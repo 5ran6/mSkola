@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_person"
+        android:title="@string/drawer_item_1" />
+    <item
+        android:id="@+id/activity"
+        android:icon="@drawable/ic_dvr_black_24dp"
+        android:title="@string/drawer_item_2" />
+    <item
+        android:id="@+id/trending"
+        android:icon="@drawable/ic_whatshot"
+        android:title="@string/drawer_item_3" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/drawer_item_4" />
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/ic_info"
+        android:title="@string/drawer_item_5" />
+    <item
+        android:id="@+id/help"
+        android:icon="@drawable/ic_help"
+        android:title="@string/drawer_item_6" />
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:title="@string/drawer_item_7" />
+</menu>

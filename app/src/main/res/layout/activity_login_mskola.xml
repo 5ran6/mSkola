@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_img"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="330dp"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_large">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_small" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logo"
+            android:tint="@color/colorPrimary" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="Welcome to mSkola"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="Login to continue"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/blue_grey_300" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EMAIL"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+            android:textColor="@color/blue_grey_700" />
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginRight="-4dp"
+            android:inputType="text"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/blue_grey_800"
+            android:theme="@style/EditText.Blue" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_mlarge" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PASSWORD"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+            android:textColor="@color/blue_grey_700" />
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginRight="-4dp"
+            android:inputType="textPassword"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/blue_grey_800"
+            android:theme="@style/EditText.Blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:onClick="forgot"
+            android:text="Forgot Password?"
+            android:textColor="@color/red_500"
+            android:textStyle="italic" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/keep_signed_in"
+            android:layout_marginLeft="-4dp"
+            android:onClick="keep_signed_in"
+            android:layout_marginRight="-4dp"
+            android:layout_marginTop="@dimen/spacing_middle"
+            android:text="Keep me Signed in"
+            android:textColor="@color/blue_600"
+            android:textStyle="bold"
+            android:theme="@style/Checkbox.Blue" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:id="@+id/sig_in"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginRight="-4dp"
+            android:background="@drawable/btn_rounded_blue_300"
+            android:text="L O G I N"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_medium" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

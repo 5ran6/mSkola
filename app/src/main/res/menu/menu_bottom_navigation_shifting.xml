@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/food_order"
+        android:icon="@drawable/ic_restaurant"
+        android:title="@string/food_order" />
+
+    <item
+        android:id="@+id/social_hub"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/social_hub" />
+
+    <item
+        android:id="@+id/favourite"
+        android:icon="@drawable/ic_favorites"
+        android:title="@string/favourite" />
+
+</menu>
