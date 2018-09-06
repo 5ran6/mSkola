@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.Sign_Up;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 

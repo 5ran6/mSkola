@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -40,4 +41,20 @@ public class Home extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.teacher.Login_SignUp.class));
 
     }
+
+    @Override
+    public void onBackPressed() {
+        doExitApp();
+    }
+    private long exitTime = 0;
+
+    public void doExitApp() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(this, "Press again to exit app", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+        }
+    }
+
 }

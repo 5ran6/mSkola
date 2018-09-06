@@ -77,10 +77,8 @@
     <string name="register">R E G I S T E R</string>
     <string name="sign_up">Sign Up</string>
     <string name="new_user">New user?   </string>
-    <string name="forgot_password">Forgot Password?</string>
     <string name="other">Anything goes here</string>
     <string name="phone_username">Phone number</string>
-    <string name="password">Password</string>
     <string name="sign_in_title">SIGN IN</string>
     <string name="tab">\t</string>
     <string name="loginFacebookButton">Sign in with Facebook</string>
@@ -89,6 +87,32 @@
     <string name="teacher">Teacher</string>
     <string name="parent">Parent</string>
     <string name="student">Student</string>
+    <string name="forgot_password_text">Forgot Password</string>
+    <string name="email">EMAIL</string>
+    <string name="new_password">NEW PASSWORD</string>
+    <string name="d_o_n_e">D O N E</string>
+    <string name="check_your_internet_connection_and_try_again">Check your internet connection and try again</string>
+    <string name="connection_error">Connection error!</string>
+    <string name="oops">Oops!</string>
+    <string name="first_name">First Name</string>
+    <string name="town">Town</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="password">Password</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+
+    <string name="err_msg_fname">Enter First name</string>
+    <string name="err_msg_lname">Enter Last name</string>
+    <string name="err_msg_email">Enter a valid Email address</string>
+    <string name="err_msg_phone">Enter a phone number</string>
+    <string name="err_msg_pass1">Enter a password</string>
+    <string name="err_msg_pass2">Enter confrim password</string>
+    <string name="err_msg_pass_mismatch">Password mismatch</string>
+    <string name="err_msg_town">Enter a Town</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="school_ids_are_unique_for_every_school_your_school_id_will_be_saved_for_ease_of_subsequent_login">School IDs are unique for every school. Your school ID will be saved for ease of subsequent login.</string>
+    <string name="enter_school_id">Enter School ID</string>
+    <string name="pick_image_intent_text">Select or take passport</string>
 
 
 </resources>

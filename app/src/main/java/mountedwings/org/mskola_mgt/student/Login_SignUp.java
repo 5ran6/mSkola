@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +20,14 @@ import android.widget.TextView;
 
 import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.teacher.Sign_Up;
+import mountedwings.org.mskola_mgt.Sign_Up;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 
 public class Login_SignUp extends AppCompatActivity {
 
     private static final int MAX_STEP = 3;
+
 
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;

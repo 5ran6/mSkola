@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/parent_layout"
         android:layout_width="330dp"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
@@ -54,22 +55,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="EMAIL"
+            android:text="@string/email_address"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
             android:textColor="@color/blue_grey_700" />
 
-        <android.support.design.widget.TextInputEditText
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-4dp"
-            android:layout_marginRight="-4dp"
-            android:inputType="text"
-            android:maxLength="50"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/blue_grey_800"
-            android:theme="@style/EditText.Blue" />
+            android:textColorHint="@color/grey_40">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/emailE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:theme="@style/EditText.Blue" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <View
             android:layout_width="0dp"
@@ -78,49 +82,53 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PASSWORD"
+            android:text="@string/password"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
             android:textColor="@color/blue_grey_700" />
 
-        <android.support.design.widget.TextInputEditText
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-4dp"
-            android:layout_marginRight="-4dp"
-            android:inputType="textPassword"
-            android:maxLength="50"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/blue_grey_800"
-            android:theme="@style/EditText.Blue" />
+            android:textColorHint="@color/grey_40">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/pass1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:theme="@style/EditText.Blue" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:onClick="forgot"
-            android:text="Forgot Password?"
+            android:text="@string/forgot_password"
             android:textColor="@color/red_500"
             android:textStyle="italic" />
 
         <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/keep_signed_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/keep_signed_in"
             android:layout_marginLeft="-4dp"
-            android:onClick="keep_signed_in"
             android:layout_marginRight="-4dp"
             android:layout_marginTop="@dimen/spacing_middle"
+            android:onClick="keep_signed_in"
             android:text="Keep me Signed in"
             android:textColor="@color/blue_600"
             android:textStyle="bold"
             android:theme="@style/Checkbox.Blue" />
 
         <Button
+            android:id="@+id/sig_in"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:id="@+id/sig_in"
             android:layout_marginLeft="-4dp"
             android:layout_marginRight="-4dp"
             android:background="@drawable/btn_rounded_blue_300"
@@ -134,6 +142,21 @@
             android:layout_height="@dimen/spacing_medium" />
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/spacing_medium"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <mountedwings.org.mskola_mgt.widget.ViewLoadingDotsBounce
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:background="@color/pink_300" />
     </LinearLayout>
 
 </RelativeLayout>

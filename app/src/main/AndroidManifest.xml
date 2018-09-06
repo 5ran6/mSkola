@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mountedwings.org.mskola_mgt">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
@@ -43,19 +46,13 @@
             android:name=".teacher.Login_SignUp"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".teacher.Sign_Up"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".parent.Login_SignUp"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".parent.Sign_Up"
+            android:name=".Sign_Up"
             android:screenOrientation="portrait" />
         <activity
             android:name=".student.Login_SignUp"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".student.Sign_Up"
             android:screenOrientation="portrait" />
     </application>
 
