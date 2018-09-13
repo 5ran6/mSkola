@@ -31,6 +31,35 @@
                 android:layout_width="100sp"
                 android:layout_height="100sp"
                 android:src="@drawable/logo" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_weight=".388"
+                    android:fontFamily="@font/rocket_rinder"
+                    android:gravity="end"
+                    android:text="m-Skola"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@color/grey_10" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_weight=".6"
+                    android:gravity="start"
+                    android:padding="@dimen/spacing_small"
+                    android:text="1.0"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@color/grey_10"
+                    android:textSize="8sp" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="250dp"

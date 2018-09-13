@@ -1,5 +1,6 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -7,15 +8,20 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
 import mountedwings.org.mskola_mgt.Sign_Up;
@@ -28,14 +34,14 @@ public class Login_SignUp extends AppCompatActivity {
 
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
-    private Button btn_login, btn_sign_up;
+    private Button btnNext;
     private String title_array[] = {
             "Manage Academic Records",
             "Interconnectivity",
             "Computer Based Testing"
     };
     private String description_array[] = {
-            "Records continuous assessments, give assignments and compile results.",
+            "Record continuous assessments, give assignments and compile results.",
             "Instant messaging with parents and students.",
             "Setup computer based tests, mark and record performances instantly.",
     };
@@ -45,9 +51,10 @@ public class Login_SignUp extends AppCompatActivity {
             R.drawable.cbt,
     };
     private int color_array[] = {
-            R.color.red_600,
-            R.color.blue_grey_600,
-            R.color.purple_600
+            //R.drawable.image_15,
+            R.drawable.image_10,
+            R.drawable.image_3,
+            R.drawable.image_12
     };
 
     @Override
@@ -60,29 +67,12 @@ public class Login_SignUp extends AppCompatActivity {
 
     private void initComponent() {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        btn_login = (Button) findViewById(R.id.login);
-        btn_sign_up = (Button) findViewById(R.id.sign_up);
 
         // adding bottom dots
         bottomProgressDots(0);
         myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
-        btn_login.setVisibility(View.GONE);
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SchoolID_Login.class));
-            }
-        });
-        btn_sign_up.setVisibility(View.GONE);
-        btn_sign_up.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Sign_Up.class));
-            }
-        });
 
     }
 
@@ -114,13 +104,6 @@ public class Login_SignUp extends AppCompatActivity {
         @Override
         public void onPageSelected(final int position) {
             bottomProgressDots(position);
-            if (position == title_array.length - 1) {
-                btn_login.setVisibility(View.VISIBLE);
-                btn_sign_up.setVisibility(View.VISIBLE);
-            } else {
-                btn_login.setVisibility(View.GONE);
-                btn_sign_up.setVisibility(View.GONE);
-            }
         }
 
         @Override
@@ -133,6 +116,7 @@ public class Login_SignUp extends AppCompatActivity {
 
         }
     };
+
 
     /**
      * View pager adapter
@@ -147,13 +131,35 @@ public class Login_SignUp extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = layoutInflater.inflate(R.layout.item_stepper_wizard_color, container, false);
+            View view = layoutInflater.inflate(R.layout.item_card_wizard_bg, container, false);
             ((TextView) view.findViewById(R.id.title)).setText(title_array[position]);
             ((TextView) view.findViewById(R.id.description)).setText(description_array[position]);
             ((ImageView) view.findViewById(R.id.image)).setImageResource(about_images_array[position]);
-            ((RelativeLayout) view.findViewById(R.id.lyt_parent)).setBackgroundColor(getResources().getColor(color_array[position]));
-            container.addView(view);
+            ((ImageView) view.findViewById(R.id.image_bg)).setImageResource(color_array[position]);
 
+            btnNext = (Button) view.findViewById(R.id.btn_next);
+
+            if (position == title_array.length - 1) {
+                btnNext.setText("Get Started");
+            } else {
+                btnNext.setText("Next");
+            }
+
+            btnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int current = viewPager.getCurrentItem() + 1;
+                    if (current < MAX_STEP) {
+                        // move to next screen
+                        viewPager.setCurrentItem(current);
+                    } else {
+//                        finish();
+                        showCustomDialog();
+                    }
+                }
+            });
+
+            container.addView(view);
             return view;
         }
 
@@ -173,5 +179,44 @@ public class Login_SignUp extends AppCompatActivity {
             View view = (View) object;
             container.removeView(view);
         }
+    }
+
+    private void showCustomDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.dialog_info_login);
+        dialog.setCancelable(false);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+
+        ((ImageView) dialog.findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        ((AppCompatButton) dialog.findViewById(R.id.bt_sign_up)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Sign_Up.class));
+                dialog.dismiss();
+            }
+        });
+        ((AppCompatButton) dialog.findViewById(R.id.bt_login)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), SchoolID_Login.class));
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
     }
 }

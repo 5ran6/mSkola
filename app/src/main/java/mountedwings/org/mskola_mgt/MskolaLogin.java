@@ -168,7 +168,7 @@ public class MskolaLogin extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), Test.class));
+                startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
             }
         }, LOADING_DURATION + 400);
     }

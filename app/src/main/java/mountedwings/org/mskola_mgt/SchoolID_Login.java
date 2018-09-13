@@ -44,6 +44,11 @@ public class SchoolID_Login extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Fill in School ID", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }

@@ -113,6 +113,22 @@
     <string name="school_ids_are_unique_for_every_school_your_school_id_will_be_saved_for_ease_of_subsequent_login">School IDs are unique for every school. Your school ID will be saved for ease of subsequent login.</string>
     <string name="enter_school_id">Enter School ID</string>
     <string name="pick_image_intent_text">Select or take passport</string>
+    <string name="administration">Administration</string>
+    <string name="academics">Academics</string>
+    <string name="achievements">Achievements</string>
+    <string name="messages">Messages</string>
+    <string name="bursary">Bursary</string>
+    <string name="cbt">CBT</string>
+    <string name="next">Next</string>
+    <string name="login">L O G I N</string>
+    <string name="manage_results">Manage Results</string>
+    <string name="assignment">Assignment</string>
+    <string name="attendance">Attendance</string>
+    <string name="assessment">Assessment</string>
+    <string name="staff">STAFF</string>
+    <string name="logout">logout</string>
+    <string name="update">Update</string>
+    <string name="alert">Alert</string>
 
 
 </resources>

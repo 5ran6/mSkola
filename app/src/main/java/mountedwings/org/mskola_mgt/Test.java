@@ -17,7 +17,7 @@ public class Test extends AppCompatActivity {
     }
 
     public void testing(View view) {
-        startActivity(new Intent(getApplicationContext(), Sign_Up.class));
+        startActivity(new Intent(getApplicationContext(), Parents.class));
 
     }
 }

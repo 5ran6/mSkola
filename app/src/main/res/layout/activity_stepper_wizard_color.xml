@@ -2,9 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_40"
-    android:fitsSystemWindows="false"
+    android:background="@drawable/background_img"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@color/overlay_light_80"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_13" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
@@ -20,23 +26,6 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/spacing_large">
-
-        <Button
-            android:id="@+id/sign_up"
-            android:layout_width="300sp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_rounded_accent"
-            android:text="Create mSkola Account"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/login"
-            android:layout_width="300sp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_rounded_white"
-            android:text="Login to existing Account"
-            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/layoutDots"

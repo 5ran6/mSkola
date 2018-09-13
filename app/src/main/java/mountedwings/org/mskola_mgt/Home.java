@@ -17,7 +17,6 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         initToolbar();
     }
 
@@ -46,6 +45,7 @@ public class Home extends AppCompatActivity {
     public void onBackPressed() {
         doExitApp();
     }
+
     private long exitTime = 0;
 
     public void doExitApp() {
