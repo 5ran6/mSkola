@@ -1,6 +1,7 @@
 package mountedwings.org.mskola_mgt.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -65,8 +66,8 @@ public class AdapterListInbox extends RecyclerView.Adapter<AdapterListInbox.View
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Inbox inbox = items.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        final Inbox inbox = items.get(holder.getAdapterPosition());
 
         // displaying text view data
         holder.from.setText(inbox.from);
@@ -75,13 +76,13 @@ public class AdapterListInbox extends RecyclerView.Adapter<AdapterListInbox.View
         holder.date.setText(inbox.date);
         holder.image_letter.setText(inbox.from.substring(0, 1));
 
-        holder.lyt_parent.setActivated(selected_items.get(position, false));
+        holder.lyt_parent.setActivated(selected_items.get(holder.getAdapterPosition(), false));
 
         holder.lyt_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onClickListener == null) return;
-                onClickListener.onItemClick(v, inbox, position);
+                onClickListener.onItemClick(v, inbox, holder.getAdapterPosition());
             }
         });
 
@@ -89,12 +90,12 @@ public class AdapterListInbox extends RecyclerView.Adapter<AdapterListInbox.View
             @Override
             public boolean onLongClick(View v) {
                 if (onClickListener == null) return false;
-                onClickListener.onItemLongClick(v, inbox, position);
+                onClickListener.onItemLongClick(v, inbox, holder.getAdapterPosition());
                 return true;
             }
         });
 
-        toggleCheckedIcon(holder, position);
+        toggleCheckedIcon(holder, holder.getAdapterPosition());
         displayImage(holder, inbox);
 
     }
