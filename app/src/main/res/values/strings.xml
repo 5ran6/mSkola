@@ -121,7 +121,7 @@
     <string name="cbt">CBT</string>
     <string name="next">Next</string>
     <string name="login">L O G I N</string>
-    <string name="manage_results">Manage Results</string>
+    <string name="manage_results">Results</string>
     <string name="assignment">Assignment</string>
     <string name="attendance">Attendance</string>
     <string name="assessment">Assessment</string>
@@ -129,6 +129,9 @@
     <string name="logout">logout</string>
     <string name="update">Update</string>
     <string name="alert">Alert</string>
+    <string name="demo_name">Ocholi Francis</string>
+    <string name="get_started">Get Started</string>
+    <string name="default_alarm_text">Set an alarm to remind some minutes before your child/children close for the day</string>
 
 
 </resources>

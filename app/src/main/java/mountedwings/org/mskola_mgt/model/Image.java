@@ -1,4 +1,4 @@
-package mountedwings.org.mskola_mgt.utils;
+package mountedwings.org.mskola_mgt.model;
 
 import android.graphics.drawable.Drawable;
 

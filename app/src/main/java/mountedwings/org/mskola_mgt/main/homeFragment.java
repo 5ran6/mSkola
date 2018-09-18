@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.utils.Image;
+import mountedwings.org.mskola_mgt.model.Image;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 

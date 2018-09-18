@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.transition.Transition;
+import android.support.transition.TransitionValues;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -194,6 +199,27 @@ public class Login_SignUp extends AppCompatActivity {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
 
+        // Animate the close button
+        final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        final Transition transition = new Transition() {
+            @Override
+            public void captureEndValues(@NonNull TransitionValues transitionValues) {
+
+            }
+
+            @Override
+            public void captureStartValues(@NonNull TransitionValues transitionValues) {
+
+            }
+        };
+
+        animation.setDuration(800); // duration - 2 seconds
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+        ImageView img = dialog.findViewById(R.id.close);
+        img.startAnimation(animation);
+
         ((ImageView) dialog.findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,6 +232,7 @@ public class Login_SignUp extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Sign_Up.class));
                 dialog.dismiss();
+                finish();
             }
         });
         ((AppCompatButton) dialog.findViewById(R.id.bt_login)).setOnClickListener(new View.OnClickListener() {
@@ -213,6 +240,7 @@ public class Login_SignUp extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
                 dialog.dismiss();
+                finish();
             }
         });
 

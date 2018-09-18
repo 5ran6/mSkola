@@ -5,17 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.transition.Transition;
+import android.support.transition.TransitionValues;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,11 +30,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.Sign_Up;
 import mountedwings.org.mskola_mgt.utils.Tools;
-
 
 public class Login_SignUp extends AppCompatActivity {
 
@@ -35,8 +43,6 @@ public class Login_SignUp extends AppCompatActivity {
 
 
     private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
-    private Button btnNext;
     private String title_array[] = {
             "Track your Academic Records",
             "Interconnectivity",
@@ -72,7 +78,7 @@ public class Login_SignUp extends AppCompatActivity {
 
         // adding bottom dots
         bottomProgressDots(0);
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -128,8 +134,9 @@ public class Login_SignUp extends AppCompatActivity {
         public MyViewPagerAdapter() {
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = layoutInflater.inflate(R.layout.item_card_wizard_bg, container, false);
@@ -138,10 +145,10 @@ public class Login_SignUp extends AppCompatActivity {
             ((ImageView) view.findViewById(R.id.image)).setImageResource(about_images_array[position]);
             ((ImageView) view.findViewById(R.id.image_bg)).setImageResource(color_array[position]);
 
-            btnNext = (Button) view.findViewById(R.id.btn_next);
+            Button btnNext = (Button) view.findViewById(R.id.btn_next);
 
             if (position == title_array.length - 1) {
-                btnNext.setText("Get Started");
+                btnNext.setText(R.string.get_started);
             } else {
                 btnNext.setText("Next");
             }
@@ -189,9 +196,30 @@ public class Login_SignUp extends AppCompatActivity {
         dialog.setCancelable(false);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        // Animate the close button
+        final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        final Transition transition = new Transition() {
+            @Override
+            public void captureEndValues(@NonNull TransitionValues transitionValues) {
+
+            }
+
+            @Override
+            public void captureStartValues(@NonNull TransitionValues transitionValues) {
+
+            }
+        };
+
+        animation.setDuration(800); // duration - 2 seconds
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+        ImageView img = dialog.findViewById(R.id.close);
+        img.startAnimation(animation);
 
 
         ((ImageView) dialog.findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
@@ -205,8 +233,8 @@ public class Login_SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Sign_Up.class));
-
                 dialog.dismiss();
+                finish();
             }
         });
         ((AppCompatButton) dialog.findViewById(R.id.bt_login)).setOnClickListener(new View.OnClickListener() {
@@ -214,6 +242,7 @@ public class Login_SignUp extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
                 dialog.dismiss();
+                finish();
             }
         });
 

@@ -1,4 +1,4 @@
-package mountedwings.org.mskola_mgt;
+package mountedwings.org.mskola_mgt.teacher;
 
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 

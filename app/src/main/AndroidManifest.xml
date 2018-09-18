@@ -55,8 +55,11 @@
         <activity
             android:name=".student.Login_SignUp"
             android:screenOrientation="portrait" />
-        <activity android:name=".SchoolDashboard" />
-        <activity android:name=".Parents"></activity>
+        <activity android:name=".teacher.SchoolDashboard" />
+        <activity android:name=".parent.Parents"></activity>
+        <activity android:name=".student.Students" />
+        <activity android:name=".Chat" />
+        <activity android:name=".SettingFlat" />
     </application>
 
 </manifest>

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import mountedwings.org.mskola_mgt.parent.Parents;
+import mountedwings.org.mskola_mgt.student.Students;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Test extends AppCompatActivity {
@@ -17,7 +19,7 @@ public class Test extends AppCompatActivity {
     }
 
     public void testing(View view) {
-        startActivity(new Intent(getApplicationContext(), Parents.class));
+        startActivity(new Intent(getApplicationContext(), SettingFlat.class));
 
     }
 }
