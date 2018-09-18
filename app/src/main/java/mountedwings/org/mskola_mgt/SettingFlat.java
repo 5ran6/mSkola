@@ -1,9 +1,11 @@
 package mountedwings.org.mskola_mgt;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -30,23 +32,44 @@ public class SettingFlat extends AppCompatActivity {
     private TextView time;
     private View parent_view;
     public static final String myPref = "mSkola";
-    SharedPreferences.Editor editor = getSharedPreferences(myPref, MODE_PRIVATE).edit();
+    private String single_choice_selected;
 
+    SharedPreferences mPrefs;
+    SharedPreferences.Editor editor;
+
+    private static final int PREFRENCE_MODE_PRIVATE = 0;
 
     private static final String[] TIME = new String[]{
             "0 mins", "5 mins", "10 mins", "15 mins", "30 mins"
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_flat);
 
+        if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
+            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+            notifyState = mPrefs.getBoolean("notification", true);
+            alarmState = mPrefs.getBoolean("minutes_before_state", false);
+
+            if (alarmState) {
+                single_choice_selected = mPrefs.getString("minutes_before_text", "10 mins");
+            }
+
+        }
+
+        mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+
         parent_view = findViewById(android.R.id.content);
         time = findViewById(R.id.time);
         notification = findViewById(R.id.notifications);
+        notification.setChecked(notifyState);
         alarm = findViewById(R.id.alarm);
+        if (alarmState) {
+            alarm.setChecked(alarmState);
+            time.setText(single_choice_selected + " before closing time");
+        }
     }
 
     private void initToolbar() {
@@ -57,6 +80,8 @@ public class SettingFlat extends AppCompatActivity {
 
     public void notifications(View view) {
         notifyState = !notifyState;
+
+        editor = mPrefs.edit();
         editor.putBoolean("notification", notifyState);
         editor.apply();
     }
@@ -64,6 +89,7 @@ public class SettingFlat extends AppCompatActivity {
     public void alarm(View view) {
         alarmState = !alarmState;
         //sharedPrefs
+        editor = mPrefs.edit();
         editor.putBoolean("minutes_before_state", alarmState);
         editor.apply();
 
@@ -75,8 +101,6 @@ public class SettingFlat extends AppCompatActivity {
             time.setText(R.string.default_alarm_text);
         }
     }
-
-    private String single_choice_selected;
 
 
     private void showSingleChoiceDialog() {
@@ -101,6 +125,7 @@ public class SettingFlat extends AppCompatActivity {
                     case "0 mins":
                         //TODO
                         //sharedPrefs
+                        editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "0 mins");
                         editor.putInt("minutes_before_time", 0);
                         editor.apply();
@@ -109,6 +134,7 @@ public class SettingFlat extends AppCompatActivity {
                     case "5 mins":
                         //TODO
                         //sharedPrefs
+                        editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "5 mins");
                         editor.putInt("minutes_before_time", 5);
                         editor.apply();
@@ -116,6 +142,7 @@ public class SettingFlat extends AppCompatActivity {
                     case "10 mins":
                         //TODO
                         //sharedPrefs
+                        editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "10 mins");
                         editor.putInt("minutes_before_time", 10);
                         editor.apply();
@@ -123,6 +150,7 @@ public class SettingFlat extends AppCompatActivity {
                     case "15 mins":
                         //TODO
                         //sharedPrefs
+                        editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "15 mins");
                         editor.putInt("minutes_before_time", 15);
                         editor.apply();
@@ -130,6 +158,7 @@ public class SettingFlat extends AppCompatActivity {
                     case "30 mins":
                         //TODO
                         //sharedPrefs
+                        editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "30 mins");
                         editor.putInt("minutes_before_time", 30);
                         editor.apply();
@@ -150,5 +179,13 @@ public class SettingFlat extends AppCompatActivity {
         builder.show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+//        notification_state = mPrefs.getBoolean("notification", true);
+        //  String name = prefs.getString("name", "No name defined");//"No name defined" is the default value.
+        //  int idName = prefs.getInt("idName", 0); //0 is the default value.
+
+    }
 }
