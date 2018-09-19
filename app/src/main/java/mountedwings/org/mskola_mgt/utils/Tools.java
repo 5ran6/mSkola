@@ -280,4 +280,16 @@ public class Tools {
         return builder.toString();
     }
 
+    public static String personInfo(String firstName, String lastName, String country, String town, String phone, String account_type, String email, String password) {
+        String info =
+                firstName + "," +
+                lastName + "," +
+                country + "," +
+                town + "," +
+                phone + "," +
+                account_type + "," +
+                email + "," +
+                password;
+        return info;
+    }
 }

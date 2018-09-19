@@ -91,7 +91,7 @@
     <string name="email">EMAIL</string>
     <string name="new_password">NEW PASSWORD</string>
     <string name="d_o_n_e">D O N E</string>
-    <string name="check_your_internet_connection_and_try_again">Check your internet connection and try again</string>
+    <string name="check_your_internet_connection_and_try_again">Please try again</string>
     <string name="connection_error">Connection error!</string>
     <string name="oops">Oops!</string>
     <string name="first_name">First Name</string>

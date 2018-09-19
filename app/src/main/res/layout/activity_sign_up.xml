@@ -53,6 +53,7 @@
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
+                    android:onClick="getPhoto"
                     android:visibility="visible"
                     app:cardCornerRadius="2dp"
                     app:cardElevation="5dp">
@@ -278,7 +279,7 @@
                                 android:layout_height="match_parent" />
 
                             <Spinner
-                                android:id="@+id/spn_phone_type"
+                                android:id="@+id/spn_country"
                                 style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -406,6 +407,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_smlarge"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="getPhoto"
             android:tint="@android:color/white"
             app:backgroundTint="@color/blue_grey_800"
@@ -413,8 +415,7 @@
             app:layout_anchor="@id/passport"
             app:layout_anchorGravity="bottom|end|right"
             app:rippleColor="@android:color/white"
-            app:srcCompat="@drawable/ic_photo_camera"
-            android:focusable="true" />
+            app:srcCompat="@drawable/ic_photo_camera" />
 
     </android.support.design.widget.CoordinatorLayout>
 
