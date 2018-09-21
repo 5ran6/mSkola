@@ -7,13 +7,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/mskola"
         android:label="@string/app_name"
-        android:logo="@drawable/logo"
-        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -63,7 +60,7 @@
         <activity android:name=".student.Students" />
         <activity android:name=".Chat" />
         <activity android:name=".SettingFlat" />
-
+        <activity android:name=".teacher.Record_scores" />
     </application>
 
 </manifest>

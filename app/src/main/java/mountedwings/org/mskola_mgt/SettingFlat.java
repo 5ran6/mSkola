@@ -34,8 +34,8 @@ public class SettingFlat extends AppCompatActivity {
     public static final String myPref = "mSkola";
     private String single_choice_selected;
 
-    SharedPreferences mPrefs;
-    SharedPreferences.Editor editor;
+    private SharedPreferences mPrefs;
+    private SharedPreferences.Editor editor;
 
     private static final int PREFRENCE_MODE_PRIVATE = 0;
 

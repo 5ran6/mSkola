@@ -58,7 +58,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Sign_Up extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 200;
-    private String TAG = "mSkola", error = "Error";
+    public String TAG = "mSkola", error = "Error";
     boolean isSuccess = false;
     private Toolbar toolbar;
     private CoordinatorLayout parent_layout;
@@ -74,7 +74,7 @@ public class Sign_Up extends AppCompatActivity {
     private static final int PICK_IMAGE_ID = 234; // the number doesn't matter
     private String[] separatedValues;
     private View view;
-    private String f, l, c, t, p, a, e, pass, account_type;
+    private String f, l, c = "Nigeria", t, p, a, e, pass, account_type;
     BroadcastReceiver mReceiver;
 
     @Override
@@ -495,7 +495,6 @@ public class Sign_Up extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override

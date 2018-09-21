@@ -245,7 +245,9 @@ public class Login_SignUp extends AppCompatActivity {
         ((AppCompatButton) dialog.findViewById(R.id.bt_login)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SchoolID_Login.class));
+                Intent intent = new Intent(getApplicationContext(), SchoolID_Login.class);
+                intent.putExtra("account_type", "Teacher");
+                startActivity(intent);
                 dialog.dismiss();
                 finish();
             }

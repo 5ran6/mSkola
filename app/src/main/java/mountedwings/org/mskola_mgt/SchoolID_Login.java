@@ -11,10 +11,14 @@ import android.widget.Toast;
 
 public class SchoolID_Login extends AppCompatActivity {
     private TextInputEditText school_id;
+    private String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        role = intent.getStringExtra("account_type");
+
         setContentView(R.layout.activity_shool_id_login);
         school_id = findViewById(R.id.school_id);
     }
@@ -39,8 +43,10 @@ public class SchoolID_Login extends AppCompatActivity {
         //check if the field is empty first
         if (!school_id.getText().toString().isEmpty()) {
             //validate from server
-            startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
-
+            Intent intent = new Intent(getApplicationContext(), MskolaLogin.class);
+            intent.putExtra("account_type", role);
+            intent.putExtra("school_id", school_id.getText().toString().trim());
+            startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(), "Fill in School ID", Toast.LENGTH_SHORT).show();
         }

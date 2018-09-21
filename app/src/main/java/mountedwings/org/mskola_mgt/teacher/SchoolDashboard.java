@@ -30,7 +30,7 @@ public class SchoolDashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_dashboard);
-        initToolbar();
+      //  initToolbar();
         initComponent();
     }
 
@@ -168,7 +168,6 @@ public class SchoolDashboard extends AppCompatActivity {
                 toggleSectionInfoMessages(bt_toggle_info_messages1);
             }
         });
-
 
     }
 
