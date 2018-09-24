@@ -62,7 +62,7 @@ public class Record_scores_Test extends AppCompatActivity {
     private AppCompatEditText score;
     private Button record;
     private ViewGroup main;
-    private int position, counter =0;
+    private int position, counter = 0;
     private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject, next_persons_score = "";
 
 
@@ -184,13 +184,74 @@ public class Record_scores_Test extends AppCompatActivity {
         TextView textView = view.findViewById(R.id.index);
         textView.setText(String.valueOf(index));
 
+        //students name from server
         TextView student_name = view.findViewById(R.id.tv_label_title);
         student_name.setText(name);
+        //button init
         Button mark_scores = view.findViewById(R.id.bt_continue_title);
         Button skip = view.findViewById(R.id.bt_skip);
 
         score = view.findViewById(R.id.et_title);
 
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        main = (ViewGroup) findViewById(R.id.main_content);
+        main.addView(view, index);
+        //add to the view list array
+        view_list.add(view);
+        step_view_list.add(((RelativeLayout) view.findViewById(R.id.step_title)));
+
+        for (View v : view_list) {
+            v.findViewById(R.id.lyt_title).setVisibility(View.GONE);
+//            v.setVisibility(View.VISIBLE);
+        }
+        view_list.get(0).findViewById(R.id.lyt_title).setVisibility(View.VISIBLE);
+        if (counter <= 1) {
+            score.setText(first_persons_score);
+            counter++;
+        } else {
+            score.setText("");
+        }
+        hideSoftKeyboard();
+
+        mark_scores.setOnClickListener(v -> {
+            if (Integer.valueOf(score.getText().toString()) > 100) {
+                Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (score.getText().toString().trim().equals("")) {
+                Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
+            collapseAndContinue(index);
+
+        });
+        skip.setOnClickListener(v -> {
+
+            collapseAndContinue(index);
+            //don't record anything
+
+        });
+//        Toast.makeText(getApplicationContext(), "Here", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void initViews1(int index, String name) {
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.assessment_record, null);
+        TextView textView = view.findViewById(R.id.index);
+        textView.setText(String.valueOf(index));
+
+        //students name from server
+        TextView student_name = view.findViewById(R.id.tv_label_title);
+        student_name.setText(name);
+        //button init
+        Button mark_scores = view.findViewById(R.id.bt_continue_title);
+        Button skip = view.findViewById(R.id.bt_skip);
+
+        score = view.findViewById(R.id.et_title);
 
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -494,7 +555,8 @@ public class Record_scores_Test extends AppCompatActivity {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
                 loading.setVisibility(View.GONE);
-                for (int i = 0; i < len; i++)
+                initViews(0, names[0]);
+                for (int i = 1; i < len; i++)
                     initViews(i, names[i]);
             } else {
                 Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();

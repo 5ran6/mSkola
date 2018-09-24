@@ -43,7 +43,7 @@ public class Splash extends AppCompatActivity {
         handler1.postDelayed(new Runnable() {
             public void run() {
                 // intent
-                Intent intent = new Intent(getApplicationContext(), Test.class);
+                Intent intent = new Intent(getApplicationContext(), Home.class);
                 startActivity(intent);
                 finish();
             }
