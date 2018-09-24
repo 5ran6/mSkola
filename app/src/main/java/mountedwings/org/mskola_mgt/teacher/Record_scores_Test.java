@@ -72,7 +72,7 @@ public class Record_scores_Test extends AppCompatActivity {
         setContentView(R.layout.activity_record_scores_test);
         parent_view = findViewById(android.R.id.content);
 //        initToolbar();
-        loading = findViewById(R.id.loading);
+        loading = (ProgressBar) findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
         new first_loading().execute("cac180826043520", "JSS1", "A", "CA1", "English Language");
         //        initComponent();
