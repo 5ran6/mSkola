@@ -61,6 +61,7 @@
         <activity android:name=".Chat" />
         <activity android:name=".SettingFlat" />
         <activity android:name=".teacher.Record_scores" />
+        <activity android:name=".teacher.Record_scores_Test" />
     </application>
 
 </manifest>
