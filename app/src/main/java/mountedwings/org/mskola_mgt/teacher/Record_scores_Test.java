@@ -62,8 +62,8 @@ public class Record_scores_Test extends AppCompatActivity {
     private AppCompatEditText score;
     private Button record;
     private ViewGroup main;
-    private int position, counter = 0;
-    private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject, next_persons_score = "";
+    private int position, counter = 0, last_index;
+    private String TAG = "mSkola", first_persons_score = "", school_id = "cac180826043520", class_name = "JSS1", arm = "A", assessment = "CA1", subject = "English Language", next_persons_score = "";
 
 
     @Override
@@ -74,7 +74,7 @@ public class Record_scores_Test extends AppCompatActivity {
 //        initToolbar();
         loading = (ProgressBar) findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
-        new first_loading().execute("cac180826043520", "JSS1", "A", "CA1", "English Language");
+        new first_loading().execute(school_id, class_name, arm, assessment, subject);
         //        initComponent();
     }
 
@@ -179,6 +179,7 @@ public class Record_scores_Test extends AppCompatActivity {
     }
 
     private void initViews(int index, String name) {
+        //to load all names and score of first person
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.assessment_record, null);
         TextView textView = view.findViewById(R.id.index);
@@ -203,17 +204,13 @@ public class Record_scores_Test extends AppCompatActivity {
 
         for (View v : view_list) {
             v.findViewById(R.id.lyt_title).setVisibility(View.GONE);
+//            student_name.setText("");
 //            v.setVisibility(View.VISIBLE);
         }
         view_list.get(0).findViewById(R.id.lyt_title).setVisibility(View.VISIBLE);
-        if (counter <= 1) {
-            score.setText(first_persons_score);
-            counter++;
-        } else {
-            score.setText("");
-        }
-        hideSoftKeyboard();
 
+        score.setText(first_persons_score);
+        hideSoftKeyboard();
         mark_scores.setOnClickListener(v -> {
             if (Integer.valueOf(score.getText().toString()) > 100) {
                 Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
@@ -238,53 +235,44 @@ public class Record_scores_Test extends AppCompatActivity {
 
     }
 
-    private void initViews1(int index, String name) {
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.assessment_record, null);
-        TextView textView = view.findViewById(R.id.index);
+    private void subsequentView(int index, View vv) {
+        TextView textView = vv.findViewById(R.id.index);
         textView.setText(String.valueOf(index));
 
-        //students name from server
-        TextView student_name = view.findViewById(R.id.tv_label_title);
-        student_name.setText(name);
-        //button init
-        Button mark_scores = view.findViewById(R.id.bt_continue_title);
-        Button skip = view.findViewById(R.id.bt_skip);
+        // button init
+        Button mark_scores = vv.findViewById(R.id.bt_continue_title);
+        Button skip = vv.findViewById(R.id.bt_skip);
 
-        score = view.findViewById(R.id.et_title);
+        score = vv.findViewById(R.id.et_title);
+        score.setText("");
 
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        main = (ViewGroup) findViewById(R.id.main_content);
-        main.addView(view, index);
-        //add to the view list array
-        view_list.add(view);
-        step_view_list.add(((RelativeLayout) view.findViewById(R.id.step_title)));
-
-        for (View v : view_list) {
-            v.findViewById(R.id.lyt_title).setVisibility(View.GONE);
-//            v.setVisibility(View.VISIBLE);
-        }
-        view_list.get(0).findViewById(R.id.lyt_title).setVisibility(View.VISIBLE);
-        if (counter <= 1) {
-            score.setText(first_persons_score);
-            counter++;
-        } else {
-            score.setText("");
-        }
         hideSoftKeyboard();
 
         mark_scores.setOnClickListener(v -> {
-            if (Integer.valueOf(score.getText().toString()) > 100) {
+//is Not a float
+            boolean check = false;
+            int i = 0;
+            try {
+                i = Integer.valueOf(score.getText().toString());
+
+            } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (score.getText().toString().trim().equals("")) {
-                Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
-                return;
+                e.printStackTrace();
+            } finally {
+                if (i > 100) {
+                    Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (score.getText().toString().trim().equals("")) {
+                    Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
             Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
+            //send to server
+            new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
+
             collapseAndContinue(index);
 
         });
@@ -295,23 +283,6 @@ public class Record_scores_Test extends AppCompatActivity {
 
         });
 //        Toast.makeText(getApplicationContext(), "Here", Toast.LENGTH_SHORT).show();
-
-    }
-
-    private void initComponent() {
-        // populate layout field
-        view_list.add(findViewById(R.id.lyt_title));
-
-        // populate view step (circle in left)
-        step_view_list.add(((RelativeLayout) findViewById(R.id.step_title)));
-
-        for (View v : view_list) {
-            v.setVisibility(View.GONE);
-        }
-
-        view_list.get(0).setVisibility(View.VISIBLE);
-        hideSoftKeyboard();
-
 
     }
 
@@ -387,7 +358,7 @@ public class Record_scores_Test extends AppCompatActivity {
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("CA1 for SSS 3B");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(assessment.toUpperCase() + " for " + class_name + " " + arm);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -395,13 +366,17 @@ public class Record_scores_Test extends AppCompatActivity {
     private void collapseAndContinue(int index) {
         ViewAnimation.collapse(view_list.get(index).findViewById(R.id.lyt_title));
         setCheckedStep(index);
+        last_index = index;
         index++;
         //thread for loading score for next person using index++ for index
+        score.setText("");
+        Log.d(TAG, "Reg number = " + regNumbs[index]);
         new loading().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index));
-        //       loadNextScore(school_id, class_name, arm, assessment, subject, index);
         current_step = index;
         success_step = index > success_step ? index : success_step;
         ViewAnimation.expand(view_list.get(index).findViewById(R.id.lyt_title));
+        View vv = view_list.get(index);
+        subsequentView(index, vv);
     }
 
     //DONE
@@ -466,21 +441,65 @@ public class Record_scores_Test extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            return loadNextScore(strings[0], strings[1], strings[2], strings[3], strings[4], Integer.valueOf(strings[5]));
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getstudentscore");
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4] + "<>" + regNumbs[Integer.valueOf(strings[5])]);
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            return next_persons_score = sentData.getStrData();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
         protected void onPostExecute(String scores) {
             super.onPostExecute(scores);
+            Log.d(TAG, scores);
+            Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
             if (!scores.isEmpty()) {
                 score.setText(scores);
+                setCheckedRecorded(Integer.valueOf(last_index));
             } else {
+//                Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
+                //      Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class submitScore extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("savestudentscore");
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4] + "<>" + regNumbs[Integer.valueOf(strings[5])] + "<>" + strings[6]);
+
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            return next_persons_score = sentData.getStrData();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onPostExecute(String scores) {
+            super.onPostExecute(scores);
+            Log.d(TAG, scores);
+            Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
+            if (!scores.isEmpty()) {
+                score.setText(scores);
+                setCheckedRecorded(Integer.valueOf(last_index));
+            } else {
+//                Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
+                //      Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -555,29 +574,12 @@ public class Record_scores_Test extends AppCompatActivity {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
                 loading.setVisibility(View.GONE);
-                initViews(0, names[0]);
-                for (int i = 1; i < len; i++)
+                //initViews(0, names[0]);
+                for (int i = 0; i < len; i++)
                     initViews(i, names[i]);
             } else {
                 Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
-
-    private void loadRecordScorePage(String schID, String className, String arm, String assessment, String subject) {
-
-    }
-
-    private String loadNextScore(String schID, String className, String arm, String assessment, String subject, int index) {
-        storageFile storageObj = new storageFile();
-        storageObj.setOperation("getstudentscore");
-        storageObj.setStrData(schID + "<>" + className + "<>" + arm + "<>" + assessment + "<>" + subject + "<>" + regNumbs[index]);
-        storageFile sentData = new serverProcess().requestProcess(storageObj);
-        next_persons_score = sentData.getStrData();
-//try
-        view_list.get(index).findViewById(R.id.lyt_title).setVisibility(View.VISIBLE);
-        return next_persons_score;
-    }
-
 }

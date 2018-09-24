@@ -39,7 +39,7 @@
                     <com.mikhaellopez.circularimageview.CircularImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/user"
+                        android:src="@drawable/avatar"
                         tools:ignore="VectorDrawableCompat" />
 
                 </RelativeLayout>
@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
-                    android:text="CALVARY ARROWS COLLEGE"
+                    android:text="JOSHUA TIMI"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@android:color/white" />
 
@@ -74,7 +74,7 @@
                             android:layout_height="wrap_content"
                             android:maxLines="2"
                             android:padding="@dimen/spacing_small"
-                            android:text="OCHOLI FRANCIS"
+                            android:text="MY SCHOOL"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
@@ -92,12 +92,6 @@
                         android:layout_width="@dimen/spacing_xmlarge"
                         android:layout_height="@dimen/spacing_xmlarge">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:contentDescription="@string/logout"
-                            android:src="@drawable/shape_circle"
-                            android:tint="@android:color/white" />
 
                         <ImageButton
                             android:id="@+id/bt_copy_code"
@@ -114,6 +108,12 @@
                     </RelativeLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Logout" />
 
             </LinearLayout>
 
