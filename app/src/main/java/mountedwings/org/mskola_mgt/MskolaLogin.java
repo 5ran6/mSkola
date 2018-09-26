@@ -65,6 +65,12 @@ public class MskolaLogin extends AppCompatActivity {
         if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
             mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
+
+            editor = mPrefs.edit();
+            editor.putString("role", role);
+            editor.putString("school_id", school_id);
+            editor.apply();
+
         }
 
         if (singedIn) {
@@ -72,6 +78,7 @@ public class MskolaLogin extends AppCompatActivity {
             finish();
             startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
         }
+
         setContentView(R.layout.activity_login_mskola);
         parent_layout = findViewById(R.id.parent_layout);
         parent_view = findViewById(android.R.id.content);
@@ -273,6 +280,14 @@ public class MskolaLogin extends AppCompatActivity {
             if (isSuccess) {
                 //    showCustomDialogSuccess(newbie);
                 Intent intent = new Intent(getApplicationContext(), SchoolDashboard.class);
+
+                //sharedPref
+                editor = mPrefs.edit();
+                editor.putBoolean("signed_in", true);
+                editor.putString("account_type", role);
+                editor.putString("email_address", text.split("<>")[1]);
+                editor.apply();
+
                 intent.putExtra("email_address", emailAddress);
                 intent.putExtra("school_role", text.split("<>")[1]);
                 startActivity(intent);

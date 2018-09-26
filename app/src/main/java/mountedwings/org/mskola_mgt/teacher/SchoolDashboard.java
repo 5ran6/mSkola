@@ -1,5 +1,7 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +15,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
+
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 
 public class SchoolDashboard extends AppCompatActivity {
@@ -25,21 +30,22 @@ public class SchoolDashboard extends AppCompatActivity {
     private ImageButton bt_toggle_info_messages1, bt_toggle_info_academics1, bt_toggle_info_cbt1, bt_toggle_info_bursary1, bt_toggle_info_achievements1;
     private Button bt_hide_info_messages, bt_hide_info_academics, bt_hide_info_cbt, bt_hide_info_bursary, bt_hide_info_achievements;
     private View lyt_expand_info_academics, lyt_expand_info_cbt, lyt_expand_info_bursary, lyt_expand_info_messages, lyt_expand_info_achievements;
+    private String role, school_id, email;
+    private SharedPreferences mPrefs;
+    private SharedPreferences.Editor editor;
+    private static final int PREFRENCE_MODE_PRIVATE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_dashboard);
-        //  initToolbar();
+        if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
+            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+            email = mPrefs.getString("email_address", "");
+            role = mPrefs.getString("role", "");
+            school_id = mPrefs.getString("school_id", "");
+        }
         initComponent();
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_menu);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initComponent() {
@@ -172,9 +178,23 @@ public class SchoolDashboard extends AppCompatActivity {
     }
 
     private void toggleSectionInfoAcademics(View view) {
+
+        CardView assessment = findViewById(R.id.assessment);
+        assessment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Class_menu.class);
+                intent.putExtra("school_id", school_id);
+                intent.putExtra("role", role);
+                intent.putExtra("email_address", email);
+                startActivity(intent);
+            }
+        });
+
         boolean show = toggleArrow(view);
         if (show) {
             ViewAnimation.expand(lyt_expand_info_academics, new ViewAnimation.AnimListener() {
+
                 @Override
                 public void onFinish() {
                     Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_academics);
