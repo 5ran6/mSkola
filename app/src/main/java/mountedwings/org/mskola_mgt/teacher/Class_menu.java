@@ -1,5 +1,6 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.accounts.NetworkErrorException;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,8 @@ public class Class_menu extends AppCompatActivity {
     private Spinner select_class, select_arm, select_subject, select_assessment;
     private ProgressBar progressBar1, progressBar2, progressBar3, progressBar4;
     private int counter = 0;
-private TextView load;
+    private TextView load;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,12 +251,10 @@ private TextView load;
 
         @Override
         protected String doInBackground(String... strings) {
-
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getrsclass");
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
-
             return sentData.getStrData();
         }
 

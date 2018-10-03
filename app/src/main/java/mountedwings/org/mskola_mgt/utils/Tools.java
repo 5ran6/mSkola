@@ -123,6 +123,10 @@ public class Tools {
         SimpleDateFormat newFormat = new SimpleDateFormat("MMMM dd, yyyy");
         return newFormat.format(new Date(dateTime));
     }
+    public static String getFormattedDate(Long dateTime) {
+        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return newFormat.format(new Date(dateTime));
+    }
 
     public static String getFormattedDateEvent(Long dateTime) {
         SimpleDateFormat newFormat = new SimpleDateFormat("EEE, MMM dd yyyy");

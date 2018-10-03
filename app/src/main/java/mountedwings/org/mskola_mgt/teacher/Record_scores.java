@@ -66,7 +66,7 @@ public class Record_scores extends AppCompatActivity {
     private Button record;
     private ViewGroup main;
     private int position, counter = 0, last_index;
-    private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject, next_persons_score = "" , title;
+    private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject, next_persons_score = "", title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class Record_scores extends AppCompatActivity {
         subject = intent.getStringExtra("subject");
 
         title = assessment.toUpperCase() + " for " + class_name + arm;
-    //    initToolbar();
+        //    initToolbar();
         loading = (ProgressBar) findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
         new first_loading().execute(school_id, class_name, arm, assessment, subject);
@@ -313,6 +313,7 @@ public class Record_scores extends AppCompatActivity {
         } else {
             //just collapse
             ViewAnimation.collapse(view_list.get(view_list.size() - 1).findViewById(R.id.lyt_title));
+            hideSoftKeyboard();
         }
     }
 
