@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".teacher.MainActivityFragment"
+    tools:context=".teacher.AttendanceFragment"
     tools:showIn="@layout/activity_main">
 
     <android.support.design.widget.AppBarLayout
@@ -120,7 +120,8 @@
         android:layout_height="match_parent"
         android:background="@color/overlay_dark_30"
         android:clickable="true"
-        android:fitsSystemWindows="true" />
+        android:fitsSystemWindows="true"
+        android:focusable="true" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -148,6 +149,7 @@
                 app:contentPadding="@dimen/spacing_medium">
 
                 <TextView
+                    android:id="@+id/pub"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -166,6 +168,7 @@
                 android:layout_marginRight="@dimen/spacing_smlarge"
                 android:layout_marginTop="@dimen/spacing_middle"
                 android:clickable="true"
+                android:focusable="true"
                 android:tint="@color/grey_80"
                 app:backgroundTint="@android:color/white"
                 app:fabSize="mini"
@@ -195,6 +198,7 @@
                 app:contentPadding="@dimen/spacing_medium">
 
                 <TextView
+                    android:id="@+id/sav"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -235,6 +239,7 @@
             android:layout_marginRight="@dimen/spacing_smlarge"
             android:layout_marginTop="@dimen/spacing_middle"
             android:clickable="true"
+            android:focusable="true"
             android:tint="@android:color/white"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal"

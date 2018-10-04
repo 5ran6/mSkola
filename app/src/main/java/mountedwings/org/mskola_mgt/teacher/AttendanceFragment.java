@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
@@ -32,7 +33,8 @@ import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+
+public class AttendanceFragment extends Fragment {
     private View back_drop;
     private boolean rotate = false;
     private View lyt_hols;
@@ -43,13 +45,14 @@ public class MainActivityFragment extends Fragment {
     private ArrayList regNo = new ArrayList();
     private RecyclerView list;
     private FloatingActionButton fab_add, fab_holidays, fab_save;
-    private String[] morning = null, afternoon = null;
+    public String[] morning = null, afternoon = null;
+    private TextView pub, sav;
 
     String date, school_id, class_name, arm, TAG = "mSkola";
     ProgressBar loading;
     NumbersAdapter adapter;
 
-    public MainActivityFragment() {
+    public AttendanceFragment() {
     }
 
     @Override
@@ -64,6 +67,8 @@ public class MainActivityFragment extends Fragment {
         fab_add = (FloatingActionButton) view.findViewById(R.id.see_more);
         fab_holidays = (FloatingActionButton) view.findViewById(R.id.fab_hols);
         fab_save = (FloatingActionButton) view.findViewById(R.id.fab_save);
+        pub = view.findViewById(R.id.pub);
+        sav = view.findViewById(R.id.sav);
         back_drop = view.findViewById(R.id.back_drop);
         all_morning = view.findViewById(R.id.all_checkbox1);
         all_afternoon = view.findViewById(R.id.all_checkbox2);
@@ -97,7 +102,7 @@ public class MainActivityFragment extends Fragment {
     }
 
 
-    private class first_loading extends AsyncTask<String, Integer, String> {
+    public class first_loading extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
             //  Boolean success = false;
@@ -137,7 +142,7 @@ public class MainActivityFragment extends Fragment {
                     text = text.split("##")[0];
                 }
 
-                //worked. Splited into reg and names
+                //worked. Split into reg and names
                 String rows[] = text.split("<>");
                 if (rows.length > 0) {
                     for (int i = 0; i < rows.length; i++) {
@@ -148,9 +153,9 @@ public class MainActivityFragment extends Fragment {
                         number.setONEs((i + 1) + "");
                         number.setTextONEs(names.get(i).toString());
                         try {
-//                            Log.d(TAG, morning[i].toString());
                             //checked morning
                             if (morning[i].trim().equals("1")) number.setSelected(true);
+
                             //checked afternoon
                             if (afternoon[i].trim().equals("1")) number.setSelected1(true);
                         } catch (Exception ex) {
@@ -163,12 +168,156 @@ public class MainActivityFragment extends Fragment {
                     list.setAdapter(adapter);
                 } else {
                     // display an EMPTY error dialog and return to previous activity
-                    Toast.makeText(getContext(), "Something wrong went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             } else {
                 Toast.makeText(getContext(), "No record found for selected class/arm", Toast.LENGTH_SHORT).show();
+                getActivity().finish();
             }
+        }
+    }
+
+    private class markAttendance extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            //     Number number = new Number();
+            //  Boolean success = false;
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("takeattendance");
+            //to get the attendance values
+            String allReg = "", morning = "", afternoon = "";
+
+            for (int i = 0; i < regNo.size(); i++) {
+                if (allReg.isEmpty()) {
+                    allReg = regNo.get(i).toString();
+                } else {
+                    allReg += ";" + regNo.get(i).toString();
+                }
+
+                //morning
+                if (morning.isEmpty()) {
+                    //get checkbox at position i
+                    //get the string at that index
+                    if (numbers.get(i).isSelected()) {
+                        morning = "1";
+                    } else {
+                        morning = "0";
+                    }
+                } else {
+                    if (numbers.get(i).isSelected()) {
+                        morning += ";1";
+                    } else {
+                        morning += ";0";
+                    }
+                }
+//afternoon
+                if (afternoon.isEmpty()) {
+                    if (numbers.get(i).isSelected1()) {
+                        afternoon = "1";
+                    } else {
+                        afternoon = "0";
+                    }
+                } else {
+                    if (numbers.get(i).isSelected1()) {
+                        afternoon += ";1";
+                    } else {
+                        afternoon += ";0";
+                    }
+                }
+
+
+            }
+
+
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + allReg + "<>" + morning + "<>" + afternoon);
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+
+            String text = sentData.getStrData();
+            Log.d(TAG, text);
+
+            return text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+            try {
+                if (text.equals("success")) {
+                    Toast.makeText(getContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                } else {
+                    Toast.makeText(getContext(), "An error occurred. Check your connection and try again", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private class publicHoidays extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("takeattendance");
+            String allReg = "", morning = "", afternoon = "";
+            for (int i = 0; i < regNo.size(); i++) {
+                if (allReg.isEmpty()) {
+                    allReg = regNo.get(i).toString();
+                } else {
+                    allReg += ";" + regNo.get(i).toString();
+                }
+
+                if (morning.isEmpty()) {
+                    morning = "2";
+                } else {
+                    morning += ";2";
+                }
+
+                if (afternoon.isEmpty()) {
+                    afternoon = "2";
+                } else {
+                    afternoon += ";2";
+                }
+            }
+
+
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + allReg + "<>" + morning + "<>" + afternoon);
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+
+            String text = sentData.getStrData();
+            Log.d(TAG, text);
+
+            return text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+            try {
+                if (text.equals("success")) {
+                    Toast.makeText(getContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                } else {
+                    Toast.makeText(getContext(), "An error occurred. Check your connection and try again", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception ex) {
+
+            }
+
         }
     }
 
@@ -182,11 +331,10 @@ public class MainActivityFragment extends Fragment {
         arm = getActivity().getIntent().getStringExtra("arm");
         date = getActivity().getIntent().getStringExtra("date");
 
-//        Toast.makeText(getContext(), school_id, Toast.LENGTH_SHORT).show();
         loading.setVisibility(View.VISIBLE);
 
-        //        new first_loading().execute(school_id, class_name, arm, date);
-        new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
+        new first_loading().execute(school_id, class_name, arm, date);
+        //new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
         back_drop.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +347,7 @@ public class MainActivityFragment extends Fragment {
         fab_holidays.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getActivity().getActivity().getApplicationContext(), "Voice clicked", Toast.LENGTH_SHORT).show();
+                new publicHoidays().execute(school_id, class_name, arm, date);
             }
         });
 
@@ -207,6 +355,8 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //              Toast.makeText(getActivity().getActivity().getApplicationContext(), "Call clicked", Toast.LENGTH_SHORT).show();
+                new markAttendance().execute(school_id, class_name, arm, date);
+
             }
         });
 
@@ -215,21 +365,19 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 toggleFabMode(v);
-                StringBuilder stringBuilder = new StringBuilder();
-                StringBuilder stringBuilder1 = new StringBuilder();
-                for (Number number : numbers) {
-                    if (number.isSelected()) {
-                        if (stringBuilder.length() > 0)
-                            stringBuilder.append(", ");
-                        stringBuilder.append(number.getONEs());
-                    }
-                    if (number.isSelected1()) {
-                        if (stringBuilder1.length() > 0)
-                            stringBuilder1.append(", ");
-                        stringBuilder1.append(number.getONEs());
-                    }
-                }
-//                Toast.makeText(getActivity(), stringBuilder.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        sav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new markAttendance().execute(school_id, class_name, arm, date);
+            }
+        });
+        pub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new publicHoidays().execute(school_id, class_name, arm, date);
             }
         });
 
@@ -238,9 +386,15 @@ public class MainActivityFragment extends Fragment {
             public void onClick(View v) {
                 if (((CheckBox) v).isChecked()) {
                     //tick all
+                    for (int i = 0; i < numbers.size(); i++) {
+                        numbers.get(i).setSelected(true);
+                    }
                     adapter.selectAll();
                 } else {
                     //uncheck all
+                    for (int i = 0; i < numbers.size(); i++) {
+                        numbers.get(i).setSelected(false);
+                    }
                     adapter.unSelectAll();
 
                 }
@@ -251,9 +405,17 @@ public class MainActivityFragment extends Fragment {
             public void onClick(View v) {
                 if (((CheckBox) v).isChecked()) {
                     //tick all
+                    for (int i = 0; i < numbers.size(); i++) {
+                        numbers.get(i).setSelected1(true);
+                    }
+
                     adapter.selectAll1();
                 } else {
                     //uncheck all
+                    for (int i = 0; i < numbers.size(); i++) {
+                        numbers.get(i).setSelected1(false);
+                    }
+
                     adapter.unSelectAll1();
 
                 }

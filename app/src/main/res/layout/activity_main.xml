@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey_100"
     android:fitsSystemWindows="true"
-    tools:context=".teacher.MainActivity">
+    tools:context=".teacher.AttendanceActivity">
     <include layout="@layout/content_main" />
 
 

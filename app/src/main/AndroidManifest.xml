@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".teacher.MainActivity"
+            android:name=".teacher.AttendanceActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"

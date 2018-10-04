@@ -185,7 +185,7 @@ public class home extends AppCompatActivity {
                         if (drawerItem != null) {
                             Intent intent = null;
                             if (drawerItem.getIdentifier() == 1) {
-                                //     intent = new Intent(getApplicationContext(), MainActivity.class);
+                                //     intent = new Intent(getApplicationContext(), AttendanceActivity.class);
                             } else if (drawerItem.getIdentifier() == 2) {
                                 //intent = new Intent(getApplicationContext(), Class.class);
                             } else if (drawerItem.getIdentifier() == 3) {
