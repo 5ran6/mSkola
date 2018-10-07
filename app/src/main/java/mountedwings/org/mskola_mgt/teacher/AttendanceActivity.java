@@ -24,7 +24,6 @@ import mountedwings.org.mskola_mgt.R;
 
 public class AttendanceActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

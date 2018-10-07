@@ -60,8 +60,13 @@
         <activity android:name=".Chat" />
         <activity android:name=".SettingFlat" />
         <activity android:name=".teacher.Record_scores" />
-        <activity android:name=".teacher.Class_menu"/>
+        <activity android:name=".teacher.Assessment_menu"/>
         <activity android:name=".teacher.Attendance_menu" />
+        <activity android:name=".teacher.Assignment_menu" />
+        <activity android:name=".teacher.GiveAssignment" />
+        <activity android:name=".teacher.Assignment_history" />
+        <activity android:name=".teacher.CollateAssignments" />
+        <activity android:name=".teacher.Give_assignment_menu" />
     </application>
 
 </manifest>

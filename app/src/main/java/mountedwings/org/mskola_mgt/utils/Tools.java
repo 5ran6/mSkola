@@ -1,6 +1,7 @@
 package mountedwings.org.mskola_mgt.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -123,8 +125,17 @@ public class Tools {
         SimpleDateFormat newFormat = new SimpleDateFormat("MMMM dd, yyyy");
         return newFormat.format(new Date(dateTime));
     }
+
     public static String getFormattedDate(Long dateTime) {
         SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return newFormat.format(new Date(dateTime));
+    }
+    public static String getFormattedDate1(Long dateTime) {
+        SimpleDateFormat newFormat = new SimpleDateFormat("YYYY-MM-dd");
+        return newFormat.format(new Date(dateTime));
+    }
+    public static String getFormattedDateSlash(Long dateTime) {
+        SimpleDateFormat newFormat = new SimpleDateFormat("MM/dd/yyyy");
         return newFormat.format(new Date(dateTime));
     }
 
@@ -150,6 +161,31 @@ public class Tools {
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+
+    public void showCustomDialogFailure(Context context, String error) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.dialog_error);
+        dialog.setCancelable(true);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView error_message = dialog.findViewById(R.id.content);
+        error_message.setText(error);
+
+        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+    }
+
 
 //    public static GoogleMap configActivityMaps(GoogleMap googleMap) {
 //        // set map type
@@ -287,13 +323,13 @@ public class Tools {
     public static String personInfo(String firstName, String lastName, String country, String town, String phone, String account_type, String email, String password) {
         String info =
                 firstName + "," +
-                lastName + "," +
-                country + "," +
-                town + "," +
-                phone + "," +
-                account_type + "," +
-                email + "," +
-                password;
+                        lastName + "," +
+                        country + "," +
+                        town + "," +
+                        phone + "," +
+                        account_type + "," +
+                        email + "," +
+                        password;
         return info;
     }
 }

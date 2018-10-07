@@ -22,8 +22,8 @@ import java.util.Collections;
 
 import mountedwings.org.mskola_mgt.R;
 
-public class Class_menu extends AppCompatActivity {
-    private String school_id, staff_id, class_name, arm, assessment, subject;
+public class Assessment_menu extends AppCompatActivity {
+    private String school_id = "", staff_id = "", class_name = "", arm = "", assessment = "", subject = "";
     private Spinner select_class, select_arm, select_subject, select_assessment;
     private ProgressBar progressBar1, progressBar2, progressBar3, progressBar4;
     private int counter = 0;
@@ -120,17 +120,17 @@ public class Class_menu extends AppCompatActivity {
             }
         });
 
-        load.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Record_scores.class);
-                intent.putExtra("school_id", school_id);
-                intent.putExtra("class_name", class_name);
-                intent.putExtra("assessment", assessment);
-                intent.putExtra("arm", arm);
-                intent.putExtra("subject", subject);
-                startActivity(intent);
-
+        load.setOnClickListener(v -> {
+            if (!class_name.isEmpty() || !assessment.isEmpty() || !arm.isEmpty() || !subject.isEmpty()) {
+                Intent intent1 = new Intent(getApplicationContext(), Record_scores.class);
+                intent1.putExtra("school_id", school_id);
+                intent1.putExtra("class_name", class_name);
+                intent1.putExtra("assessment", assessment);
+                intent1.putExtra("arm", arm);
+                intent1.putExtra("subject", subject);
+                startActivity(intent1);
+            } else {
+                Toast.makeText(getApplicationContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
             }
         });
     }

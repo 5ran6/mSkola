@@ -299,13 +299,12 @@ public class MskolaLogin extends AppCompatActivity {
     }
 
     private void doLogin() {
-        lyt_progress = (LinearLayout) findViewById(R.id.lyt_progress);
+        lyt_progress =  findViewById(R.id.lyt_progress);
         lyt_progress.setVisibility(View.VISIBLE);
         lyt_progress.setAlpha(1.0f);
         parent_layout.setVisibility(View.GONE);
         //toolbar.setVisibility(View.GONE);
         new login().execute();
-
     }
 
 }

@@ -33,7 +33,7 @@ public class Splash extends AppCompatActivity {
             mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
         }
-        img = (ImageView) findViewById(R.id.img);
+        img = findViewById(R.id.img);
         final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
         final Transition transition = new Transition() {
             @Override
@@ -53,17 +53,15 @@ public class Splash extends AppCompatActivity {
         img.startAnimation(animation);
 
         Handler handler1 = new Handler();
-        handler1.postDelayed(new Runnable() {
-            public void run() {
-                // intent
-
-                if (singedIn) {
-                    startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
-                } else {
-                    //initial Launch
-                    finish();
-                    startActivity(new Intent(getApplicationContext(), Home.class));
-                }
+        handler1.postDelayed(() -> {
+            // intent
+            if (singedIn) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
+            } else {
+                //initial Launch
+                finish();
+                startActivity(new Intent(getApplicationContext(), Home.class));
             }
         }, 4000); // 4000 milliseconds delay
     }

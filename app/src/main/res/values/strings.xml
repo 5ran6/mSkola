@@ -135,6 +135,17 @@
     <string name="enter_score">Enter score</string>
     <string name="register_score">Register Score</string>
     <string name="mark_all">MARK ALL</string>
+    <string name="no_internet_connection">Check your internet connection and try again</string>
+    <string name="pay_fees">Pay Fees</string>
+    <string name="payment_status">Payment Status</string>
+    <string name="verifying_school_id">Verifying School ID</string>
+    <string name="assignment_history">Assignment History</string>
+    <string name="collate_assignments">Collate Assignments</string>
+    <string name="give_assignments">Give Assignments</string>
+    <string name="submission_time">Submission time</string>
+    <string name="submission_date">Submission Date</string>
+    <string name="type_your_questions_here">Type your questions here:</string>
+    <string name="u_p_l_o_a_d">U P L O A D</string>
 
 
 </resources>

@@ -64,16 +64,16 @@ public class AttendanceFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fab_add = (FloatingActionButton) view.findViewById(R.id.see_more);
-        fab_holidays = (FloatingActionButton) view.findViewById(R.id.fab_hols);
-        fab_save = (FloatingActionButton) view.findViewById(R.id.fab_save);
+        fab_add = view.findViewById(R.id.see_more);
+        fab_holidays = view.findViewById(R.id.fab_hols);
+        fab_save = view.findViewById(R.id.fab_save);
         pub = view.findViewById(R.id.pub);
         sav = view.findViewById(R.id.sav);
         back_drop = view.findViewById(R.id.back_drop);
         all_morning = view.findViewById(R.id.all_checkbox1);
         all_afternoon = view.findViewById(R.id.all_checkbox2);
 
-        loading = (ProgressBar) view.findViewById(R.id.loading);
+        loading = view.findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
 
         lyt_hols = view.findViewById(R.id.lyt_mic);
@@ -82,7 +82,7 @@ public class AttendanceFragment extends Fragment {
         ViewAnimation.initShowOut(lyt_save);
         back_drop.setVisibility(View.GONE);
 
-        list = (RecyclerView) view.findViewById(R.id.list);
+        list = view.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setHasFixedSize(false);
     }
@@ -181,48 +181,48 @@ public class AttendanceFragment extends Fragment {
     private class markAttendance extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            //     Number number = new Number();
-            //  Boolean success = false;
             storageFile storageObj = new storageFile();
             storageObj.setOperation("takeattendance");
             //to get the attendance values
-            String allReg = "", morning = "", afternoon = "";
+            StringBuilder allReg = new StringBuilder();
+            StringBuilder morning = new StringBuilder();
+            StringBuilder afternoon = new StringBuilder();
 
             for (int i = 0; i < regNo.size(); i++) {
-                if (allReg.isEmpty()) {
-                    allReg = regNo.get(i).toString();
+                if (allReg.length() == 0) {
+                    allReg = new StringBuilder(regNo.get(i).toString());
                 } else {
-                    allReg += ";" + regNo.get(i).toString();
+                    allReg.append(";").append(regNo.get(i).toString());
                 }
 
                 //morning
-                if (morning.isEmpty()) {
+                if (morning.length() == 0) {
                     //get checkbox at position i
                     //get the string at that index
                     if (numbers.get(i).isSelected()) {
-                        morning = "1";
+                        morning = new StringBuilder("1");
                     } else {
-                        morning = "0";
+                        morning = new StringBuilder("0");
                     }
                 } else {
                     if (numbers.get(i).isSelected()) {
-                        morning += ";1";
+                        morning.append(";1");
                     } else {
-                        morning += ";0";
+                        morning.append(";0");
                     }
                 }
 //afternoon
-                if (afternoon.isEmpty()) {
+                if (afternoon.length() == 0) {
                     if (numbers.get(i).isSelected1()) {
-                        afternoon = "1";
+                        afternoon = new StringBuilder("1");
                     } else {
-                        afternoon = "0";
+                        afternoon = new StringBuilder("0");
                     }
                 } else {
                     if (numbers.get(i).isSelected1()) {
-                        afternoon += ";1";
+                        afternoon.append(";1");
                     } else {
-                        afternoon += ";0";
+                        afternoon.append(";0");
                     }
                 }
 
@@ -261,7 +261,7 @@ public class AttendanceFragment extends Fragment {
         }
     }
 
-    private class publicHoidays extends AsyncTask<String, Integer, String> {
+    private class publicHolidays extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
@@ -337,88 +337,49 @@ public class AttendanceFragment extends Fragment {
         //new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        back_drop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMode(fab_add);
-            }
-        });
+        back_drop.setOnClickListener(v -> toggleFabMode(fab_add));
 
-        fab_holidays.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new publicHoidays().execute(school_id, class_name, arm, date);
-            }
-        });
+        fab_holidays.setOnClickListener(v -> new publicHolidays().execute(school_id, class_name, arm, date));
 
-        fab_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //              Toast.makeText(getActivity().getActivity().getApplicationContext(), "Call clicked", Toast.LENGTH_SHORT).show();
-                new markAttendance().execute(school_id, class_name, arm, date);
+        fab_save.setOnClickListener(v -> {
+            new markAttendance().execute(school_id, class_name, arm, date);
 
-            }
         });
 
 
-        fab_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMode(v);
-            }
-        });
+        fab_add.setOnClickListener(v -> toggleFabMode(v));
 
-        sav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new markAttendance().execute(school_id, class_name, arm, date);
-            }
-        });
-        pub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new publicHoidays().execute(school_id, class_name, arm, date);
-            }
-        });
+        sav.setOnClickListener(v -> new markAttendance().execute(school_id, class_name, arm, date));
+        pub.setOnClickListener(v -> new publicHolidays().execute(school_id, class_name, arm, date));
 
-        all_morning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    //tick all
-                    for (int i = 0; i < numbers.size(); i++) {
-                        numbers.get(i).setSelected(true);
-                    }
-                    adapter.selectAll();
-                } else {
-                    //uncheck all
-                    for (int i = 0; i < numbers.size(); i++) {
-                        numbers.get(i).setSelected(false);
-                    }
-                    adapter.unSelectAll();
-
+        all_morning.setOnClickListener(v -> {
+            if (((CheckBox) v).isChecked()) {
+                //tick all
+                for (int i = 0; i < numbers.size(); i++) {
+                    numbers.get(i).setSelected(true);
                 }
+                adapter.selectAll();
+            } else {
+                //uncheck all
+                for (int i = 0; i < numbers.size(); i++) {
+                    numbers.get(i).setSelected(false);
+                }
+                adapter.unSelectAll();
             }
         });
-        all_afternoon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    //tick all
-                    for (int i = 0; i < numbers.size(); i++) {
-                        numbers.get(i).setSelected1(true);
-                    }
-
-                    adapter.selectAll1();
-                } else {
-                    //uncheck all
-                    for (int i = 0; i < numbers.size(); i++) {
-                        numbers.get(i).setSelected1(false);
-                    }
-
-                    adapter.unSelectAll1();
-
+        all_afternoon.setOnClickListener(v -> {
+            if (((CheckBox) v).isChecked()) {
+                //tick all
+                for (int i = 0; i < numbers.size(); i++) {
+                    numbers.get(i).setSelected1(true);
                 }
+                adapter.selectAll1();
+            } else {
+                //uncheck all
+                for (int i = 0; i < numbers.size(); i++) {
+                    numbers.get(i).setSelected1(false);
+                }
+                adapter.unSelectAll1();
             }
         });
     }

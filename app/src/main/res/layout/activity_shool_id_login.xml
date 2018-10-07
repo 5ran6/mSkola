@@ -120,7 +120,6 @@
 
                 <android.support.v7.widget.AppCompatButton
                     android:layout_width="200dp"
-
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_rounded_blue_300"
                     android:onClick="continued"
@@ -131,7 +130,24 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/spacing_xlarge" />
 
+                <ProgressBar
+                    android:id="@+id/checking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/verifying"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/verifying_school_id"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white_transparency"
+                    android:textStyle="italic"
+                    android:visibility="invisible" />
             </LinearLayout>
+
 
         </RelativeLayout>
 

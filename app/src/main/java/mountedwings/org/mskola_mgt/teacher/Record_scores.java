@@ -1,7 +1,5 @@
 package mountedwings.org.mskola_mgt.teacher;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -13,10 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +21,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,12 +29,8 @@ import android.widget.Toast;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
@@ -58,15 +48,10 @@ public class Record_scores extends AppCompatActivity {
     private int success_step = 0, len;
     private int current_step = 0;
     private View parent_view;
-    private LinearLayout parent, serial_number, whole_details, input_section;
-    private RelativeLayout serial_number_with_textView;
-    private View view_small, view_divider;
-    private TextView s_no, students_name;
     private AppCompatEditText score;
-    private Button record;
     private ViewGroup main;
-    private int position, counter = 0, last_index;
-    private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject, next_persons_score = "", title;
+    private int last_index;
+    private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +66,10 @@ public class Record_scores extends AppCompatActivity {
         arm = intent.getStringExtra("arm");
         subject = intent.getStringExtra("subject");
 
-        title = assessment.toUpperCase() + " for " + class_name + arm;
-        //    initToolbar();
-        loading = (ProgressBar) findViewById(R.id.loading);
+       // initToolbar(assessment.toUpperCase() + " for " + class_name + arm);
+        loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
         new first_loading().execute(school_id, class_name, arm, assessment, subject);
-        //        initComponent();
     }
 
 
@@ -108,18 +91,16 @@ public class Record_scores extends AppCompatActivity {
 
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        main = (ViewGroup) findViewById(R.id.main_content);
+        main = findViewById(R.id.main_content);
         main.addView(view, index);
         //add to the view list array
         view_list.add(view);
-        step_view_list.add(((RelativeLayout) view.findViewById(R.id.step_title)));
+        step_view_list.add(( view.findViewById(R.id.step_title)));
 
         for (View v : view_list) {
             v.findViewById(R.id.lyt_title).setVisibility(View.GONE);
-//            student_name.setText("");
-//            v.setVisibility(View.VISIBLE);
         }
-        view = view_list.get(0);
+//        view = view_list.get(0);
         view_list.get(0).findViewById(R.id.lyt_title).setVisibility(View.VISIBLE);
         view = view_list.get(0);
         score = view.findViewById(R.id.et_title);
@@ -129,7 +110,7 @@ public class Record_scores extends AppCompatActivity {
 
         mark_scores.setOnClickListener(v -> {
 //is Not a float
-            boolean check = false;
+  //          boolean check = false;
             int i = 0;
             try {
                 i = Integer.valueOf(score.getText().toString());
@@ -150,7 +131,6 @@ public class Record_scores extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
             //send to server
             new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
-
             collapseAndContinue(index);
 
         });
@@ -161,8 +141,6 @@ public class Record_scores extends AppCompatActivity {
             //don't record anything
 
         });
-//        Toast.makeText(getApplicationContext(), "Here", Toast.LENGTH_SHORT).show();
-
     }
 
     private void subsequentView(int index, View vv) {
@@ -177,7 +155,6 @@ public class Record_scores extends AppCompatActivity {
 
         mark_scores.setOnClickListener(v -> {
 //is Not a float
-            boolean check = false;
             int i = 0;
             try {
                 i = Integer.valueOf(score.getText().toString());
@@ -207,10 +184,7 @@ public class Record_scores extends AppCompatActivity {
 
             collapseAndContinue(index);
             //don't record anything
-
         });
-//        Toast.makeText(getApplicationContext(), "Here", Toast.LENGTH_SHORT).show();
-
     }
 
     public void clickAction(View view) {
@@ -282,10 +256,10 @@ public class Record_scores extends AppCompatActivity {
     }
 
     //DONE
-    private void initToolbar() {
+    private void initToolbar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Details");
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -299,7 +273,6 @@ public class Record_scores extends AppCompatActivity {
             index++;
             //thread for loading score for next person using index++ for index
             score.setText("");
-//            Log.d(TAG, "Reg number = " + regNumbs[index]);
             current_step = index;
             if (current_step >= view_list.size()) {
                 ViewAnimation.collapse(view_list.get(view_list.size() - 1).findViewById(R.id.lyt_title));
@@ -383,7 +356,7 @@ public class Record_scores extends AppCompatActivity {
             storageObj.setOperation("getstudentscore");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4] + "<>" + regNumbs[Integer.valueOf(strings[5])]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return next_persons_score = sentData.getStrData();
+            return sentData.getStrData();
         }
 
         @Override
@@ -414,7 +387,7 @@ public class Record_scores extends AppCompatActivity {
             storageObj.setOperation("savestudentscore");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4] + "<>" + regNumbs[Integer.valueOf(strings[5])] + "<>" + strings[6]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return next_persons_score = sentData.getStrData();
+            return sentData.getStrData();
         }
 
         @Override
@@ -439,7 +412,6 @@ public class Record_scores extends AppCompatActivity {
 
     //DONE
     private class first_loading extends AsyncTask<String, Integer, Boolean> {
-
         @Override
         protected Boolean doInBackground(String... strings) {
             Boolean success = false;
@@ -452,7 +424,6 @@ public class Record_scores extends AppCompatActivity {
             Log.d(TAG, text);
 
             if (!text.equals("0") && !text.equals("")) {
-//            myClass.recordScoresObj = sentData;
 
                 try {
                     first_persons_score = text.split("##")[1];
@@ -470,7 +441,6 @@ public class Record_scores extends AppCompatActivity {
                 if (!text.isEmpty()) {
                     int i = 0;
                     do {
-                        position = i;
                         //name
                         names[i] = text.split("<>")[i].split(";")[1];
                         //regNumber
@@ -483,12 +453,9 @@ public class Record_scores extends AppCompatActivity {
                     success = true;
                 } else {
                     // display an error dialog and return to previous activity
-                    //      Toast.makeText(getApplicationContext(), "No student found in the selected class", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             } else {
-                // display an EMPTY error dialog and return to previous activity
-                //  Toast.makeText(getApplicationContext(), "No student found in the selected class", Toast.LENGTH_SHORT).show();
                 success = false;
 
                 finish();
@@ -509,11 +476,11 @@ public class Record_scores extends AppCompatActivity {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
                 loading.setVisibility(View.GONE);
-                //initViews(0, names[0]);
                 for (int i = 0; i < len; i++)
                     initViews(i, names[i]);
             } else {
                 Toast.makeText(getApplicationContext(), "No record found for selected class/subject", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }

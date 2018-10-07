@@ -6,16 +6,13 @@ import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
@@ -26,21 +23,19 @@ import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 public class SchoolDashboard extends AppCompatActivity {
 
     private NestedScrollView nested_scroll_view;
-    private CardView bt_toggle_info_messages, bt_toggle_info_academics, bt_toggle_info_cbt, bt_toggle_info_bursary, bt_toggle_info_achievements;
     private ImageButton bt_toggle_info_messages1, bt_toggle_info_academics1, bt_toggle_info_cbt1, bt_toggle_info_bursary1, bt_toggle_info_achievements1;
-    private Button bt_hide_info_messages, bt_hide_info_academics, bt_hide_info_cbt, bt_hide_info_bursary, bt_hide_info_achievements;
     private View lyt_expand_info_academics, lyt_expand_info_cbt, lyt_expand_info_bursary, lyt_expand_info_messages, lyt_expand_info_achievements;
     private String role, school_id, email;
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor editor;
-    private static final int PREFRENCE_MODE_PRIVATE = 0;
+    private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_dashboard);
-        if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
-            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+        if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
+            mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
             email = mPrefs.getString("email_address", "");
             role = mPrefs.getString("role", "");
             school_id = mPrefs.getString("school_id", "");
@@ -52,154 +47,86 @@ public class SchoolDashboard extends AppCompatActivity {
         nested_scroll_view = findViewById(R.id.nested_scroll_view);
 
         // info item_academics
-        bt_toggle_info_academics = findViewById(R.id.bt_toggle_info_academics);
+        CardView bt_toggle_info_academics = findViewById(R.id.bt_toggle_info_academics);
         bt_toggle_info_academics1 = findViewById(R.id.bt_toggle_info_academics1);
-        bt_hide_info_academics = findViewById(R.id.bt_hide_info_academics);
+        Button bt_hide_info_academics = findViewById(R.id.bt_hide_info_academics);
         lyt_expand_info_academics = findViewById(R.id.lyt_expand_info_academics);
-        bt_toggle_info_academics.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoAcademics(bt_toggle_info_academics1);
-            }
-        });
-        bt_toggle_info_academics1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoAcademics(bt_toggle_info_academics1);
-            }
-        });
-        bt_hide_info_academics.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoAcademics(bt_toggle_info_academics1);
-            }
-        });
+        bt_toggle_info_academics.setOnClickListener(view -> toggleSectionInfoAcademics(bt_toggle_info_academics1));
+        bt_toggle_info_academics1.setOnClickListener(view -> toggleSectionInfoAcademics(bt_toggle_info_academics1));
+        bt_hide_info_academics.setOnClickListener(view -> toggleSectionInfoAcademics(bt_toggle_info_academics1));
 
         // info item_bursary
-        bt_toggle_info_bursary = findViewById(R.id.bt_toggle_info_bursary);
+        CardView bt_toggle_info_bursary = findViewById(R.id.bt_toggle_info_bursary);
         bt_toggle_info_bursary1 = findViewById(R.id.bt_toggle_info_bursary1);
-        bt_hide_info_bursary = findViewById(R.id.bt_hide_info_bursary);
+        Button bt_hide_info_bursary = findViewById(R.id.bt_hide_info_bursary);
         lyt_expand_info_bursary = findViewById(R.id.lyt_expand_info_bursary);
-        bt_toggle_info_bursary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoBursary(bt_toggle_info_bursary1);
-            }
-        });
-        bt_toggle_info_bursary1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoBursary(bt_toggle_info_bursary1);
-            }
-        });
+        bt_toggle_info_bursary.setOnClickListener(view -> toggleSectionInfoBursary(bt_toggle_info_bursary1));
+        bt_toggle_info_bursary1.setOnClickListener(view -> toggleSectionInfoBursary(bt_toggle_info_bursary1));
 
-        bt_hide_info_bursary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoBursary(bt_toggle_info_bursary1);
-            }
-        });
+        bt_hide_info_bursary.setOnClickListener(view -> toggleSectionInfoBursary(bt_toggle_info_bursary1));
 
         // info item_cbt
-        bt_toggle_info_cbt = findViewById(R.id.bt_toggle_info_cbt);
+        CardView bt_toggle_info_cbt = findViewById(R.id.bt_toggle_info_cbt);
         bt_toggle_info_cbt1 = findViewById(R.id.bt_toggle_info_cbt1);
-        bt_hide_info_cbt = findViewById(R.id.bt_hide_info_cbt);
+        Button bt_hide_info_cbt = findViewById(R.id.bt_hide_info_cbt);
         lyt_expand_info_cbt = findViewById(R.id.lyt_expand_info_cbt);
-        bt_toggle_info_cbt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoCBT(bt_toggle_info_cbt1);
-            }
-        });
-        bt_toggle_info_cbt1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoCBT(bt_toggle_info_cbt1);
-            }
-        });
+        bt_toggle_info_cbt.setOnClickListener(view -> toggleSectionInfoCBT(bt_toggle_info_cbt1));
+        bt_toggle_info_cbt1.setOnClickListener(view -> toggleSectionInfoCBT(bt_toggle_info_cbt1));
 
-        bt_hide_info_cbt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoCBT(bt_toggle_info_cbt1);
-            }
-        });
+        bt_hide_info_cbt.setOnClickListener(view -> toggleSectionInfoCBT(bt_toggle_info_cbt1));
 
         // info item_achievements
-        bt_toggle_info_achievements = findViewById(R.id.bt_toggle_info_achievements);
+        CardView bt_toggle_info_achievements = findViewById(R.id.bt_toggle_info_achievements);
         bt_toggle_info_achievements1 = findViewById(R.id.bt_toggle_info_achievements1);
-        bt_hide_info_achievements = findViewById(R.id.bt_hide_info_achievements);
+        Button bt_hide_info_achievements = findViewById(R.id.bt_hide_info_achievements);
         lyt_expand_info_achievements = findViewById(R.id.lyt_expand_info_achievements);
-        bt_toggle_info_achievements.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoAchievements(bt_toggle_info_achievements1);
-            }
-        });
-        bt_toggle_info_achievements1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoAchievements(bt_toggle_info_achievements1);
-            }
-        });
+        bt_toggle_info_achievements.setOnClickListener(view -> toggleSectionInfoAchievements(bt_toggle_info_achievements1));
+        bt_toggle_info_achievements1.setOnClickListener(view -> toggleSectionInfoAchievements(bt_toggle_info_achievements1));
 
-        bt_hide_info_achievements.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoAchievements(bt_toggle_info_achievements1);
-            }
-        });
+        bt_hide_info_achievements.setOnClickListener(view -> toggleSectionInfoAchievements(bt_toggle_info_achievements1));
 
         // info item_messages
-        bt_toggle_info_messages = findViewById(R.id.bt_toggle_info_messages);
+        CardView bt_toggle_info_messages = findViewById(R.id.bt_toggle_info_messages);
         bt_toggle_info_messages1 = findViewById(R.id.bt_toggle_info_messages1);
-        bt_hide_info_messages = findViewById(R.id.bt_hide_info_messages);
+        Button bt_hide_info_messages = findViewById(R.id.bt_hide_info_messages);
         lyt_expand_info_messages = findViewById(R.id.lyt_expand_info_messages);
-        bt_toggle_info_messages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoMessages(bt_toggle_info_messages1);
-            }
-        });
-        bt_toggle_info_messages1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoMessages(bt_toggle_info_messages1);
-            }
-        });
+        bt_toggle_info_messages.setOnClickListener(view -> toggleSectionInfoMessages(bt_toggle_info_messages1));
+        bt_toggle_info_messages1.setOnClickListener(view -> toggleSectionInfoMessages(bt_toggle_info_messages1));
 
-        bt_hide_info_messages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSectionInfoMessages(bt_toggle_info_messages1);
-            }
-        });
+        bt_hide_info_messages.setOnClickListener(view -> toggleSectionInfoMessages(bt_toggle_info_messages1));
 
     }
 
     private void toggleSectionInfoAcademics(View view) {
 
         CardView assessment = findViewById(R.id.assessment);
-        assessment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Class_menu.class);
-                intent.putExtra("school_id", school_id);
-                intent.putExtra("role", role);
-                intent.putExtra("email_address", email);
-                startActivity(intent);
-            }
+        assessment.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Assessment_menu.class);
+            intent.putExtra("school_id", school_id);
+            intent.putExtra("role", role);
+            intent.putExtra("email_address", email);
+            startActivity(intent);
+        });
+        CardView attendance = findViewById(R.id.attendance);
+        attendance.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Attendance_menu.class);
+            intent.putExtra("school_id", school_id);
+            intent.putExtra("role", role);
+            intent.putExtra("email_address", email);
+            startActivity(intent);
+        });
+        CardView assignment = findViewById(R.id.assignment);
+        assignment.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Assignment_menu.class);
+            intent.putExtra("school_id", school_id);
+            intent.putExtra("role", role);
+            intent.putExtra("email_address", email);
+            startActivity(intent);
         });
 
         boolean show = toggleArrow(view);
         if (show) {
-            ViewAnimation.expand(lyt_expand_info_academics, new ViewAnimation.AnimListener() {
-
-                @Override
-                public void onFinish() {
-                    Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_academics);
-                }
-            });
+            ViewAnimation.expand(lyt_expand_info_academics, () -> Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_academics));
         } else {
             ViewAnimation.collapse(lyt_expand_info_academics);
         }
@@ -208,12 +135,7 @@ public class SchoolDashboard extends AppCompatActivity {
     private void toggleSectionInfoBursary(View view) {
         boolean show = toggleArrow(view);
         if (show) {
-            ViewAnimation.expand(lyt_expand_info_bursary, new ViewAnimation.AnimListener() {
-                @Override
-                public void onFinish() {
-                    Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_bursary);
-                }
-            });
+            ViewAnimation.expand(lyt_expand_info_bursary, () -> Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_bursary));
         } else {
             ViewAnimation.collapse(lyt_expand_info_bursary);
         }
@@ -222,12 +144,7 @@ public class SchoolDashboard extends AppCompatActivity {
     private void toggleSectionInfoCBT(View view) {
         boolean show = toggleArrow(view);
         if (show) {
-            ViewAnimation.expand(lyt_expand_info_cbt, new ViewAnimation.AnimListener() {
-                @Override
-                public void onFinish() {
-                    Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_cbt);
-                }
-            });
+            ViewAnimation.expand(lyt_expand_info_cbt, () -> Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_cbt));
         } else {
             ViewAnimation.collapse(lyt_expand_info_cbt);
         }
@@ -236,12 +153,7 @@ public class SchoolDashboard extends AppCompatActivity {
     private void toggleSectionInfoAchievements(View view) {
         boolean show = toggleArrow(view);
         if (show) {
-            ViewAnimation.expand(lyt_expand_info_achievements, new ViewAnimation.AnimListener() {
-                @Override
-                public void onFinish() {
-                    Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_achievements);
-                }
-            });
+            ViewAnimation.expand(lyt_expand_info_achievements, () -> Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_achievements));
         } else {
             ViewAnimation.collapse(lyt_expand_info_achievements);
         }
@@ -250,17 +162,11 @@ public class SchoolDashboard extends AppCompatActivity {
     private void toggleSectionInfoMessages(View view) {
         boolean show = toggleArrow(view);
         if (show) {
-            ViewAnimation.expand(lyt_expand_info_messages, new ViewAnimation.AnimListener() {
-                @Override
-                public void onFinish() {
-                    Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_messages);
-                }
-            });
+            ViewAnimation.expand(lyt_expand_info_messages, () -> Tools.nestedScrollTo(nested_scroll_view, lyt_expand_info_messages));
         } else {
             ViewAnimation.collapse(lyt_expand_info_messages);
         }
     }
-
 
     public boolean toggleArrow(View view) {
         if (view.getRotation() == 0) {
@@ -271,7 +177,6 @@ public class SchoolDashboard extends AppCompatActivity {
             return false;
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
