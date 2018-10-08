@@ -45,6 +45,7 @@ public class Record_scores extends AppCompatActivity {
     private String[] regNumbs;
     private String[] names;
     private ProgressBar loading;
+    private TextView heading;
     private int success_step = 0, len;
     private int current_step = 0;
     private View parent_view;
@@ -58,6 +59,7 @@ public class Record_scores extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_scores_test);
         parent_view = findViewById(android.R.id.content);
+        heading = findViewById(R.id.text);
         Intent intent = getIntent();
 
         school_id = intent.getStringExtra("school_id");
@@ -66,7 +68,10 @@ public class Record_scores extends AppCompatActivity {
         arm = intent.getStringExtra("arm");
         subject = intent.getStringExtra("subject");
 
-       // initToolbar(assessment.toUpperCase() + " for " + class_name + arm);
+
+        heading.setText(new StringBuilder().append(assessment.toUpperCase()).append(" for ").append(class_name).append(arm).toString());
+
+        // initToolbar(assessment.toUpperCase() + " for " + class_name + arm);
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
         new first_loading().execute(school_id, class_name, arm, assessment, subject);
@@ -95,7 +100,7 @@ public class Record_scores extends AppCompatActivity {
         main.addView(view, index);
         //add to the view list array
         view_list.add(view);
-        step_view_list.add(( view.findViewById(R.id.step_title)));
+        step_view_list.add((view.findViewById(R.id.step_title)));
 
         for (View v : view_list) {
             v.findViewById(R.id.lyt_title).setVisibility(View.GONE);
@@ -110,7 +115,7 @@ public class Record_scores extends AppCompatActivity {
 
         mark_scores.setOnClickListener(v -> {
 //is Not a float
-  //          boolean check = false;
+            //          boolean check = false;
             int i = 0;
             try {
                 i = Integer.valueOf(score.getText().toString());

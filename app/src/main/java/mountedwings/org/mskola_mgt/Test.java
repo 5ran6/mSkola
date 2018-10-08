@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import mountedwings.org.mskola_mgt.teacher.Assessment_menu;
+import mountedwings.org.mskola_mgt.teacher.AssignmentHistoryActivity;
 import mountedwings.org.mskola_mgt.teacher.GiveAssignment;
 import mountedwings.org.mskola_mgt.teacher.Give_assignment_menu;
+import mountedwings.org.mskola_mgt.teacher.Record_scores;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Test extends AppCompatActivity {
@@ -19,6 +22,6 @@ public class Test extends AppCompatActivity {
     }
 
     public void testing(View view) {
-        startActivity(new Intent(getApplicationContext(), Give_assignment_menu.class));
+        startActivity(new Intent(getApplicationContext(), Assessment_menu.class));
     }
 }

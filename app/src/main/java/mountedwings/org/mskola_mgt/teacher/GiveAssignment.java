@@ -113,14 +113,13 @@ public class GiveAssignment extends AppCompatActivity {
                 lyt_progress.setAlpha(1.0f);
                 //pass into background thread
                 new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
-        //        new uploadAssignment().execute("cac180826043520", questions, "English Language", "JSS1 A", dueDate, dueTime, "admin");
+                //        new uploadAssignment().execute("cac180826043520", questions, "English Language", "JSS1 A", dueDate, dueTime, "admin");
             } else {
                 Toast.makeText(getApplicationContext(), "Assignment Field is empty", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(getApplicationContext(), "Please select due Date and Time", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private class uploadAssignment extends AsyncTask<String, Integer, String> {

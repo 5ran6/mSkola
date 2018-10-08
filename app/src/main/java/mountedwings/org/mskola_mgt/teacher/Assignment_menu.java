@@ -38,7 +38,7 @@ public class Assignment_menu extends AppCompatActivity {
     }
 
     public void assignmentHistory(View view) {
-        intent = new Intent(getApplicationContext(), Assignment_history.class);
+        intent = new Intent(getApplicationContext(), AssignmentHistoryActivity.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", staff_id);
         startActivity(intent);
