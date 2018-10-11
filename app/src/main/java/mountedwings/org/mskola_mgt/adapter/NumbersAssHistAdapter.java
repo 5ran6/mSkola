@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import java.util.List;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.data.Number;
 import mountedwings.org.mskola_mgt.data.NumberAssHist;
+import mountedwings.org.mskola_mgt.teacher.Assignment_history_detail;
 import mountedwings.org.mskola_mgt.teacher.AttendanceFragment;
 
 /**
@@ -25,6 +27,7 @@ import mountedwings.org.mskola_mgt.teacher.AttendanceFragment;
 public class NumbersAssHistAdapter extends RecyclerView.Adapter<NumbersAssHistAdapter.ViewHolder> {
 
     ArrayList<NumberAssHist> numbers;
+    private OnItemClickListener mOnItemClickListener;
 
     public NumbersAssHistAdapter(List<NumberAssHist> numbers) {
         this.numbers = new ArrayList<>(numbers);
@@ -36,16 +39,31 @@ public class NumbersAssHistAdapter extends RecyclerView.Adapter<NumbersAssHistAd
         return new ViewHolder(v);
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, NumberAssHist obj, int position);
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.bindData(numbers.get(position));
 
-        holder.cardView.setOnClickListener(v -> {
-            //intent to open a class with passed extras
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: intent to open a class with passed extras
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, numbers.get(position), position);
 
+                }
+
+            }
         });
-
     }
+
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mOnItemClickListener = mItemClickListener;
+    }
+
 
     @Override
     public int getItemCount() {
@@ -79,4 +97,6 @@ public class NumbersAssHistAdapter extends RecyclerView.Adapter<NumbersAssHistAd
             staff_id.setText(String.format("By: %s", number.getStaff()));
         }
     }
+
+
 }

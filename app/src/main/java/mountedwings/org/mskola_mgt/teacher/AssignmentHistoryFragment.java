@@ -1,11 +1,13 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -72,6 +75,11 @@ public class AssignmentHistoryFragment extends Fragment {
         list = view.findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setHasFixedSize(false);
+
+        adapter = new NumbersAssHistAdapter(numbers);
+        list.setAdapter(adapter);
+
+
     }
 
     public class first_loading extends AsyncTask<String, Integer, String> {
@@ -109,16 +117,61 @@ public class AssignmentHistoryFragment extends Fragment {
                     number.setClassArm(rows[i].split(";")[2]);
                     number.setStaff(rows[i].split(";")[3]);
                     number.setAssignment(rows[i].split(";")[4]);
-
                     numbers.add(number);
                 }
                 //show recyclerView with inflated views
                 adapter = new NumbersAssHistAdapter(numbers);
                 list.setAdapter(adapter);
+
+                adapter.setOnItemClickListener(new NumbersAssHistAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, NumberAssHist obj, int position) {
+                        String assignmentId = numbers.get(position).getAssignment();
+//                        Toast.makeText(getContext(), "Item " + assignmentId + " clicked", Toast.LENGTH_SHORT).show();
+                        new loadIndividualAssignment().execute(assignmentId);
+                    }
+                });
+
             } else {
                 Toast.makeText(getContext(), "You haven't given an assignment!", Toast.LENGTH_SHORT).show();
                 Objects.requireNonNull(getActivity()).finish();
             }
+        }
+    }
+
+    public class loadIndividualAssignment extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getassdetails");
+            storageObj.setStrData(school_id + "<>" + strings[0]);
+
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+
+            String text = sentData.getStrData();
+            Log.d(TAG, text);
+
+            return text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            try {
+                if (!text.isEmpty() && !text.equals("0")) {
+                    startActivity(new Intent(getContext(), Assignment_history_detail.class).putExtra("ass_details", text));
+                }
+
+            } catch (Exception e) {
+
+            }
+
         }
     }
 
@@ -144,4 +197,6 @@ public class AssignmentHistoryFragment extends Fragment {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> getActivity().finish());
     }
+
+
 }
