@@ -23,7 +23,7 @@ public class Assignment_menu extends AppCompatActivity {
     }
 
     public void giveAssignments(View view) {
-        intent = new Intent(getApplicationContext(), GiveAssignment.class);
+        intent = new Intent(getApplicationContext(), Give_assignment_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", staff_id);
         startActivity(intent);

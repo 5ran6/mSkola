@@ -92,6 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:imeOptions="actionDone"
                     android:inputType="textCapCharacters"
                     android:maxLength="25"
                     android:maxLines="1"

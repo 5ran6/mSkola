@@ -1,11 +1,10 @@
 package mountedwings.org.mskola_mgt.teacher;
 
-import android.accounts.NetworkErrorException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,13 +13,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.Collections;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Assessment_menu extends AppCompatActivity {
     private String school_id = "", staff_id = "", class_name = "", arm = "", assessment = "", subject = "";
@@ -34,9 +35,14 @@ public class Assessment_menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_menu);
 
-        Intent intent = getIntent();
-        school_id = intent.getStringExtra("school_id");
-        staff_id = intent.getStringExtra("email_address");
+        //get stuff from sharedPrefs
+
+        SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
+
+        //school_id/staff id from sharedPrefs
+
+        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
 
         load = findViewById(R.id.load);
@@ -122,7 +128,7 @@ public class Assessment_menu extends AppCompatActivity {
 
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() || !assessment.isEmpty() || !arm.isEmpty() || !subject.isEmpty()) {
-                Intent intent1 = new Intent(getApplicationContext(), Record_scores.class);
+                Intent intent1 = new Intent(getApplicationContext(), Assessment.class);
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("assessment", assessment);

@@ -145,7 +145,7 @@ public class Login_SignUp extends AppCompatActivity {
             ((ImageView) view.findViewById(R.id.image)).setImageResource(about_images_array[position]);
             ((ImageView) view.findViewById(R.id.image_bg)).setImageResource(color_array[position]);
 
-            Button btnNext = (Button) view.findViewById(R.id.btn_next);
+            Button btnNext =  view.findViewById(R.id.btn_next);
 
             if (position == title_array.length - 1) {
                 btnNext.setText(R.string.get_started);

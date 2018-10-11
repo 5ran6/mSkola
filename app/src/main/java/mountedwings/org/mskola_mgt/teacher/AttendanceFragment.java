@@ -330,8 +330,8 @@ public class AttendanceFragment extends Fragment {
 
         loading.setVisibility(View.VISIBLE);
 
-        new first_loading().execute(school_id, class_name, arm, date);
-        //new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
+        //new first_loading().execute(school_id, class_name, arm, date);
+        new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
         back_drop.setOnClickListener(v -> toggleFabMode(fab_add));
@@ -340,6 +340,7 @@ public class AttendanceFragment extends Fragment {
 
         fab_save.setOnClickListener(v -> {
             new markAttendance().execute(school_id, class_name, arm, date);
+//            new markAttendance().execute("cac180826043520", "JSS1", "A", "2018-10-03");
 
         });
 

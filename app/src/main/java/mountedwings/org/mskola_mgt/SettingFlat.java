@@ -37,7 +37,7 @@ public class SettingFlat extends AppCompatActivity {
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor editor;
 
-    private static final int PREFRENCE_MODE_PRIVATE = 0;
+    public static final int PREFRENCE_MODE_PRIVATE = 0;
 
     private static final String[] TIME = new String[]{
             "0 mins", "5 mins", "10 mins", "15 mins", "30 mins"

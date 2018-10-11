@@ -1,6 +1,7 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +17,11 @@ import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.Collections;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Give_assignment_menu extends AppCompatActivity {
     private String school_id = "", staff_id = "", class_name = "", arm = "", assessment = "", subject = "";
@@ -30,10 +34,10 @@ public class Give_assignment_menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_give_assignment_menu);
-
-        Intent intent = getIntent();
-        school_id = intent.getStringExtra("school_id");
-        staff_id = intent.getStringExtra("email_address");
+        SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
+        //school_id/staff id from sharedPrefs
+        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
@@ -47,8 +51,8 @@ public class Give_assignment_menu extends AppCompatActivity {
 
         progressBar3 = findViewById(R.id.progress3);
         progressBar3.setVisibility(View.INVISIBLE);
-        school_id = "cac180826043520";
-        staff_id = "admin";
+        // school_id = "cac180826043520";
+        // staff_id = "admin";
         //load classes and assessments
         new initialLoad().execute(school_id, staff_id);
 //        new initialLoad().execute("cac180826043520", "admin");

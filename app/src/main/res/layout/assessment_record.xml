@@ -70,6 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_score"
+                android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:maxLength="5"
                 android:maxLines="1" />

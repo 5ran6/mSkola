@@ -1,6 +1,8 @@
 package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -8,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -22,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -29,6 +33,8 @@ import com.mskola.files.storageFile;
 import java.io.ByteArrayOutputStream;
 
 import mountedwings.org.mskola_mgt.teacher.SchoolDashboard;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
+import mountedwings.org.mskola_mgt.utils.NetworkBroadcastReceiver;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
@@ -41,7 +47,6 @@ public class MskolaLogin extends AppCompatActivity {
     int keep_signed_in = 0;
     private boolean singedIn, isSuccess;
     private String error_from_server = "Error";
-    private final static int LOADING_DURATION = 3500;
     //    private LinearLayout parent_layout;
     private TextInputLayout email, password1;
     private AppCompatEditText emailE, pass1;
@@ -55,58 +60,13 @@ public class MskolaLogin extends AppCompatActivity {
     private LinearLayout parent_layout;
     private LinearLayout lyt_progress;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        role = intent.getStringExtra("account_type");
-        school_id = intent.getStringExtra("school_id");
-
-        if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
-            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
-            singedIn = mPrefs.getBoolean("signed_in", false);
-
-            editor = mPrefs.edit();
-            editor.putString("role", role);
-            editor.putString("school_id", school_id);
-            editor.apply();
-
-        }
-
-        if (singedIn) {
-            //startIntent to next activity
-            finish();
-            startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
-        }
-
-        setContentView(R.layout.activity_login_mskola);
-        parent_layout = findViewById(R.id.parent_layout);
-        parent_view = findViewById(android.R.id.content);
-        //      parent_layout = findViewById(R.id.parent_layout);
-        Tools.setSystemBarColor(this, android.R.color.white);
-        Tools.setSystemBarLight(this);
-        mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
-
-        email = findViewById(R.id.email);
-        password1 = findViewById(R.id.password1);
-
-        emailE = findViewById(R.id.emailE);
-        pass1 = findViewById(R.id.pass1);
-
-        emailE.addTextChangedListener(new MyTextWatcher(emailE));
-        pass1.addTextChangedListener(new MyTextWatcher(pass1));
-
-
-        ((Button) findViewById(R.id.sig_in)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                submitForm();
-//                if (isFilled) {
-//                    loadingAndDisplayContent();
-//                }
-            }
-        });
-    }
+//
+//    NetworkBroadcastReceiver networkBroadcastReceiver = new NetworkBroadcastReceiver();
+//
+//    public NetworkBroadcastReceiver getNetworkBroadcastReceiver() {
+//        return networkBroadcastReceiver;
+//    }
+//
 
     private void submitForm() {
         if (!validateEmail()) {
@@ -168,14 +128,12 @@ public class MskolaLogin extends AppCompatActivity {
             editor = mPrefs.edit();
             editor.putBoolean("signed_in", singedIn);
             editor.apply();
-
         } else {
             keep_signed_in = 0;
             singedIn = false;
             editor = mPrefs.edit();
             editor.putBoolean("signed_in", singedIn);
             editor.apply();
-
         }
     }
 
@@ -192,19 +150,21 @@ public class MskolaLogin extends AppCompatActivity {
         TextView error_message = dialog.findViewById(R.id.content);
         error_message.setText(error);
 
-        ((AppCompatButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                lyt_progress.setVisibility(View.INVISIBLE);
-                parent_layout.setVisibility(View.VISIBLE);
-
+        (dialog.findViewById(R.id.bt_close)).setOnClickListener(v -> {
+            dialog.dismiss();
+            try {
+                if (lyt_progress.getVisibility() == View.VISIBLE && parent_layout.getVisibility() == View.INVISIBLE) {
+                    lyt_progress.setVisibility(View.INVISIBLE);
+                    parent_layout.setVisibility(View.VISIBLE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
-
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
+
 
     private class MyTextWatcher implements TextWatcher {
 
@@ -232,19 +192,15 @@ public class MskolaLogin extends AppCompatActivity {
         }
     }
 
-
     private class login extends AsyncTask<String, Integer, Boolean> {
-
         @Override
         protected Boolean doInBackground(String... strings) {
-
             storageFile storageObj = new storageFile();
             storageObj.setOperation("requestlogin");
             storageObj.setStrData(emailAddress + "," + password + "," + school_id);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             //received from server
-
             text = sentData.getStrData();
             if (text.contains("success")) {
                 isSuccess = true;
@@ -278,14 +234,13 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
-                //    showCustomDialogSuccess(newbie);
                 Intent intent = new Intent(getApplicationContext(), SchoolDashboard.class);
 
                 //sharedPref
                 editor = mPrefs.edit();
                 editor.putBoolean("signed_in", true);
                 editor.putString("account_type", role);
-                editor.putString("email_address", text.split("<>")[1]);
+                editor.putString("staff_id", text.split("<>")[1]);
                 editor.apply();
 
                 intent.putExtra("email_address", emailAddress);
@@ -299,7 +254,7 @@ public class MskolaLogin extends AppCompatActivity {
     }
 
     private void doLogin() {
-        lyt_progress =  findViewById(R.id.lyt_progress);
+        lyt_progress = findViewById(R.id.lyt_progress);
         lyt_progress.setVisibility(View.VISIBLE);
         lyt_progress.setAlpha(1.0f);
         parent_layout.setVisibility(View.GONE);
@@ -307,4 +262,56 @@ public class MskolaLogin extends AppCompatActivity {
         new login().execute();
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        role = intent.getStringExtra("account_type");
+        school_id = intent.getStringExtra("school_id");
+
+        if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
+            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+            singedIn = mPrefs.getBoolean("signed_in", false);
+
+            editor = mPrefs.edit();
+            editor.putString("role", role);
+            editor.putString("school_id", school_id);
+            editor.apply();
+
+        }
+
+        if (singedIn) {
+            //startIntent to next activity
+            finish();
+            startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
+        }
+
+        setContentView(R.layout.activity_login_mskola);
+        parent_layout = findViewById(R.id.parent_layout);
+        parent_view = findViewById(android.R.id.content);
+        //      parent_layout = findViewById(R.id.parent_layout);
+        Tools.setSystemBarColor(this, android.R.color.white);
+        Tools.setSystemBarLight(this);
+        mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+
+        email = findViewById(R.id.email);
+        password1 = findViewById(R.id.password1);
+
+        emailE = findViewById(R.id.emailE);
+        pass1 = findViewById(R.id.pass1);
+
+        emailE.addTextChangedListener(new MyTextWatcher(emailE));
+        pass1.addTextChangedListener(new MyTextWatcher(pass1));
+
+
+        ((Button) findViewById(R.id.sig_in)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submitForm();
+//                if (isFilled) {
+//                    loadingAndDisplayContent();
+//                }
+            }
+        });
+    }
 }

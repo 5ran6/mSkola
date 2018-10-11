@@ -84,7 +84,6 @@ public class Sign_Up extends AppCompatActivity {
         Intent intent = getIntent();
         account_type = intent.getStringExtra("account_type");
 
-
         //        view = findViewById(android)
         parent_layout = findViewById(R.id.parent_layout);
         initToolbar();
@@ -501,7 +500,7 @@ public class Sign_Up extends AppCompatActivity {
         protected void onPostExecute(String[] seperatedValue) {
             super.onPostExecute(seperatedValue);
             if (network) {
-                Toast.makeText(getApplicationContext(), "Connected to the internet", Toast.LENGTH_LONG).show();
+                //   Toast.makeText(getApplicationContext(), "Connected to the internet", Toast.LENGTH_LONG).show();
                 //inflate the data on the spinner
                 ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, seperatedValue);
                 spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

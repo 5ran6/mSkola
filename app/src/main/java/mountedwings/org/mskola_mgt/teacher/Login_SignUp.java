@@ -77,7 +77,7 @@ public class Login_SignUp extends AppCompatActivity {
     }
 
     private void initComponent() {
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = findViewById(R.id.view_pager);
 
         // adding bottom dots
         bottomProgressDots(0);
@@ -225,35 +225,24 @@ public class Login_SignUp extends AppCompatActivity {
         img.startAnimation(animation);
 
 
-        ((ImageView) dialog.findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
+        (dialog.findViewById(R.id.close)).setOnClickListener(v -> {
+            dialog.dismiss();
         });
-        ((AppCompatButton) dialog.findViewById(R.id.bt_sign_up)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Sign_Up.class);
-                intent.putExtra("account_type", "Teacher");
-                startActivity(intent);
-                dialog.dismiss();
-                finish();
-            }
+        (dialog.findViewById(R.id.bt_sign_up)).setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Sign_Up.class);
+            intent.putExtra("account_type", "Teacher");
+            startActivity(intent);
+            dialog.dismiss();
+            finish();
         });
-        ((AppCompatButton) dialog.findViewById(R.id.bt_login)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SchoolID_Login.class);
-                intent.putExtra("account_type", "Teacher");
-                startActivity(intent);
-                dialog.dismiss();
-                finish();
-            }
+        (dialog.findViewById(R.id.bt_login)).setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), SchoolID_Login.class);
+            intent.putExtra("account_type", "Teacher");
+            startActivity(intent);
+            dialog.dismiss();
+            finish();
         });
 
         dialog.show();
-        // dialog.getWindow().setAttributes(lp);
     }
 }

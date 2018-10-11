@@ -111,6 +111,7 @@ public class GiveAssignment extends AppCompatActivity {
                 parent_layout.setVisibility(View.GONE);
                 lyt_progress.setVisibility(View.VISIBLE);
                 lyt_progress.setAlpha(1.0f);
+/////////////////////////////////////////////
                 //pass into background thread
                 new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
                 //        new uploadAssignment().execute("cac180826043520", questions, "English Language", "JSS1 A", dueDate, dueTime, "admin");
@@ -143,6 +144,7 @@ public class GiveAssignment extends AppCompatActivity {
 
             if (text.equals("success")) {
                 Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+                finish();
 
             } else {
                 Toast.makeText(getApplicationContext(), "An Error Occurred. Try Again", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,7 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -12,12 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -35,17 +39,16 @@ import java.util.List;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
-public class Record_scores extends AppCompatActivity {
+public class Assessment extends AppCompatActivity {
 
-    // TODO
-    // TO ADD EVENT WHERE WHENEVER A VIEW IS CLICKED, WE CAN EDIT
+    // TODO: TO ADD EVENT WHERE WHENEVER A VIEW IS CLICKED, WE CAN EDIT
+    // TODO: When the keyboards' done key is pressed, activity should prompt to ask if you want to close [Are you done?]
 
     private List<View> view_list = new ArrayList<>();
     private List<RelativeLayout> step_view_list = new ArrayList<>();
     private String[] regNumbs;
     private String[] names;
     private ProgressBar loading;
-    private TextView heading;
     private int success_step = 0, len;
     private int current_step = 0;
     private View parent_view;
@@ -59,7 +62,7 @@ public class Record_scores extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_scores_test);
         parent_view = findViewById(android.R.id.content);
-        heading = findViewById(R.id.text);
+        TextView heading = findViewById(R.id.text);
         Intent intent = getIntent();
 
         school_id = intent.getStringExtra("school_id");
@@ -93,7 +96,6 @@ public class Record_scores extends AppCompatActivity {
         Button mark_scores = view.findViewById(R.id.bt_continue_title);
         Button skip = view.findViewById(R.id.bt_skip);
 
-
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         main = findViewById(R.id.main_content);
@@ -109,6 +111,14 @@ public class Record_scores extends AppCompatActivity {
         view_list.get(0).findViewById(R.id.lyt_title).setVisibility(View.VISIBLE);
         view = view_list.get(0);
         score = view.findViewById(R.id.et_title);
+        score.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                areYouSure();
+                handled = true;
+            }
+            return handled;
+        });
 
         score.setText(first_persons_score);
         hideSoftKeyboard();
@@ -133,7 +143,7 @@ public class Record_scores extends AppCompatActivity {
                 }
             }
 
-            Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
+            //   Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
             //send to server
             new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
             collapseAndContinue(index);
@@ -146,6 +156,18 @@ public class Record_scores extends AppCompatActivity {
             //don't record anything
 
         });
+    }
+
+    private void areYouSure() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you done?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", (dialog, id) -> finish())
+                .setNegativeButton("No", (dialog, which) -> {
+                })
+                .show();
+
+
     }
 
     private void subsequentView(int index, View vv) {
@@ -178,7 +200,7 @@ public class Record_scores extends AppCompatActivity {
                 }
             }
 
-            Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
+            //      Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
             //send to server
             new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
 
@@ -261,17 +283,9 @@ public class Record_scores extends AppCompatActivity {
     }
 
     //DONE
-    private void initToolbar(String title) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    //DONE
     private void collapseAndContinue(int index) {
         if (index - 1 < view_list.size()) {
-            Toast.makeText(getApplicationContext(), "Current index is " + index + ", size of view List is " + view_list.size(), Toast.LENGTH_SHORT).show();
+            //     Toast.makeText(getApplicationContext(), "Current index is " + index + ", size of view List is " + view_list.size(), Toast.LENGTH_SHORT).show();
             ViewAnimation.collapse(view_list.get(index).findViewById(R.id.lyt_title));
             setCheckedStep(index);
             last_index = index;
@@ -374,9 +388,10 @@ public class Record_scores extends AppCompatActivity {
         protected void onPostExecute(String scores) {
             super.onPostExecute(scores);
             Log.d(TAG, scores);
-            Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
+            //   Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
             if (!scores.isEmpty()) {
                 score.setText("");
+                //has to be here
                 score.setText(scores);
             } else {
                 Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
@@ -404,11 +419,10 @@ public class Record_scores extends AppCompatActivity {
         protected void onPostExecute(String scores) {
             super.onPostExecute(scores);
             Log.d(TAG, scores);
-            Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
+            //   Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
             if (!scores.isEmpty()) {
                 score.setText("");
-                score.setText(scores);
-                setCheckedRecorded(Integer.valueOf(last_index));
+                setCheckedRecorded(last_index);
             } else {
                 Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
             }

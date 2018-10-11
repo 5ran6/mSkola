@@ -2,6 +2,7 @@ package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.support.transition.TransitionValues;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +20,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,8 @@ import java.util.ArrayList;
 
 import mountedwings.org.mskola_mgt.adapter.NumbersAdapter;
 import mountedwings.org.mskola_mgt.data.Number;
+
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 
 public class SchoolID_Login extends AppCompatActivity {
@@ -47,6 +52,17 @@ public class SchoolID_Login extends AppCompatActivity {
         school_id = findViewById(R.id.school_id);
         verifying = findViewById(R.id.verifying);
         checking = findViewById(R.id.checking);
+        school_id.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    verifyID();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
     }
 
 
@@ -116,6 +132,14 @@ public class SchoolID_Login extends AppCompatActivity {
             checking.setVisibility(View.INVISIBLE);
             verifying.setVisibility(View.INVISIBLE);
             if (text.equals("found")) {
+                //save school_id to sharedPrefs
+                //check if there's already a sheared pref, create or edit
+
+                SharedPreferences mPrefs = getSharedPreferences(myPref, 0);
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putString("school_id", school_id.getText().toString().trim());
+                editor.apply();
+
                 //intent
                 Intent intent = new Intent(getApplicationContext(), MskolaLogin.class);
                 intent.putExtra("account_type", role);

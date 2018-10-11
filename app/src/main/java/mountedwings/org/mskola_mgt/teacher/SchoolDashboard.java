@@ -1,7 +1,9 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +15,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.File;
+
+import mountedwings.org.mskola_mgt.Home;
+import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.Splash;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
@@ -36,9 +44,13 @@ public class SchoolDashboard extends AppCompatActivity {
         setContentView(R.layout.activity_school_dashboard);
         if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
             mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
-            email = mPrefs.getString("email_address", "");
+            email = mPrefs.getString("staff_id", "");
             role = mPrefs.getString("role", "");
             school_id = mPrefs.getString("school_id", "");
+        } else {
+            Toast.makeText(getApplicationContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
+            finish();
+            startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }
         initComponent();
     }
@@ -192,5 +204,50 @@ public class SchoolDashboard extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void logout(View view) {
+        Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_SHORT).show();
+        finish();
+        clearSharedPreferences(this);
+        startActivity(new Intent(getApplicationContext(), Home.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        doExitApp();
+    }
+
+    private long exitTime = 0;
+
+    public void doExitApp() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(this, "Press again to exit app", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                finishAffinity();
+            } else {
+                finish(); // call this to finish the current activity
+            }
+        }
+    }
+
+    public static void clearSharedPreferences(Context ctx) {
+        File dir = new File(ctx.getFilesDir().getParent() + "/shared_prefs/");
+        String[] children = dir.list();
+        for (int i = 0; i < children.length; i++) {
+            // clear each of the prefs
+            ctx.getSharedPreferences(children[i].replace(".xml", ""), Context.MODE_PRIVATE).edit().clear().commit();
+        }
+        // Make sure it has enough time to save all the commited changes
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+        }
+        for (int i = 0; i < children.length; i++) {
+            // delete the files
+            new File(dir, children[i]).delete();
+        }
     }
 }

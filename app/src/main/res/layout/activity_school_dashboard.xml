@@ -103,8 +103,9 @@
                             android:clickable="true"
                             android:contentDescription="@string/logout"
                             android:focusable="true"
+                            android:onClick="logout"
                             android:foreground="?android:attr/selectableItemBackground"
-                            android:tint="@color/grey_800"
+                            android:tint="@color/deep_orange_300"
                             app:srcCompat="@drawable/exit" />
 
                     </RelativeLayout>

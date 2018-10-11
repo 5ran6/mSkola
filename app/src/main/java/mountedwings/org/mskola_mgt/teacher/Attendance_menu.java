@@ -1,6 +1,7 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +19,12 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.Tools;
+
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Attendance_menu extends AppCompatActivity {
     private String school_id = "", staff_id = "", class_name = "", arm = "";
@@ -59,9 +63,11 @@ public class Attendance_menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_menu);
 
-        Intent intent = getIntent();
-        school_id = intent.getStringExtra("school_id");
-        staff_id = intent.getStringExtra("email_address");
+        SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
+        //school_id/staff id from sharedPrefs
+
+        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         initComponent();
         TextView load = findViewById(R.id.load);

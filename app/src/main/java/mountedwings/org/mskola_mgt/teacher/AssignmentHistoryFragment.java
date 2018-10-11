@@ -1,5 +1,6 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersAdapter;
@@ -28,6 +30,8 @@ import mountedwings.org.mskola_mgt.adapter.NumbersAssHistAdapter;
 import mountedwings.org.mskola_mgt.data.Number;
 import mountedwings.org.mskola_mgt.data.NumberAssHist;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
+
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,7 +45,7 @@ public class AssignmentHistoryFragment extends Fragment {
     private RecyclerView list;
     private FloatingActionButton fab_done;
     private TextView heading;
-
+    private int PREFERENCE_MODE_PRIVATE = 0;
     String school_id, staff_id, TAG = "mSkola";
 
     ProgressBar loading;
@@ -113,7 +117,7 @@ public class AssignmentHistoryFragment extends Fragment {
                 list.setAdapter(adapter);
             } else {
                 Toast.makeText(getContext(), "You haven't given an assignment!", Toast.LENGTH_SHORT).show();
-                getActivity().finish();
+                Objects.requireNonNull(getActivity()).finish();
             }
         }
     }
@@ -124,13 +128,19 @@ public class AssignmentHistoryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////  init
-        school_id = getActivity().getIntent().getStringExtra("school_id");
-        staff_id = getActivity().getIntent().getStringExtra("staff_id");
+
+        SharedPreferences mPrefs = Objects.requireNonNull(getActivity()).getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
+
+        //school_id/staff id from sharedPrefs
+
+        staff_id = mPrefs.getString("staff_id", getActivity().getIntent().getStringExtra("email_address"));
+        school_id = mPrefs.getString("school_id", getActivity().getIntent().getStringExtra("school_id"));
+
         //hide parentView
         loading.setVisibility(View.VISIBLE);
 
-//        new first_loading().execute(school_id, staff_id);
-        new first_loading().execute("cac180826043520", "admin");
+        new first_loading().execute(school_id, staff_id);
+//        new first_loading().execute("cac180826043520", "admin");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> getActivity().finish());
     }
