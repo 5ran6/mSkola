@@ -1,6 +1,8 @@
 package mountedwings.org.mskola_mgt.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,7 +46,7 @@ public class NumbersAssHistAdapter extends RecyclerView.Adapter<NumbersAssHistAd
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.bindData(numbers.get(position));
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
