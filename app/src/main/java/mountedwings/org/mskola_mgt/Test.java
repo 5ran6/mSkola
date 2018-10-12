@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import mountedwings.org.mskola_mgt.teacher.AttendanceActivity;
+import mountedwings.org.mskola_mgt.teacher.Compile_Result_menu;
+import mountedwings.org.mskola_mgt.teacher.Psychomotor_menu;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Test extends AppCompatActivity {
@@ -18,6 +20,6 @@ public class Test extends AppCompatActivity {
     }
 
     public void testing(View view) {
-        startActivity(new Intent(getApplicationContext(), AttendanceActivity.class));
+        startActivity(new Intent(getApplicationContext(), Compile_Result_menu.class));
     }
 }

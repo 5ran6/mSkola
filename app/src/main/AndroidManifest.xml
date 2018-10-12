@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Splash"
+            android:name=".Test"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,6 +69,9 @@
         <activity android:name=".teacher.Give_assignment_menu" />
         <activity android:name=".teacher.AssignmentHistoryActivity" />
         <activity android:name=".teacher.Assignment_history_detail" />
+        <activity android:name=".teacher.Psychomotor_menu" />
+        <activity android:name=".teacher.Psychomotor" />
+        <activity android:name=".teacher.Compile_Result_menu" />
 
     </application>
 

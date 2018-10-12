@@ -49,16 +49,13 @@ public class NumbersAssHistAdapter extends RecyclerView.Adapter<NumbersAssHistAd
     public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.bindData(numbers.get(position));
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: intent to open a class with passed extras
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(v, numbers.get(position), position);
-
-                }
+        holder.cardView.setOnClickListener(v -> {
+            //TODO: intent to open a class with passed extras
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClick(v, numbers.get(position), position);
 
             }
+
         });
     }
 
