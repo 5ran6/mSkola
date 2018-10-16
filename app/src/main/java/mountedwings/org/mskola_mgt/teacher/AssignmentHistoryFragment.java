@@ -186,7 +186,7 @@ public class AssignmentHistoryFragment extends Fragment {
 
         //school_id/staff id from sharedPrefs
 
-        staff_id = mPrefs.getString("staff_id", getActivity().getIntent().getStringExtra("email_address"));
+        staff_id = mPrefs.getString("staff_id", getActivity().getIntent().getStringExtra("staff_id"));
         school_id = mPrefs.getString("school_id", getActivity().getIntent().getStringExtra("school_id"));
 
         //hide parentView

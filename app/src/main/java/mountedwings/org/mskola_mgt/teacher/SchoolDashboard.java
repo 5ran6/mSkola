@@ -116,7 +116,7 @@ public class SchoolDashboard extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), Assessment_menu.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("role", role);
-            intent.putExtra("email_address", email);
+            intent.putExtra("staff_id", email);
             startActivity(intent);
         });
         CardView attendance = findViewById(R.id.attendance);
@@ -130,6 +130,15 @@ public class SchoolDashboard extends AppCompatActivity {
         CardView assignment = findViewById(R.id.assignment);
         assignment.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), Assignment_menu.class);
+            intent.putExtra("school_id", school_id);
+            intent.putExtra("role", role);
+            intent.putExtra("email_address", email);
+            startActivity(intent);
+        });
+
+        CardView result = findViewById(R.id.assignment);
+        result.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Results_menu.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("role", role);
             intent.putExtra("email_address", email);

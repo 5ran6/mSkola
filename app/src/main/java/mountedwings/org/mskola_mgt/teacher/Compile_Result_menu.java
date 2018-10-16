@@ -213,7 +213,7 @@ public class Compile_Result_menu extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 finish();
-                Intent intent1 = new Intent(getApplicationContext(), Psychomotor.class);
+                Intent intent1 = new Intent(getApplicationContext(), SchoolDashboard.class);
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("arm", arm);

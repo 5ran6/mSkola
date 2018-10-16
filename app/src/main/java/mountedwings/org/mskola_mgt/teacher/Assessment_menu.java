@@ -41,7 +41,7 @@ public class Assessment_menu extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
 
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("staff_id"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
 

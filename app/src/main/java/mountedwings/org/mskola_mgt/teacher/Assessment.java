@@ -1,20 +1,16 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,7 +80,7 @@ public class Assessment extends AppCompatActivity {
     private void initViews(int index, String name) {
         //to load all names and score of first person
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.assessment_record, null);
+        View view = inflater.inflate(R.layout.item_assessment_record, null);
 
         TextView textView = view.findViewById(R.id.index);
         textView.setText(String.valueOf(index + 1));
@@ -124,8 +120,7 @@ public class Assessment extends AppCompatActivity {
         hideSoftKeyboard();
 
         mark_scores.setOnClickListener(v -> {
-//is Not a float
-            //          boolean check = false;
+            //is Not a float
             int i = 0;
             try {
                 i = Integer.valueOf(score.getText().toString());
@@ -166,8 +161,6 @@ public class Assessment extends AppCompatActivity {
                 .setNegativeButton("No", (dialog, which) -> {
                 })
                 .show();
-
-
     }
 
     private void subsequentView(int index, View vv) {
@@ -176,6 +169,15 @@ public class Assessment extends AppCompatActivity {
         Button skip = vv.findViewById(R.id.bt_skip);
 
         score = vv.findViewById(R.id.et_title);
+        score.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                areYouSure();
+                handled = true;
+            }
+            return handled;
+        });
+
         score.setText("");
 
         hideSoftKeyboard();

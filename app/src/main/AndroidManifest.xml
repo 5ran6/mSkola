@@ -70,8 +70,9 @@
         <activity android:name=".teacher.AssignmentHistoryActivity" />
         <activity android:name=".teacher.Assignment_history_detail" />
         <activity android:name=".teacher.Psychomotor_menu" />
+         <activity android:name=".teacher.Compile_Result_menu" />
+        <activity android:name=".teacher.Results_menu" />
         <activity android:name=".teacher.Psychomotor" />
-        <activity android:name=".teacher.Compile_Result_menu" />
 
     </application>
 

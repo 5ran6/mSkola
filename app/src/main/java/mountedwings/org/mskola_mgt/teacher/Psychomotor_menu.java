@@ -89,7 +89,7 @@ public class Psychomotor_menu extends AppCompatActivity {
 
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() || !arm.isEmpty()) {
-                Intent intent1 = new Intent(getApplicationContext(), Psychomotor.class);
+                Intent intent1 = new Intent(getApplicationContext(), SchoolDashboard.class);
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("arm", arm);
