@@ -3,25 +3,31 @@ package mountedwings.org.mskola_mgt.teacher;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import mountedwings.org.mskola_mgt.Home;
-import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
-import mountedwings.org.mskola_mgt.Splash;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
@@ -33,8 +39,11 @@ public class SchoolDashboard extends AppCompatActivity {
     private NestedScrollView nested_scroll_view;
     private ImageButton bt_toggle_info_messages1, bt_toggle_info_academics1, bt_toggle_info_cbt1, bt_toggle_info_bursary1, bt_toggle_info_achievements1;
     private View lyt_expand_info_academics, lyt_expand_info_cbt, lyt_expand_info_bursary, lyt_expand_info_messages, lyt_expand_info_achievements;
-    private String role, school_id, email;
+    private String role, school_id, email, school, name, clearance, raw_pass;
+    private CircularImageView passport;
+    private TextView staff_name, school_name;
     private SharedPreferences mPrefs;
+    private byte[] pass = new byte[1];
     private SharedPreferences.Editor editor;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
@@ -47,6 +56,16 @@ public class SchoolDashboard extends AppCompatActivity {
             email = mPrefs.getString("staff_id", "");
             role = mPrefs.getString("role", "");
             school_id = mPrefs.getString("school_id", "");
+
+            name = mPrefs.getString("name", getIntent().getStringExtra("name"));
+            school = mPrefs.getString("school", getIntent().getStringExtra("school"));
+            raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                pass = raw_pass.getBytes(StandardCharsets.UTF_8);
+            } else {
+                pass = raw_pass.getBytes();
+            }
+            Log.i("mSkola1", Arrays.toString(pass));
         } else {
             Toast.makeText(getApplicationContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
             finish();
@@ -57,6 +76,21 @@ public class SchoolDashboard extends AppCompatActivity {
 
     private void initComponent() {
         nested_scroll_view = findViewById(R.id.nested_scroll_view);
+
+//        Intent intent = getIntent();
+//        name = intent.getStringExtra("name");
+//        school = intent.getStringExtra("school");
+//        pass = intent.getByteArrayExtra("pass");
+
+        staff_name = findViewById(R.id.tv_staff_name);
+        school_name = findViewById(R.id.tv_school_name);
+        passport = findViewById(R.id.passport);
+
+        staff_name.setText(name);
+        school_name.setText(school);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
+        passport.setImageBitmap(bitmap);
+//      passport.setImageResource(bitmap);
 
         // info item_academics
         CardView bt_toggle_info_academics = findViewById(R.id.bt_toggle_info_academics);

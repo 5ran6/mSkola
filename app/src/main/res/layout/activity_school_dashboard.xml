@@ -74,6 +74,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="2"
+                            android:textAllCaps="true"
                             android:padding="@dimen/spacing_small"
                             android:text="MY SCHOOL"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"

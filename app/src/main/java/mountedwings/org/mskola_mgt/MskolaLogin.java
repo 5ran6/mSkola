@@ -1,19 +1,12 @@
 package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,18 +18,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
-import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 import mountedwings.org.mskola_mgt.teacher.SchoolDashboard;
-import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
-import mountedwings.org.mskola_mgt.utils.NetworkBroadcastReceiver;
 import mountedwings.org.mskola_mgt.utils.Tools;
-import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -59,6 +48,10 @@ public class MskolaLogin extends AppCompatActivity {
     private String text;
     private LinearLayout parent_layout;
     private LinearLayout lyt_progress;
+    private String name, school;
+    private byte[] pass;
+    private Intent intent;
+    private storageFile data;
 
 //
 //    NetworkBroadcastReceiver networkBroadcastReceiver = new NetworkBroadcastReceiver();
@@ -80,6 +73,11 @@ public class MskolaLogin extends AppCompatActivity {
         emailAddress = emailE.getText().toString().trim();
         password = pass1.getText().toString();
         doLogin();
+    }
+
+    //DONE
+    public void hideSoftKeyboard() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private boolean validateEmail() {
@@ -234,7 +232,8 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
-                Intent intent = new Intent(getApplicationContext(), SchoolDashboard.class);
+
+                intent = new Intent(getApplicationContext(), SchoolDashboard.class);
 
                 //sharedPref
                 editor = mPrefs.edit();
@@ -245,22 +244,78 @@ public class MskolaLogin extends AppCompatActivity {
 
                 intent.putExtra("email_address", emailAddress);
                 intent.putExtra("school_role", text.split("<>")[1]);
-                startActivity(intent);
-                finish();
+
+                new dashboardInfo().execute(school_id, emailAddress);
+
             } else {
                 showCustomDialogFailure(error_from_server);
             }
         }
     }
 
+
+    //DONE
+    private class dashboardInfo extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            data = storageObj;
+
+            storageObj.setOperation("getinfoonlogin");
+            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            data = sentData;
+            String text = sentData.getStrData();
+            Log.d(TAG, text);
+            return text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            if (!text.equals("0") && !text.equals("")) {
+                String rows[] = text.split("<>");
+                school = rows[0];
+                name = rows[2];
+//              school = rows[2];
+                pass = data.getImageFiles().get(0);
+                Log.i(TAG, Arrays.toString(pass));
+            }
+            //finally and intent
+
+            //sharedPref
+            editor = mPrefs.edit();
+            editor.putString("name", name);
+            editor.putString("school", school);
+            editor.putString("pass", Arrays.toString(pass));
+            editor.apply();
+
+            intent.putExtra("name", name);
+            intent.putExtra("school", school);
+            intent.putExtra("pass", pass);
+            startActivity(intent);
+            finish();
+        }
+
+    }
+
+
     private void doLogin() {
         lyt_progress = findViewById(R.id.lyt_progress);
         lyt_progress.setVisibility(View.VISIBLE);
         lyt_progress.setAlpha(1.0f);
         parent_layout.setVisibility(View.GONE);
+        hideSoftKeyboard();
         //toolbar.setVisibility(View.GONE);
         new login().execute();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

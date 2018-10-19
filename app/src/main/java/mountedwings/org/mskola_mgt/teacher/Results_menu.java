@@ -45,8 +45,7 @@ public class Results_menu extends AppCompatActivity {
     }
 
     public void viewResults(View view) {
-//TODO
-        intent = new Intent(getApplicationContext(), AssignmentHistoryActivity.class);
+        intent = new Intent(getApplicationContext(), ViewResult_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", staff_id);
         startActivity(intent);

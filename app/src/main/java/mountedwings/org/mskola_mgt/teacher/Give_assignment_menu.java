@@ -272,6 +272,11 @@ public class Give_assignment_menu extends AppCompatActivity {
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
+            } else {
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                select_class.setAdapter(spinnerAdapter1);
+                progressBar1.setVisibility(View.INVISIBLE);
             }
         }
     }

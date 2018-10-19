@@ -27,7 +27,7 @@
                 android:maxLines="1"
                 android:minHeight="@dimen/spacing_xlarge"
                 android:padding="@dimen/spacing_large"
-                android:text="@string/demo_name"
+                android:text="Loading..."
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/Black" />
 
@@ -40,7 +40,7 @@
                 android:maxLines="1"
                 android:minHeight="@dimen/spacing_xlarge"
                 android:padding="@dimen/spacing_large"
-                android:text="Step ---/---"
+                android:text="---/---"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/Black" />
 
@@ -113,25 +113,19 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/second"
+                <ListView
+                    android:id="@+id/psycho_skills"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".7"
-                    android:background="@color/green_800"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    android:weightSum="1">
-
-
-                </LinearLayout>
+                    android:visibility="visible" />
 
                 <ProgressBar
                     android:id="@+id/loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </LinearLayout>
 
