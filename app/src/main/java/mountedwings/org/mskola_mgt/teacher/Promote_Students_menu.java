@@ -38,6 +38,7 @@ public class Promote_Students_menu extends AppCompatActivity {
     private ArrayList studentsName = new ArrayList();
     private ArrayList regNos = new ArrayList();
     private String[] classes;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,6 @@ public class Promote_Students_menu extends AppCompatActivity {
             mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
             staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
-
         } else {
             Toast.makeText(getApplicationContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
             finish();
@@ -327,10 +327,16 @@ public class Promote_Students_menu extends AppCompatActivity {
                 showCustomDialogFailure("An error occurred. No Session found. Contact Admin");
             }
             //finally
-            Intent intent = new Intent(getApplicationContext(), PromoteStudentsActivity.class);
+
+            intent = new Intent(getApplicationContext(), PromotionStudents.class);
             intent.putExtra("students_names", studentsName);
             intent.putExtra("reg_nos", regNos);
-            intent.putExtra("classes", classes);
+
+            intent.putExtra("arm", arm);
+            intent.putExtra("session", session);
+
+            intent.putExtra("classes", class_name);
+
             startActivity(intent);
             //finish();
         }
@@ -413,4 +419,9 @@ public class Promote_Students_menu extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }

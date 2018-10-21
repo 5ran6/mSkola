@@ -76,6 +76,8 @@
         <activity android:name=".teacher.ViewResult_menu" />
         <activity android:name=".teacher.ViewResultActivity" />
         <activity android:name=".teacher.Promote_Students_menu" />
+        <activity android:name=".teacher.PromoteStudentsActivity" />
+        <activity android:name=".teacher.PromotionStudents" />
 
     </application>
 

@@ -1,6 +1,9 @@
 package mountedwings.org.mskola_mgt.data;
 
 public class NumberPromoteStudents {
+    public int color = -1;
+    public Integer image = null;
+
     private String name;
     private String session;
     private String regNo;

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +46,7 @@ public class AdapterListInbox extends RecyclerView.Adapter<AdapterListInbox.View
             date = (TextView) view.findViewById(R.id.date);
             image_letter = (TextView) view.findViewById(R.id.image_letter);
             image = (ImageView) view.findViewById(R.id.image);
+
             lyt_checked = (RelativeLayout) view.findViewById(R.id.lyt_checked);
             lyt_image = (RelativeLayout) view.findViewById(R.id.lyt_image);
             lyt_parent = (View) view.findViewById(R.id.lyt_parent);
