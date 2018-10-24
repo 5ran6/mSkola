@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -117,12 +116,12 @@ public class MskolaLogin extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
     }
 
-//    public void keep_signed_in(View view) {
-//        checkKeepState();
-//    }
+    public void keep_signed_in(View view) {
+        checkKeepState();
+    }
 
     private void checkKeepState() {
-        CheckBox checkedTextView = findViewById(R.id.keep_signed_in);
+        AppCompatCheckBox checkedTextView = findViewById(R.id.keep_signed_in);
         if (checkedTextView.isChecked()) {
             keep_signed_in = 1;
             singedIn = true;

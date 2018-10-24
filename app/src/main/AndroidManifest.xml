@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Splash"
+            android:name=".Test"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,9 +36,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ForgotPassword"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".main.home"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Home"
@@ -78,6 +75,7 @@
         <activity android:name=".teacher.Promote_Students_menu" />
         <activity android:name=".teacher.PromoteStudentsActivity" />
         <activity android:name=".teacher.PromotionStudents" />
+        <activity android:name=".teacher.AchievementsActivity" />
 
     </application>
 

@@ -9,21 +9,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.data.Number;
-import mountedwings.org.mskola_mgt.teacher.AttendanceFragment;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.data.Number;
 
 /**
  * Simple adapter class, used for show all numbers in list
  */
 public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHolder> {
 
-    Boolean isSelectedAll = false, isASelectedAll1 = false;
     ArrayList<Number> numbers;
-    AttendanceFragment attendanceFragment = new AttendanceFragment();
 
     public NumbersAdapter(List<Number> numbers) {
         this.numbers = new ArrayList<>(numbers);
@@ -62,14 +59,23 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 numbers.get(holder.getAdapterPosition()).setSelected(isChecked);
-                Log.d("mSkola", String.valueOf(numbers.get(holder.getAdapterPosition()).isSelected()));
+                if (!numbers.get(position).isSelected()) {
+                    for (int i = 0; i < numbers.size(); i++)
+                        numbers.get(i).setAllSelectedM(false);
+                }
+
+                Log.d("mSkola", String.valueOf(Boolean.valueOf(numbers.get(holder.getAdapterPosition()).isSelected())));
             }
         });
         holder.checkbox2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 numbers.get(holder.getAdapterPosition()).setSelected1(isChecked);
-                Log.d("mSkola", numbers.get(holder.getAdapterPosition()).toString());
+                if (!numbers.get(position).isSelected()) {
+                    for (int i = 0; i < numbers.size(); i++)
+                        numbers.get(i).setAllSelectedA(false);
+                }
+                Log.d("mSkola", String.valueOf(Boolean.valueOf(numbers.get(holder.getAdapterPosition()).toString())));
             }
         });
     }
@@ -86,14 +92,14 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
         // each data item is just a string in this case
         private TextView ONEs;
         private TextView textName;
-        private CheckBox checkbox1, checkbox2, allMorning, allAfternoon;
+        private CheckBox checkbox1, checkbox2;
 
         public ViewHolder(View v) {
             super(v);
-            ONEs = (TextView) v.findViewById(R.id.ONEs);
-            textName = (TextView) v.findViewById(R.id.textONEs);
-            checkbox1 = (CheckBox) v.findViewById(R.id.checkbox1);
-            checkbox2 = (CheckBox) v.findViewById(R.id.checkbox2);
+            ONEs = v.findViewById(R.id.ONEs);
+            textName = v.findViewById(R.id.textONEs);
+            checkbox1 = v.findViewById(R.id.checkbox1);
+            checkbox2 = v.findViewById(R.id.checkbox2);
         }
 
         public void bindData(Number number) {
@@ -103,29 +109,18 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
     }
 
     public void selectAll() {
-        //     isSelectedAll = true;
-//        if (!isSelectedAll) holder.checkbox1.setChecked(false);
-//        else holder.checkbox1.setChecked(true);
-//
-//        if (!isASelectedAll1) holder.checkbox2.setChecked(false);
-//        else holder.checkbox2.setChecked(true);
-
         notifyDataSetChanged();
     }
 
     public void unSelectAll() {
-        //   isSelectedAll = false;
         notifyDataSetChanged();
     }
 
     public void selectAll1() {
-        //   isASelectedAll1 = true;
-
         notifyDataSetChanged();
     }
 
     public void unSelectAll1() {
-        // isASelectedAll1 = false;
         notifyDataSetChanged();
     }
 }

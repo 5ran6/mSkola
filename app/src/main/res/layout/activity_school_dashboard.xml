@@ -74,9 +74,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="2"
-                            android:textAllCaps="true"
                             android:padding="@dimen/spacing_small"
                             android:text="MY SCHOOL"
+                            android:textAllCaps="true"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
@@ -318,10 +318,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_small"
                 android:layout_marginTop="@dimen/spacing_small"
+                android:background="@color/grey_300"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="5dp">
 

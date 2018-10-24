@@ -5,6 +5,24 @@ public class Number {
     private String textONEs;
     private boolean isSelected;
     private boolean isSelected1;
+    private boolean isAllSelectedM = false;
+    private boolean isAllSelectedA = false;
+
+    public boolean isAllSelectedM() {
+        return isAllSelectedM;
+    }
+
+    public void setAllSelectedM(boolean allSelectedM) {
+        isAllSelectedM = allSelectedM;
+    }
+
+    public boolean isAllSelectedA() {
+        return isAllSelectedA;
+    }
+
+    public void setAllSelectedA(boolean allSelectedA) {
+        isAllSelectedA = allSelectedA;
+    }
 
     public String getTextONEs() {
         return textONEs;

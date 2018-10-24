@@ -130,7 +130,7 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:onClick="collateAssignments"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:cardCornerRadius="2sp"
                         app:cardElevation="5sp">
 

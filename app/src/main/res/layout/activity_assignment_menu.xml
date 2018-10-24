@@ -48,7 +48,7 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="400sp"
+                android:layout_height="300sp"
                 android:layout_margin="@dimen/spacing_large"
                 android:visibility="visible"
                 app:cardCornerRadius="2dp"
@@ -130,7 +130,7 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:onClick="collateAssignments"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:cardCornerRadius="2sp"
                         app:cardElevation="5sp">
 
