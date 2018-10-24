@@ -1,5 +1,6 @@
 package mountedwings.org.mskola_mgt.adapter;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.bindData(numbers.get(position));
         //in some cases, it will prevent unwanted situations
         holder.checkbox1.setOnCheckedChangeListener(null);
