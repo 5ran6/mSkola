@@ -38,7 +38,6 @@ import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 public class Assessment extends AppCompatActivity {
 
     // TODO: TO ADD EVENT WHERE WHENEVER A VIEW IS CLICKED, WE CAN EDIT
-    // TODO: When the keyboards' done key is pressed, activity should prompt to ask if you want to close [Are you done?]
 
     private List<View> view_list = new ArrayList<>();
     private List<RelativeLayout> step_view_list = new ArrayList<>();
@@ -269,13 +268,15 @@ public class Assessment extends AppCompatActivity {
     }
 
     public void clickLabel(View view) {
-        int index;
-        index = main.indexOfChild(view);
+        //Found out I can't get the index of the view clickedunless i do a big overhaul. So i chose to always go to the first item to start editing from there. It might be stressful but Pele
+        int index = 0;
+        //index = main.indexOfChild(view);
         // index = step_view_list.indexOf(view);
         // index = view_list.indexOf(view);
-        index = 2;
-
-//        index = view.getId();
+        //TODO: just try and get the right ID for the index of the child view and you're good to go
+        //  index = view_list.indexOf(view.getRootView().getId());
+        //index = view.getId();
+        Toast.makeText(getApplicationContext(), "Review from top", Toast.LENGTH_SHORT).show();
         if (success_step >= index && current_step != index) {
             current_step = index;
             collapseAll();
@@ -396,7 +397,7 @@ public class Assessment extends AppCompatActivity {
                 //has to be here
                 score.setText(scores);
             } else {
-                Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -500,7 +501,7 @@ public class Assessment extends AppCompatActivity {
                 for (int i = 0; i < len; i++)
                     initViews(i, names[i]);
             } else {
-                Toast.makeText(getApplicationContext(), "No record found for selected class/subject", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "No record found for selected class/subject", Toast.LENGTH_LONG).show();
                 finish();
             }
         }

@@ -249,6 +249,7 @@
             android:layout_marginLeft="@dimen/spacing_xsmall"
             android:layout_marginRight="@dimen/spacing_xsmall"
             android:layout_marginTop="@dimen/spacing_xsmall"
+            android:id="@+id/result"
             android:layout_weight="1"
             android:clickable="true"
             android:focusable="true"

@@ -3,8 +3,8 @@ package mountedwings.org.mskola_mgt.teacher;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -60,7 +61,7 @@ public class Assessment_menu extends AppCompatActivity {
         progressBar3.setVisibility(View.INVISIBLE);
 
         progressBar4 = findViewById(R.id.progress4);
-        progressBar4.setVisibility(View.VISIBLE);
+        progressBar4.setVisibility(View.INVISIBLE);
         //load classes and assessments
         new initialLoad().execute(school_id, staff_id);
 
@@ -139,6 +140,7 @@ public class Assessment_menu extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 
@@ -152,7 +154,7 @@ public class Assessment_menu extends AppCompatActivity {
         new loadSubject().execute(school_id, staff_id, class_name, arm);
     }
 
-
+    //loads arms and cas
     private class loadArms extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
@@ -168,25 +170,46 @@ public class Assessment_menu extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressBar2.setVisibility(View.VISIBLE);
+            progressBar4.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.isEmpty()) {
-                String[] dataRows = text.split(",");
+                int no_cas = Integer.parseInt(text.split("<>")[1]);
+
+                String[] dataRows = text.split("<>")[0].split(",");
                 String[] data = new String[(dataRows.length + 1)];
+                ArrayList ca = new ArrayList();
+//                String[] cas = new String[(no_cas + 1)];
+                //              cas[0] = "";
+
                 data[0] = "";
                 for (int i = 1; i <= dataRows.length; i++) {
                     data[i] = dataRows[(i - 1)];
                 }
+                ca.add("");
+
+                for (int i = 1; i < no_cas; i++) {
+                    ca.add(i, "CA" + String.valueOf(i));
+                }
+
+                ca.add("Exams");
 
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 arm = select_arm.getSelectedItem().toString();
                 progressBar2.setVisibility(View.INVISIBLE);
+
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, ca);
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                select_assessment.setAdapter(spinnerAdapter);
+                progressBar4.setVisibility(View.INVISIBLE);
                 counter = -1;
+
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -252,7 +275,7 @@ public class Assessment_menu extends AppCompatActivity {
         }
     }
 
-    //loads Classes and arms
+    //loads Classes
     private class initialLoad extends AsyncTask<String, Integer, String> {
 
         @Override
@@ -275,18 +298,7 @@ public class Assessment_menu extends AppCompatActivity {
             System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String ca_info = text.split("##")[1];
-                text = text.split("##")[0];
-                int no_cas = Integer.parseInt(ca_info.split("<>")[0]);
                 String dataRows[] = text.split("<>");
-
-                String[] caRows = new String[no_cas + 1];
-
-                for (int i = 0; i < no_cas; i++) {
-                    caRows[i] = "CA" + String.valueOf(i + 1);
-                }
-                caRows[no_cas] = "Exams";
-
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
                 for (int i = 1; i <= dataRows.length; i++) {
@@ -298,12 +310,8 @@ public class Assessment_menu extends AppCompatActivity {
                 select_class.setAdapter(spinnerAdapter1);
                 class_name = select_class.getSelectedItem().toString();
 
-                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, caRows);
-                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_assessment.setAdapter(spinnerAdapter);
 
                 progressBar1.setVisibility(View.INVISIBLE);
-                progressBar4.setVisibility(View.INVISIBLE);
                 counter = -1;
             }
         }

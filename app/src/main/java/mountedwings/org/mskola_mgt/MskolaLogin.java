@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +38,7 @@ public class MskolaLogin extends AppCompatActivity {
     int keep_signed_in = 0;
     private boolean singedIn, isSuccess;
     private String error_from_server = "Error";
+    private AppCompatCheckBox checkbox;
     //    private LinearLayout parent_layout;
     private TextInputLayout email, password1;
     private AppCompatEditText emailE, pass1;
@@ -114,9 +117,9 @@ public class MskolaLogin extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
     }
 
-    public void keep_signed_in(View view) {
-        checkKeepState();
-    }
+//    public void keep_signed_in(View view) {
+//        checkKeepState();
+//    }
 
     private void checkKeepState() {
         CheckBox checkedTextView = findViewById(R.id.keep_signed_in);
@@ -344,6 +347,7 @@ public class MskolaLogin extends AppCompatActivity {
         setContentView(R.layout.activity_login_mskola);
         parent_layout = findViewById(R.id.parent_layout);
         parent_view = findViewById(android.R.id.content);
+        checkbox = findViewById(R.id.keep_signed_in);
         //      parent_layout = findViewById(R.id.parent_layout);
         Tools.setSystemBarColor(this, android.R.color.white);
         Tools.setSystemBarLight(this);
@@ -358,6 +362,12 @@ public class MskolaLogin extends AppCompatActivity {
         emailE.addTextChangedListener(new MyTextWatcher(emailE));
         pass1.addTextChangedListener(new MyTextWatcher(pass1));
 
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checkKeepState();
+            }
+        });
 
         ((Button) findViewById(R.id.sig_in)).setOnClickListener(new View.OnClickListener() {
             @Override

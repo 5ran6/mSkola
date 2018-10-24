@@ -1,10 +1,10 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,12 +19,11 @@ import android.widget.Toast;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
-import mountedwings.org.mskola_mgt.adapter.NumbersAdapter;
-import mountedwings.org.mskola_mgt.data.Number;
-
 import java.util.ArrayList;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.adapter.NumbersAdapter;
+import mountedwings.org.mskola_mgt.data.Number;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 /**
@@ -331,7 +330,8 @@ public class AttendanceFragment extends Fragment {
         loading.setVisibility(View.VISIBLE);
 
         //new first_loading().execute(school_id, class_name, arm, date);
-        new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
+//        new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
+        new first_loading().execute("cac181009105222", "JSS1", "A", "2018-10-03");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
         back_drop.setOnClickListener(v -> toggleFabMode(fab_add));

@@ -23,14 +23,14 @@ public class Results_menu extends AppCompatActivity {
     }
 
     public void psychomotor(View view) {
-        intent = new Intent(getApplicationContext(), Give_assignment_menu.class);
+        intent = new Intent(getApplicationContext(), Psychomotor_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", staff_id);
         startActivity(intent);
     }
 
     public void compileResults(View view) {
-        intent = new Intent(getApplicationContext(), CollateAssignments.class);
+        intent = new Intent(getApplicationContext(), Compile_Result_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", staff_id);
         startActivity(intent);
@@ -38,7 +38,7 @@ public class Results_menu extends AppCompatActivity {
     }
 
     public void promoteStudents(View view) {
-        intent = new Intent(getApplicationContext(), AssignmentHistoryActivity.class);
+        intent = new Intent(getApplicationContext(), Promote_Students_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", staff_id);
         startActivity(intent);

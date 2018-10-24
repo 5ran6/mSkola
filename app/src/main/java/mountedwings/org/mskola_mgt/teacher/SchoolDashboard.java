@@ -170,7 +170,7 @@ public class SchoolDashboard extends AppCompatActivity {
             startActivity(intent);
         });
 
-        CardView result = findViewById(R.id.assignment);
+        CardView result = findViewById(R.id.result);
         result.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), Results_menu.class);
             intent.putExtra("school_id", school_id);
