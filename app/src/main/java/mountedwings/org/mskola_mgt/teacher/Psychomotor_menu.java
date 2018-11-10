@@ -89,14 +89,14 @@ public class Psychomotor_menu extends AppCompatActivity {
 
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() || !arm.isEmpty()) {
-                Intent intent1 = new Intent(getApplicationContext(), SchoolDashboard.class);
+                Intent intent1 = new Intent(getBaseContext(), Psychomotor.class);
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("arm", arm);
                 intent1.putExtra("staff_id", staff_id);
                 startActivity(intent1);
             } else {
-                Toast.makeText(getApplicationContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -136,14 +136,14 @@ public class Psychomotor_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 arm = select_arm.getSelectedItem().toString();
                 progressBar2.setVisibility(View.INVISIBLE);
                 counter = -1;
             } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 progressBar2.setVisibility(View.INVISIBLE);
@@ -189,7 +189,7 @@ public class Psychomotor_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_class.setAdapter(spinnerAdapter1);
                 class_name = select_class.getSelectedItem().toString();

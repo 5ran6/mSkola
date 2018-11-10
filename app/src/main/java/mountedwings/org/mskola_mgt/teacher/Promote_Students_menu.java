@@ -49,9 +49,9 @@ public class Promote_Students_menu extends AppCompatActivity {
             staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
         } else {
-            Toast.makeText(getApplicationContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
             finish();
-            startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
+            startActivity(new Intent(getBaseContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }
         setContentView(R.layout.activity_promote_students_menu);
 
@@ -143,7 +143,7 @@ public class Promote_Students_menu extends AppCompatActivity {
                 //TODO: Loading progressBar
                 new getStudentsToPromote().execute();
             } else {
-                Toast.makeText(getApplicationContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -186,14 +186,14 @@ public class Promote_Students_menu extends AppCompatActivity {
                 for (int i = 1; i <= dataRows.length; i++) {
                     data[i] = dataRows[(i - 1)];
                 }
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 arm = select_arm.getSelectedItem().toString();
                 progressBar2.setVisibility(View.INVISIBLE);
                 counter = -1;
             } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 progressBar2.setVisibility(View.INVISIBLE);
@@ -234,14 +234,14 @@ public class Promote_Students_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_session.setAdapter(spinnerAdapter1);
                 session = select_session.getSelectedItem().toString();
                 progressBar3.setVisibility(View.INVISIBLE);
                 counter = -1;
             } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_session.setAdapter(spinnerAdapter1);
                 progressBar3.setVisibility(View.INVISIBLE);
@@ -251,7 +251,7 @@ public class Promote_Students_menu extends AppCompatActivity {
         }
 
         private void showCustomDialogFailure(String error) {
-            final Dialog dialog = new Dialog(getApplicationContext());
+            final Dialog dialog = new Dialog(getBaseContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
             dialog.setContentView(R.layout.dialog_error);
             dialog.setCancelable(true);
@@ -328,7 +328,7 @@ public class Promote_Students_menu extends AppCompatActivity {
             }
             //finally
 
-            intent = new Intent(getApplicationContext(), PromotionStudents.class);
+            intent = new Intent(getBaseContext(), PromotionStudents.class);
             intent.putExtra("students_names", studentsName);
             intent.putExtra("reg_nos", regNos);
 
@@ -342,7 +342,7 @@ public class Promote_Students_menu extends AppCompatActivity {
         }
 
         private void showCustomDialogFailure(String error) {
-            final Dialog dialog = new Dialog(getApplicationContext());
+            final Dialog dialog = new Dialog(getBaseContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
             dialog.setContentView(R.layout.dialog_error);
             dialog.setCancelable(true);
@@ -408,7 +408,7 @@ public class Promote_Students_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_class.setAdapter(spinnerAdapter1);
                 class_name = select_class.getSelectedItem().toString();

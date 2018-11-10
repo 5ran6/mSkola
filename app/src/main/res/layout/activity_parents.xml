@@ -429,7 +429,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Recent Activity"
+                                android:text="@string/recent_activity"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                                 android:textColor="@color/grey_60"
                                 android:textStyle="bold" />
@@ -440,6 +440,7 @@
                                 android:layout_height="?android:attr/actionBarSize"
                                 android:background="?android:attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
+                                android:contentDescription="@string/app_name"
                                 android:focusable="true"
                                 android:onClick="clear_activities"
                                 android:tint="@color/colorPrimary"

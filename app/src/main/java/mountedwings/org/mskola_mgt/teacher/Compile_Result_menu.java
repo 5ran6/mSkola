@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -45,9 +44,9 @@ public class Compile_Result_menu extends AppCompatActivity {
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         } else {
-            Toast.makeText(getApplicationContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
             finish();
-            startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
+            startActivity(new Intent(getBaseContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }
         setContentView(R.layout.activity_compile_result_menu);
         TextView load = findViewById(R.id.load);
@@ -103,7 +102,7 @@ public class Compile_Result_menu extends AppCompatActivity {
             if (!class_name.isEmpty() || !arm.isEmpty()) {
                 new compileResult().execute(school_id, class_name, arm);
             } else {
-                Toast.makeText(getApplicationContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -143,14 +142,14 @@ public class Compile_Result_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 arm = select_arm.getSelectedItem().toString();
                 progressBar2.setVisibility(View.INVISIBLE);
                 counter = -1;
             } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 progressBar2.setVisibility(View.INVISIBLE);
@@ -179,13 +178,14 @@ public class Compile_Result_menu extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Toast.makeText(getBaseContext(), "Compiling......", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (text.equals("success")) {
-                //    Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getBaseContext(), "", Toast.LENGTH_SHORT).show();
                 showCustomDialogSuccess("Results successfully compiled");
             } else if (text.equals("not found")) {
                 showCustomDialogFailure("Students not found in the selected class");
@@ -215,13 +215,13 @@ public class Compile_Result_menu extends AppCompatActivity {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
 
-        ((AppCompatButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 finish();
-                Intent intent1 = new Intent(getApplicationContext(), SchoolDashboard.class);
+                Intent intent1 = new Intent(getBaseContext(), Dashboard.class);
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("arm", arm);
@@ -249,17 +249,7 @@ public class Compile_Result_menu extends AppCompatActivity {
         TextView error_message = dialog.findViewById(R.id.content);
         error_message.setText(error);
 
-        (dialog.findViewById(R.id.bt_close)).setOnClickListener(v -> {
-            dialog.dismiss();
-            try {
-//                if (lyt_progress.getVisibility() == View.VISIBLE && parent_layout.getVisibility() == View.INVISIBLE) {
-//                    lyt_progress.setVisibility(View.INVISIBLE);
-//                    parent_layout.setVisibility(View.VISIBLE);
-//                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        (dialog.findViewById(R.id.bt_close)).setOnClickListener(v -> dialog.dismiss());
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
@@ -296,7 +286,7 @@ public class Compile_Result_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_class.setAdapter(spinnerAdapter1);
                 class_name = select_class.getSelectedItem().toString();

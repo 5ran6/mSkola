@@ -62,11 +62,11 @@ public class PromotionStudents extends AppCompatActivity {
 
         initToolbar();
         initComponent();
-        Toast.makeText(this, "Long press for selection", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Long press for selection", Toast.LENGTH_LONG).show();
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Select students to promote");
@@ -101,7 +101,7 @@ public class PromotionStudents extends AppCompatActivity {
             numbers.add(number);
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.list);
+        recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new LineItemDecoration(this, LinearLayout.VERTICAL));
         recyclerView.setHasFixedSize(false);

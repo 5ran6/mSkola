@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +24,7 @@ import com.mskola.files.storageFile;
 
 import java.util.Arrays;
 
-import mountedwings.org.mskola_mgt.teacher.SchoolDashboard;
+import mountedwings.org.mskola_mgt.teacher.Dashboard;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -235,7 +234,7 @@ public class MskolaLogin extends AppCompatActivity {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
 
-                intent = new Intent(getApplicationContext(), SchoolDashboard.class);
+                intent = new Intent(getApplicationContext(), Dashboard.class);
 
                 //sharedPref
                 editor = mPrefs.edit();
@@ -340,7 +339,7 @@ public class MskolaLogin extends AppCompatActivity {
         if (singedIn) {
             //startIntent to next activity
             finish();
-            startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
         }
 
         setContentView(R.layout.activity_login_mskola);
@@ -368,7 +367,7 @@ public class MskolaLogin extends AppCompatActivity {
             }
         });
 
-        ((Button) findViewById(R.id.sig_in)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.sig_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 submitForm();

@@ -11,7 +11,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:showIn="@layout/activity_main">
+        tools:showIn="@layout/activity_attendance">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_layout"

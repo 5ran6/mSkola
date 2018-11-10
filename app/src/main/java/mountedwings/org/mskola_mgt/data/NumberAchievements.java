@@ -2,7 +2,7 @@ package mountedwings.org.mskola_mgt.data;
 
 public class NumberAchievements {
     private String achievement;
-    private String subTitle;
+    private String title;
     private byte[] Image;
 
     public void setImage(byte[] image) {
@@ -21,12 +21,12 @@ public class NumberAchievements {
         this.achievement = achievement;
     }
 
-    public String getsubTitle() {
-        return subTitle;
+    public String gettitle() {
+        return title;
     }
 
-    public void setsubTitle(String subTitle) {
-        this.subTitle = subTitle;
+    public void settitle(String title) {
+        this.title = title;
     }
 
 }

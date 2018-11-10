@@ -17,13 +17,11 @@ import java.util.List;
 
 import mountedwings.org.mskola_mgt.adapter.AdapterListInbox;
 import mountedwings.org.mskola_mgt.data.DataGenerator;
-
 import mountedwings.org.mskola_mgt.model.Inbox;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.widget.LineItemDecoration;
 
 public class Chat extends AppCompatActivity {
-
     private View parent_view;
 
     private RecyclerView recyclerView;
@@ -46,7 +44,7 @@ public class Chat extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Messages");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,7 +54,7 @@ public class Chat extends AppCompatActivity {
 
     private void initComponent() {
         relativeLayout = findViewById(R.id.no_messages);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new LineItemDecoration(this, LinearLayout.VERTICAL));
         recyclerView.setHasFixedSize(true);

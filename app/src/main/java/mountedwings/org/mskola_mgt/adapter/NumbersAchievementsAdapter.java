@@ -76,26 +76,24 @@ public class NumbersAchievementsAdapter extends RecyclerView.Adapter<NumbersAchi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         private TextView achievement;
-        private TextView subTitle;
+        private TextView title;
         private ImageView passport;
         private CardView cardView;
 
         private ViewHolder(View v) {
             super(v);
             achievement = v.findViewById(R.id.title);
-            subTitle = v.findViewById(R.id.subtitle);
+            title = v.findViewById(R.id.title);
             passport = v.findViewById(R.id.image);
             cardView = v.findViewById(R.id.parent_layout);
         }
 
         private void bindData(NumberAchievements number) {
-//          achievement.setText(number.get);
+            title.setText(number.gettitle().toUpperCase());
             achievement.setText(number.getachievement());
-            subTitle.setText(String.format("subTitle: %s", number.getsubTitle()));
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(number.getImageFile(), 0, number.getImageFile().length);
             passport.setImageBitmap(bitmap);
-
 
         }
     }

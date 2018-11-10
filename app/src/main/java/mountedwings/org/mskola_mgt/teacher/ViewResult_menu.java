@@ -54,7 +54,7 @@ public class ViewResult_menu extends AppCompatActivity {
         progressBar3.setVisibility(View.INVISIBLE);
 
         String[] data = {"", "First", "Second", "Third"};
-        ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+        ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
         spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         select_term.setAdapter(spinnerAdapter1);
 
@@ -125,7 +125,7 @@ public class ViewResult_menu extends AppCompatActivity {
 
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() || !session.isEmpty() || !arm.isEmpty() || !term.isEmpty()) {
-                Intent intent1 = new Intent(getApplicationContext(), ViewResultActivity.class);
+                Intent intent1 = new Intent(getBaseContext(), ViewResultActivity.class);
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name + " " + arm);
                 intent1.putExtra("class", class_name);
@@ -135,7 +135,7 @@ public class ViewResult_menu extends AppCompatActivity {
                 intent1.putExtra("staff_id", staff_id);
                 startActivity(intent1);
             } else {
-                Toast.makeText(getApplicationContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -180,14 +180,14 @@ public class ViewResult_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 arm = select_arm.getSelectedItem().toString();
                 progressBar2.setVisibility(View.INVISIBLE);
                 counter = -1;
             } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_arm.setAdapter(spinnerAdapter1);
                 progressBar2.setVisibility(View.INVISIBLE);
@@ -227,16 +227,16 @@ public class ViewResult_menu extends AppCompatActivity {
                 for (int i = 1; i <= dataRows.length; i++) {
                     data[i] = dataRows[(i - 1)];
                 }
-                //       Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_SHORT).show();
+                //       Toast.makeText(getBaseContext(), data.toString(), Toast.LENGTH_SHORT).show();
 
                 //Log.d("mSkola", data.toString());
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_session.setAdapter(spinnerAdapter1);
                 session = select_session.getSelectedItem().toString();
                 progressBar3.setVisibility(View.INVISIBLE);
             } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_session.setAdapter(spinnerAdapter1);
                 progressBar3.setVisibility(View.INVISIBLE);
@@ -281,7 +281,7 @@ public class ViewResult_menu extends AppCompatActivity {
                     data[i] = dataRows[(i - 1)];
                 }
 
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_class.setAdapter(spinnerAdapter1);
                 class_name = select_class.getSelectedItem().toString();
@@ -289,7 +289,7 @@ public class ViewResult_menu extends AppCompatActivity {
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
             } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_class.setAdapter(spinnerAdapter1);
                 progressBar1.setVisibility(View.INVISIBLE);

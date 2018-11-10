@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -17,7 +16,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,34 +34,77 @@ public class SchoolID_Login extends AppCompatActivity {
     private String role;
     private TextView verifying;
     private ProgressBar checking;
+    private SharedPreferences mPrefs;
+
+    private SharedPreferences mPrefsSchoolID;
+
+    private String schoolIds;
+    private Spinner recentIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         role = intent.getStringExtra("account_type");
+        mPrefs = getSharedPreferences(myPref, 0);
+        mPrefsSchoolID = getSharedPreferences("schoolIDs", 0);
 
         setContentView(R.layout.activity_shool_id_login);
         school_id = findViewById(R.id.school_id);
         verifying = findViewById(R.id.verifying);
         checking = findViewById(R.id.checking);
-        school_id.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideSoftKeyboard();
-                    verifyID();
-                    handled = true;
-                }
-                return handled;
+        recentIds = findViewById(R.id.recent_ids);
+        recentIds.setVisibility(View.GONE);
+        if (!mPrefsSchoolID.getString("school_id", "").isEmpty()) {
+            schoolIds = mPrefsSchoolID.getString("school_id", "");
+
+            String[] schools = schoolIds.split(",");
+            String[] data = new String[(schools.length + 1)];
+            data[0] = "Recent School IDs.....";
+            for (int i = 1; i <= schools.length; i++) {
+                data[i] = schools[(i - 1)];
             }
+
+            ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, data);
+            spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            recentIds.setAdapter(spinnerAdapter1);
+
+            //setVisibility
+            recentIds.setVisibility(View.VISIBLE);
+        }
+
+        recentIds.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (recentIds.getSelectedItemPosition() > 0)
+                    school_id.setText(recentIds.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        school_id.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideSoftKeyboard();
+                verifyID();
+                handled = true;
+            }
+            return handled;
         });
     }
 
     //DONE
     public void hideSoftKeyboard() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -138,11 +183,25 @@ public class SchoolID_Login extends AppCompatActivity {
                 //save school_id to sharedPrefs
                 //check if there's already a sheared pref, create or edit
 
-                SharedPreferences mPrefs = getSharedPreferences(myPref, 0);
                 SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putString("school_id", school_id.getText().toString().trim());
-                editor.apply();
+                SharedPreferences.Editor editorSchoolID = mPrefsSchoolID.edit();
 
+                editor.putString("school_id", school_id.getText().toString().trim());
+                //get School ID text
+                //append with a ,
+                String old_schoolID = mPrefsSchoolID.getString("school_id", "");
+                if (old_schoolID.isEmpty()) {
+                    editorSchoolID.putString("school_id", school_id.getText().toString().trim());
+                } else {
+                    if (!old_schoolID.contains(school_id.getText().toString().trim())) {
+                        editorSchoolID.putString("school_id", old_schoolID + "," + school_id.getText().toString().trim());
+                    }
+                }
+                editor.apply();
+                editorSchoolID.apply();
+
+                //          Toast.makeText(getBaseContext(), mPrefs.getString("school_id", ""), Toast.LENGTH_SHORT).show();
+                //        Toast.makeText(getBaseContext(), mPrefsSchoolID.getString("school_id", ""), Toast.LENGTH_SHORT).show();
                 //intent
                 Intent intent = new Intent(getApplicationContext(), MskolaLogin.class);
                 intent.putExtra("account_type", role);

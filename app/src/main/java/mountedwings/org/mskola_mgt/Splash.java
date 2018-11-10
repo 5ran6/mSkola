@@ -2,19 +2,18 @@ package mountedwings.org.mskola_mgt;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.transition.Transition;
 import android.support.transition.TransitionValues;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
-import mountedwings.org.mskola_mgt.teacher.SchoolDashboard;
+import mountedwings.org.mskola_mgt.teacher.Dashboard;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -57,7 +56,7 @@ public class Splash extends AppCompatActivity {
             // intent
             if (singedIn) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), SchoolDashboard.class));
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
             } else {
                 //initial Launch
                 finish();

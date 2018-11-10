@@ -156,8 +156,8 @@ public class ViewResultActivity extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getstudentprintresult");
             for (int i = 0; i < regNo.size(); i++) {
-//                storageObj.setStrData(school_id + "<>" + regNo.get(i) + "<>" + "arm" + "<>" + "yes" + "<>" + session + "<>" + term + "<>" + class_name + "<>" + arm);
-                storageObj.setStrData("cac181009105222" + "<>" + regNo.get(i) + "<>" + "arm" + "<>" + "yes" + "<>" + "2017/2018" + "<>" + "First" + "<>" + "JSS1" + "<>" + "A");
+                storageObj.setStrData(school_id + "<>" + regNo.get(i) + "<>" + "arm" + "<>" + "yes" + "<>" + session + "<>" + term + "<>" + class_name + "<>" + arm);
+                //              storageObj.setStrData("cac181009105222" + "<>" + regNo.get(i) + "<>" + "arm" + "<>" + "yes" + "<>" + "2017/2018" + "<>" + "First" + "<>" + "JSS1" + "<>" + "A");
                 storageFile sentData = new serverProcess().requestProcess(storageObj);
 
                 String text = sentData.getStrData();

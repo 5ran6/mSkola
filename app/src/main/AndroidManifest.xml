@@ -52,7 +52,6 @@
         <activity
             android:name=".student.Login_SignUp"
             android:screenOrientation="portrait" />
-        <activity android:name=".teacher.SchoolDashboard" />
         <activity android:name=".parent.Parents" />
         <activity android:name=".student.Students" />
         <activity android:name=".Chat" />
@@ -67,7 +66,7 @@
         <activity android:name=".teacher.AssignmentHistoryActivity" />
         <activity android:name=".teacher.Assignment_history_detail" />
         <activity android:name=".teacher.Psychomotor_menu" />
-         <activity android:name=".teacher.Compile_Result_menu" />
+        <activity android:name=".teacher.Compile_Result_menu" />
         <activity android:name=".teacher.Results_menu" />
         <activity android:name=".teacher.Psychomotor" />
         <activity android:name=".teacher.ViewResult_menu" />
@@ -76,6 +75,10 @@
         <activity android:name=".teacher.PromoteStudentsActivity" />
         <activity android:name=".teacher.PromotionStudents" />
         <activity android:name=".teacher.AchievementsActivity" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".Chat_menu" />
+        <activity android:name=".teacher.ChatCategoriesActivity" />
+        <activity android:name=".teacher.Dashboard" />
 
     </application>
 

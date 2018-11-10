@@ -41,17 +41,17 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:layout_width="@dimen/spacing_xmlarge"
-                        android:layout_height="@dimen/spacing_xmlarge"
+                        android:layout_width="@dimen/spacing_xxlarge"
+                        android:layout_height="@dimen/spacing_xxlarge"
                         android:contentDescription="@string/app_name"
                         android:src="@drawable/shape_circle"
-                        android:tint="@color/blue_grey_600" />
+                        android:tint="@color/yellow_A400" />
 
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="@dimen/spacing_xxlarge"
+                        android:layout_height="@dimen/spacing_xxlarge"
                         android:layout_centerInParent="true"
-                        app:srcCompat="@drawable/ic_done" />
+                        app:srcCompat="@drawable/ic_stars_black_24dp" />
 
                 </RelativeLayout>
 
@@ -65,14 +65,6 @@
                         android:layout_width="@dimen/spacing_xmlarge"
                         android:layout_height="@dimen/spacing_xmlarge"
                         android:contentDescription="@string/app_name" />
-
-                    <TextView
-                        android:id="@+id/image_letter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@android:color/white" />
 
                 </RelativeLayout>
 

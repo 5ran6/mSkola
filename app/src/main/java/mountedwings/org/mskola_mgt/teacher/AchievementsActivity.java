@@ -28,13 +28,6 @@ import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class AchievementsActivity extends AppCompatActivity {
     String school_id, staff_id, TAG = "mSkola";
-    String session;
-
-    String class_name;
-    String class_;
-    String arm;
-
-    String term;
     ArrayList<NumberAchievements> numbers = new ArrayList<>();
 
 
@@ -44,7 +37,7 @@ public class AchievementsActivity extends AppCompatActivity {
     private ArrayList<byte[]> allPassport_aPerson = new ArrayList<>();
     private storageFile data = new storageFile();
     private ArrayList<String> achievements = new ArrayList<>();
-    private ArrayList<String> subtitle = new ArrayList<>();
+    private ArrayList<String> title = new ArrayList<>();
 
 
     ProgressBar loading;
@@ -96,9 +89,8 @@ public class AchievementsActivity extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             data = storageObj;
 
-            storageObj.setOperation("getachievements");
+            storageObj.setOperation("getpsstudentinfo");
             storageObj.setStrData(strings[0]);
-
             data = new serverProcess().requestProcess(storageObj);
             String text = data.getStrData();
             Log.d(TAG, text);
@@ -115,21 +107,31 @@ public class AchievementsActivity extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("") && !text.equals("not found")) {
+                //       Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
                 allPassport_aPerson = data.getImageFiles();
                 Log.i(TAG, "Passports = " + String.valueOf(allPassport_aPerson));
 
                 String rows[] = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
                     achievements.add(rows[i].split(";")[1]);
-                    subtitle.add(text.split("<>")[i].split(";")[0]);
+                    title.add(rows[i].split(";")[0]);
+                    NumberAchievements number = new NumberAchievements();
+                    number.setachievement(achievements.get(i));
+                    number.settitle(achievements.get(i));
+                    number.setImage(allPassport_aPerson.get(i));
+                    numbers.add(number);
                 }
+                //show recyclerView with inflated views
+                adapter = new NumbersAchievementsAdapter(numbers);
+                list.setAdapter(adapter);
             } else {
-                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No student found in the selected class. Compile Result first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No achievements found", Toast.LENGTH_SHORT).show();
                 finish();
             }
             //finally
-            Toast.makeText(Objects.requireNonNull(getApplicationContext()), "Done", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(Objects.requireNonNull(getApplicationContext()), "Done", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
 

@@ -49,7 +49,7 @@ public class AttendanceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_attendance);
         fab_add = findViewById(R.id.see_more);
         fab_holidays = findViewById(R.id.fab_hols);
         fab_save = findViewById(R.id.fab_save);
@@ -85,13 +85,6 @@ public class AttendanceActivity extends AppCompatActivity {
         //  new first_loading().execute("cac181009105222", "JSS1", "A", "2018-10-03");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-//        if (!numbers.get(0).isAllSelectedA()) {
-//            all_afternoon.setChecked(false);
-//        }
-//        if (!numbers.get(0).isAllSelectedM()) {
-//            all_morning.setChecked(false);
-//        }
 
         back_drop.setOnClickListener(v -> toggleFabMode(fab_add));
 
