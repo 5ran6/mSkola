@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import mountedwings.org.mskola_mgt.widget.LineItemDecoration;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
-public class PromotionStudents extends AppCompatActivity {
+public class Chat_List_Parents extends AppCompatActivity {
 
     private ArrayList<NumberPromoteStudents> numbers = new ArrayList<>();
     private ArrayList<String> students = new ArrayList<>();
@@ -38,6 +39,7 @@ public class PromotionStudents extends AppCompatActivity {
 
     //    private RecyclerView list;
     private FloatingActionButton fab_done;
+    private TextView heading;
     private int PREFERENCE_MODE_PRIVATE = 0;
     String school_id, staff_id, TAG = "mSkola";
 
@@ -168,7 +170,7 @@ public class PromotionStudents extends AppCompatActivity {
     private class ActionModeCallback implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_grey_700);
+            Tools.setSystemBarColor(Chat_List_Parents.this, R.color.blue_grey_700);
             mode.getMenuInflater().inflate(R.menu.menu_selecet_all, menu);
             return true;
         }
@@ -206,7 +208,7 @@ public class PromotionStudents extends AppCompatActivity {
             mAdapter.clearSelections();
             actionMode = null;
             fab_done.setVisibility(View.INVISIBLE);
-            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_400);
+            Tools.setSystemBarColor(Chat_List_Parents.this, R.color.blue_400);
         }
     }
 

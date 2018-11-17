@@ -1,9 +1,9 @@
 package mountedwings.org.mskola_mgt.data;
 
-public class NumberChat {
-    private String date;
+public class NumberChatStaffList {
+    public int color = -1;
     private String recipient;
-    private String msg;
+    public Integer image = null;
     private String email;
     private byte[] Image;
 
@@ -21,22 +21,6 @@ public class NumberChat {
 
     public byte[] getImageFile() {
         return Image;
-    }
-
-    public String getdate() {
-        return date;
-    }
-
-    public void setdate(String date) {
-        this.date = date;
-    }
-
-    public String getmsg() {
-        return msg;
-    }
-
-    public void setmsg(String msg) {
-        this.msg = msg;
     }
 
     public String getEmail() {

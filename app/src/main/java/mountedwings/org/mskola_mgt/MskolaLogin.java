@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,16 +31,12 @@ import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class MskolaLogin extends AppCompatActivity {
 
-    private View parent_view;
     int keep_signed_in = 0;
-    private boolean singedIn, isSuccess;
+    private boolean singedIn;
     private String error_from_server = "Error";
-    private AppCompatCheckBox checkbox;
-    //    private LinearLayout parent_layout;
     private TextInputLayout email, password1;
     private AppCompatEditText emailE, pass1;
     private String emailAddress, password, TAG = "mSkola";
-    private boolean isFilled = false;
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor editor;
     private String role, school_id;
@@ -69,7 +64,6 @@ public class MskolaLogin extends AppCompatActivity {
         if (!validatePassword1()) {
             return;
         }
-        isFilled = true;
 
         emailAddress = emailE.getText().toString().trim();
         password = pass1.getText().toString();
@@ -201,6 +195,7 @@ public class MskolaLogin extends AppCompatActivity {
 
             //received from server
             text = sentData.getStrData();
+            boolean isSuccess;
             if (text.contains("success")) {
                 isSuccess = true;
                 Log.d(TAG, "registration successful");
@@ -344,9 +339,7 @@ public class MskolaLogin extends AppCompatActivity {
 
         setContentView(R.layout.activity_login_mskola);
         parent_layout = findViewById(R.id.parent_layout);
-        parent_view = findViewById(android.R.id.content);
-        checkbox = findViewById(R.id.keep_signed_in);
-        //      parent_layout = findViewById(R.id.parent_layout);
+        AppCompatCheckBox checkbox = findViewById(R.id.keep_signed_in);
         Tools.setSystemBarColor(this, android.R.color.white);
         Tools.setSystemBarLight(this);
         mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
@@ -360,21 +353,8 @@ public class MskolaLogin extends AppCompatActivity {
         emailE.addTextChangedListener(new MyTextWatcher(emailE));
         pass1.addTextChangedListener(new MyTextWatcher(pass1));
 
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkKeepState();
-            }
-        });
+        checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> checkKeepState());
 
-        findViewById(R.id.sig_in).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                submitForm();
-//                if (isFilled) {
-//                    loadingAndDisplayContent();
-//                }
-            }
-        });
+        findViewById(R.id.sig_in).setOnClickListener(view -> submitForm());
     }
 }

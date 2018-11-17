@@ -79,6 +79,9 @@
         <activity android:name=".Chat_menu" />
         <activity android:name=".teacher.ChatCategoriesActivity" />
         <activity android:name=".teacher.Dashboard" />
+        <activity android:name=".teacher.Chat_List_Teachers" />
+        <activity android:name=".teacher.Chat_List_Students" />
+        <activity android:name=".teacher.Chat_List_Parents" />
 
     </application>
 

@@ -15,11 +15,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import mountedwings.org.mskola_mgt.R;
 
 public class Assignment_history_detail extends AppCompatActivity {
-    private RelativeLayout parent_layout;
-    private MaterialRippleLayout done;
-    private LinearLayout progressBar;
-    private TextView done_button;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +25,10 @@ public class Assignment_history_detail extends AppCompatActivity {
         String subDueTime = text.split(";")[1];
         String assignment = text.split(";")[2];
 
-        parent_layout = findViewById(R.id.lyt_parent);
-        done = findViewById(R.id.done);
-        done_button = findViewById(R.id.done_button);
-        progressBar = findViewById(R.id.lyt_progress);
+        RelativeLayout parent_layout = findViewById(R.id.lyt_parent);
+        MaterialRippleLayout done = findViewById(R.id.done);
+        TextView done_button = findViewById(R.id.done_button);
+        LinearLayout progressBar = findViewById(R.id.lyt_progress);
 
         done.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -51,13 +46,7 @@ public class Assignment_history_detail extends AppCompatActivity {
         parent_layout.setVisibility(View.VISIBLE);
         done.setVisibility(View.VISIBLE);
 
-        done_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+        done_button.setOnClickListener(v -> finish());
     }
 
     @Override

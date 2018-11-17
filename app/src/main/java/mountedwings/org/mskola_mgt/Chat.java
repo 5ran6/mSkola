@@ -22,7 +22,6 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.widget.LineItemDecoration;
 
 public class Chat extends AppCompatActivity {
-    private View parent_view;
 
     private RecyclerView recyclerView;
     private AdapterListInbox mAdapter;
@@ -36,7 +35,6 @@ public class Chat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_multi_selection);
-        parent_view = findViewById(R.id.lyt_parent);
 
         initToolbar();
         initComponent();

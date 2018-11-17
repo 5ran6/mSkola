@@ -17,6 +17,6 @@ public class Test extends AppCompatActivity {
     }
 
     public void testing(View view) {
-        startActivity(new Intent(this, Home.class));
+        startActivity(new Intent(this, Chat_menu.class));
     }
 }

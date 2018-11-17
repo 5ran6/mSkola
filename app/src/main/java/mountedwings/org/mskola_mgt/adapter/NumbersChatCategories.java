@@ -76,13 +76,13 @@ public class NumbersChatCategories extends RecyclerView.Adapter<NumbersChatCateg
         private TextView names;
         private CheckBox checkbox1;
 
-        public ViewHolder(View v) {
+        private ViewHolder(View v) {
             super(v);
             names = v.findViewById(R.id.names);
             checkbox1 = v.findViewById(R.id.checkbox1);
         }
 
-        public void bindData(NumberChatCategory numberChatCategory) {
+        private void bindData(NumberChatCategory numberChatCategory) {
             names.setText(numberChatCategory.getnames());
 
             //set checked too

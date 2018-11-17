@@ -19,21 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersPromoteStudentsAdapter;
-import mountedwings.org.mskola_mgt.data.NumberPromoteStudents;
+import mountedwings.org.mskola_mgt.adapter.NumbersChatStaffListAdapter;
+import mountedwings.org.mskola_mgt.data.NumberChatStaffList;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.widget.LineItemDecoration;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
-public class PromotionStudents extends AppCompatActivity {
+public class Chat_List_Teachers extends AppCompatActivity {
 
-    private ArrayList<NumberPromoteStudents> numbers = new ArrayList<>();
-    private ArrayList<String> students = new ArrayList<>();
-    private ArrayList<String> regNo = new ArrayList<>();
-    private String classes;
-    private String session;
-    private String arm;
+    private ArrayList<NumberChatStaffList> numbers = new ArrayList<>();
+    private ArrayList<String> staff_list = new ArrayList<>();
+    private ArrayList<String> staff_email = new ArrayList<>();
     private boolean selected = true;
 
     //    private RecyclerView list;
@@ -41,11 +38,11 @@ public class PromotionStudents extends AppCompatActivity {
     private int PREFERENCE_MODE_PRIVATE = 0;
     String school_id, staff_id, TAG = "mSkola";
 
-    NumbersPromoteStudentsAdapter adapter;
+    NumbersChatStaffListAdapter adapter;
 
 
     private RecyclerView recyclerView;
-    private NumbersPromoteStudentsAdapter mAdapter;
+    private NumbersChatStaffListAdapter mAdapter;
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
     private Toolbar toolbar;
@@ -53,7 +50,7 @@ public class PromotionStudents extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_promote_students);
+        setContentView(R.layout.activity_chat_list_teachers);
 
         initToolbar();
         initComponent();
@@ -64,7 +61,7 @@ public class PromotionStudents extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Select students to promote");
+        getSupportActionBar().setTitle("Select Staff to message");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Tools.setSystemBarColor(this, R.color.blue_400);
     }
@@ -73,26 +70,21 @@ public class PromotionStudents extends AppCompatActivity {
         SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
 
         Intent intent = getIntent();
-        students = intent.getStringArrayListExtra("students_names");
-        regNo = intent.getStringArrayListExtra("reg_nos");
-        classes = intent.getStringExtra("classes");
-        session = intent.getStringExtra("session");
-        arm = intent.getStringExtra("arm");
+        staff_list = intent.getStringArrayListExtra("staff_list");
+        staff_email = intent.getStringArrayListExtra("staff_email");
 
         fab_done = findViewById(R.id.done);
 
-        adapter = new NumbersPromoteStudentsAdapter(this, numbers);
+        adapter = new NumbersChatStaffListAdapter(this, numbers);
 
         //school_id/staff id from sharedPrefs
         staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("staff_id"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
-        for (int i = 0; i < students.size(); i++) {
-            NumberPromoteStudents number = new NumberPromoteStudents();
-            number.setName(students.get(i));
-            number.setsession(session);
-            number.setclass_arm(classes + " " + arm);
-            number.setregNo(regNo.get(i));
+        for (int i = 0; i < staff_list.size(); i++) {
+            NumberChatStaffList number = new NumberChatStaffList();
+            number.setRecipient(staff_list.get(i));
+            number.setEmail(staff_email.get(i));
             numbers.add(number);
         }
 
@@ -102,24 +94,25 @@ public class PromotionStudents extends AppCompatActivity {
         recyclerView.setHasFixedSize(false);
 
         //set data and list adapter
-        mAdapter = new NumbersPromoteStudentsAdapter(this, numbers);
+        mAdapter = new NumbersChatStaffListAdapter(this, numbers);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnClickListener(new NumbersPromoteStudentsAdapter.OnClickListener() {
+        mAdapter.setOnClickListener(new NumbersChatStaffListAdapter.OnClickListener() {
             @Override
-            public void onItemClick(View view, NumberPromoteStudents obj, int pos) {
+            public void onItemClick(View view, NumberChatStaffList obj, int pos) {
 
                 if (mAdapter.getSelectedItemCount() > 0) {
                     enableActionMode(pos);
                 } else {
-                    NumberPromoteStudents numberPromoteStudents = mAdapter.getItem(pos);
-                    Toast.makeText(getApplicationContext(), "Long press to select " + numberPromoteStudents.getName(), Toast.LENGTH_SHORT).show();
+                    NumberChatStaffList numberChatStaffList = mAdapter.getItem(pos);
+                    Toast.makeText(getApplicationContext(), "Long press to select " + numberChatStaffList.getRecipient(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onItemLongClick(View view, NumberPromoteStudents obj, int pos) {
+            public void onItemLongClick(View view, NumberChatStaffList obj, int pos) {
                 enableActionMode(pos);
             }
+
         });
 
         actionModeCallback = new ActionModeCallback();
@@ -168,7 +161,7 @@ public class PromotionStudents extends AppCompatActivity {
     private class ActionModeCallback implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_grey_700);
+            Tools.setSystemBarColor(Chat_List_Teachers.this, R.color.blue_grey_700);
             mode.getMenuInflater().inflate(R.menu.menu_selecet_all, menu);
             return true;
         }
@@ -206,7 +199,7 @@ public class PromotionStudents extends AppCompatActivity {
             mAdapter.clearSelections();
             actionMode = null;
             fab_done.setVisibility(View.INVISIBLE);
-            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_400);
+            Tools.setSystemBarColor(Chat_List_Teachers.this, R.color.blue_400);
         }
     }
 

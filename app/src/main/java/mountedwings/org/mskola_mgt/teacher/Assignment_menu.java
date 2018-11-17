@@ -13,10 +13,8 @@ import mountedwings.org.mskola_mgt.SchoolID_Login;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Assignment_menu extends AppCompatActivity {
-    private String school_id = "", staff_id = "", class_name = "", arm = "";
+    private String school_id = "", staff_id = "";
     private Intent intent;
-    private SharedPreferences mPrefs;
-    private SharedPreferences.Editor editor;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     @Override
@@ -24,7 +22,7 @@ public class Assignment_menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
-            mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
+            SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
             staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 

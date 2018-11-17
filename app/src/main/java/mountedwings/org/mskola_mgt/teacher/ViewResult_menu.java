@@ -58,11 +58,8 @@ public class ViewResult_menu extends AppCompatActivity {
         spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         select_term.setAdapter(spinnerAdapter1);
 
-        // school_id = "cac180826043520";
-        // staff_id = "admin";
         //load classes and sessions
         new initialLoad().execute(school_id, staff_id);
-//        new initialLoad().execute("cac180826043520", "admin");
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -227,9 +224,6 @@ public class ViewResult_menu extends AppCompatActivity {
                 for (int i = 1; i <= dataRows.length; i++) {
                     data[i] = dataRows[(i - 1)];
                 }
-                //       Toast.makeText(getBaseContext(), data.toString(), Toast.LENGTH_SHORT).show();
-
-                //Log.d("mSkola", data.toString());
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_session.setAdapter(spinnerAdapter1);

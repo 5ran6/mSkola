@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:chatview="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     style="@style/Widget.AppCompat.ButtonBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,14 +10,59 @@
     android:orientation="vertical"
     tools:context=".ChatActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <ImageView
+                android:id="@+id/dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".8"
+                android:paddingLeft="@dimen/spacing_small"
+                android:paddingRight="@dimen/spacing_small" />
+
+            <TextView
+                android:id="@+id/textbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:background="@color/colorPrimary"
+                android:gravity="center|start"
+                android:padding="@dimen/spacing_medium"
+                android:text="Edwin James"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/White"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentInsetStartWithNavigation="0dp"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
     <co.intentservice.chatui.ChatView
         android:id="@+id/chat_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         chatview:backgroundColor="@color/off_white"
-        chatview:bubbleElevation="elevated"
         chatview:bubbleBackgroundRcv="@color/blue"
         chatview:bubbleBackgroundSend="@color/white"
+        chatview:bubbleElevation="elevated"
         chatview:inputHint="@string/start_typing" />
 
 </LinearLayout>

@@ -154,10 +154,8 @@ public class SchoolID_Login extends AppCompatActivity {
             storageObj.setOperation("verifyid");
             storageObj.setStrData(strings[0]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
-
             String text = sentData.getStrData();
             Log.d("mSkola", text);
-
             return text;
         }
 
@@ -200,8 +198,6 @@ public class SchoolID_Login extends AppCompatActivity {
                 editor.apply();
                 editorSchoolID.apply();
 
-                //          Toast.makeText(getBaseContext(), mPrefs.getString("school_id", ""), Toast.LENGTH_SHORT).show();
-                //        Toast.makeText(getBaseContext(), mPrefsSchoolID.getString("school_id", ""), Toast.LENGTH_SHORT).show();
                 //intent
                 Intent intent = new Intent(getApplicationContext(), MskolaLogin.class);
                 intent.putExtra("account_type", role);
@@ -233,17 +229,9 @@ public class SchoolID_Login extends AppCompatActivity {
         TextView error_message = dialog.findViewById(R.id.content);
         error_message.setText(error);
 
-        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        dialog.findViewById(R.id.bt_close).setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
 }
-
-
-

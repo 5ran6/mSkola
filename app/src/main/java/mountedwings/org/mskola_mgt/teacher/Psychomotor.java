@@ -85,22 +85,11 @@ public class Psychomotor extends AppCompatActivity {
         new first_loading().execute(school_id, class_name, arm);
         // new first_loading().execute(school_id, "JSS1", "A");
 
-
         //students name from server
 
-        findViewById(R.id.lyt_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                backStep(current_step);
-            }
-        });
+        findViewById(R.id.lyt_back).setOnClickListener(view -> backStep(current_step));
 
-        findViewById(R.id.lyt_next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nextStep(current_step);
-            }
-        });
+        findViewById(R.id.lyt_next).setOnClickListener(view -> nextStep(current_step));
 
 //        String str_progress = String.format(getString(R.string.step_of), current_step, MAX_STEP);
         ((TextView) findViewById(R.id.steps)).setText("---/---");

@@ -24,7 +24,7 @@ import mountedwings.org.mskola_mgt.data.NumberChat;
  */
 public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenuAdapter.ViewHolder> {
 
-    ArrayList<NumberChat> numbers;
+    private ArrayList<NumberChat> numbers;
     private OnItemClickListener mOnItemClickListener;
 
     public NumbersChatMenuAdapter(List<NumberChat> numbers) {
@@ -49,9 +49,9 @@ public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenu
             //TODO: intent to open a class with passed extras
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(v, numbers.get(position), position);
-                setOnItemClickListener((view, obj, position1) -> Log.i("mSkola", numbers.get(position1).getRecipient()));
+                setOnItemClickListener((view, obj, position1) ->
+                        Log.i("mSkola", numbers.get(position).getRecipient()));
             }
-
         });
     }
 
@@ -85,10 +85,8 @@ public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenu
         private void bindData(NumberChat number) {
             recipient.setText(number.getRecipient().toUpperCase());
             msg.setText(number.getmsg());
-
             Bitmap bitmap = BitmapFactory.decodeByteArray(number.getImageFile(), 0, number.getImageFile().length);
             passport.setImageBitmap(bitmap);
-
         }
     }
 

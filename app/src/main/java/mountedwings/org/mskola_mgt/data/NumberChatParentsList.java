@@ -1,9 +1,7 @@
 package mountedwings.org.mskola_mgt.data;
 
-public class NumberChat {
-    private String date;
+public class NumberChatParentsList {
     private String recipient;
-    private String msg;
     private String email;
     private byte[] Image;
 
@@ -21,22 +19,6 @@ public class NumberChat {
 
     public byte[] getImageFile() {
         return Image;
-    }
-
-    public String getdate() {
-        return date;
-    }
-
-    public void setdate(String date) {
-        this.date = date;
-    }
-
-    public String getmsg() {
-        return msg;
-    }
-
-    public void setmsg(String msg) {
-        this.msg = msg;
     }
 
     public String getEmail() {

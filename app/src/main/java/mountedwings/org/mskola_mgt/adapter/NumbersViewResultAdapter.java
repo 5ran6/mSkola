@@ -24,7 +24,7 @@ import mountedwings.org.mskola_mgt.data.NumberViewResult;
  */
 public class NumbersViewResultAdapter extends RecyclerView.Adapter<NumbersViewResultAdapter.ViewHolder> {
 
-    ArrayList<NumberViewResult> numbers;
+    private ArrayList<NumberViewResult> numbers;
     private OnItemClickListener mOnItemClickListener;
 
     public NumbersViewResultAdapter(List<NumberViewResult> numbers) {

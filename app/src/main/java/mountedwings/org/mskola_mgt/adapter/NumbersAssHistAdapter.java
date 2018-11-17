@@ -20,7 +20,7 @@ import mountedwings.org.mskola_mgt.data.NumberAssHist;
  */
 public class NumbersAssHistAdapter extends RecyclerView.Adapter<NumbersAssHistAdapter.ViewHolder> {
 
-    ArrayList<NumberAssHist> numbers;
+    private ArrayList<NumberAssHist> numbers;
     private OnItemClickListener mOnItemClickListener;
 
     public NumbersAssHistAdapter(List<NumberAssHist> numbers) {

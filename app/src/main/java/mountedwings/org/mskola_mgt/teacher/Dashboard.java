@@ -69,13 +69,7 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void initComponent() {
-        //       nested_scroll_view = findViewById(R.id.nested_scroll_view);
-//        Intent intent = getIntent();
-//        name = intent.getStringExtra("name");
-//        school = intent.getStringExtra("school");
-//        pass = intent.getByteArrayExtra("pass");
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        // toolbar.setTitle("Dashboard");
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
@@ -192,22 +186,6 @@ public class Dashboard extends AppCompatActivity {
     }
 
     public static void clearSharedPreferences(Context ctx) {
-//        File dir = new File(ctx.getFilesDir().getParent() + "/shared_prefs/");
-//        String[] children = dir.list();
-//        for (String aChildren1 : children) {
-//            // clear each of the prefs
-//            ctx.getSharedPreferences(aChildren1.replace(".xml", ""), Context.MODE_PRIVATE).edit().clear().apply();
-//        }
-//        // Make sure it has enough time to save all the commited changes
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//        }
-//        for (String aChildren : children) {
-//            // delete the files
-//            new File(dir, aChildren);
-//        }
-
         ctx.getSharedPreferences("mSkola", 0).edit().clear().apply();
     }
 }

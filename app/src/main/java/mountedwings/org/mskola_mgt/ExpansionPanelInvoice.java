@@ -17,7 +17,7 @@ import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 public class ExpansionPanelInvoice extends AppCompatActivity {
 
-    private ImageButton bt_toggle_items, bt_toggle_address, bt_toggle_description;
+    private ImageButton bt_toggle_description;
     private View lyt_expand_items, lyt_expand_address, lyt_expand_description;
     private NestedScrollView nested_scroll_view;
 
@@ -31,7 +31,7 @@ public class ExpansionPanelInvoice extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -41,47 +41,27 @@ public class ExpansionPanelInvoice extends AppCompatActivity {
     private void initComponent() {
 
         // nested scrollview
-        nested_scroll_view = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+        nested_scroll_view = findViewById(R.id.nested_scroll_view);
 
         // section items
-        bt_toggle_items = (ImageButton) findViewById(R.id.bt_toggle_items);
-        lyt_expand_items = (View) findViewById(R.id.lyt_expand_items);
-        bt_toggle_items.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSection(view, lyt_expand_items);
-            }
-        });
+        ImageButton bt_toggle_items = findViewById(R.id.bt_toggle_items);
+        lyt_expand_items = findViewById(R.id.lyt_expand_items);
+        bt_toggle_items.setOnClickListener(view -> toggleSection(view, lyt_expand_items));
 
         // section address
-        bt_toggle_address = (ImageButton) findViewById(R.id.bt_toggle_address);
-        lyt_expand_address = (View) findViewById(R.id.lyt_expand_address);
-        bt_toggle_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSection(view, lyt_expand_address);
-            }
-        });
+        ImageButton bt_toggle_address = findViewById(R.id.bt_toggle_address);
+        lyt_expand_address = findViewById(R.id.lyt_expand_address);
+        bt_toggle_address.setOnClickListener(view -> toggleSection(view, lyt_expand_address));
 
         // section description
-        bt_toggle_description = (ImageButton) findViewById(R.id.bt_toggle_description);
-        lyt_expand_description = (View) findViewById(R.id.lyt_expand_description);
-        bt_toggle_description.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSection(view, lyt_expand_description);
-            }
-        });
+        bt_toggle_description = findViewById(R.id.bt_toggle_description);
+        lyt_expand_description = findViewById(R.id.lyt_expand_description);
+        bt_toggle_description.setOnClickListener(view -> toggleSection(view, lyt_expand_description));
 
         // copy to clipboard
-        final TextView tv_invoice_code = (TextView) findViewById(R.id.tv_invoice_code);
-        ImageButton bt_copy_code = (ImageButton) findViewById(R.id.bt_copy_code);
-        bt_copy_code.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Tools.copyToClipboard(getApplicationContext(), tv_invoice_code.getText().toString());
-            }
-        });
+        final TextView tv_invoice_code = findViewById(R.id.tv_invoice_code);
+        ImageButton bt_copy_code = findViewById(R.id.bt_copy_code);
+        bt_copy_code.setOnClickListener(view -> Tools.copyToClipboard(getApplicationContext(), tv_invoice_code.getText().toString()));
 
     }
 
@@ -89,12 +69,7 @@ public class ExpansionPanelInvoice extends AppCompatActivity {
     private void toggleSection(View bt, final View lyt) {
         boolean show = toggleArrow(bt);
         if (show) {
-            ViewAnimation.expand(lyt, new ViewAnimation.AnimListener() {
-                @Override
-                public void onFinish() {
-                    Tools.nestedScrollTo(nested_scroll_view, lyt);
-                }
-            });
+            ViewAnimation.expand(lyt, () -> Tools.nestedScrollTo(nested_scroll_view, lyt));
         } else {
             ViewAnimation.collapse(lyt);
         }

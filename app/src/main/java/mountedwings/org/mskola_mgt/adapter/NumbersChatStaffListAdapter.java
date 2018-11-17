@@ -18,23 +18,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.data.NumberPromoteStudents;
+import mountedwings.org.mskola_mgt.data.NumberChatStaffList;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 /**
  * Simple adapter class, used for show all numbers in list
  */
-public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersPromoteStudentsAdapter.ViewHolder> {
+public class NumbersChatStaffListAdapter extends RecyclerView.Adapter<NumbersChatStaffListAdapter.ViewHolder> {
     private Context ctx;
     private SparseBooleanArray selected_items;
     private int current_selected_idx = -1;
     public List<String> items = new ArrayList<>();
 
-    private ArrayList<NumberPromoteStudents> numbers;
+    private ArrayList<NumberChatStaffList> numbers;
     public ArrayList<String> selected = new ArrayList();
     private OnClickListener onClickListener = null;
 
-    public NumbersPromoteStudentsAdapter(Context context, List<NumberPromoteStudents> numbers) {
+    public NumbersChatStaffListAdapter(Context context, List<NumberChatStaffList> numbers) {
         this.ctx = context;
         this.numbers = new ArrayList<>(numbers);
         selected_items = new SparseBooleanArray();
@@ -47,7 +47,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_promote_students, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_staff_list, parent, false);
         return new ViewHolder(v);
     }
 
@@ -76,7 +76,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
     }
 
 
-    private void displayImage(NumbersPromoteStudentsAdapter.ViewHolder holder, NumberPromoteStudents inbox) {
+    private void displayImage(NumbersChatStaffListAdapter.ViewHolder holder, NumberChatStaffList inbox) {
         if (inbox.image != null) {
             Tools.displayImageRound(ctx, holder.image, inbox.image);
             holder.image.setColorFilter(null);
@@ -88,7 +88,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
         }
     }
 
-    private void toggleCheckedIcon(NumbersPromoteStudentsAdapter.ViewHolder holder, int position) {
+    private void toggleCheckedIcon(NumbersChatStaffListAdapter.ViewHolder holder, int position) {
         if (selected_items.get(position, false)) {
             holder.lyt_image.setVisibility(View.GONE);
             holder.lyt_checked.setVisibility(View.VISIBLE);
@@ -105,7 +105,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
         return numbers.size();
     }
 
-    public NumberPromoteStudents getItem(int position) {
+    public NumberChatStaffList getItem(int position) {
         return numbers.get(position);
     }
 
@@ -117,11 +117,11 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
         current_selected_idx = pos;
         if (selected_items.get(pos, false)) {
             //if it was there before, remove it
-            items.remove(numbers.get(pos).getregNo());
+            items.remove(numbers.get(pos).getEmail());
             selected_items.delete(pos);
         } else {
             //else put
-            items.add(numbers.get(pos).getregNo());
+            items.add(numbers.get(pos).getEmail());
             selected_items.put(pos, true);
         }
         Log.i("mSkola", items.toString());
@@ -137,7 +137,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
     public List<String> selectAll() {
         items = new ArrayList<>();
         for (int i = 0; i < getItemCount(); i++) {
-            items.add(numbers.get(i).getregNo());
+            items.add(numbers.get(i).getEmail());
             selected_items.put(i, true);
             notifyItemChanged(i);
         }
@@ -166,12 +166,9 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
     public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView name;
-        private TextView reg_number;
-        public TextView class_arm;
         public TextView select;
-        private TextView current_session;
-        public TextView image_letter;
         public ImageView image;
+        public TextView image_letter;
 
 
         public RelativeLayout lyt_checked, lyt_image;
@@ -180,12 +177,9 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
         private ViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.name);
-            reg_number = v.findViewById(R.id.regNo);
-            class_arm = v.findViewById(R.id.class_arm);
             select = v.findViewById(R.id.select);
-            current_session = v.findViewById(R.id.session);
-
             image_letter = v.findViewById(R.id.image_letter);
+
             image = v.findViewById(R.id.image);
 
             lyt_checked = v.findViewById(R.id.lyt_checked);
@@ -193,28 +187,23 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
             lyt_parent = v.findViewById(R.id.lyt_parent);
         }
 
-        private void bindData(NumberPromoteStudents number) {
+        private void bindData(NumberChatStaffList number) {
 
-            name.setText(number.getName());
-            reg_number.setText(number.getregNo());
-            class_arm.setText(number.getclass_arm());
-            current_session.setText(number.getsession());
-            image_letter.setText(number.getName().substring(0, 1).toUpperCase());
+            name.setText(number.getRecipient());
             lyt_parent.setActivated(selected_items.get(getAdapterPosition(), false));
             if (selected_items.get(getAdapterPosition())) {
                 select.setText(R.string.selected);
                 select.setTextColor(ctx.getResources().getColor(R.color.green_900));
             } else {
                 select.setText(R.string.select);
-
             }
         }
     }
 
     public interface OnClickListener {
-        void onItemClick(View view, NumberPromoteStudents obj, int pos);
+        void onItemClick(View view, NumberChatStaffList obj, int pos);
 
-        void onItemLongClick(View view, NumberPromoteStudents obj, int pos);
+        void onItemLongClick(View view, NumberChatStaffList obj, int pos);
     }
 
 }

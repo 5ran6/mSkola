@@ -11,7 +11,6 @@ import android.support.transition.TransitionValues;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +22,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
@@ -38,9 +35,7 @@ public class Login_SignUp extends AppCompatActivity {
     private static final int MAX_STEP = 3;
 
     private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
 
-    private Button btnNext;
     private String title_array[] = {
             "Be part of the classroom",
             "Interconnectivity",
@@ -72,11 +67,11 @@ public class Login_SignUp extends AppCompatActivity {
     }
 
     private void initComponent() {
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = findViewById(R.id.view_pager);
 
         // adding bottom dots
         bottomProgressDots(0);
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -84,7 +79,7 @@ public class Login_SignUp extends AppCompatActivity {
     }
 
     private void bottomProgressDots(int current_index) {
-        LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+        LinearLayout dotsLayout = findViewById(R.id.layoutDots);
         ImageView[] dots = new ImageView[MAX_STEP];
 
         dotsLayout.removeAllViews();
@@ -130,7 +125,7 @@ public class Login_SignUp extends AppCompatActivity {
     public class MyViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
-        public MyViewPagerAdapter() {
+        private MyViewPagerAdapter() {
         }
 
         @Override
@@ -143,7 +138,7 @@ public class Login_SignUp extends AppCompatActivity {
             ((ImageView) view.findViewById(R.id.image)).setImageResource(about_images_array[position]);
             ((ImageView) view.findViewById(R.id.image_bg)).setImageResource(color_array[position]);
 
-            btnNext = (Button) view.findViewById(R.id.btn_next);
+            Button btnNext = view.findViewById(R.id.btn_next);
 
             if (position == title_array.length - 1) {
                 btnNext.setText("Get Started");
@@ -151,17 +146,13 @@ public class Login_SignUp extends AppCompatActivity {
                 btnNext.setText("Next");
             }
 
-            btnNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int current = viewPager.getCurrentItem() + 1;
-                    if (current < MAX_STEP) {
-                        // move to next screen
-                        viewPager.setCurrentItem(current);
-                    } else {
-//                        finish();
-                        showCustomDialog();
-                    }
+            btnNext.setOnClickListener(v -> {
+                int current = viewPager.getCurrentItem() + 1;
+                if (current < MAX_STEP) {
+                    // move to next screen
+                    viewPager.setCurrentItem(current);
+                } else {
+                    showCustomDialog();
                 }
             });
 
@@ -220,31 +211,19 @@ public class Login_SignUp extends AppCompatActivity {
         ImageView img = dialog.findViewById(R.id.close);
         img.startAnimation(animation);
 
-        ((ImageView) dialog.findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-        ((AppCompatButton) dialog.findViewById(R.id.bt_sign_up)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        dialog.findViewById(R.id.close).setOnClickListener(v -> dialog.dismiss());
+        dialog.findViewById(R.id.bt_sign_up).setOnClickListener(v -> {
 
-                Intent intent = new Intent(getApplicationContext(), Sign_Up.class);
-                intent.putExtra("account_type", "Parent");
-                startActivity(intent);
-                dialog.dismiss();
-                finish();
-            }
+            Intent intent = new Intent(getApplicationContext(), Sign_Up.class);
+            intent.putExtra("account_type", "Parent");
+            startActivity(intent);
+            dialog.dismiss();
+            finish();
         });
-        ((AppCompatButton) dialog.findViewById(R.id.bt_login)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
-                dialog.dismiss();
-                finish();
-            }
+        dialog.findViewById(R.id.bt_login).setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
+            dialog.dismiss();
+            finish();
         });
 
         dialog.show();

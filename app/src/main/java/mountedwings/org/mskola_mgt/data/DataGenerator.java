@@ -3,9 +3,9 @@ package mountedwings.org.mskola_mgt.data;
 import android.content.Context;
 import android.content.res.TypedArray;
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -14,11 +14,11 @@ import java.util.Random;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.model.CardViewImg;
+import mountedwings.org.mskola_mgt.model.Image;
 import mountedwings.org.mskola_mgt.model.Inbox;
 import mountedwings.org.mskola_mgt.model.MusicAlbum;
 import mountedwings.org.mskola_mgt.model.MusicSong;
 import mountedwings.org.mskola_mgt.model.People;
-import mountedwings.org.mskola_mgt.model.Image;
 import mountedwings.org.mskola_mgt.model.ShopCategory;
 import mountedwings.org.mskola_mgt.model.ShopProduct;
 import mountedwings.org.mskola_mgt.model.Social;
@@ -36,9 +36,8 @@ public class DataGenerator {
     }
 
     public static List<String> getStringsShort(Context ctx) {
-        List<String> items = new ArrayList<>();
         String name_arr[] = ctx.getResources().getStringArray(R.array.strings_short);
-        for (String s : name_arr) items.add(s);
+        List<String> items = new ArrayList<>(Arrays.asList(name_arr));
         Collections.shuffle(items);
         return items;
     }

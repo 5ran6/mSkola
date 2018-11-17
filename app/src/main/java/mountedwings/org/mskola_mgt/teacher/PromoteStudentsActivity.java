@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -30,14 +28,10 @@ import mountedwings.org.mskola_mgt.R;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class PromoteStudentsActivity extends AppCompatActivity {
-    private ArrayList<String> students = new ArrayList<>();
-    private ArrayList<String> regNo = new ArrayList<>();
     private String regNos;
     private String classes[];
     private String session, class_name;
     private String arm;
-    private SharedPreferences mPrefs;
-    private SharedPreferences.Editor editor;
 
     private Spinner select_class, select_arm, select_session;
     private ProgressBar progressBar1, progressBar2, progressBar3;
@@ -45,8 +39,6 @@ public class PromoteStudentsActivity extends AppCompatActivity {
 
     private int PREFERENCE_MODE_PRIVATE = 0;
     String school_id, staff_id, TAG = "mSkola";
-
-    ProgressBar loading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -410,7 +402,7 @@ public class PromoteStudentsActivity extends AppCompatActivity {
 
         ((TextView) dialog.findViewById(R.id.title)).setText(msg);
 
-        ((AppCompatButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

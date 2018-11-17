@@ -21,7 +21,7 @@ import mountedwings.org.mskola_mgt.data.Number;
  */
 public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHolder> {
 
-    ArrayList<Number> numbers;
+    private ArrayList<Number> numbers;
 
     public NumbersAdapter(List<Number> numbers) {
         this.numbers = new ArrayList<>(numbers);
@@ -45,15 +45,6 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
         holder.checkbox1.setChecked(numbers.get(position).isSelected());
         //if true, your checkbox will be selected, else unselected
         holder.checkbox2.setChecked(numbers.get(position).isSelected1());
-//        for (int i = 0 ;  i<numbers.size();i++){
-//            Log.d("mSkola", String.valueOf(numbers.get(i).isSelected()));
-//        }
-
-//        if (!isSelectedAll) holder.checkbox1.setChecked(false);
-//        else holder.checkbox1.setChecked(true);
-//
-//        if (!isASelectedAll1) holder.checkbox2.setChecked(false);
-//        else holder.checkbox2.setChecked(true);
 
 
         holder.checkbox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -68,16 +59,13 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
                 Log.d("mSkola", String.valueOf(Boolean.valueOf(numbers.get(holder.getAdapterPosition()).isSelected())));
             }
         });
-        holder.checkbox2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                numbers.get(holder.getAdapterPosition()).setSelected1(isChecked);
-                if (!numbers.get(position).isSelected()) {
-                    for (int i = 0; i < numbers.size(); i++)
-                        numbers.get(i).setAllSelectedA(false);
-                }
-                Log.d("mSkola", String.valueOf(Boolean.valueOf(numbers.get(holder.getAdapterPosition()).toString())));
+        holder.checkbox2.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            numbers.get(holder.getAdapterPosition()).setSelected1(isChecked);
+            if (!numbers.get(position).isSelected()) {
+                for (int i = 0; i < numbers.size(); i++)
+                    numbers.get(i).setAllSelectedA(false);
             }
+            Log.d("mSkola", String.valueOf(Boolean.valueOf(numbers.get(holder.getAdapterPosition()).toString())));
         });
     }
 
@@ -95,7 +83,7 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
         private TextView textName;
         private CheckBox checkbox1, checkbox2;
 
-        public ViewHolder(View v) {
+        private ViewHolder(View v) {
             super(v);
             ONEs = v.findViewById(R.id.ONEs);
             textName = v.findViewById(R.id.textONEs);

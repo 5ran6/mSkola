@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
@@ -40,9 +39,6 @@ public class ViewResultActivity extends AppCompatActivity {
 
 
     private RecyclerView list;
-    private FloatingActionButton fab_done;
-    private TextView heading;
-    private int PREFERENCE_MODE_PRIVATE = 0;
     private ArrayList<byte[]> allPassport_aPerson = new ArrayList<>();
     private storageFile data = new storageFile();
     private ArrayList<String> students = new ArrayList<>();
@@ -74,9 +70,7 @@ public class ViewResultActivity extends AppCompatActivity {
         class_name = intent.getStringExtra("class_name");
         session = intent.getStringExtra("session");
 
-        fab_done = findViewById(R.id.done);
-        heading = findViewById(R.id.assignment_history_title);
-        //   heading.setText(new StringBuilder().append("Result for ").append(Objects.requireNonNull(getArguments()).getString("class_name")).toString());
+        FloatingActionButton fab_done = findViewById(R.id.done);
 
         loading = findViewById(R.id.loading);
 
@@ -91,10 +85,7 @@ public class ViewResultActivity extends AppCompatActivity {
         //hide parentView
         loading.setVisibility(View.VISIBLE);
 
-//        new first_loading().execute("cac181009105222", "JSS1", "A");
         new first_loading().execute(school_id, class_, arm);
-//        new first_loading().execute("cac180826043520", "admin");
-///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> finish());
     }
 
@@ -129,7 +120,6 @@ public class ViewResultActivity extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
-                //       Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
                 allPassport_aPerson = data.getImageFiles();
                 Log.i(TAG, "Passports = " + String.valueOf(allPassport_aPerson));
 
@@ -157,7 +147,6 @@ public class ViewResultActivity extends AppCompatActivity {
             storageObj.setOperation("getstudentprintresult");
             for (int i = 0; i < regNo.size(); i++) {
                 storageObj.setStrData(school_id + "<>" + regNo.get(i) + "<>" + "arm" + "<>" + "yes" + "<>" + session + "<>" + term + "<>" + class_name + "<>" + arm);
-                //              storageObj.setStrData("cac181009105222" + "<>" + regNo.get(i) + "<>" + "arm" + "<>" + "yes" + "<>" + "2017/2018" + "<>" + "First" + "<>" + "JSS1" + "<>" + "A");
                 storageFile sentData = new serverProcess().requestProcess(storageObj);
 
                 String text = sentData.getStrData();

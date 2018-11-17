@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
 import android.support.transition.Transition;
 import android.support.transition.TransitionValues;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +22,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -74,18 +68,17 @@ public class Login_SignUp extends AppCompatActivity {
     }
 
     private void initComponent() {
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = findViewById(R.id.view_pager);
 
         // adding bottom dots
         bottomProgressDots(0);
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
     }
 
     private void bottomProgressDots(int current_index) {
-        LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+        LinearLayout dotsLayout = findViewById(R.id.layoutDots);
         ImageView[] dots = new ImageView[MAX_STEP];
 
         dotsLayout.removeAllViews();
@@ -100,10 +93,8 @@ public class Login_SignUp extends AppCompatActivity {
             dotsLayout.addView(dots[i]);
         }
 
-        if (dots.length > 0) {
-            dots[current_index].setImageResource(R.drawable.shape_circle);
-            dots[current_index].setColorFilter(getResources().getColor(R.color.grey_10), PorterDuff.Mode.SRC_IN);
-        }
+        dots[current_index].setImageResource(R.drawable.shape_circle);
+        dots[current_index].setColorFilter(getResources().getColor(R.color.grey_10), PorterDuff.Mode.SRC_IN);
     }
 
     //  viewpager change listener
@@ -153,17 +144,13 @@ public class Login_SignUp extends AppCompatActivity {
                 btnNext.setText("Next");
             }
 
-            btnNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int current = viewPager.getCurrentItem() + 1;
-                    if (current < MAX_STEP) {
-                        // move to next screen
-                        viewPager.setCurrentItem(current);
-                    } else {
-//                        finish();
-                        showCustomDialog();
-                    }
+            btnNext.setOnClickListener(v -> {
+                int current = viewPager.getCurrentItem() + 1;
+                if (current < MAX_STEP) {
+                    // move to next screen
+                    viewPager.setCurrentItem(current);
+                } else {
+                    showCustomDialog();
                 }
             });
 
@@ -222,30 +209,20 @@ public class Login_SignUp extends AppCompatActivity {
         img.startAnimation(animation);
 
 
-        ((ImageView) dialog.findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
+        dialog.findViewById(R.id.close).setOnClickListener(v -> {
+            dialog.dismiss();
         });
-        ((AppCompatButton) dialog.findViewById(R.id.bt_sign_up)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Sign_Up.class);
-                intent.putExtra("account_type", "Student");
-                startActivity(intent);
-              dialog.dismiss();
-                finish();
-            }
+        dialog.findViewById(R.id.bt_sign_up).setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Sign_Up.class);
+            intent.putExtra("account_type", "Student");
+            startActivity(intent);
+            dialog.dismiss();
+            finish();
         });
-        ((AppCompatButton) dialog.findViewById(R.id.bt_login)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
-                dialog.dismiss();
-                finish();
-            }
+        dialog.findViewById(R.id.bt_login).setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
+            dialog.dismiss();
+            finish();
         });
 
         dialog.show();
