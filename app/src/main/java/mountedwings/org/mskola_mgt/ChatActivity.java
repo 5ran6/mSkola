@@ -24,7 +24,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class ChatActivity extends AppCompatActivity {
-    String school_id, staff_id, TAG = "mSkola", recipients = "";
+    String school_id, staff_id, TAG = "mSkola", recipients = "", recipient_category = "";
     private ChatView chatView;
     private ImageView dp;
     private TextView textbar;
@@ -39,11 +39,15 @@ public class ChatActivity extends AppCompatActivity {
         appBarLayout = findViewById(R.id.app_bar_layout);
         dp = findViewById(R.id.dp);
         Intent intent = getIntent();
+
         recipients = getIntent().getStringExtra("recipient");
-        if (recipients.split(",").length > 1) {
+        recipient_category = getIntent().getStringExtra("category");
+        Log.d("mSkola", "Recipient(s) = " + recipients);
+        Log.d("mSkola", "Category = " + recipient_category);
+
+        if (recipients.split(";").length > 1) {
             multi = true;
         }
-        Log.d("mSkola", "Recipient(s) = " + recipients);
 
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
         //school_id/staff id from sharedPrefs
@@ -56,14 +60,17 @@ public class ChatActivity extends AppCompatActivity {
 
         if (!multi) {
             new first_loading().execute(school_id, staff_id, recipients);
+        } else {
+            chatView.addMessage(new ChatMessage("Type your Broadcast message", System.currentTimeMillis(), ChatMessage.Type.RECEIVED, "<" + recipients + ">"));
         }
+
 
         chatView.setOnSentMessageListener(chatMessage ->
                 {
-
-                    Toast.makeText(getApplicationContext(), chatMessage.getMessage()
-                            , Toast.LENGTH_SHORT).show();
-                    new sendSingleMessage().execute(school_id, chatMessage.getMessage(), recipients, staff_id);
+                    if (multi)
+                        new sendBatchMessage().execute(school_id, chatMessage.getMessage(), recipients, staff_id, recipient_category);
+                    else
+                        new sendSingleMessage().execute(school_id, chatMessage.getMessage(), recipients, staff_id);
                     return true;
                 }
         );
@@ -134,6 +141,54 @@ public class ChatActivity extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("sendmessage");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + "_");
+            return new serverProcess().requestProcess(storageObj).getStrData();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            Log.d("mSkola", "Msg = " + text);
+
+            if (text.equals("success")) {
+                View layout = getLayoutInflater().inflate(R.layout.toast_custom, findViewById(R.id.custom_toast_layout_id));
+                TextView Ttext = layout.findViewById(R.id.text);
+                Ttext.setTextColor(getResources().getColor(R.color.green_300));
+                Ttext.setText("Sent");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
+
+            } else {
+                View layout = getLayoutInflater().inflate(R.layout.toast_custom, findViewById(R.id.custom_toast_layout_id));
+                TextView Ttext = layout.findViewById(R.id.text);
+                Ttext.setTextColor(getResources().getColor(R.color.red_300));
+                Ttext.setText("Could not send message");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout);
+                toast.show();
+
+                Toast.makeText(getApplicationContext(), "Could not send message"
+                        , Toast.LENGTH_SHORT).show();
+
+            }
+//finally
+        }
+    }
+
+    //DONE
+    private class sendBatchMessage extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("sendmessage");
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4]);
             return new serverProcess().requestProcess(storageObj).getStrData();
         }
 

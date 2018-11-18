@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import mountedwings.org.mskola_mgt.ChatActivity;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersChatStaffListAdapter;
 import mountedwings.org.mskola_mgt.data.NumberChatStaffList;
@@ -36,7 +37,7 @@ public class Chat_List_Teachers extends AppCompatActivity {
     //    private RecyclerView list;
     private FloatingActionButton fab_done;
     private int PREFERENCE_MODE_PRIVATE = 0;
-    String school_id, staff_id, TAG = "mSkola";
+    String school_id, staff_id, TAG = "mSkola", category = "";
 
     NumbersChatStaffListAdapter adapter;
 
@@ -72,6 +73,7 @@ public class Chat_List_Teachers extends AppCompatActivity {
         Intent intent = getIntent();
         staff_list = intent.getStringArrayListExtra("staff_list");
         staff_email = intent.getStringArrayListExtra("staff_email");
+        category = intent.getStringExtra("category");
 
         fab_done = findViewById(R.id.done);
 
@@ -120,15 +122,16 @@ public class Chat_List_Teachers extends AppCompatActivity {
 
         fab_done.setOnClickListener(v -> {
             //Toast.makeText(getApplicationContext(), mAdapter.getSelectedItems().toString(), Toast.LENGTH_SHORT).show();
-            StringBuilder regNos = new StringBuilder(mAdapter.getSelectedItems().get(0));
-            // Toast.makeText(getApplicationContext(), "First: " + regNos, Toast.LENGTH_SHORT).show();
+            StringBuilder recipients = new StringBuilder(mAdapter.getSelectedItems().get(0));
+            // Toast.makeText(getApplicationContext(), "First: " + recipients, Toast.LENGTH_SHORT).show();
             for (int i = 1; i < mAdapter.getSelectedItems().size(); i++) {
-                regNos.append(";").append(mAdapter.getSelectedItems().get(i));
+                recipients.append(";").append(mAdapter.getSelectedItems().get(i));
             }
-//            Toast.makeText(getApplicationContext(), regNos.toString(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), recipients.toString(), Toast.LENGTH_SHORT).show();
 
-            Intent intent1 = new Intent(getApplicationContext(), PromoteStudentsActivity.class);
-            intent1.putExtra("reg_nos", regNos.toString());
+            Intent intent1 = new Intent(getApplicationContext(), ChatActivity.class);
+            intent1.putExtra("recipient", recipients.toString());
+            intent1.putExtra("category", category);
             startActivity(intent1);
 
             //always make this line last so as not to run into errors -  I know what am saying ;)

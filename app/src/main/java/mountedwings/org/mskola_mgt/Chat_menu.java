@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,7 +33,7 @@ import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Chat_menu extends AppCompatActivity {
-    String school_id, staff_id, TAG = "mSkola";
+    String school_id, staff_id, TAG = "mSkola", category = "";
     private RecyclerView list;
     private String message_category;
     private storageFile sentData;
@@ -45,6 +46,15 @@ public class Chat_menu extends AppCompatActivity {
     private View lyt_staff;
     private View lyt_parent;
     private View lyt_student;
+
+    private FloatingActionButton fab_staff;
+    private FloatingActionButton fab_parent;
+    private FloatingActionButton fab_student;
+
+    private CardView card_staff;
+    private CardView card_parent;
+    private CardView card_student;
+
     private View back_drop;
 
     private ArrayList<NumberChatParentsList> parents_list = new ArrayList<>();
@@ -65,15 +75,26 @@ public class Chat_menu extends AppCompatActivity {
 
         FloatingActionButton fab_done = findViewById(R.id.done);
 
+        back_drop = findViewById(R.id.back_drop);
         swipe_refresh = findViewById(R.id.swipe_refresh_layout);
         loading = findViewById(R.id.loading);
+
         lyt_staff = findViewById(R.id.lyt_staff);
         lyt_parent = findViewById(R.id.lyt_parent);
         lyt_student = findViewById(R.id.lyt_student);
+
+        card_staff = findViewById(R.id.card_staff);
+        card_parent = findViewById(R.id.card_parent);
+        card_student = findViewById(R.id.card_student);
+
+        fab_staff = findViewById(R.id.fab_staff);
+        fab_parent = findViewById(R.id.fab_parent);
+        fab_student = findViewById(R.id.fab_student);
+
         ViewAnimation.initShowOut(lyt_staff);
         ViewAnimation.initShowOut(lyt_parent);
         ViewAnimation.initShowOut(lyt_student);
-        back_drop = findViewById(R.id.back_drop);
+        back_drop.setVisibility(View.GONE);
 
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -92,6 +113,14 @@ public class Chat_menu extends AppCompatActivity {
         lyt_parent.setOnClickListener(v -> new getParents().execute(school_id));
         lyt_staff.setOnClickListener(v -> new getStaffMembers().execute(school_id, staff_id));
 
+        card_student.setOnClickListener(v -> new getStaffMembers().execute(school_id, staff_id));
+        card_parent.setOnClickListener(v -> new getParents().execute(school_id));
+        card_staff.setOnClickListener(v -> new getStaffMembers().execute(school_id, staff_id));
+
+        fab_student.setOnClickListener(v -> new getStaffMembers().execute(school_id, staff_id));
+        fab_parent.setOnClickListener(v -> new getParents().execute(school_id));
+        fab_staff.setOnClickListener(v -> new getStaffMembers().execute(school_id, staff_id));
+
         fab_done.setOnClickListener(v -> toggleFabMode(v));
 //        fab_done.setOnClickListener(v -> showSingleChoiceDialog());
     }
@@ -100,12 +129,12 @@ public class Chat_menu extends AppCompatActivity {
     private void toggleFabMode(View v) {
         rotate = ViewAnimation.rotateFab(v, !rotate);
         if (rotate) {
-            ViewAnimation.showIn(lyt_student);
+            ViewAnimation.showIn(lyt_staff);
             ViewAnimation.showIn(lyt_student);
             ViewAnimation.showIn(lyt_parent);
             back_drop.setVisibility(View.VISIBLE);
         } else {
-            ViewAnimation.showOut(lyt_student);
+            ViewAnimation.showOut(lyt_staff);
             ViewAnimation.showOut(lyt_student);
             ViewAnimation.showOut(lyt_parent);
             back_drop.setVisibility(View.GONE);
@@ -123,7 +152,7 @@ public class Chat_menu extends AppCompatActivity {
 
     private void pullAndRefresh() {
         swipeProgress(true);
-        new Handler().postDelayed(() -> new first_loading().execute(school_id, staff_id), 5000);
+        new Handler().postDelayed(() -> new first_loading().execute(school_id, staff_id), 3000);
     }
 
     @Override
@@ -214,6 +243,7 @@ public class Chat_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            category = "staff";
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
@@ -238,6 +268,7 @@ public class Chat_menu extends AppCompatActivity {
             //finally
             Intent intent = new Intent(getApplicationContext(), Chat_List_Teachers.class);
             intent.putExtra("staff_list", staff);
+            intent.putExtra("category", category);
             intent.putExtra("staff_email", staff_email);
             startActivity(intent);
 
@@ -265,6 +296,7 @@ public class Chat_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            category = "parent";
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
@@ -283,6 +315,7 @@ public class Chat_menu extends AppCompatActivity {
             }
             //finally
             Intent intent = new Intent(getApplicationContext(), Chat_List_Teachers.class);
+            intent.putExtra("category", category);
             startActivity(intent);
 
         }
@@ -309,6 +342,7 @@ public class Chat_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            category = "student";
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
