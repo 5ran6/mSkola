@@ -207,7 +207,7 @@ public class Chat_menu extends AppCompatActivity {
                 list.setAdapter(adapter);
                 adapter.setOnItemClickListener((view, obj, position) -> {
                     String recipient = numbers.get(position).getEmail();
-                    Toast.makeText(getBaseContext(), "Item " + recipient + " clicked", Toast.LENGTH_SHORT).show();
+                    //       Toast.makeText(getBaseContext(), "Item " + recipient + " clicked", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), ChatActivity.class).putExtra("recipient", recipient));
                     finish();
                 });
@@ -297,6 +297,7 @@ public class Chat_menu extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             category = "parent";
+            Log.i("mSkola", text);
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();

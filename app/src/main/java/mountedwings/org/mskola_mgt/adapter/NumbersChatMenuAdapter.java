@@ -71,6 +71,7 @@ public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenu
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView msg;
         private TextView recipient;
+        private TextView date;
         private ImageView passport;
         private CardView cardView;
 
@@ -80,11 +81,14 @@ public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenu
             recipient = v.findViewById(R.id.recipient);
             passport = v.findViewById(R.id.image);
             cardView = v.findViewById(R.id.parent_layout);
+            date = v.findViewById(R.id.date);
+
         }
 
         private void bindData(NumberChat number) {
             recipient.setText(number.getRecipient().toUpperCase());
             msg.setText(number.getmsg());
+            date.setText(number.getdate());
             Bitmap bitmap = BitmapFactory.decodeByteArray(number.getImageFile(), 0, number.getImageFile().length);
             passport.setImageBitmap(bitmap);
         }

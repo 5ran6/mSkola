@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 
-import mountedwings.org.mskola_mgt.ChatActivity;
+import mountedwings.org.mskola_mgt.Chat_menu;
 import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
@@ -138,7 +138,7 @@ public class Dashboard extends AppCompatActivity {
         });
         FloatingActionButton messages = findViewById(R.id.message);
         messages.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+            Intent intent = new Intent(getApplicationContext(), Chat_menu.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("role", role);
             intent.putExtra("email_address", email);
