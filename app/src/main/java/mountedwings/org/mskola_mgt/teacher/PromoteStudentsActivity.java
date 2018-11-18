@@ -139,10 +139,9 @@ public class PromoteStudentsActivity extends AppCompatActivity {
 
         {
             if (!class_name.isEmpty() || !arm.isEmpty()) {
-                //TODO: Loading progressBar
                 new promoteStudents().execute();
             } else {
-                Tools.toast("Fill all necessary fields!", getParent(), R.color.yellow_500);
+                Tools.toast("Fill all necessary fields!", PromoteStudentsActivity.this, R.color.yellow_500);
             }
         });
     }

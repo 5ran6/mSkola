@@ -49,7 +49,7 @@ public class Promote_Students_menu extends AppCompatActivity {
             staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
         } else {
-            Tools.toast("Previous Login invalidated. Login again!", getParent(), R.color.red_500);
+            Tools.toast("Previous Login invalidated. Login again!", Promote_Students_menu.this, R.color.red_500);
 
             finish();
             startActivity(new Intent(getBaseContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
@@ -141,10 +141,9 @@ public class Promote_Students_menu extends AppCompatActivity {
 
         {
             if (!class_name.isEmpty() || !arm.isEmpty()) {
-                //TODO: Loading progressBar
                 new getStudentsToPromote().execute();
             } else {
-                Tools.toast("Fill all necessary fields!", getParent(), R.color.yellow_500);
+                Tools.toast("Fill all necessary fields!", Promote_Students_menu.this, R.color.yellow_500);
 
             }
         });

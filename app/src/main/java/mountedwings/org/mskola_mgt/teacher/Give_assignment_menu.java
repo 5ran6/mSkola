@@ -117,7 +117,7 @@ public class Give_assignment_menu extends AppCompatActivity {
                 intent1.putExtra("staff_id", staff_id);
                 startActivity(intent1);
             } else {
-                Tools.toast("Fill all necessary fields", getParent());
+                Tools.toast("Fill all necessary fields", Give_assignment_menu.this);
 
             }
         });

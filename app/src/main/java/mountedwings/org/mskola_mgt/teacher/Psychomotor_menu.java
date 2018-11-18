@@ -96,7 +96,7 @@ public class Psychomotor_menu extends AppCompatActivity {
                 intent1.putExtra("staff_id", staff_id);
                 startActivity(intent1);
             } else {
-                Tools.toast("Fill all necessary fields", getParent(), R.color.yellow_800);
+                Tools.toast("Fill all necessary fields", Psychomotor_menu.this, R.color.yellow_800);
             }
         });
     }

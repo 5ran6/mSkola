@@ -46,7 +46,6 @@ public class NumbersViewResultAdapter extends RecyclerView.Adapter<NumbersViewRe
         holder.bindData(numbers.get(position));
 
         holder.cardView.setOnClickListener(v -> {
-            //TODO: intent to open a class with passed extras
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(v, numbers.get(position), position);
                 setOnItemClickListener(new OnItemClickListener() {

@@ -132,7 +132,7 @@ public class ViewResult_menu extends AppCompatActivity {
                 intent1.putExtra("staff_id", staff_id);
                 startActivity(intent1);
             } else {
-                Tools.toast("Fill all necessary fields", getParent(), R.color.yellow_600);
+                Tools.toast("Fill all necessary fields", ViewResult_menu.this, R.color.yellow_600);
 
             }
         });

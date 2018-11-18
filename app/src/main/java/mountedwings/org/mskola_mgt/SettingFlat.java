@@ -109,7 +109,6 @@ public class SettingFlat extends AppCompatActivity {
 
                 switch (single_choice_selected) {
                     case "0 mins":
-                        //TODO
                         //sharedPrefs
                         editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "0 mins");
@@ -118,7 +117,6 @@ public class SettingFlat extends AppCompatActivity {
 
                         break;
                     case "5 mins":
-                        //TODO
                         //sharedPrefs
                         editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "5 mins");
@@ -126,7 +124,6 @@ public class SettingFlat extends AppCompatActivity {
                         editor.apply();
                         break;
                     case "10 mins":
-                        //TODO
                         //sharedPrefs
                         editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "10 mins");
@@ -134,7 +131,6 @@ public class SettingFlat extends AppCompatActivity {
                         editor.apply();
                         break;
                     case "15 mins":
-                        //TODO
                         //sharedPrefs
                         editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "15 mins");
@@ -142,7 +138,6 @@ public class SettingFlat extends AppCompatActivity {
                         editor.apply();
                         break;
                     case "30 mins":
-                        //TODO
                         //sharedPrefs
                         editor = mPrefs.edit();
                         editor.putString("minutes_before_text", "30 mins");
@@ -153,13 +148,9 @@ public class SettingFlat extends AppCompatActivity {
                 Snackbar.make(parent_view, "alarm set for : " + single_choice_selected + " before closing", Snackbar.LENGTH_SHORT).show();
             }
         });
-        builder.setNegativeButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alarm.setChecked(false);
-                alarmState = !alarmState;
-
-            }
+        builder.setNegativeButton(R.string.CANCEL, (dialog, which) -> {
+            alarm.setChecked(false);
+            alarmState = !alarmState;
 
         });
         builder.show();

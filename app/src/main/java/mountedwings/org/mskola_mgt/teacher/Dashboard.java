@@ -21,7 +21,6 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.Chat_menu;
 import mountedwings.org.mskola_mgt.Home;
@@ -67,7 +66,7 @@ public class Dashboard extends AppCompatActivity {
             Log.i("mSkola1", Arrays.toString(pass));
 
         } else {
-            Tools.toast("Previous Login invalidated. Login again!", getParent(), R.color.red_600);
+            Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
 
             //clear mPrefs
             clearSharedPreferences(this);
@@ -79,19 +78,11 @@ public class Dashboard extends AppCompatActivity {
 
     private void initComponent() {
         if (school == null) {
-            Tools.toast("Previous Login invalidated. Login again!", getParent(), R.color.red_600);
+            Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
             //clear mPrefs
             clearSharedPreferences(this);
             finish();
             startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
-        }
-
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            toolbar.setTitle("Dashboard");
         }
 
         TextView staff_name = findViewById(R.id.tv_staff_name);
@@ -172,13 +163,12 @@ public class Dashboard extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_logout) {
-            Tools.toast("Logged out", getParent(), R.color.green_600);
-
             clearSharedPreferences(this);
+            Tools.toast("Logged out", Dashboard.this, R.color.green_600);
             finish();
             startActivity(new Intent(getApplicationContext(), Home.class));
         } else {
-            Tools.toast(item.getTitle().toString(), getParent());
+            Tools.toast(item.getTitle().toString(), Dashboard.this);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -192,7 +182,7 @@ public class Dashboard extends AppCompatActivity {
 
     public void doExitApp() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Tools.toast("Press again to exit app", getParent());
+            Tools.toast("Press again to exit app", Dashboard.this);
             exitTime = System.currentTimeMillis();
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -205,5 +195,13 @@ public class Dashboard extends AppCompatActivity {
 
     public static void clearSharedPreferences(Context ctx) {
         ctx.getSharedPreferences("mSkola", 0).edit().clear().apply();
+    }
+
+    public void doLogout(View view) {
+        clearSharedPreferences(this);
+        Tools.toast("Logged out", Dashboard.this, R.color.green_600);
+        finish();
+        startActivity(new Intent(getApplicationContext(), Home.class));
+
     }
 }

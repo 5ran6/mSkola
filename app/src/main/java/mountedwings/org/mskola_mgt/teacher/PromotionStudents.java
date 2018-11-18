@@ -56,7 +56,7 @@ public class PromotionStudents extends AppCompatActivity {
 
         initToolbar();
         initComponent();
-        Tools.toast("Long press for selection", getParent(), R.color.yellow_600);
+        Tools.toast("Long press for selection", PromotionStudents.this, R.color.yellow_600);
     }
 
     private void initToolbar() {
@@ -111,7 +111,7 @@ public class PromotionStudents extends AppCompatActivity {
                     enableActionMode(pos);
                 } else {
                     NumberPromoteStudents numberPromoteStudents = mAdapter.getItem(pos);
-                    Tools.toast("Long press to select " + numberPromoteStudents.getName(), getParent(), R.color.yellow_800);
+                    Tools.toast("Long press to select " + numberPromoteStudents.getName(), PromotionStudents.this, R.color.yellow_800);
 
                 }
             }
@@ -213,7 +213,7 @@ public class PromotionStudents extends AppCompatActivity {
     //  '
     private void selectAll() {
         List<String> listOfSelected = mAdapter.selectAll();
-        Tools.toast(listOfSelected.toString(), getParent(), R.color.yellow_800);
+        Tools.toast(listOfSelected.toString(), PromotionStudents.this, R.color.yellow_800);
 
         actionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
     }
@@ -229,7 +229,7 @@ public class PromotionStudents extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else {
-            Tools.toast(item.getTitle().toString(), getParent());
+            Tools.toast(item.getTitle().toString(), PromotionStudents.this);
 
         }
         return super.onOptionsItemSelected(item);

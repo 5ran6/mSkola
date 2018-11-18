@@ -42,7 +42,6 @@ public class NumbersAssHistAdapter extends RecyclerView.Adapter<NumbersAssHistAd
         holder.bindData(numbers.get(position));
 
         holder.cardView.setOnClickListener(v -> {
-            //TODO: intent to open a class with passed extras
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(v, numbers.get(position), position);
 

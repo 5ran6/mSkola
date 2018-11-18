@@ -132,7 +132,7 @@ public class ViewResultActivity extends AppCompatActivity {
                     regNo.add(text.split("<>")[i].split(";")[0]);
                 }
             } else {
-                Tools.toast("No student found in the selected class. Compile Result first", getParent());
+                Tools.toast("No student found in the selected class. Compile Result first", ViewResultActivity.this);
                 finish();
             }
             //finally
@@ -178,7 +178,7 @@ public class ViewResultActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Tools.toast("Fetching Results", getParent());
+            Tools.toast("Fetching Results", ViewResultActivity.this);
             loading.setVisibility(View.VISIBLE);
         }
 

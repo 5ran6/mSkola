@@ -12,48 +12,43 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.util.Log;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.io.ByteArrayOutputStream;
-import java.net.NoRouteToHostException;
 import java.util.Objects;
-
-import static android.Manifest.permission.CAMERA;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.model.People;
 import mountedwings.org.mskola_mgt.utils.ImagePicker;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
+
+import static android.Manifest.permission.CAMERA;
 
 
 public class Sign_Up extends AppCompatActivity {
@@ -93,7 +88,7 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -303,7 +298,7 @@ public class Sign_Up extends AppCompatActivity {
         ((TextView) dialog.findViewById(R.id.title)).setText(p.name);
         ((CircleImageView) dialog.findViewById(R.id.image)).setImageResource(p.image);
 
-        ((ImageButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -311,7 +306,7 @@ public class Sign_Up extends AppCompatActivity {
             }
         });
 
-        ((AppCompatButton) dialog.findViewById(R.id.bt_follow)).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.bt_follow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -338,7 +333,7 @@ public class Sign_Up extends AppCompatActivity {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
 
-        ((AppCompatButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
@@ -371,7 +366,7 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     private void doRegister() {
-        final LinearLayout lyt_progress = (LinearLayout) findViewById(R.id.lyt_progress);
+        final LinearLayout lyt_progress = findViewById(R.id.lyt_progress);
         lyt_progress.setVisibility(View.VISIBLE);
         lyt_progress.setAlpha(1.0f);
         parent_layout.setVisibility(View.GONE);
@@ -427,7 +422,6 @@ public class Sign_Up extends AppCompatActivity {
             case PICK_IMAGE_ID:
                 if (data != null) {
                     Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                    // TODO use bitmap
                     passport.setImageBitmap(bitmap);
                     newPassport = true;
                 }

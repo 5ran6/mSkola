@@ -216,7 +216,7 @@ public class Chat_List_Parents extends AppCompatActivity {
     //  '
     private void selectAll() {
         List<String> listOfSelected = mAdapter.selectAll();
-        Tools.toast(listOfSelected.toString(), getParent());
+        Tools.toast(listOfSelected.toString(), Chat_List_Parents.this);
         actionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
     }
 
