@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 public class Assessment extends AppCompatActivity {
@@ -124,11 +125,11 @@ public class Assessment extends AppCompatActivity {
             try {
                 i = Integer.valueOf(score.getText().toString());
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
+                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                 e.printStackTrace();
             } finally {
                 if (i > 100) {
-                    Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
+                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                     return;
                 }
                 if (score.getText().toString().trim().equals("")) {
@@ -137,7 +138,6 @@ public class Assessment extends AppCompatActivity {
                 }
             }
 
-            //   Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
             //send to server
             new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
             collapseAndContinue(index);
@@ -188,11 +188,11 @@ public class Assessment extends AppCompatActivity {
                 i = Integer.valueOf(score.getText().toString());
 
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
+                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                 e.printStackTrace();
             } finally {
                 if (i > 100) {
-                    Toast.makeText(getApplicationContext(), score.getText().toString() + " is an Invalid score", Toast.LENGTH_SHORT).show();
+                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                     return;
                 }
                 if (score.getText().toString().trim().equals("")) {
@@ -276,7 +276,9 @@ public class Assessment extends AppCompatActivity {
         //TODO: just try and get the right ID for the index of the child view and you're good to go
         //  index = view_list.indexOf(view.getRootView().getId());
         //index = view.getId();
-        Toast.makeText(getApplicationContext(), "Review from top", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "Review from top", Toast.LENGTH_SHORT).show();
+        Tools.toast("Reviewing from top", this, R.color.yellow_600);
+
         if (success_step >= index && current_step != index) {
             current_step = index;
             collapseAll();
@@ -427,7 +429,7 @@ public class Assessment extends AppCompatActivity {
                 score.setText("");
                 setCheckedRecorded(last_index);
             } else {
-                Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
+                Tools.toast("Check your internet connection and try again", Assessment.this, R.color.red_400);
             }
         }
     }
@@ -501,7 +503,7 @@ public class Assessment extends AppCompatActivity {
                 for (int i = 0; i < len; i++)
                     initViews(i, names[i]);
             } else {
-                Toast.makeText(getApplicationContext(), "No record found for selected class/subject", Toast.LENGTH_LONG).show();
+                Tools.toast("No record found for selected class/subject", Assessment.this, R.color.yellow_600);
                 finish();
             }
         }

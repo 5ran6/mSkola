@@ -5,10 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -27,7 +27,8 @@ public class Assignment_menu extends AppCompatActivity {
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         } else {
-            Toast.makeText(getApplicationContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
+            Tools.toast("Previous Login invalidated. Login again!", this, R.color.yellow_700);
+
             finish();
             startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }

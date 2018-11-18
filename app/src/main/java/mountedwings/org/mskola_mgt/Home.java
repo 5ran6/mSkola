@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.parent.Login_SignUp;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Home extends AppCompatActivity {
 
@@ -17,7 +17,7 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-      //  initToolbar();
+        //  initToolbar();
     }
 
     private void initToolbar() {
@@ -50,7 +50,7 @@ public class Home extends AppCompatActivity {
 
     public void doExitApp() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Toast.makeText(this, "Press again to exit app", Toast.LENGTH_SHORT).show();
+            Tools.toast("Press again to exit app", Home.this);
             exitTime = System.currentTimeMillis();
         } else {
             finishAffinity();

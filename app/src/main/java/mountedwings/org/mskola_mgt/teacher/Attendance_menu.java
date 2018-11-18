@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -119,7 +118,7 @@ public class Attendance_menu extends AppCompatActivity {
                 intent1.putExtra("date", date.getText().toString().trim());
                 startActivity(intent1);
             } else {
-                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Tools.toast("Fill all necessary fields", Attendance_menu.this, R.color.yellow_600);
             }
         });
     }
@@ -218,8 +217,7 @@ public class Attendance_menu extends AppCompatActivity {
                 class_name = select_class.getSelectedItem().toString();
                 progressBar1.setVisibility(View.INVISIBLE);
             } else {
-                Toast.makeText(getBaseContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
-
+                Tools.toast(getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.yellow_600);
             }
         }
     }

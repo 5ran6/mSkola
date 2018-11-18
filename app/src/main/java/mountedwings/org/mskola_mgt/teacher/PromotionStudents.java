@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class PromotionStudents extends AppCompatActivity {
 
         initToolbar();
         initComponent();
-        Toast.makeText(this, "Long press for selection", Toast.LENGTH_LONG).show();
+        Tools.toast("Long press for selection", getParent(), R.color.yellow_600);
     }
 
     private void initToolbar() {
@@ -112,7 +111,8 @@ public class PromotionStudents extends AppCompatActivity {
                     enableActionMode(pos);
                 } else {
                     NumberPromoteStudents numberPromoteStudents = mAdapter.getItem(pos);
-                    Toast.makeText(getApplicationContext(), "Long press to select " + numberPromoteStudents.getName(), Toast.LENGTH_SHORT).show();
+                    Tools.toast("Long press to select " + numberPromoteStudents.getName(), getParent(), R.color.yellow_800);
+
                 }
             }
 
@@ -213,7 +213,8 @@ public class PromotionStudents extends AppCompatActivity {
     //  '
     private void selectAll() {
         List<String> listOfSelected = mAdapter.selectAll();
-        Toast.makeText(getApplicationContext(), listOfSelected.toString(), Toast.LENGTH_LONG).show();
+        Tools.toast(listOfSelected.toString(), getParent(), R.color.yellow_800);
+
         actionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
     }
 
@@ -228,7 +229,8 @@ public class PromotionStudents extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+            Tools.toast(item.getTitle().toString(), getParent());
+
         }
         return super.onOptionsItemSelected(item);
     }

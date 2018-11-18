@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -23,6 +22,7 @@ import java.util.Objects;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersAchievementsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberAchievements;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -125,7 +125,7 @@ public class AchievementsActivity extends AppCompatActivity {
                 adapter = new NumbersAchievementsAdapter(numbers);
                 list.setAdapter(adapter);
             } else {
-                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No achievements found", Toast.LENGTH_SHORT).show();
+                Tools.toast("No achievements found", AchievementsActivity.this, R.color.yellow_600);
                 finish();
             }
             //finally

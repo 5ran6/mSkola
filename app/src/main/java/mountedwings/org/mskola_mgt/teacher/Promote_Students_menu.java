@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -24,6 +23,7 @@ import java.util.Collections;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -49,7 +49,8 @@ public class Promote_Students_menu extends AppCompatActivity {
             staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
         } else {
-            Toast.makeText(getBaseContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
+            Tools.toast("Previous Login invalidated. Login again!", getParent(), R.color.red_500);
+
             finish();
             startActivity(new Intent(getBaseContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }
@@ -143,7 +144,8 @@ public class Promote_Students_menu extends AppCompatActivity {
                 //TODO: Loading progressBar
                 new getStudentsToPromote().execute();
             } else {
-                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Tools.toast("Fill all necessary fields!", getParent(), R.color.yellow_500);
+
             }
         });
     }

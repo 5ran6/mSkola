@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -155,30 +154,10 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("mSkola", "Msg = " + text);
 
             if (text.equals("success")) {
-                View layout = getLayoutInflater().inflate(R.layout.toast_custom, findViewById(R.id.custom_toast_layout_id));
-                TextView Ttext = layout.findViewById(R.id.text);
-                Ttext.setTextColor(getResources().getColor(R.color.green_300));
-                Ttext.setText("Sent");
-                Toast toast = new Toast(getApplicationContext());
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setView(layout);
-                toast.show();
-
+                Tools.toast("Sent", ChatActivity.this, R.color.green_300);
             } else {
-                View layout = getLayoutInflater().inflate(R.layout.toast_custom, findViewById(R.id.custom_toast_layout_id));
-                TextView Ttext = layout.findViewById(R.id.text);
-                Ttext.setTextColor(getResources().getColor(R.color.red_300));
-                Ttext.setText("Could not send message");
-                Toast toast = new Toast(getApplicationContext());
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setView(layout);
-                toast.show();
-
-                Toast.makeText(getApplicationContext(), "Could not send message"
-                        , Toast.LENGTH_SHORT).show();
-
+                Tools.toast("Could not send message", ChatActivity.this, R.color.red_300);
             }
-//finally
         }
     }
 
@@ -203,30 +182,10 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("mSkola", "Msg = " + text);
 
             if (text.equals("success")) {
-                View layout = getLayoutInflater().inflate(R.layout.toast_custom, findViewById(R.id.custom_toast_layout_id));
-                TextView Ttext = layout.findViewById(R.id.text);
-                Ttext.setTextColor(getResources().getColor(R.color.green_300));
-                Ttext.setText("Sent");
-                Toast toast = new Toast(getApplicationContext());
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setView(layout);
-                toast.show();
-
+                Tools.toast("Sent", ChatActivity.this, R.color.green_300);
             } else {
-                View layout = getLayoutInflater().inflate(R.layout.toast_custom, findViewById(R.id.custom_toast_layout_id));
-                TextView Ttext = layout.findViewById(R.id.text);
-                Ttext.setTextColor(getResources().getColor(R.color.red_300));
-                Ttext.setText("Could not send message");
-                Toast toast = new Toast(getApplicationContext());
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setView(layout);
-                toast.show();
-
-                Toast.makeText(getApplicationContext(), "Could not send message"
-                        , Toast.LENGTH_SHORT).show();
-
+                Tools.toast("Could not send message", ChatActivity.this, R.color.red_300);
             }
-//finally
         }
     }
 

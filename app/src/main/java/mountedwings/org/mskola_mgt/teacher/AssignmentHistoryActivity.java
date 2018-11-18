@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersAssHistAdapter;
 import mountedwings.org.mskola_mgt.data.NumberAssHist;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -125,7 +125,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                 });
 
             } else {
-                Toast.makeText(getApplicationContext(), "You haven't given an assignment!", Toast.LENGTH_SHORT).show();
+                Tools.toast("You haven't given an assignment!", AssignmentHistoryActivity.this);
                 finish();
             }
         }

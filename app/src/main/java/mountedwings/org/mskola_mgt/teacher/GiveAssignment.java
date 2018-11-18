@@ -7,12 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -29,13 +28,15 @@ public class GiveAssignment extends AppCompatActivity {
     private RelativeLayout parent_layout;
     private AppCompatEditText assignment;
     private boolean dateSelected = false, timeSelected = false;
+    private MaterialRippleLayout materialRippleLayout;
 
     private void initComponents() {
         date = findViewById(R.id.date);
         time = findViewById(R.id.time);
         assignment = findViewById(R.id.assignmentText);
+        materialRippleLayout = findViewById(R.id.uploadLayout);
         (findViewById(R.id.pick_date)).setOnClickListener(this::dialogDatePickerLight);
-        (findViewById(R.id.pick_time)).setOnClickListener(this::dialogTimePickerDark);
+        (findViewById(R.id.pick_time)).setOnClickListener(bt -> dialogTimePickerDark());
     }
 
 
@@ -61,7 +62,7 @@ public class GiveAssignment extends AppCompatActivity {
         datePicker.show(getFragmentManager(), "Datepickerdialog");
     }
 
-    private void dialogTimePickerDark(final View bt) {
+    private void dialogTimePickerDark() {
         Calendar cur_calender = Calendar.getInstance();
         com.wdullaer.materialdatetimepicker.time.TimePickerDialog datePicker = com.wdullaer.materialdatetimepicker.time.TimePickerDialog.newInstance((view, hourOfDay, minute, second) -> {
             String am_pm = "";
@@ -111,15 +112,21 @@ public class GiveAssignment extends AppCompatActivity {
                 parent_layout.setVisibility(View.GONE);
                 lyt_progress.setVisibility(View.VISIBLE);
                 lyt_progress.setAlpha(1.0f);
+                //TODO: invisible button
+                materialRippleLayout.setVisibility(View.GONE);
+
 /////////////////////////////////////////////
+
                 //pass into background thread
                 new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
                 //        new uploadAssignment().execute("cac180826043520", questions, "English Language", "JSS1 A", dueDate, dueTime, "admin");
             } else {
-                Toast.makeText(getApplicationContext(), "Assignment Field is empty", Toast.LENGTH_SHORT).show();
+                Tools.toast("Assignment Field is empty", getParent(), R.color.yellow_800);
+
             }
         } else {
-            Toast.makeText(getApplicationContext(), "Please select due Date and Time", Toast.LENGTH_SHORT).show();
+            Tools.toast("Please select due Date and Time", getParent(), R.color.yellow_800);
+
         }
     }
 
@@ -143,11 +150,12 @@ public class GiveAssignment extends AppCompatActivity {
             super.onPostExecute(text);
 
             if (text.equals("success")) {
-                Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+                Tools.toast("Done", getParent(), R.color.green_300);
                 finish();
 
             } else {
-                Toast.makeText(getApplicationContext(), "An Error Occurred. Try Again", Toast.LENGTH_SHORT).show();
+                Tools.toast("An Error Occurred. Try Again", getParent(), R.color.red_500);
+
             }
         }
 

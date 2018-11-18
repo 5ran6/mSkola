@@ -148,10 +148,12 @@
         <mountedwings.org.mskola_mgt.widget.ViewLoadingDotsBounce
             android:layout_width="50dp"
             android:layout_height="40dp"
+            android:layout_gravity="center"
             android:background="@color/pink_300" />
     </LinearLayout>
 
     <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/uploadLayout"
         style="@style/RippleStyleWhite"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"

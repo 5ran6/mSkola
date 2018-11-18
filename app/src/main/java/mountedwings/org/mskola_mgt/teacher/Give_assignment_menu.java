@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -20,6 +19,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -117,7 +117,8 @@ public class Give_assignment_menu extends AppCompatActivity {
                 intent1.putExtra("staff_id", staff_id);
                 startActivity(intent1);
             } else {
-                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Tools.toast("Fill all necessary fields", getParent());
+
             }
         });
     }

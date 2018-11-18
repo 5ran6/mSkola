@@ -41,6 +41,28 @@ import mountedwings.org.mskola_mgt.R;
 
 public class Tools {
 
+    public static void toast(String message, Activity ctx) {
+        View layout = ctx.getLayoutInflater().inflate(R.layout.toast_custom, ctx.findViewById(R.id.custom_toast_layout_id));
+        TextView Ttext = layout.findViewById(R.id.text);
+        Ttext.setTextColor(ctx.getResources().getColor(R.color.blue_500));
+        Ttext.setText(message);
+        Toast toast = new Toast(ctx.getApplicationContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    public static void toast(String message, Activity ctx, int color) {
+        View layout = ctx.getLayoutInflater().inflate(R.layout.toast_custom, ctx.findViewById(R.id.custom_toast_layout_id));
+        TextView Ttext = layout.findViewById(R.id.text);
+        Ttext.setTextColor(ctx.getResources().getColor(color));
+        Ttext.setText(message);
+        Toast toast = new Toast(ctx.getApplicationContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
     public static void setSystemBarColor(Activity act) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = act.getWindow();
@@ -130,10 +152,12 @@ public class Tools {
         SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
         return newFormat.format(new Date(dateTime));
     }
+
     public static String getFormattedDate1(Long dateTime) {
         SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
         return newFormat.format(new Date(dateTime));
     }
+
     public static String getFormattedDateSlash(Long dateTime) {
         SimpleDateFormat newFormat = new SimpleDateFormat("MM/dd/yyyy");
         return newFormat.format(new Date(dateTime));

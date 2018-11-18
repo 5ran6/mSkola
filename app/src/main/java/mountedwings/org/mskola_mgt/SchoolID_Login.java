@@ -21,10 +21,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
+
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -65,7 +66,8 @@ public class SchoolID_Login extends AppCompatActivity {
                 data[i] = schools[(i - 1)];
             }
 
-            ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, data);
+            //TODO: check across devices
+            ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, data);
             spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             recentIds.setAdapter(spinnerAdapter1);
 
@@ -112,7 +114,8 @@ public class SchoolID_Login extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+
+            Tools.toast(item.getTitle().toString(), SchoolID_Login.this, R.color.green_300);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,7 +139,7 @@ public class SchoolID_Login extends AppCompatActivity {
             verifying.startAnimation(animation);
             new verifySchoolID().execute(school_id.getText().toString().trim());
         } else {
-            Toast.makeText(getApplicationContext(), "Fill in School ID", Toast.LENGTH_SHORT).show();
+            Tools.toast("Fill in School ID", SchoolID_Login.this, R.color.yellow_600);
         }
     }
 

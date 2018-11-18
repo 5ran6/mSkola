@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -28,6 +27,7 @@ import mountedwings.org.mskola_mgt.data.NumberChat;
 import mountedwings.org.mskola_mgt.data.NumberChatParentsList;
 import mountedwings.org.mskola_mgt.data.NumberChatStaffList;
 import mountedwings.org.mskola_mgt.teacher.Chat_List_Teachers;
+import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -212,7 +212,8 @@ public class Chat_menu extends AppCompatActivity {
                     finish();
                 });
             } else {
-                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No messages yet", Toast.LENGTH_SHORT).show();
+                Tools.toast("No messages yet", Chat_menu.this, R.color.yellow_600);
+
                 finish();
             }
             //finally
@@ -262,7 +263,7 @@ public class Chat_menu extends AppCompatActivity {
                     staff_email.add(number.getEmail());
                 }
             } else {
-                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No staff registered", Toast.LENGTH_SHORT).show();
+                Tools.toast("No registered staff", Chat_menu.this, R.color.yellow_600);
                 finish();
             }
             //finally
@@ -311,7 +312,8 @@ public class Chat_menu extends AppCompatActivity {
 
                 }
             } else {
-                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No Parent registered", Toast.LENGTH_SHORT).show();
+                Tools.toast("No Parent registered", Chat_menu.this, R.color.yellow_600);
+
                 finish();
             }
             //finally
@@ -361,7 +363,7 @@ public class Chat_menu extends AppCompatActivity {
 
                 }
             } else {
-                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No messages yet", Toast.LENGTH_SHORT).show();
+                Tools.toast("No messages yet", Chat_menu.this, R.color.yellow_600);
                 finish();
             }
             //finally

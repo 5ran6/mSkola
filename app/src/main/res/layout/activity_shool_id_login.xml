@@ -8,6 +8,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
         android:foreground="@color/overlay_dark_70"
         android:scaleType="centerCrop"
         android:src="@drawable/background_login" />
@@ -84,7 +85,7 @@
                     android:text="@string/enter_school_id"
                     android:textAlignment="center"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/grey_20" />
+                    android:textColor="@color/grey_100" />
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/school_id"
@@ -107,10 +108,11 @@
 
                 <Spinner
                     android:id="@+id/recent_ids"
-                    style="@style/Base.Widget.AppCompat.TextView.SpinnerItem"
+                    style="@style/TextAppearance.AppCompat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -123,7 +125,8 @@
                     android:text="@string/school_ids_are_unique_for_every_school_your_school_id_will_be_saved_for_ease_of_subsequent_login"
                     android:textAlignment="center"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/grey_20" />
+                    android:textColor="@color/grey_500"
+                    android:textStyle="italic" />
 
                 <View
                     android:layout_width="0dp"

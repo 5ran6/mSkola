@@ -1,5 +1,6 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -10,19 +11,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersViewResultAdapter;
 import mountedwings.org.mskola_mgt.data.NumberViewResult;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -121,7 +124,7 @@ public class ViewResultActivity extends AppCompatActivity {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
                 allPassport_aPerson = data.getImageFiles();
-                Log.i(TAG, "Passports = " + String.valueOf(allPassport_aPerson));
+                //       Log.i(TAG, "Passports = " + String.valueOf(allPassport_aPerson));
 
                 String rows[] = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
@@ -129,11 +132,10 @@ public class ViewResultActivity extends AppCompatActivity {
                     regNo.add(text.split("<>")[i].split(";")[0]);
                 }
             } else {
-                Toast.makeText(Objects.requireNonNull(getApplicationContext()), "No student found in the selected class. Compile Result first", Toast.LENGTH_SHORT).show();
+                Tools.toast("No student found in the selected class. Compile Result first", getParent());
                 finish();
             }
             //finally
-            Toast.makeText(Objects.requireNonNull(getApplicationContext()), "Stage 1/2 done", Toast.LENGTH_SHORT).show();
             new second_loading().execute();
         }
     }
@@ -142,7 +144,7 @@ public class ViewResultActivity extends AppCompatActivity {
     public class second_loading extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-
+            boolean compiled = false;
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getstudentprintresult");
             for (int i = 0; i < regNo.size(); i++) {
@@ -152,22 +154,31 @@ public class ViewResultActivity extends AppCompatActivity {
                 String text = sentData.getStrData();
                 String[] rows = text.split(";");
 
-                Log.d(TAG, Arrays.toString(rows));
+                if (!text.equalsIgnoreCase("not compiled"))
+                    compiled = true;
 
-                total.add(i, rows[0]);
-                average.add(i, rows[1]);
-                no_subjects.add(i, rows[2]);
-                position.add(i, rows[3]);
+                try {
+                    total.add(i, rows[0]);
+                    average.add(i, rows[1]);
+                    no_subjects.add(i, rows[2]);
+                    position.add(i, rows[3]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 Log.d(TAG, total.get(i));
             }
 
-            return "success";
+            if (compiled)
+                return "success";
+            else
+                return "not compile";
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Tools.toast("Fetching Results", getParent());
             loading.setVisibility(View.VISIBLE);
         }
 
@@ -196,14 +207,37 @@ public class ViewResultActivity extends AppCompatActivity {
 
                 });
             } else {
-                Toast.makeText(getApplicationContext(), "No records found", Toast.LENGTH_SHORT).show();
-                finish();
+                //               Toast.makeText(getApplicationContext(), "No results found. Results may not have been compile", Toast.LENGTH_SHORT).show();
+                showCustomDialogFailure("No results found. Results may not have been compile");
+
             }
-            Toast.makeText(getApplicationContext(), "Stage 2/2 done", Toast.LENGTH_SHORT).show();
             loading.setVisibility(View.GONE);
         }
     }
 
+    private void showCustomDialogFailure(String error) {
 
+        //progress bar and text will disappear
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.dialog_error);
+        dialog.setCancelable(true);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView error_message = dialog.findViewById(R.id.content);
+        error_message.setText(error);
+
+        dialog.findViewById(R.id.bt_close).setOnClickListener(v -> {
+            dialog.dismiss();
+            finish();
+        });
+
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+    }
 }
 

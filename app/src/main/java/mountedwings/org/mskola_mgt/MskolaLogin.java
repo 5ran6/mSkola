@@ -41,6 +41,7 @@ public class MskolaLogin extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private String role, school_id;
     private static final int PREFRENCE_MODE_PRIVATE = 0;
+    private AppCompatCheckBox checkedTextView;
     private String text;
     private LinearLayout parent_layout;
     private LinearLayout lyt_progress;
@@ -109,12 +110,11 @@ public class MskolaLogin extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
     }
 
-    public void keep_signed_in(View view) {
-        checkKeepState();
-    }
+//    public void keep_signed_in(View view) {
+//        checkKeepState();
+//    }
 
     private void checkKeepState() {
-        AppCompatCheckBox checkedTextView = findViewById(R.id.keep_signed_in);
         if (checkedTextView.isChecked()) {
             keep_signed_in = 1;
             singedIn = true;
@@ -146,7 +146,7 @@ public class MskolaLogin extends AppCompatActivity {
         (dialog.findViewById(R.id.bt_close)).setOnClickListener(v -> {
             dialog.dismiss();
             try {
-                if (lyt_progress.getVisibility() == View.VISIBLE && parent_layout.getVisibility() == View.INVISIBLE) {
+                if (lyt_progress.getVisibility() == View.VISIBLE || parent_layout.getVisibility() == View.GONE) {
                     lyt_progress.setVisibility(View.INVISIBLE);
                     parent_layout.setVisibility(View.VISIBLE);
                 }
@@ -240,11 +240,13 @@ public class MskolaLogin extends AppCompatActivity {
 
                 intent.putExtra("email_address", emailAddress);
                 intent.putExtra("school_role", text.split("<>")[1]);
-
+                lyt_progress.setVisibility(View.GONE);
                 new dashboardInfo().execute(school_id, emailAddress);
 
             } else {
                 showCustomDialogFailure(error_from_server);
+                lyt_progress.setVisibility(View.GONE);
+
             }
         }
     }
@@ -339,10 +341,11 @@ public class MskolaLogin extends AppCompatActivity {
 
         setContentView(R.layout.activity_login_mskola);
         parent_layout = findViewById(R.id.parent_layout);
-        AppCompatCheckBox checkbox = findViewById(R.id.keep_signed_in);
         Tools.setSystemBarColor(this, android.R.color.white);
         Tools.setSystemBarLight(this);
         mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+
+        checkedTextView = findViewById(R.id.keep_signed_in);
 
         email = findViewById(R.id.email);
         password1 = findViewById(R.id.password1);
@@ -353,7 +356,7 @@ public class MskolaLogin extends AppCompatActivity {
         emailE.addTextChangedListener(new MyTextWatcher(emailE));
         pass1.addTextChangedListener(new MyTextWatcher(pass1));
 
-        checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> checkKeepState());
+        checkedTextView.setOnCheckedChangeListener((buttonView, isChecked) -> checkKeepState());
 
         findViewById(R.id.sig_in).setOnClickListener(view -> submitForm());
     }

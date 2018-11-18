@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -23,13 +22,14 @@ import java.util.Collections;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Compile_Result_menu extends AppCompatActivity {
     private String school_id, staff_id, class_name, arm;
     private Spinner select_class, select_arm;
-    private ProgressBar progressBar1, progressBar2;
+    private ProgressBar progressBar1, progressBar2, progressBar;
     private int counter = 0;
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor editor;
@@ -44,7 +44,8 @@ public class Compile_Result_menu extends AppCompatActivity {
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         } else {
-            Toast.makeText(getBaseContext(), "Previous Login invalidated. Login again!", Toast.LENGTH_LONG).show();
+            Tools.toast("Previous Login invalidated. Login again!", this, R.color.red_500);
+
             finish();
             startActivity(new Intent(getBaseContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }
@@ -52,6 +53,7 @@ public class Compile_Result_menu extends AppCompatActivity {
         TextView load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
         select_class = findViewById(R.id.select_class);
+        progressBar = findViewById(R.id.progress);
         progressBar1 = findViewById(R.id.progress1);
         progressBar1.setVisibility(View.VISIBLE);
 
@@ -102,7 +104,8 @@ public class Compile_Result_menu extends AppCompatActivity {
             if (!class_name.isEmpty() || !arm.isEmpty()) {
                 new compileResult().execute(school_id, class_name, arm);
             } else {
-                Toast.makeText(getBaseContext(), "Fill all necessary fields", Toast.LENGTH_SHORT).show();
+                Tools.toast("Fill all necessary fields!", this, R.color.yellow_600);
+
             }
         });
     }
@@ -178,12 +181,15 @@ public class Compile_Result_menu extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(getBaseContext(), "Compiling......", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.VISIBLE);
+            Tools.toast("Compiling......", getParent(), R.color.green_600);
         }
 
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            progressBar.setVisibility(View.GONE);
+
             if (text.equals("success")) {
                 //    Toast.makeText(getBaseContext(), "", Toast.LENGTH_SHORT).show();
                 showCustomDialogSuccess("Results successfully compiled");
@@ -221,12 +227,12 @@ public class Compile_Result_menu extends AppCompatActivity {
 //                Toast.makeText(getBaseContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 finish();
-                Intent intent1 = new Intent(getBaseContext(), Dashboard.class);
-                intent1.putExtra("school_id", school_id);
-                intent1.putExtra("class_name", class_name);
-                intent1.putExtra("arm", arm);
-                intent1.putExtra("staff_id", staff_id);
-                startActivity(intent1);
+//                Intent intent1 = new Intent(getBaseContext(), Dashboard.class);
+//                intent1.putExtra("school_id", school_id);
+//                intent1.putExtra("class_name", class_name);
+//                intent1.putExtra("arm", arm);
+//                intent1.putExtra("staff_id", staff_id);
+//                startActivity(intent1);
 
                 //   parent_layout.setVisibility(View.VISIBLE);
                 // toolbar.setVisibility(View.VISIBLE);

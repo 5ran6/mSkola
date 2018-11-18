@@ -57,28 +57,49 @@
         <activity android:name=".Chat" />
         <activity android:name=".SettingFlat" />
         <activity android:name=".teacher.Assessment" />
-        <activity android:name=".teacher.Assessment_menu" />
-        <activity android:name=".teacher.Attendance_menu" />
-        <activity android:name=".teacher.Assignment_menu" />
+        <activity
+            android:name=".teacher.Assessment_menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".teacher.Attendance_menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".teacher.Assignment_menu"
+            android:screenOrientation="portrait" />
         <activity android:name=".teacher.GiveAssignment" />
         <activity android:name=".teacher.CollateAssignments" />
-        <activity android:name=".teacher.Give_assignment_menu" />
+        <activity
+            android:name=".teacher.Give_assignment_menu"
+            android:screenOrientation="portrait" />
         <activity android:name=".teacher.AssignmentHistoryActivity" />
         <activity android:name=".teacher.Assignment_history_detail" />
-        <activity android:name=".teacher.Psychomotor_menu" />
-        <activity android:name=".teacher.Compile_Result_menu" />
-        <activity android:name=".teacher.Results_menu" />
+        <activity
+            android:name=".teacher.Psychomotor_menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".teacher.Compile_Result_menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".teacher.Results_menu"
+            android:screenOrientation="portrait" />
         <activity android:name=".teacher.Psychomotor" />
-        <activity android:name=".teacher.ViewResult_menu" />
+        <activity
+            android:name=".teacher.ViewResult_menu"
+            android:screenOrientation="portrait" />
         <activity android:name=".teacher.ViewResultActivity" />
-        <activity android:name=".teacher.Promote_Students_menu" />
+        <activity
+            android:name=".teacher.Promote_Students_menu"
+            android:screenOrientation="portrait" />
         <activity android:name=".teacher.PromoteStudentsActivity" />
         <activity android:name=".teacher.PromotionStudents" />
         <activity android:name=".teacher.AchievementsActivity" />
         <activity android:name=".ChatActivity" />
-        <activity android:name=".Chat_menu" />
-        <activity android:name=".teacher.ChatCategoriesActivity" />
-        <activity android:name=".teacher.Dashboard" />
+        <activity
+            android:name=".Chat_menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".teacher.Dashboard"
+            android:screenOrientation="portrait" />
         <activity android:name=".teacher.Chat_List_Teachers" />
         <activity android:name=".teacher.Chat_List_Students" />
         <activity android:name=".teacher.Chat_List_Parents" />

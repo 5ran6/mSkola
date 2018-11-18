@@ -11,23 +11,18 @@ import android.support.transition.TransitionValues;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
 import mountedwings.org.mskola_mgt.Sign_Up;
@@ -88,7 +83,7 @@ public class Login_SignUp extends AppCompatActivity {
     }
 
     private void bottomProgressDots(int current_index) {
-        LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+        LinearLayout dotsLayout = findViewById(R.id.layoutDots);
         ImageView[] dots = new ImageView[MAX_STEP];
 
         dotsLayout.removeAllViews();
@@ -148,7 +143,7 @@ public class Login_SignUp extends AppCompatActivity {
             ((ImageView) view.findViewById(R.id.image)).setImageResource(about_images_array[position]);
             ((ImageView) view.findViewById(R.id.image_bg)).setImageResource(color_array[position]);
 
-            btnNext = (Button) view.findViewById(R.id.btn_next);
+            btnNext = view.findViewById(R.id.btn_next);
 
             if (position == title_array.length - 1) {
                 btnNext.setText("Get Started");

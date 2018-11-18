@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersAdapter;
 import mountedwings.org.mskola_mgt.data.Number;
+import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 import static android.view.View.GONE;
@@ -215,11 +215,11 @@ public class AttendanceActivity extends AppCompatActivity {
                     list.setAdapter(adapter);
                 } else {
                     // display an EMPTY error dialog and return to previous activity
-                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Tools.toast("Oops! Something went wrong", AttendanceActivity.this, R.color.red_600);
                     finish();
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "No record found for selected class/arm", Toast.LENGTH_SHORT).show();
+                Tools.toast("No record found for selected class/arm", AttendanceActivity.this, R.color.yellow_600);
                 finish();
             }
         }
@@ -295,13 +295,14 @@ public class AttendanceActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//            Tools.toast("No achievements found", AttendanceActivity.this, R.color.yellow_600);
             try {
                 if (text.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
+                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_300);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "An error occurred. Check your connection and try again", Toast.LENGTH_SHORT).show();
+                    Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
                 }
             } catch (Exception ex) {
             }
@@ -353,13 +354,14 @@ public class AttendanceActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             try {
                 if (text.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
+                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_300);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "An error occurred. Check your connection and try again", Toast.LENGTH_SHORT).show();
+                    Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
                 }
             } catch (Exception ex) {
 
