@@ -128,8 +128,6 @@ public class AchievementsActivity extends AppCompatActivity {
                 Tools.toast("No achievements found", AchievementsActivity.this, R.color.yellow_800);
                 finish();
             }
-            //finally
-            //  Toast.makeText(Objects.requireNonNull(getApplicationContext()), "Done", Toast.LENGTH_SHORT).show();
         }
     }
 

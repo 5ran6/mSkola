@@ -3,19 +3,19 @@ package mountedwings.org.mskola_mgt.teacher;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,7 +37,7 @@ public class Dashboard extends AppCompatActivity {
     private String email;
     private String school = "";
     private String name;
-    private byte[] pass = new byte[1];
+    //private byte[] pass = new byte[1000];
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     @Override
@@ -53,14 +53,16 @@ public class Dashboard extends AppCompatActivity {
 
             name = mPrefs.getString("name", getIntent().getStringExtra("name"));
             school = mPrefs.getString("school", getIntent().getStringExtra("school"));
+
             String raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                pass = raw_pass.getBytes(StandardCharsets.UTF_8);
-            } else {
-                pass = raw_pass.getBytes();
-            }
+            byte[] pass = Base64.decode(raw_pass, Base64.NO_WRAP);
             Log.i("mSkola1", Arrays.toString(pass));
+
+            CircleImageView passport = findViewById(R.id.passport);
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
+            passport.setImageBitmap(bitmap);
 
         } else {
             Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
@@ -84,16 +86,10 @@ public class Dashboard extends AppCompatActivity {
 
         TextView staff_name = findViewById(R.id.tv_staff_name);
         TextView school_name = findViewById(R.id.tv_school_name);
-        CircleImageView passport = findViewById(R.id.passport);
         parent_view = findViewById(R.id.parent_layout);
         staff_name.setText(name);
         school_name.setText(school);
-        //      Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
-        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(pass, 0, pass.length));
-//        passport.setImageDrawable(bitmapDrawable);
-        passport.setBackground(bitmapDrawable);
 
-        //        passport.setImageDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(pass, 0, pass.length)));
         CardView assessment = findViewById(R.id.assessment);
         assessment.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), Assessment_first_menu.class);
@@ -102,6 +98,7 @@ public class Dashboard extends AppCompatActivity {
             intent.putExtra("email_address", email);
             startActivity(intent);
         });
+
         CardView attendance = findViewById(R.id.attendance);
         attendance.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), Attendance_menu.class);
@@ -110,6 +107,7 @@ public class Dashboard extends AppCompatActivity {
             intent.putExtra("email_address", email);
             startActivity(intent);
         });
+
         CardView assignment = findViewById(R.id.assignment);
         assignment.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), Assignment_menu.class);
@@ -136,14 +134,10 @@ public class Dashboard extends AppCompatActivity {
             intent.putExtra("email_address", email);
             startActivity(intent);
         });
+
         CardView cbt = findViewById(R.id.cbt);
-        cbt.setOnClickListener(v -> {
-            Snackbar.make(parent_view, "Your school doesn't support CBT", Snackbar.LENGTH_SHORT).show();
-//            Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_SHORT).show();
-            //clearSharedPreferences(this);
-            //     finish();
-            //      startActivity(new Intent(getApplicationContext(), Home.class));
-        });
+        cbt.setOnClickListener(v -> Snackbar.make(parent_view, "Your school doesn't support CBT", Snackbar.LENGTH_SHORT).show());
+
         FloatingActionButton messages = findViewById(R.id.message);
         messages.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), Chat_menu.class);
@@ -154,24 +148,6 @@ public class Dashboard extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_logout, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.action_logout) {
-//            clearSharedPreferences(this);
-//            Tools.toast("Logged out", Dashboard.this, R.color.green_600);
-//            finish();
-//            startActivity(new Intent(getApplicationContext(), Home.class));
-//        } else {
-//            Tools.toast(item.getTitle().toString(), Dashboard.this);
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public void onBackPressed() {
@@ -188,7 +164,7 @@ public class Dashboard extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 finishAffinity();
             } else {
-                finish(); // call this to finish the current activity
+                finish(); // call this to finish the current activity and hopefully close the app for older devices
             }
         }
     }

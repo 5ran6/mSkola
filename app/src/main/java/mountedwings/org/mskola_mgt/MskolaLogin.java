@@ -110,10 +110,6 @@ public class MskolaLogin extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
     }
 
-//    public void keep_signed_in(View view) {
-//        checkKeepState();
-//    }
-
     private void checkKeepState() {
         if (checkedTextView.isChecked()) {
             keep_signed_in = 1;
@@ -242,7 +238,6 @@ public class MskolaLogin extends AppCompatActivity {
 
                 intent.putExtra("email_address", emailE.getText().toString());
                 intent.putExtra("school_role", text.split("<>")[1]);
-                lyt_progress.setVisibility(View.GONE);
                 new dashboardInfo().execute(school_id, emailE.getText().toString());
 
             } else {
@@ -286,21 +281,27 @@ public class MskolaLogin extends AppCompatActivity {
 //              school = rows[2];
                 pass = data.getImageFiles().get(0);
                 Log.i(TAG, Arrays.toString(pass));
+
+
+                //finally and intent
+                lyt_progress.setVisibility(View.GONE);
+
+                //sharedPref
+                editor = mPrefs.edit();
+                editor.putString("name", name);
+                editor.putString("school", school);
+                editor.putString("email_address", emailE.getText().toString());
+                editor.putString("pass", android.util.Base64.encodeToString(pass, android.util.Base64.NO_WRAP));
+                editor.apply();
+
+                intent.putExtra("name", name);
+                intent.putExtra("school", school);
+                intent.putExtra("pass", pass);
+                startActivity(intent);
+
+            } else {
+                Tools.toast("An error occurred", MskolaLogin.this, R.color.red_800);
             }
-            //finally and intent
-
-            //sharedPref
-            editor = mPrefs.edit();
-            editor.putString("name", name);
-            editor.putString("school", school);
-            editor.putString("email_address", emailE.getText().toString());
-            editor.putString("pass", Arrays.toString(pass));
-            editor.apply();
-
-            intent.putExtra("name", name);
-            intent.putExtra("school", school);
-            intent.putExtra("pass", pass);
-            startActivity(intent);
             finish();
         }
 
