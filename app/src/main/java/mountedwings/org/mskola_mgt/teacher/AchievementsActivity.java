@@ -125,7 +125,7 @@ public class AchievementsActivity extends AppCompatActivity {
                 adapter = new NumbersAchievementsAdapter(numbers);
                 list.setAdapter(adapter);
             } else {
-                Tools.toast("No achievements found", AchievementsActivity.this, R.color.yellow_600);
+                Tools.toast("No achievements found", AchievementsActivity.this, R.color.yellow_800);
                 finish();
             }
             //finally

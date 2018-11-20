@@ -28,7 +28,6 @@ public class Give_assignment_menu extends AppCompatActivity {
     private Spinner select_class, select_arm, select_subject;
     private ProgressBar progressBar1, progressBar2, progressBar3;
     private int counter = 0;
-    private TextView load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +35,10 @@ public class Give_assignment_menu extends AppCompatActivity {
         setContentView(R.layout.activity_give_assignment_menu);
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
         //school_id/staff id from sharedPrefs
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
-        load = findViewById(R.id.load);
+        TextView load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
         select_class = findViewById(R.id.select_class);
         select_subject = findViewById(R.id.subject);
@@ -114,7 +113,7 @@ public class Give_assignment_menu extends AppCompatActivity {
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("arm", arm);
                 intent1.putExtra("subject", subject);
-                intent1.putExtra("staff_id", staff_id);
+                intent1.putExtra("email_address", staff_id);
                 startActivity(intent1);
             } else {
                 Tools.toast("Fill all necessary fields", Give_assignment_menu.this);

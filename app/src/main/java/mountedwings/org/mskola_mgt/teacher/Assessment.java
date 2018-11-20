@@ -268,7 +268,7 @@ public class Assessment extends AppCompatActivity {
     }
 
     public void clickLabel(View view) {
-        //Found out I can't get the index of the view clickedunless i do a big overhaul. So i chose to always go to the first item to start editing from there. It might be stressful but Pele
+        //Found out I can't get the index of the view clicked unless i do a full overhaul[that's change the type of view entirely]. So i chose to always go to the first item to start editing from there. It might be stressful but Pele
         int index = 0;
         //index = main.indexOfChild(view);
         // index = step_view_list.indexOf(view);
@@ -278,6 +278,7 @@ public class Assessment extends AppCompatActivity {
         //index = view.getId();
 //        Toast.makeText(getApplicationContext(), "Review from top", Toast.LENGTH_SHORT).show();
         Tools.toast("Reviewing from top", this, R.color.yellow_600);
+//        TODO: scroll to the top of activity
 
         if (success_step >= index && current_step != index) {
             current_step = index;

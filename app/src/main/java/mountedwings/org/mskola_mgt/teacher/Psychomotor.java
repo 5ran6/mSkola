@@ -38,8 +38,6 @@ public class Psychomotor extends AppCompatActivity {
     private storageFile data;
     private int MAX_STEP = 20;
     private int current_step = 1;
-    private String[] skill_names;
-    private String[] skills_values;
 
     private ArrayList<String> students = new ArrayList<>();
     private ArrayList<String> skills = new ArrayList<>();
@@ -252,8 +250,8 @@ public class Psychomotor extends AppCompatActivity {
     //--------------GREAT WALL OF CHINA-----------------
 
     private void load() {
-        skill_names = new String[no_skills];
-        skills_values = new String[no_skills];
+        String[] skill_names = new String[no_skills];
+        String[] skills_values = new String[no_skills];
 
 
         for (int x = 0; x < no_skills; x++) {

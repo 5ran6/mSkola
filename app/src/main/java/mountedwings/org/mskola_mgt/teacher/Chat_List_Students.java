@@ -86,7 +86,7 @@ public class Chat_List_Students extends AppCompatActivity {
         adapter = new NumbersPromoteStudentsAdapter(this, numbers);
 
         //school_id/staff id from sharedPrefs
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("staff_id"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         for (int i = 0; i < students.size(); i++) {

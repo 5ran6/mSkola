@@ -1,26 +1,22 @@
 package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
@@ -57,17 +53,14 @@ public class ForgotPassword extends AppCompatActivity {
         done = findViewById(R.id.done);
         Tools.setSystemBarColor(this, R.color.grey_5);
         Tools.setSystemBarLight(this);
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                email_text = emailE.getText().toString().toLowerCase();
-                password1_text = pass1.getText().toString();
-                submitForm();
-                if (isFilled) {
-                    isFilled = false;
-                    //ready for sockets
-                    loadingAndDisplayContent();
-                }
+        done.setOnClickListener(v -> {
+            email_text = emailE.getText().toString().toLowerCase();
+            password1_text = pass1.getText().toString();
+            submitForm();
+            if (isFilled) {
+                isFilled = false;
+                //ready for sockets
+                loadingAndDisplayContent();
             }
         });
     }
@@ -124,13 +117,10 @@ public class ForgotPassword extends AppCompatActivity {
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        ((AppCompatButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //              Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                finish();
-            }
+        dialog.findViewById(R.id.bt_close).setOnClickListener(v -> {
+            //              Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+            finish();
         });
 
         dialog.show();
@@ -144,19 +134,16 @@ public class ForgotPassword extends AppCompatActivity {
         dialog.setCancelable(false);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
 
-        ((AppCompatButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        dialog.findViewById(R.id.bt_close).setOnClickListener(v -> {
 //                Toast.makeText(getApplicationContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                parent_layout.setVisibility(View.VISIBLE);
-                done.setVisibility(View.VISIBLE);
-            }
+            dialog.dismiss();
+            parent_layout.setVisibility(View.VISIBLE);
+            done.setVisibility(View.VISIBLE);
         });
         dialog.show();
         dialog.getWindow().setAttributes(lp);
@@ -166,26 +153,18 @@ public class ForgotPassword extends AppCompatActivity {
         //init
         final int LOADING_DURATION = 3500;
 
-        final LinearLayout lyt_progress = (LinearLayout) findViewById(R.id.lyt_progress);
+        final LinearLayout lyt_progress = findViewById(R.id.lyt_progress);
         lyt_progress.setVisibility(View.VISIBLE);
         lyt_progress.setAlpha(1.0f);
         parent_layout.setVisibility(View.GONE);
         done.setVisibility(View.GONE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ViewAnimation.fadeOut(lyt_progress);
-            }
-        }, LOADING_DURATION);
+        new Handler().postDelayed(() -> ViewAnimation.fadeOut(lyt_progress), LOADING_DURATION);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (isSuccess) {
-                    showCustomDialogSuccess();
-                } else {
-                    showCustomDialogFailure();
-                }
+        new Handler().postDelayed(() -> {
+            if (isSuccess) {
+                showCustomDialogSuccess();
+            } else {
+                showCustomDialogFailure();
             }
         }, LOADING_DURATION + 400);
     }

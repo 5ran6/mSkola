@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -24,7 +25,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class ViewResult_menu extends AppCompatActivity {
-    private String school_id, staff_id, class_name, arm, session, term;
+    private String school_id, staff_id, class_name = "", arm = "", session = "", term = "";
     private Spinner select_class, select_arm, select_term, select_session;
     private ProgressBar progressBar1, progressBar2, progressBar3;
     private int counter = 0;
@@ -36,7 +37,7 @@ public class ViewResult_menu extends AppCompatActivity {
         setContentView(R.layout.activity_view_result_menu);
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
         //school_id/staff id from sharedPrefs
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         load = findViewById(R.id.load);
@@ -121,7 +122,7 @@ public class ViewResult_menu extends AppCompatActivity {
         });
 
         load.setOnClickListener(v -> {
-            if (!class_name.isEmpty() || !session.isEmpty() || !arm.isEmpty() || !term.isEmpty()) {
+            if (!class_name.isEmpty() && !session.isEmpty() && !arm.isEmpty() && !term.isEmpty()) {
                 Intent intent1 = new Intent(getBaseContext(), ViewResultActivity.class);
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name + " " + arm);
@@ -129,7 +130,7 @@ public class ViewResult_menu extends AppCompatActivity {
                 intent1.putExtra("arm", arm);
                 intent1.putExtra("term", term);
                 intent1.putExtra("session", session);
-                intent1.putExtra("staff_id", staff_id);
+                intent1.putExtra("email_address", staff_id);
                 startActivity(intent1);
             } else {
                 Tools.toast("Fill all necessary fields", ViewResult_menu.this, R.color.yellow_600);
@@ -287,7 +288,10 @@ public class ViewResult_menu extends AppCompatActivity {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_class.setAdapter(spinnerAdapter1);
-                progressBar1.setVisibility(View.INVISIBLE);
+                progressBar1.setVisibility(View.VISIBLE);
+                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), ViewResult_menu.this, R.color.red_800, Toast.LENGTH_LONG);
+                load.setVisibility(View.INVISIBLE);
+
             }
         }
     }

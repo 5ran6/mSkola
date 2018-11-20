@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -39,6 +40,7 @@ public class Promote_Students_menu extends AppCompatActivity {
     private ArrayList regNos = new ArrayList();
     private String[] classes;
     private Intent intent;
+    private TextView load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class Promote_Students_menu extends AppCompatActivity {
 
         if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
             mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
-            staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+            staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
         } else {
             Tools.toast("Previous Login invalidated. Login again!", Promote_Students_menu.this, R.color.red_500);
@@ -56,7 +58,7 @@ public class Promote_Students_menu extends AppCompatActivity {
         }
         setContentView(R.layout.activity_promote_students_menu);
 
-        TextView load = findViewById(R.id.load);
+        load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
 
         select_class = findViewById(R.id.select_class);
@@ -416,6 +418,10 @@ public class Promote_Students_menu extends AppCompatActivity {
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
+            } else {
+                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Promote_Students_menu.this, R.color.red_800, Toast.LENGTH_LONG);
+                load.setVisibility(View.INVISIBLE);
+
             }
         }
     }

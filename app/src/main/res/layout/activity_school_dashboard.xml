@@ -44,22 +44,22 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="@dimen/spacing_medium"
-                    android:layout_weight=".4"
+                    android:layout_weight=".6"
                     android:fontFamily="@font/rocket_rinder"
-                    android:gravity="end"
+                    android:gravity="center|end"
                     android:text="m-Skola"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    android:textColor="@color/grey_10"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textColor="@color/white"
                     tools:ignore="NestedWeights" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/spacing_medium"
-                    android:layout_weight=".2"
-                    android:gravity="start"
+                    android:layout_weight=".4"
+                    android:gravity="center_vertical"
                     android:padding="@dimen/spacing_small"
-                    android:text="1.0"
+                    android:text="\n1.0"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     android:textColor="@color/grey_10"
                     android:textSize="12sp" />
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Logout"
-                    android:textColor="@color/md_red_200" />
+                    android:textColor="@color/md_red_400" />
             </LinearLayout>
         </LinearLayout>
 
@@ -111,8 +111,8 @@
                 android:background="@color/colorPrimary"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/spacing_smlarge"
-                android:paddingLeft="@dimen/spacing_smlarge"
-                android:paddingRight="@dimen/spacing_smlarge"
+                android:paddingLeft="@dimen/spacing_medium"
+                android:paddingRight="@dimen/spacing_medium"
                 android:paddingTop="@dimen/spacing_medium">
 
                 <RelativeLayout
@@ -120,7 +120,7 @@
                     android:layout_height="@dimen/spacing_xxlarge">
 
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/passport"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -158,7 +158,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="2"
-                            android:padding="@dimen/spacing_small"
                             android:text="MY SCHOOL"
                             android:textAllCaps="true"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"

@@ -53,7 +53,7 @@ public class ViewResultActivity extends AppCompatActivity {
     private ArrayList<String> average = new ArrayList<>();
 
     ProgressBar loading;
-    NumbersViewResultAdapter adapter;
+    private NumbersViewResultAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +65,15 @@ public class ViewResultActivity extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
 
-        staff_id = mPrefs.getString("staff_id", intent.getStringExtra("staff_id"));
+        staff_id = mPrefs.getString("email_address", intent.getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", intent.getStringExtra("school_id"));
         arm = intent.getStringExtra("arm");
         term = intent.getStringExtra("term");
         class_ = intent.getStringExtra("class");
         class_name = intent.getStringExtra("class_name");
         session = intent.getStringExtra("session");
-
+        TextView heading = findViewById(R.id.heading);
+        heading.setText(String.format("Result for %s", class_name));
         FloatingActionButton fab_done = findViewById(R.id.done);
 
         loading = findViewById(R.id.loading);
@@ -103,13 +104,15 @@ public class ViewResultActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
-            data = storageObj;
+//            data = storageObj;
 
             storageObj.setOperation("getpsstudentinfo");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
             data = new serverProcess().requestProcess(storageObj);
+
             String text = data.getStrData();
             Log.d(TAG, text);
+            Log.d(TAG, "Passports number = " + String.valueOf(data.getImageFiles().size()));
             return text;
         }
 
@@ -123,7 +126,6 @@ public class ViewResultActivity extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
-                allPassport_aPerson = data.getImageFiles();
                 //       Log.i(TAG, "Passports = " + String.valueOf(allPassport_aPerson));
 
                 String rows[] = text.split("<>");
@@ -150,25 +152,23 @@ public class ViewResultActivity extends AppCompatActivity {
             for (int i = 0; i < regNo.size(); i++) {
                 storageObj.setStrData(school_id + "<>" + regNo.get(i) + "<>" + "arm" + "<>" + "yes" + "<>" + session + "<>" + term + "<>" + class_name + "<>" + arm);
                 storageFile sentData = new serverProcess().requestProcess(storageObj);
-
+                allPassport_aPerson.add(data.getImageFiles().get(i));
                 String text = sentData.getStrData();
                 String[] rows = text.split(";");
 
                 if (!text.equalsIgnoreCase("not compiled"))
                     compiled = true;
-
                 try {
                     total.add(i, rows[0]);
                     average.add(i, rows[1]);
                     no_subjects.add(i, rows[2]);
                     position.add(i, rows[3]);
+                    Log.d(TAG, "Position of " + regNo.get(i) + " = " + rows[3]);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 Log.d(TAG, total.get(i));
             }
-
             if (compiled)
                 return "success";
             else

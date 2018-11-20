@@ -22,10 +22,13 @@ import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class GiveAssignment extends AppCompatActivity {
-    private String school_id, class_name, arm, subject, dueDate, dueTime, questions, staff_id;
+    private String school_id;
+    private String class_name;
+    private String arm;
+    private String subject;
+    private String dueTime;
+    private String staff_id;
     private TextView date, time;
-    private LinearLayout lyt_progress;
-    private RelativeLayout parent_layout;
     private AppCompatEditText assignment;
     private boolean dateSelected = false, timeSelected = false;
     private MaterialRippleLayout materialRippleLayout;
@@ -92,7 +95,7 @@ public class GiveAssignment extends AppCompatActivity {
         setContentView(R.layout.activity_give_assignment);
         Intent intent1 = getIntent();
         school_id = intent1.getStringExtra("school_id");
-        staff_id = intent1.getStringExtra("staff_id");
+        staff_id = intent1.getStringExtra("email_address");
         class_name = intent1.getStringExtra("class_name");
         arm = intent1.getStringExtra("arm");
         subject = intent1.getStringExtra("subject");
@@ -103,11 +106,11 @@ public class GiveAssignment extends AppCompatActivity {
     public void upload(View view) {
         if (dateSelected && timeSelected) {
             if (!assignment.getText().toString().isEmpty()) {
-                dueDate = date.getText().toString().trim();
-                questions = assignment.getText().toString();
+                String dueDate = date.getText().toString().trim();
+                String questions = assignment.getText().toString();
                 //begin wait dialog
-                lyt_progress = findViewById(R.id.lyt_progress);
-                parent_layout = findViewById(R.id.lyt_parent);
+                LinearLayout lyt_progress = findViewById(R.id.lyt_progress);
+                RelativeLayout parent_layout = findViewById(R.id.lyt_parent);
 
                 parent_layout.setVisibility(View.GONE);
                 lyt_progress.setVisibility(View.VISIBLE);

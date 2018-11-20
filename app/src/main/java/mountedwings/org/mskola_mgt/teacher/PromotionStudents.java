@@ -40,8 +40,6 @@ public class PromotionStudents extends AppCompatActivity {
     private int PREFERENCE_MODE_PRIVATE = 0;
     String school_id, staff_id, TAG = "mSkola";
 
-    NumbersPromoteStudentsAdapter adapter;
-
 
     private RecyclerView recyclerView;
     private NumbersPromoteStudentsAdapter mAdapter;
@@ -80,10 +78,8 @@ public class PromotionStudents extends AppCompatActivity {
 
         fab_done = findViewById(R.id.done);
 
-        adapter = new NumbersPromoteStudentsAdapter(this, numbers);
-
         //school_id/staff id from sharedPrefs
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("staff_id"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         for (int i = 0; i < students.size(); i++) {

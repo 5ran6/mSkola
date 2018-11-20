@@ -29,7 +29,6 @@ public class Assessment_menu extends AppCompatActivity {
     private Spinner select_class, select_arm, select_subject, select_assessment;
     private ProgressBar progressBar1, progressBar2, progressBar3, progressBar4;
     private int counter = 0;
-    private TextView load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +41,11 @@ public class Assessment_menu extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
 
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("staff_id"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
 
-        load = findViewById(R.id.load);
+        TextView load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
         select_class = findViewById(R.id.select_class);
         select_subject = findViewById(R.id.subject);
@@ -192,7 +191,7 @@ public class Assessment_menu extends AppCompatActivity {
                 }
                 ca.add("");
 
-                for (int i = 1; i < no_cas; i++) {
+                for (int i = 1; i <= no_cas; i++) {
                     ca.add(i, "CA" + String.valueOf(i));
                 }
 

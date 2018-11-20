@@ -99,7 +99,10 @@ public class NumbersViewResultAdapter extends RecyclerView.Adapter<NumbersViewRe
             total.setText(String.format("Total: %s", number.gettotal()));
             average.setText(String.format("Avg: %s", number.getaverage()));
             no_subjects.setText(String.format("No. Sub: %s", number.getno_subjects()));
-            position.setText(String.format("Pos.: %s", number.getPosition()));
+            if (number.getPosition().equals("0"))
+                position.setText("");
+            else
+                position.setText(String.format("Pos.: %s", number.getPosition()));
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(number.getImageFile(), 0, number.getImageFile().length);
             passport.setImageBitmap(bitmap);

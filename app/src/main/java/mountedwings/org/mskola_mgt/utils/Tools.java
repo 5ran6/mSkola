@@ -63,6 +63,17 @@ public class Tools {
         toast.show();
     }
 
+    public static void toast(String message, Activity ctx, int color, int length) {
+        View layout = ctx.getLayoutInflater().inflate(R.layout.toast_custom, ctx.findViewById(R.id.custom_toast_layout_id));
+        TextView Ttext = layout.findViewById(R.id.text);
+        Ttext.setTextColor(ctx.getResources().getColor(color));
+        Ttext.setText(message);
+        Toast toast = new Toast(ctx.getApplicationContext());
+        toast.setDuration(length);
+        toast.setView(layout);
+        toast.show();
+    }
+
     public static void setSystemBarColor(Activity act) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = act.getWindow();

@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -30,6 +32,7 @@ public class Attendance_menu extends AppCompatActivity {
     private Spinner select_class, select_arm;
     private ProgressBar progressBar1, progressBar2;
     private TextView date;
+    private TextView load;
 
     private void initComponent() {
         (findViewById(R.id.pick_date)).setOnClickListener(this::dialogDatePickerLight);
@@ -65,11 +68,13 @@ public class Attendance_menu extends AppCompatActivity {
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
         //school_id/staff id from sharedPrefs
 
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
+        Log.d("mSkola", staff_id);
+        //   Toast.makeText(this, staff_id, Toast.LENGTH_SHORT).show();
         initComponent();
-        TextView load = findViewById(R.id.load);
+        load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
         select_class = findViewById(R.id.select_class);
         progressBar1 = findViewById(R.id.progress1);
@@ -180,6 +185,7 @@ public class Attendance_menu extends AppCompatActivity {
 
     //loads Classes and arms
     private class loadClass extends AsyncTask<String, Integer, String> {
+        String x;
 
         @Override
         protected String doInBackground(String... strings) {
@@ -198,18 +204,16 @@ public class Attendance_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split(";");
 
                 String[] data = new String[(rows.length + 1)];
                 data[0] = "";
-//                for (int i = 1; i <= rows.length; i++) {
-//                    data[i] = rows[(i - 1)];
-//                }
 
                 //I did one jazz here. About to test
                 System.arraycopy(rows, 0, data, 1, rows.length);
-                //JAzz worked
+                //Boom! the JAzz worked ;)
 
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -217,9 +221,9 @@ public class Attendance_menu extends AppCompatActivity {
                 class_name = select_class.getSelectedItem().toString();
                 progressBar1.setVisibility(View.INVISIBLE);
             } else {
-                Tools.toast(getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.yellow_600);
+                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_800, Toast.LENGTH_LONG);
+                load.setVisibility(View.INVISIBLE);
             }
         }
     }
-
 }

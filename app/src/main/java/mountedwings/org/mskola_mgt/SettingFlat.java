@@ -93,13 +93,10 @@ public class SettingFlat extends AppCompatActivity {
         single_choice_selected = TIME[0];
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Minutes before closing");
-        builder.setSingleChoiceItems(TIME, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                single_choice_selected = TIME[i];
+        builder.setSingleChoiceItems(TIME, 0, (dialogInterface, i) -> {
+            single_choice_selected = TIME[i];
 //                alarm.setChecked(false);
 
-            }
         });
         builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
             @Override

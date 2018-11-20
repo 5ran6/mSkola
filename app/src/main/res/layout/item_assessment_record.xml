@@ -49,8 +49,9 @@
         <TextView
             android:id="@+id/tv_label_title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xlarge"
+            android:layout_height="@dimen/spacing_xxlarge"
             android:gravity="center_vertical"
+            android:maxLines="2"
             android:onClick="clickLabel"
             android:paddingLeft="@dimen/spacing_small"
             android:paddingRight="@dimen/spacing_small"

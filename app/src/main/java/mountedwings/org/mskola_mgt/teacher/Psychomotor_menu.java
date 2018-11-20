@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -28,6 +29,7 @@ public class Psychomotor_menu extends AppCompatActivity {
     private Spinner select_class, select_arm;
     private ProgressBar progressBar1, progressBar2;
     private int counter = 0;
+    private TextView load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +37,10 @@ public class Psychomotor_menu extends AppCompatActivity {
         setContentView(R.layout.activity_psychomotor_menu);
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
         //school_id/staff id from sharedPrefs
-        staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
-        TextView load = findViewById(R.id.load);
+        load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
         select_class = findViewById(R.id.select_class);
         progressBar1 = findViewById(R.id.progress1);
@@ -93,7 +95,7 @@ public class Psychomotor_menu extends AppCompatActivity {
                 intent1.putExtra("school_id", school_id);
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("arm", arm);
-                intent1.putExtra("staff_id", staff_id);
+                intent1.putExtra("email_address", staff_id);
                 startActivity(intent1);
             } else {
                 Tools.toast("Fill all necessary fields", Psychomotor_menu.this, R.color.yellow_800);
@@ -196,6 +198,9 @@ public class Psychomotor_menu extends AppCompatActivity {
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
+            } else {
+                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Psychomotor_menu.this, R.color.red_800, Toast.LENGTH_LONG);
+                load.setVisibility(View.INVISIBLE);
             }
         }
     }

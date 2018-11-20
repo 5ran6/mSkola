@@ -18,6 +18,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,10 +37,8 @@ public class SchoolID_Login extends AppCompatActivity {
     private TextView verifying;
     private ProgressBar checking;
     private SharedPreferences mPrefs;
-
     private SharedPreferences mPrefsSchoolID;
 
-    private String schoolIds;
     private Spinner recentIds;
 
     @Override
@@ -57,7 +56,7 @@ public class SchoolID_Login extends AppCompatActivity {
         recentIds = findViewById(R.id.recent_ids);
         recentIds.setVisibility(View.GONE);
         if (!mPrefsSchoolID.getString("school_id", "").isEmpty()) {
-            schoolIds = mPrefsSchoolID.getString("school_id", "");
+            String schoolIds = mPrefsSchoolID.getString("school_id", "");
 
             String[] schools = schoolIds.split(",");
             String[] data = new String[(schools.length + 1)];
@@ -66,13 +65,14 @@ public class SchoolID_Login extends AppCompatActivity {
                 data[i] = schools[(i - 1)];
             }
 
-            //TODO: check across devices
-            ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, data);
+            ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, data);
             spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             recentIds.setAdapter(spinnerAdapter1);
 
             //setVisibility
             recentIds.setVisibility(View.VISIBLE);
+            ImageView overlay = findViewById(R.id.overlay);
+            overlay.setVisibility(View.VISIBLE);
         }
 
         recentIds.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

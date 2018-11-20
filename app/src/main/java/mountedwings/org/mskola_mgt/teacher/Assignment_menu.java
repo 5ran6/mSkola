@@ -23,7 +23,7 @@ public class Assignment_menu extends AppCompatActivity {
 
         if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
             SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
-            staff_id = mPrefs.getString("staff_id", getIntent().getStringExtra("email_address"));
+            staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
         } else {

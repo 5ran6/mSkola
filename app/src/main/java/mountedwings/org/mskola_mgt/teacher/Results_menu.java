@@ -8,7 +8,7 @@ import android.view.View;
 import mountedwings.org.mskola_mgt.R;
 
 public class Results_menu extends AppCompatActivity {
-    private String school_id = "", staff_id = "", class_name = "", arm = "";
+    private String school_id = "", staff_id = "";
     private Intent intent;
 
     @Override

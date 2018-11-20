@@ -3,10 +3,7 @@ package mountedwings.org.mskola_mgt;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-
-import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.parent.Login_SignUp;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -17,14 +14,6 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //  initToolbar();
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     public void parents(View view) {

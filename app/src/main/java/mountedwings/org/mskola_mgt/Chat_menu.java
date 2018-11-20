@@ -70,7 +70,7 @@ public class Chat_menu extends AppCompatActivity {
 
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
         //school_id/staff id from sharedPrefs
-        staff_id = mPrefs.getString("staff_id", intent.getStringExtra("staff_id"));
+        staff_id = mPrefs.getString("email_address", intent.getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", intent.getStringExtra("school_id"));
 
         FloatingActionButton fab_done = findViewById(R.id.done);

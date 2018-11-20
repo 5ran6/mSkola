@@ -12,16 +12,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.Chat_menu;
 import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
@@ -50,9 +47,9 @@ public class Dashboard extends AppCompatActivity {
         if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
 
             SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
-            email = mPrefs.getString("staff_id", "");
-            role = mPrefs.getString("role", "");
-            school_id = mPrefs.getString("school_id", "");
+            email = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
+            role = mPrefs.getString("role", getIntent().getStringExtra("role"));
+            school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
             name = mPrefs.getString("name", getIntent().getStringExtra("name"));
             school = mPrefs.getString("school", getIntent().getStringExtra("school"));
@@ -87,19 +84,22 @@ public class Dashboard extends AppCompatActivity {
 
         TextView staff_name = findViewById(R.id.tv_staff_name);
         TextView school_name = findViewById(R.id.tv_school_name);
-        CircularImageView passport = findViewById(R.id.passport);
+        CircleImageView passport = findViewById(R.id.passport);
         parent_view = findViewById(R.id.parent_layout);
         staff_name.setText(name);
         school_name.setText(school);
-//        BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-//        passport.setImageBitmap(bitmap);
-        passport.setImageDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(pass, 0, pass.length)));
+        //      Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(pass, 0, pass.length));
+//        passport.setImageDrawable(bitmapDrawable);
+        passport.setBackground(bitmapDrawable);
+
+        //        passport.setImageDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(pass, 0, pass.length)));
         CardView assessment = findViewById(R.id.assessment);
         assessment.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), Assessment_menu.class);
+            Intent intent = new Intent(getApplicationContext(), Assessment_first_menu.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("role", role);
-            intent.putExtra("staff_id", email);
+            intent.putExtra("email_address", email);
             startActivity(intent);
         });
         CardView attendance = findViewById(R.id.attendance);
@@ -154,24 +154,24 @@ public class Dashboard extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_logout, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_logout) {
-            clearSharedPreferences(this);
-            Tools.toast("Logged out", Dashboard.this, R.color.green_600);
-            finish();
-            startActivity(new Intent(getApplicationContext(), Home.class));
-        } else {
-            Tools.toast(item.getTitle().toString(), Dashboard.this);
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_logout, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == R.id.action_logout) {
+//            clearSharedPreferences(this);
+//            Tools.toast("Logged out", Dashboard.this, R.color.green_600);
+//            finish();
+//            startActivity(new Intent(getApplicationContext(), Home.class));
+//        } else {
+//            Tools.toast(item.getTitle().toString(), Dashboard.this);
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onBackPressed() {

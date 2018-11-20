@@ -236,12 +236,14 @@ public class MskolaLogin extends AppCompatActivity {
                 editor.putBoolean("signed_in", true);
                 editor.putString("account_type", role);
                 editor.putString("staff_id", text.split("<>")[1]);
+                editor.putString("email_address", emailE.getText().toString());
+
                 editor.apply();
 
-                intent.putExtra("email_address", emailAddress);
+                intent.putExtra("email_address", emailE.getText().toString());
                 intent.putExtra("school_role", text.split("<>")[1]);
                 lyt_progress.setVisibility(View.GONE);
-                new dashboardInfo().execute(school_id, emailAddress);
+                new dashboardInfo().execute(school_id, emailE.getText().toString());
 
             } else {
                 showCustomDialogFailure(error_from_server);
@@ -291,6 +293,7 @@ public class MskolaLogin extends AppCompatActivity {
             editor = mPrefs.edit();
             editor.putString("name", name);
             editor.putString("school", school);
+            editor.putString("email_address", emailE.getText().toString());
             editor.putString("pass", Arrays.toString(pass));
             editor.apply();
 
@@ -329,6 +332,7 @@ public class MskolaLogin extends AppCompatActivity {
             editor = mPrefs.edit();
             editor.putString("role", role);
             editor.putString("school_id", school_id);
+            editor.putString("email_address", emailAddress);
             editor.apply();
 
         }
