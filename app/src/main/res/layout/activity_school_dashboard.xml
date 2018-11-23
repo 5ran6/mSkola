@@ -124,7 +124,7 @@
                         android:id="@+id/passport"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/photo_singer_female"
+                        android:src="@drawable/ic_account_circle"
                         tools:ignore="VectorDrawableCompat" />
                 </RelativeLayout>
 

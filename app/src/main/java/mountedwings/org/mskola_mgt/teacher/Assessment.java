@@ -121,14 +121,14 @@ public class Assessment extends AppCompatActivity {
 
         mark_scores.setOnClickListener(v -> {
             //is Not a float
-            int i = 0;
+            float i = 0;
             try {
-                i = Integer.valueOf(score.getText().toString());
+                i = Float.valueOf(score.getText().toString());
             } catch (Exception e) {
                 Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                 e.printStackTrace();
             } finally {
-                if (i > 100) {
+                if (i > 100.00) {
                     Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                     return;
                 }
@@ -183,15 +183,15 @@ public class Assessment extends AppCompatActivity {
 
         mark_scores.setOnClickListener(v -> {
 //is Not a float
-            int i = 0;
+            float i = 0;
             try {
-                i = Integer.valueOf(score.getText().toString());
+                i = Float.valueOf(score.getText().toString());
 
             } catch (Exception e) {
                 Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                 e.printStackTrace();
             } finally {
-                if (i > 100) {
+                if (i > 100.00) {
                     Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
                     return;
                 }

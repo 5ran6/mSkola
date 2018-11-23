@@ -31,7 +31,7 @@ public class Assessment_first_menu extends AppCompatActivity {
     }
 
     public void view_scores(View view) {
-        intent = new Intent(getBaseContext(), ViewScores.class);
+        intent = new Intent(getBaseContext(), View_Scores_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", email_address);
         startActivity(intent);

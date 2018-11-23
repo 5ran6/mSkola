@@ -184,6 +184,12 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/spacing_middle" />
 
+                    <ProgressBar
+                        android:id="@+id/progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="invisible" />
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 

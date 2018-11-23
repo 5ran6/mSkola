@@ -55,14 +55,18 @@ public class Dashboard extends AppCompatActivity {
             school = mPrefs.getString("school", getIntent().getStringExtra("school"));
 
             String raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
+            try {
+                byte[] pass = Base64.decode(raw_pass, Base64.NO_WRAP);
+                Log.i("mSkola1", Arrays.toString(pass));
 
-            byte[] pass = Base64.decode(raw_pass, Base64.NO_WRAP);
-            Log.i("mSkola1", Arrays.toString(pass));
+                CircleImageView passport = findViewById(R.id.passport);
 
-            CircleImageView passport = findViewById(R.id.passport);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
+                passport.setImageBitmap(bitmap);
 
-            Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
-            passport.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         } else {
             Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
