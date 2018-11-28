@@ -115,7 +115,7 @@ public class SchoolID_Login extends AppCompatActivity {
             finish();
         } else {
 
-            Tools.toast(item.getTitle().toString(), SchoolID_Login.this, R.color.green_300);
+            Tools.toast(item.getTitle().toString(), SchoolID_Login.this, R.color.green_800);
         }
         return super.onOptionsItemSelected(item);
     }

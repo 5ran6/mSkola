@@ -2,6 +2,8 @@ package mountedwings.org.mskola_mgt.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -62,13 +64,10 @@ public class NumbersChatStaffListAdapter extends RecyclerView.Adapter<NumbersCha
 
 
         });
-        holder.lyt_parent.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (onClickListener == null) return false;
-                onClickListener.onItemLongClick(v, numbers.get(position), position);
-                return true;
-            }
+        holder.lyt_parent.setOnLongClickListener(v -> {
+            if (onClickListener == null) return false;
+            onClickListener.onItemLongClick(v, numbers.get(position), position);
+            return true;
         });
 
         toggleCheckedIcon(holder, holder.getAdapterPosition());
@@ -169,8 +168,6 @@ public class NumbersChatStaffListAdapter extends RecyclerView.Adapter<NumbersCha
         public TextView select;
         public ImageView image;
         public TextView image_letter;
-
-
         public RelativeLayout lyt_checked, lyt_image;
         public CardView lyt_parent;
 
@@ -190,6 +187,9 @@ public class NumbersChatStaffListAdapter extends RecyclerView.Adapter<NumbersCha
         private void bindData(NumberChatStaffList number) {
 
             name.setText(number.getRecipient());
+            Bitmap bitmap = BitmapFactory.decodeByteArray(number.getImageFile(), 0, number.getImageFile().length);
+            image.setImageBitmap(bitmap);
+
             lyt_parent.setActivated(selected_items.get(getAdapterPosition(), false));
             if (selected_items.get(getAdapterPosition())) {
                 select.setText(R.string.selected);
@@ -197,6 +197,8 @@ public class NumbersChatStaffListAdapter extends RecyclerView.Adapter<NumbersCha
             } else {
                 select.setText(R.string.select);
             }
+
+
         }
     }
 

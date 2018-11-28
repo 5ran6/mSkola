@@ -125,11 +125,11 @@ public class GiveAssignment extends AppCompatActivity {
                 new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
                 //        new uploadAssignment().execute("cac180826043520", questions, "English Language", "JSS1 A", dueDate, dueTime, "admin");
             } else {
-                Tools.toast("Assignment Field is empty", GiveAssignment.this, R.color.yellow_800);
+                Tools.toast("Assignment Field is empty", GiveAssignment.this, R.color.yellow_900);
 
             }
         } else {
-            Tools.toast("Please select due Date and Time", GiveAssignment.this, R.color.yellow_800);
+            Tools.toast("Please select due Date and Time", GiveAssignment.this, R.color.yellow_900);
 
         }
     }
@@ -154,11 +154,20 @@ public class GiveAssignment extends AppCompatActivity {
             super.onPostExecute(text);
 
             if (text.equals("success")) {
-                Tools.toast("Done", GiveAssignment.this, R.color.green_300);
+                Tools.toast("Done", GiveAssignment.this, R.color.green_800);
                 finish();
 
             } else {
-                Tools.toast("An Error Occurred. Try Again", GiveAssignment.this, R.color.red_500);
+                Tools.toast("An Error Occurred. Try Again", GiveAssignment.this, R.color.red_800);
+// reverse the view
+                LinearLayout lyt_progress = findViewById(R.id.lyt_progress);
+                RelativeLayout parent_layout = findViewById(R.id.lyt_parent);
+
+                parent_layout.setVisibility(View.VISIBLE);
+                lyt_progress.setVisibility(View.GONE);
+
+                //invisible button
+                materialRippleLayout.setVisibility(View.VISIBLE);
 
             }
         }

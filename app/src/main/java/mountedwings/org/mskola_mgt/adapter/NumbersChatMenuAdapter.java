@@ -50,6 +50,7 @@ public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenu
                 mOnItemClickListener.onItemClick(v, numbers.get(position), position);
                 setOnItemClickListener((view, obj, position1) ->
                         Log.i("mSkola", numbers.get(position).getRecipient()));
+
             }
         });
     }

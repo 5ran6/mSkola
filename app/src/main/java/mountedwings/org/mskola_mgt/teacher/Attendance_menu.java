@@ -123,7 +123,7 @@ public class Attendance_menu extends AppCompatActivity {
                 intent1.putExtra("date", date.getText().toString().trim());
                 startActivity(intent1);
             } else {
-                Tools.toast("Fill all necessary fields", Attendance_menu.this, R.color.yellow_600);
+                Tools.toast("Fill all necessary fields", Attendance_menu.this, R.color.yellow_900);
             }
         });
     }

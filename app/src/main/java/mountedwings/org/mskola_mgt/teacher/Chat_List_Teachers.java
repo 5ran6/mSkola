@@ -2,6 +2,7 @@ package mountedwings.org.mskola_mgt.teacher;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +10,22 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import com.mskola.controls.serverProcess;
+import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.ChatActivity;
+import mountedwings.org.mskola_mgt.Chat_menu;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersChatStaffListAdapter;
 import mountedwings.org.mskola_mgt.data.NumberChatStaffList;
@@ -31,7 +39,10 @@ public class Chat_List_Teachers extends AppCompatActivity {
     private ArrayList<NumberChatStaffList> numbers = new ArrayList<>();
     private ArrayList<String> staff_list = new ArrayList<>();
     private ArrayList<String> staff_email = new ArrayList<>();
+    private ArrayList<byte[]> passports = new ArrayList<>();
+    private ProgressBar loading;
     private boolean selected = true;
+    private storageFile sentData;
 
     //    private RecyclerView list;
     private FloatingActionButton fab_done;
@@ -54,69 +65,44 @@ public class Chat_List_Teachers extends AppCompatActivity {
 
         initToolbar();
         initComponent();
-        Tools.toast("Long press for selection", this);
     }
 
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Select Staff to message");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Select Staff to message");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Tools.setSystemBarColor(this, R.color.blue_400);
     }
 
     private void initComponent() {
         SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
-
-        Intent intent = getIntent();
-        staff_list = intent.getStringArrayListExtra("staff_list");
-        staff_email = intent.getStringArrayListExtra("staff_email");
-        category = intent.getStringExtra("category");
-
-        fab_done = findViewById(R.id.done);
-
-        adapter = new NumbersChatStaffListAdapter(this, numbers);
-
         //school_id/staff id from sharedPrefs
         staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
-        for (int i = 0; i < staff_list.size(); i++) {
-            NumberChatStaffList number = new NumberChatStaffList();
-            number.setRecipient(staff_list.get(i));
-            number.setEmail(staff_email.get(i));
-            numbers.add(number);
-        }
+        fab_done = findViewById(R.id.done);
+        loading = findViewById(R.id.loading);
 
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new LineItemDecoration(this, LinearLayout.VERTICAL));
         recyclerView.setHasFixedSize(false);
 
+        //initialLoad
+        new getStaffMembers().execute(school_id, staff_id);
+
+
+        //adapter = new NumbersChatStaffListAdapter(this, numbers);
+
+//        for (int i = 0; i < staff_list.size(); i++) {
+//            NumberChatStaffList number = new NumberChatStaffList();
+//            number.setRecipient(staff_list.get(i));
+//            number.setEmail(staff_email.get(i));
+//            numbers.add(number);
+//        }
         //set data and list adapter
-        mAdapter = new NumbersChatStaffListAdapter(this, numbers);
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnClickListener(new NumbersChatStaffListAdapter.OnClickListener() {
-            @Override
-            public void onItemClick(View view, NumberChatStaffList obj, int pos) {
-
-                if (mAdapter.getSelectedItemCount() > 0) {
-                    enableActionMode(pos);
-                } else {
-                    NumberChatStaffList numberChatStaffList = mAdapter.getItem(pos);
-                    Tools.toast("Long press to select " + numberChatStaffList.getRecipient(), Chat_List_Teachers.this);
-
-                }
-            }
-
-            @Override
-            public void onItemLongClick(View view, NumberChatStaffList obj, int pos) {
-                enableActionMode(pos);
-            }
-
-        });
-
         actionModeCallback = new ActionModeCallback();
 
 
@@ -140,6 +126,75 @@ public class Chat_List_Teachers extends AppCompatActivity {
 
 
     }
+
+    //DONE
+    private class getStaffMembers extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getstaffmembers");
+            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+            sentData = new serverProcess().requestProcess(storageObj);
+            String text = sentData.getStrData();
+            Log.d(TAG, text);
+            return text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            recyclerView.setVisibility(View.GONE);
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            category = "staff";
+            if (!text.equals("0") && !text.isEmpty()) {
+                String rows[] = text.split("<>");
+                ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
+
+                for (int i = 0; i < rows.length; i++) {
+                    NumberChatStaffList number = new NumberChatStaffList();
+                    number.setRecipient(rows[i].split(";")[0]);
+                    number.setEmail(rows[i].split(";")[1]);
+                    number.setImage(allPassport_aPerson.get(i));
+                    numbers.add(number);
+                }
+                //  Log.i("mSkola", Arrays.toString(allPassport_aPerson.get(1)));
+                mAdapter = new NumbersChatStaffListAdapter(getApplicationContext(), numbers);
+                recyclerView.setAdapter(mAdapter);
+                mAdapter.setOnClickListener(new NumbersChatStaffListAdapter.OnClickListener() {
+                    @Override
+                    public void onItemClick(View view, NumberChatStaffList obj, int pos) {
+
+                        if (mAdapter.getSelectedItemCount() > 0) {
+                            enableActionMode(pos);
+                        } else {
+                            NumberChatStaffList numberChatStaffList = mAdapter.getItem(pos);
+                            Tools.toast("Long press to select " + numberChatStaffList.getRecipient(), Chat_List_Teachers.this);
+                        }
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, NumberChatStaffList obj, int pos) {
+                        enableActionMode(pos);
+                    }
+
+                });
+                recyclerView.setVisibility(View.VISIBLE);
+                loading.setVisibility(View.GONE);
+                Tools.toast("Long press for selection", Chat_List_Teachers.this);
+
+            } else {
+                Tools.toast("No registered staff", Chat_List_Teachers.this, R.color.yellow_600);
+                finish();
+            }
+
+        }
+    }
+
 
     private void enableActionMode(int position) {
         if (actionMode == null) {
@@ -214,21 +269,6 @@ public class Chat_List_Teachers extends AppCompatActivity {
         actionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search_setting, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        } else {
-            Tools.toast(item.getTitle().toString(), Chat_List_Teachers.this);
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onPause() {
@@ -240,5 +280,6 @@ public class Chat_List_Teachers extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+        startActivity(new Intent(getApplication(), Chat_menu.class));
     }
 }

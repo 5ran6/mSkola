@@ -37,6 +37,8 @@ public class ChatActivity extends AppCompatActivity {
         textbar = findViewById(R.id.textbar);
         appBarLayout = findViewById(R.id.app_bar_layout);
         dp = findViewById(R.id.dp);
+        Tools.toast("Loading chats", this);
+
         Intent intent = getIntent();
 
         recipients = getIntent().getStringExtra("recipient");
@@ -154,9 +156,9 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("mSkola", "Msg = " + text);
 
             if (text.equals("success")) {
-                Tools.toast("Sent", ChatActivity.this, R.color.green_300);
+                Tools.toast("Sent", ChatActivity.this, R.color.green_800);
             } else {
-                Tools.toast("Could not send message", ChatActivity.this, R.color.red_300);
+                Tools.toast("Could not send message", ChatActivity.this, R.color.red_800);
             }
         }
     }
@@ -182,9 +184,9 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("mSkola", "Msg = " + text);
 
             if (text.equals("success")) {
-                Tools.toast("Sent", ChatActivity.this, R.color.green_300);
+                Tools.toast("Sent", ChatActivity.this, R.color.green_800);
             } else {
-                Tools.toast("Could not send message", ChatActivity.this, R.color.red_300);
+                Tools.toast("Could not send message", ChatActivity.this, R.color.red_800);
             }
         }
     }

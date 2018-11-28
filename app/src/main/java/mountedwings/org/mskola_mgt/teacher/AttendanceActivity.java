@@ -38,9 +38,8 @@ public class AttendanceActivity extends AppCompatActivity {
     private ArrayList names = new ArrayList();
     private ArrayList regNo = new ArrayList();
     private RecyclerView list;
-    private FloatingActionButton fab_add, fab_holidays, fab_save;
+    private FloatingActionButton fab_add;
     public String[] morning = null, afternoon = null;
-    private TextView pub, sav;
 
     String date, school_id, class_name, arm, TAG = "mSkola";
     ProgressBar loading;
@@ -51,10 +50,10 @@ public class AttendanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
         fab_add = findViewById(R.id.see_more);
-        fab_holidays = findViewById(R.id.fab_hols);
-        fab_save = findViewById(R.id.fab_save);
-        pub = findViewById(R.id.pub);
-        sav = findViewById(R.id.sav);
+        FloatingActionButton fab_holidays = findViewById(R.id.fab_hols);
+        FloatingActionButton fab_save = findViewById(R.id.fab_save);
+        TextView pub = findViewById(R.id.pub);
+        TextView sav = findViewById(R.id.sav);
         back_drop = findViewById(R.id.back_drop);
         all_morning = findViewById(R.id.all_checkbox1);
         all_afternoon = findViewById(R.id.all_checkbox2);
@@ -299,7 +298,7 @@ public class AttendanceActivity extends AppCompatActivity {
 //            Tools.toast("No achievements found", AttendanceActivity.this, R.color.yellow_600);
             try {
                 if (text.equals("success")) {
-                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_300);
+                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_800);
                     finish();
                 } else {
                     Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
@@ -358,7 +357,7 @@ public class AttendanceActivity extends AppCompatActivity {
             try {
                 if (text.equals("success")) {
 //                    Toast.makeText(getApplicationContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
-                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_300);
+                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_800);
                     finish();
                 } else {
                     Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);

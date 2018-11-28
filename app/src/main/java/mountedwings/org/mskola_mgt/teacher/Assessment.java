@@ -121,15 +121,16 @@ public class Assessment extends AppCompatActivity {
 
         mark_scores.setOnClickListener(v -> {
             //is Not a float
-            float i = 0;
+            String i = "";
             try {
-                i = Float.valueOf(score.getText().toString());
+//                i = Float.valueOf(score.getText().toString());
+                i = score.getText().toString();
             } catch (Exception e) {
-                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
+                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
                 e.printStackTrace();
             } finally {
-                if (i > 100.00) {
-                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
+                if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
+                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
                     return;
                 }
                 if (score.getText().toString().trim().equals("")) {
@@ -183,18 +184,19 @@ public class Assessment extends AppCompatActivity {
 
         mark_scores.setOnClickListener(v -> {
 //is Not a float
-            float i = 0;
+            String i = "";
             try {
-                i = Float.valueOf(score.getText().toString());
-
+//                i = Float.valueOf(score.getText().toString());
+                i = score.getText().toString();
             } catch (Exception e) {
-                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
+                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
                 e.printStackTrace();
             } finally {
-                if (i > 100.00) {
-                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_600);
+                if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
+                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
                     return;
                 }
+
                 if (score.getText().toString().trim().equals("")) {
                     Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
                     return;
@@ -277,7 +279,7 @@ public class Assessment extends AppCompatActivity {
         //  index = view_list.indexOf(view.getRootView().getId());
         //index = view.getId();
 //        Toast.makeText(getApplicationContext(), "Review from top", Toast.LENGTH_SHORT).show();
-        Tools.toast("Reviewing from top", this, R.color.yellow_600);
+        Tools.toast("Reviewing from top", this, R.color.yellow_900);
 //        TODO: scroll to the top of activity
 
         if (success_step >= index && current_step != index) {
@@ -430,7 +432,7 @@ public class Assessment extends AppCompatActivity {
                 score.setText("");
                 setCheckedRecorded(last_index);
             } else {
-                Tools.toast("Check your internet connection and try again", Assessment.this, R.color.red_400);
+                Tools.toast("Check your internet connection and try again", Assessment.this, R.color.red_800);
             }
         }
     }
@@ -504,7 +506,7 @@ public class Assessment extends AppCompatActivity {
                 for (int i = 0; i < len; i++)
                     initViews(i, names[i]);
             } else {
-                Tools.toast("No record found for selected class/subject", Assessment.this, R.color.yellow_600);
+                Tools.toast("No record found for selected class/subject", Assessment.this, R.color.yellow_900);
                 finish();
             }
         }

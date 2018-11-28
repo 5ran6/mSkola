@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import mountedwings.org.mskola_mgt.Chat_menu;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersPromoteStudentsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberPromoteStudents;
@@ -221,22 +222,7 @@ public class Chat_List_Students extends AppCompatActivity {
         actionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search_setting, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        } else {
-            Tools.toast(item.getTitle().toString(), Chat_List_Students.this);
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onPause() {
@@ -248,5 +234,6 @@ public class Chat_List_Students extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+        startActivity(new Intent(getApplication(), Chat_menu.class));
     }
 }

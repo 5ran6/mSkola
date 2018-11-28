@@ -16,39 +16,36 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="65sp"
-            android:weightSum="1">
+            android:layout_height="65sp">
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <LinearLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight=".3"
+                android:baselineAligned="false"
                 android:elevation="1dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background"
+                android:gravity="end"
+                card_view:cardBackgroundColor="@color/colorPrimary"
                 card_view:cardCornerRadius="4dp"
                 tools:targetApi="lollipop">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/assignment_history_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/blue_500"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:fontFamily="@font/rocket_rinder"
+                    android:gravity="center|start"
+                    android:padding="@dimen/spacing_large"
+                    android:text="Given Assignment"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textColor="@color/white"
+                    tools:ignore="NestedWeights" />
 
-                    <TextView
-                        android:id="@+id/assignment_history_title"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1.3"
-                        android:gravity="center"
-                        android:maxLines="2"
-                        android:textAppearance="?android:attr/textAppearanceLargeInverse"
-                        android:textStyle="italic" />
 
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
 
         </android.support.design.widget.AppBarLayout>
 

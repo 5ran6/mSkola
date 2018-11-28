@@ -53,15 +53,15 @@
                 <RelativeLayout
                     android:id="@+id/lyt_image"
                     android:layout_width="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
 
                     <ImageView
                         android:id="@+id/passport"
                         android:layout_width="@dimen/spacing_xmlarge"
                         android:layout_height="@dimen/spacing_xmlarge"
-                        android:contentDescription="@string/app_name"
-                        android:layout_centerInParent="true" />
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/app_name" />
 
                 </RelativeLayout>
 
@@ -92,17 +92,38 @@
                         android:textColor="@color/grey_90"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/total"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_small"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:text="JSS1A"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/grey_90"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:id="@+id/total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_small"
+                            android:layout_weight=".7"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="JSS1A"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textColor="@color/grey_90"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/no_subjects"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_weight=".3"
+                            android:gravity="end"
+                            android:text="2018-09-19"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textColor="@color/blue_300"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -137,16 +158,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/no_subjects"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:text="2018-09-19"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/blue_300"
-                    android:textStyle="bold" />
 
             </RelativeLayout>
 

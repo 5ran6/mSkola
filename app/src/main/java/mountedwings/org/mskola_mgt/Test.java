@@ -7,6 +7,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import mountedwings.org.mskola_mgt.teacher.Dashboard;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Test extends AppCompatActivity {
@@ -35,6 +36,6 @@ public class Test extends AppCompatActivity {
     }
 
     public void testing(View view) {
-        startActivity(new Intent(this, Home.class));
+        startActivity(new Intent(this, Dashboard.class));
     }
 }
