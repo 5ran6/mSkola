@@ -319,13 +319,14 @@ public class View_Scores_menu extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar = findViewById(R.id.progress);
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             Log.d("mSkola", text);
+            progressBar.setVisibility(View.GONE);
 
             if (!text.equals("0") && !text.isEmpty() && !text.equals("##3") && !text.equals("##9")) {
                 scores.setNoCas(Integer.parseInt(text.split("##")[1]) + 2); // + 2 for EXAM aand TOTAL
@@ -413,7 +414,6 @@ public class View_Scores_menu extends AppCompatActivity {
 
                     String nameVar = rows[i].split(";")[(rows[i].split(";").length - 1)];
                     NAMES.add(rows[i].split(";")[(rows[i].split(";").length - 1)]);
-
                     Log.i("mSkola", nameVar);
                     Log.i("mSkola", col0);
                     Log.i("mSkola", col1);
@@ -566,6 +566,7 @@ public class View_Scores_menu extends AppCompatActivity {
                 scores.setTOTAL(TOTAL);
                 scores.setHEADERS(HEADERS);
                 scores.setNAMES(NAMES);
+                scores.setNoStudents(NAMES.size());
                 startActivity(new Intent(getApplicationContext(), ViewScores.class));
                 finish();
             } else {

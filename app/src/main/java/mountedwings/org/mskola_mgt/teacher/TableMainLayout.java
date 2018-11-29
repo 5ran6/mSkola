@@ -95,7 +95,7 @@ public class TableMainLayout extends RelativeLayout {
 
         List<SampleObject> sampleObjects = new ArrayList<>();
 
-        for (int x = 0; x <= scores.getNoStudents(); x++) {
+        for (int x = 0; x < scores.getNoStudents(); x++) {
 
             SampleObject sampleObject = new SampleObject(
                     scores.getNAMES().get(x),
