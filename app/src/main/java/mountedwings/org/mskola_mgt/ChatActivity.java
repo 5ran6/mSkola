@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +42,6 @@ public class ChatActivity extends AppCompatActivity {
 
         recipients = getIntent().getStringExtra("recipient");
         recipient_category = getIntent().getStringExtra("category");
-        Log.d("mSkola", "Recipient(s) = " + recipients);
-        Log.d("mSkola", "Category = " + recipient_category);
 
         if (recipients.split(";").length > 1) {
             multi = true;
@@ -116,7 +113,6 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d("mSkola", "Msg = " + text);
 
             if (!text.equals("not found") && !text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
@@ -153,7 +149,6 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d("mSkola", "Msg = " + text);
 
             if (text.equals("success")) {
                 Tools.toast("Sent", ChatActivity.this, R.color.green_800);
@@ -181,7 +176,6 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d("mSkola", "Msg = " + text);
 
             if (text.equals("success")) {
                 Tools.toast("Sent", ChatActivity.this, R.color.green_800);

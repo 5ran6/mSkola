@@ -4,7 +4,6 @@ package mountedwings.org.mskola_mgt.teacher;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -51,7 +50,6 @@ public class TableMainLayout extends RelativeLayout {
 
         for (int i = 0; i < scores.getHEADERS().size(); i++) {
             headers[i] = scores.getHEADERS().get(i);
-            Log.i("TableMainLayout.java", headers[i]);
         }
 
         headerCellsWidth = new int[headers.length];
@@ -224,10 +222,10 @@ public class TableMainLayout extends RelativeLayout {
     // generate table row of table C and table D
     private void generateTableC_AndTable_B() {
 
-        // just seeing some header cell width
-        for (int x = 0; x < this.headerCellsWidth.length; x++) {
-            Log.v("TableMainLayout.java", this.headerCellsWidth[x] + "");
-        }
+//        // just seeing some header cell width
+//        for (int x = 0; x < this.headerCellsWidth.length; x++) {
+//            Log.v("TableMainLayout.java", this.headerCellsWidth[x] + "");
+//        }
 
         for (SampleObject sampleObject : this.sampleObjects) {
 

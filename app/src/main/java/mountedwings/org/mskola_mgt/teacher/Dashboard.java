@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -57,7 +56,6 @@ public class Dashboard extends AppCompatActivity {
             String raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
             try {
                 byte[] pass = Base64.decode(raw_pass, Base64.NO_WRAP);
-                Log.i("mSkola1", Arrays.toString(pass));
 
                 CircleImageView passport = findViewById(R.id.passport);
 

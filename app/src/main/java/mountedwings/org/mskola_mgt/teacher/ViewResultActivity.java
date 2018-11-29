@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -111,8 +110,6 @@ public class ViewResultActivity extends AppCompatActivity {
             data = new serverProcess().requestProcess(storageObj);
 
             String text = data.getStrData();
-            Log.d(TAG, text);
-            Log.d(TAG, "Passports number = " + String.valueOf(data.getImageFiles().size()));
             return text;
         }
 
@@ -126,7 +123,6 @@ public class ViewResultActivity extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
-                //       Log.i(TAG, "Passports = " + String.valueOf(allPassport_aPerson));
 
                 String rows[] = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
@@ -163,11 +159,9 @@ public class ViewResultActivity extends AppCompatActivity {
                     average.add(i, rows[1]);
                     no_subjects.add(i, rows[2]);
                     position.add(i, rows[3]);
-                    Log.d(TAG, "Position of " + regNo.get(i) + " = " + rows[3]);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Log.d(TAG, total.get(i));
             }
             if (compiled)
                 return "success";

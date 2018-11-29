@@ -185,6 +185,7 @@ public class Compile_Result_menu extends AppCompatActivity {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
             Tools.toast("Compiling......", Compile_Result_menu.this, R.color.green_600);
+            load.setClickable(false);
         }
 
         @Override

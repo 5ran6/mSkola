@@ -250,7 +250,6 @@ public class Assessment_menu extends AppCompatActivity {
                 for (int i = 1; i <= dataRows.length; i++) {
                     data[i] = dataRows[(i - 1)];
                 }
-                //Log.d("mSkola", data.toString());
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_subject.setAdapter(spinnerAdapter1);

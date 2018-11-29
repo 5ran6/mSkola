@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -158,7 +157,6 @@ public class Chat_menu extends AppCompatActivity {
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
             sentData = new serverProcess().requestProcess(storageObj);
             String text = sentData.getStrData();
-            Log.d(TAG, text);
             return text;
         }
 
@@ -221,7 +219,6 @@ public class Chat_menu extends AppCompatActivity {
             storageObj.setStrData(strings[0]);
             sentData = new serverProcess().requestProcess(storageObj);
             String text = sentData.getStrData();
-            Log.d(TAG, text);
             return text;
         }
 
@@ -237,7 +234,6 @@ public class Chat_menu extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             category = "parent";
-            Log.i("mSkola", text);
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
@@ -271,7 +267,6 @@ public class Chat_menu extends AppCompatActivity {
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
             sentData = new serverProcess().requestProcess(storageObj);
             String text = sentData.getStrData();
-            Log.d(TAG, text);
             return text;
         }
 

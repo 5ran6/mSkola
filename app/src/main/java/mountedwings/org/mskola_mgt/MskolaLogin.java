@@ -21,8 +21,6 @@ import android.widget.TextView;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
-import java.util.Arrays;
-
 import mountedwings.org.mskola_mgt.teacher.Dashboard;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -280,7 +278,6 @@ public class MskolaLogin extends AppCompatActivity {
                 name = rows[2];
 //              school = rows[2];
                 pass = data.getImageFiles().get(0);
-                Log.i(TAG, Arrays.toString(pass));
 
 
                 //finally and intent

@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -84,7 +83,6 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             String text = sentData.getStrData();
-            Log.d(TAG, text);
 
             return text;
         }
@@ -141,7 +139,6 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             String text = sentData.getStrData();
-            Log.d(TAG, text);
 
             return text;
         }

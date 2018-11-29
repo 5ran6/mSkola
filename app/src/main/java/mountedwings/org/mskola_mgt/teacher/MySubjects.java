@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.mskola.controls.serverProcess;
@@ -63,7 +62,6 @@ public class MySubjects extends AppCompatActivity {
         staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
         email_address = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-        Log.i(TAG, staff_id);
 
         new getMySubjects().execute(school_id, email_address);
 

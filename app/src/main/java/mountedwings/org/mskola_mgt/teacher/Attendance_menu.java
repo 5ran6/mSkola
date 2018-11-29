@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -71,7 +70,6 @@ public class Attendance_menu extends AppCompatActivity {
         staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
-        Log.d("mSkola", staff_id);
         //   Toast.makeText(this, staff_id, Toast.LENGTH_SHORT).show();
         initComponent();
         load = findViewById(R.id.load);

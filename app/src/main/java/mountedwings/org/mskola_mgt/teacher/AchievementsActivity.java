@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -93,7 +92,6 @@ public class AchievementsActivity extends AppCompatActivity {
             storageObj.setStrData(strings[0]);
             data = new serverProcess().requestProcess(storageObj);
             String text = data.getStrData();
-            Log.d(TAG, text);
             return text;
         }
 
@@ -109,7 +107,6 @@ public class AchievementsActivity extends AppCompatActivity {
             if (!text.equals("0") && !text.equals("") && !text.equals("not found")) {
                 //       Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
                 allPassport_aPerson = data.getImageFiles();
-                Log.i(TAG, "Passports = " + String.valueOf(allPassport_aPerson));
 
                 String rows[] = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {

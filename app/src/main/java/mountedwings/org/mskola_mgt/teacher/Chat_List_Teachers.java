@@ -10,7 +10,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -136,7 +135,6 @@ public class Chat_List_Teachers extends AppCompatActivity {
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
             sentData = new serverProcess().requestProcess(storageObj);
             String text = sentData.getStrData();
-            Log.d(TAG, text);
             return text;
         }
 
@@ -162,7 +160,6 @@ public class Chat_List_Teachers extends AppCompatActivity {
                     number.setImage(allPassport_aPerson.get(i));
                     numbers.add(number);
                 }
-                //  Log.i("mSkola", Arrays.toString(allPassport_aPerson.get(1)));
                 mAdapter = new NumbersChatStaffListAdapter(getApplicationContext(), numbers);
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.setOnClickListener(new NumbersChatStaffListAdapter.OnClickListener() {

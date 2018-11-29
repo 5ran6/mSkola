@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -230,7 +229,6 @@ public class View_Scores_menu extends AppCompatActivity {
                 for (int i = 1; i <= dataRows.length; i++) {
                     data[i] = dataRows[(i - 1)];
                 }
-                //Log.d("mSkola", data.toString());
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_subject.setAdapter(spinnerAdapter1);
@@ -325,7 +323,6 @@ public class View_Scores_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d("mSkola", text);
             progressBar.setVisibility(View.GONE);
 
             if (!text.equals("0") && !text.isEmpty() && !text.equals("##3") && !text.equals("##9")) {
@@ -414,19 +411,6 @@ public class View_Scores_menu extends AppCompatActivity {
 
                     String nameVar = rows[i].split(";")[(rows[i].split(";").length - 1)];
                     NAMES.add(rows[i].split(";")[(rows[i].split(";").length - 1)]);
-                    Log.i("mSkola", nameVar);
-                    Log.i("mSkola", col0);
-                    Log.i("mSkola", col1);
-                    Log.i("mSkola", col2);
-                    Log.i("mSkola", col3);
-                    Log.i("mSkola", col4);
-                    Log.i("mSkola", col5);
-                    Log.i("mSkola", col6);
-                    Log.i("mSkola", col7);
-                    Log.i("mSkola", col8);
-                    Log.i("mSkola", col9);
-                    Log.i("mSkola", exams);
-                    Log.i("mSkola", String.valueOf(total));
 
                     CA1.add(col0);
                     CA2.add(col1);

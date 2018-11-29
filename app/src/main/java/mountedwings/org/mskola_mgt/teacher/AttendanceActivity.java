@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -158,7 +157,6 @@ public class AttendanceActivity extends AppCompatActivity {
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             String text = sentData.getStrData();
-            Log.d(TAG, text);
 
             return text;
         }
@@ -280,7 +278,6 @@ public class AttendanceActivity extends AppCompatActivity {
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             String text = sentData.getStrData();
-            Log.d(TAG, text);
 
             return text;
         }
@@ -339,7 +336,6 @@ public class AttendanceActivity extends AppCompatActivity {
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             String text = sentData.getStrData();
-            Log.d(TAG, text);
 
             return text;
         }
@@ -374,7 +370,7 @@ public class AttendanceActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        super.onBackPressed();
         new AlertDialog.Builder(this)
-                .setMessage("Want to cancel without saving attendance?")
+                .setMessage("Cancel without saving attendance?")
                 .setCancelable(true)
                 .setPositiveButton("Yes, cancel ", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
