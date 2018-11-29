@@ -152,6 +152,10 @@ public class MskolaLogin extends AppCompatActivity {
         dialog.getWindow().setAttributes(lp);
     }
 
+    public void change(View view) {
+        startActivity(new Intent(getApplicationContext(), ChangePassword.class));
+    }
+
 
     private class MyTextWatcher implements TextWatcher {
 

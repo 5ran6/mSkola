@@ -103,12 +103,17 @@
         <activity android:name=".teacher.Chat_List_Teachers" />
         <activity android:name=".teacher.Chat_List_Students" />
         <activity android:name=".teacher.Chat_List_Parents" />
-        <activity android:name=".teacher.Assessment_first_menu" />
+        <activity
+            android:name=".teacher.Assessment_first_menu"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".teacher.View_Scores_menu"
             android:screenOrientation="portrait" />
         <activity android:name=".teacher.ViewScores" />
         <activity android:name=".teacher.MySubjects" />
+        <activity
+            android:name=".ChangePassword"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

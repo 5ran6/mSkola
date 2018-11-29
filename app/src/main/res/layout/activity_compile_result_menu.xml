@@ -173,11 +173,12 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/loading"
         style="@style/RippleStyleWhite"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"

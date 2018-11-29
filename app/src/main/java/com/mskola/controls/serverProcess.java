@@ -1,7 +1,5 @@
 package com.mskola.controls;
 
-import android.util.Log;
-
 import com.mskola.files.storageFile;
 
 import java.io.ObjectInputStream;
@@ -22,7 +20,6 @@ public class serverProcess {
             port = Integer.parseInt(serverInfo.getPort());
 
             client = new Socket(host, port);
-            Log.d("mSkola", "Trying to connect to server");
 
             ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
             oos.writeObject(data);
@@ -32,7 +29,6 @@ public class serverProcess {
 
             try {
                 sentData = (storageFile) (ois.readObject());
-                Log.d("mSkola", "got data from server");
 
             } catch (ClassNotFoundException ex) {
             }
@@ -40,7 +36,6 @@ public class serverProcess {
             return sentData;
 
         } catch (Exception ex) {
-            Log.d("mSkola", ex.toString());
             return null;
         }
     }

@@ -21,8 +21,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 
-public class ForgotPassword extends AppCompatActivity {
-
+public class ChangePassword extends AppCompatActivity {
 
     private View parent_view;
     private String email_text, password1_text;
@@ -36,7 +35,7 @@ public class ForgotPassword extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgot_password);
+        setContentView(R.layout.activity_change_password);
         parent_view = findViewById(android.R.id.content);
         parent_layout = findViewById(R.id.parent_layout);
 
@@ -89,7 +88,7 @@ public class ForgotPassword extends AppCompatActivity {
 
     private boolean validatePassword1() {
         if (pass1.getText().toString().trim().isEmpty()) {
-            password1.setError(getString(R.string.err_msg_pass1));
+            password1.setError(getString(R.string.enter_old_password));
             requestFocus(pass1);
             return false;
         } else {

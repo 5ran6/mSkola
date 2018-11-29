@@ -153,4 +153,8 @@
     <string name="recent_activity">Recent Activities</string>
     <string name="view_schools_details">View schools details</string>
     <string name="info">INFO</string>
+    <string name="change_password">Change password!</string>
+    <string name="change_password_text">Change Password</string>
+    <string name="old_password">OLD PASSWORD</string>
+    <string name="enter_old_password">Enter old password</string>
 </resources>

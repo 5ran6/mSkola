@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
@@ -36,6 +37,7 @@ public class Compile_Result_menu extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
     private TextView load;
+    private MaterialRippleLayout loadB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class Compile_Result_menu extends AppCompatActivity {
 
         progressBar2 = findViewById(R.id.progress2);
         progressBar2.setVisibility(View.INVISIBLE);
-
+        loadB = findViewById(R.id.loading);
         //load classes and assessments
         new initialLoad().execute(school_id, staff_id);
 
@@ -185,7 +187,7 @@ public class Compile_Result_menu extends AppCompatActivity {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
             Tools.toast("Compiling......", Compile_Result_menu.this, R.color.green_600);
-            load.setClickable(false);
+            loadB.setVisibility(View.GONE);
         }
 
         @Override
@@ -230,15 +232,6 @@ public class Compile_Result_menu extends AppCompatActivity {
 //                Toast.makeText(getBaseContext(), ((AppCompatButton) v).getText().toString() + " Clicked", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 finish();
-//                Intent intent1 = new Intent(getBaseContext(), Dashboard.class);
-//                intent1.putExtra("school_id", school_id);
-//                intent1.putExtra("class_name", class_name);
-//                intent1.putExtra("arm", arm);
-//                intent1.putExtra("staff_id", staff_id);
-//                startActivity(intent1);
-
-                //   parent_layout.setVisibility(View.VISIBLE);
-                // toolbar.setVisibility(View.VISIBLE);
             }
         });
         dialog.show();
@@ -258,7 +251,11 @@ public class Compile_Result_menu extends AppCompatActivity {
         TextView error_message = dialog.findViewById(R.id.content);
         error_message.setText(error);
 
-        (dialog.findViewById(R.id.bt_close)).setOnClickListener(v -> dialog.dismiss());
+        (dialog.findViewById(R.id.bt_close)).setOnClickListener(v -> {
+            dialog.dismiss();
+            loadB.setVisibility(View.VISIBLE);
+
+        });
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
