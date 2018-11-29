@@ -425,7 +425,6 @@ public class View_Scores_menu extends AppCompatActivity {
                     Log.i("mSkola", col7);
                     Log.i("mSkola", col8);
                     Log.i("mSkola", col9);
-
                     Log.i("mSkola", exams);
                     Log.i("mSkola", String.valueOf(total));
 

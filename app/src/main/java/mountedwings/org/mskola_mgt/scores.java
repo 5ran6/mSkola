@@ -3,6 +3,19 @@ package mountedwings.org.mskola_mgt;
 import java.util.ArrayList;
 
 public class scores {
+    private static ArrayList<String> NAMES = new ArrayList<>();
+    private static ArrayList<String> CA1 = new ArrayList<>();
+    private static ArrayList<String> CA2 = new ArrayList<>();
+    private static ArrayList<String> CA3 = new ArrayList<>();
+    private static ArrayList<String> CA4 = new ArrayList<>();
+    private static ArrayList<String> CA5 = new ArrayList<>();
+    private static ArrayList<String> CA6 = new ArrayList<>();
+    private static ArrayList<String> CA7 = new ArrayList<>();
+    private static ArrayList<String> CA8 = new ArrayList<>();
+    private static ArrayList<String> CA9 = new ArrayList<>();
+    private static ArrayList<String> CA10 = new ArrayList<>();
+    private static ArrayList<String> EXAM = new ArrayList<>();
+    private static ArrayList<String> TOTAL = new ArrayList<>();
 
     private static int NO_STUDENTS;
 
@@ -129,19 +142,6 @@ public class scores {
         scores.NAMES = NAMES;
     }
 
-    private static ArrayList<String> NAMES = new ArrayList<>();
-    private static ArrayList<String> CA1 = new ArrayList<>();
-    private static ArrayList<String> CA2 = new ArrayList<>();
-    private static ArrayList<String> CA3 = new ArrayList<>();
-    private static ArrayList<String> CA4 = new ArrayList<>();
-    private static ArrayList<String> CA5 = new ArrayList<>();
-    private static ArrayList<String> CA6 = new ArrayList<>();
-    private static ArrayList<String> CA7 = new ArrayList<>();
-    private static ArrayList<String> CA8 = new ArrayList<>();
-    private static ArrayList<String> CA9 = new ArrayList<>();
-    private static ArrayList<String> CA10 = new ArrayList<>();
-    private static ArrayList<String> EXAM = new ArrayList<>();
-    private static ArrayList<String> TOTAL = new ArrayList<>();
 
     public static ArrayList<String> getHEADERS() {
         return HEADERS;
@@ -152,6 +152,5 @@ public class scores {
     }
 
     private static ArrayList<String> HEADERS;
-
 
 }

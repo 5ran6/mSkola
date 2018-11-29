@@ -10,8 +10,6 @@ public class ViewScores extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(new TableMainLayout(this));
-//        setContentView(new TableMainLayoutOriginal(this));
-        //   scores.setNAMES(null);
     }
 
     @Override

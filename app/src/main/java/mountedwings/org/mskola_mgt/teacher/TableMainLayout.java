@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.scores;
 
 public class TableMainLayout extends RelativeLayout {
@@ -249,7 +250,7 @@ public class TableMainLayout extends RelativeLayout {
         params.setMargins(0, 2, 0, 0);
 
         TableRow tableRowForTableC = new TableRow(this.context);
-        TextView textView = this.bodyTextView(sampleObject.NAME);
+        TextView textView = this.namesTextView(sampleObject.NAME);
         tableRowForTableC.addView(textView, params);
 
         return tableRowForTableC;
@@ -259,29 +260,172 @@ public class TableMainLayout extends RelativeLayout {
 
         TableRow taleRowForTableD = new TableRow(this.context);
 
-        //    int loopCount = ((TableRow) this.tableB.getChildAt(0)).getChildCount();
-        String info[] = {
-                sampleObject.CA1,
-                sampleObject.CA2,
-                sampleObject.CA3,
-                sampleObject.CA4,
-                sampleObject.CA5,
-                sampleObject.CA6,
-                sampleObject.CA7,
-                sampleObject.CA8,
-                sampleObject.CA9,
-                sampleObject.CA10,
-                sampleObject.EXAM,
-                sampleObject.TOTAL
-        };
+        if (scores.getNoCas() == 5) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
 
-        for (int x = 0; x < scores.getNoCas(); x++) {
-            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-            params.setMargins(2, 2, 0, 0);
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
 
-            TextView textViewB = this.bodyTextView(info[x]);
-            taleRowForTableD.addView(textViewB, params);
+        } else if (scores.getNoCas() == 6) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.CA4,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+
+        } else if (scores.getNoCas() == 7) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.CA4,
+                    sampleObject.CA5,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+
+        } else if (scores.getNoCas() == 8) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.CA4,
+                    sampleObject.CA5,
+                    sampleObject.CA6,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+
+        } else if (scores.getNoCas() == 9) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.CA4,
+                    sampleObject.CA5,
+                    sampleObject.CA6,
+                    sampleObject.CA7,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+
+        } else if (scores.getNoCas() == 10) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.CA4,
+                    sampleObject.CA5,
+                    sampleObject.CA6,
+                    sampleObject.CA7,
+                    sampleObject.CA8,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+
+        } else if (scores.getNoCas() == 11) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.CA4,
+                    sampleObject.CA5,
+                    sampleObject.CA6,
+                    sampleObject.CA7,
+                    sampleObject.CA8,
+                    sampleObject.CA9,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+
+        } else if (scores.getNoCas() == 12) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.CA3,
+                    sampleObject.CA4,
+                    sampleObject.CA5,
+                    sampleObject.CA6,
+                    sampleObject.CA7,
+                    sampleObject.CA8,
+                    sampleObject.CA9,
+                    sampleObject.CA10,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL
+            };
+            for (int x = 0; x < scores.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+
         }
+        //    int loopCount = ((TableRow) this.tableB.getChildAt(0)).getChildCount();
+
 
         return taleRowForTableD;
 
@@ -299,12 +443,26 @@ public class TableMainLayout extends RelativeLayout {
         return bodyTextView;
     }
 
+    // table cell standard TextView
+    TextView namesTextView(String label) {
+
+        TextView bodyTextView = new TextView(this.context);
+        bodyTextView.setBackgroundColor(Color.WHITE);
+        bodyTextView.setTextColor(getResources().getColor(R.color.grey_800));
+        bodyTextView.setText(label);
+        bodyTextView.setGravity(Gravity.LEFT);
+        bodyTextView.setPadding(5, 5, 2, 5);
+
+        return bodyTextView;
+    }
+
     // header standard TextView
     TextView headerTextView(String label) {
 
         TextView headerTextView = new TextView(this.context);
         headerTextView.setBackgroundColor(Color.WHITE);
         headerTextView.setText(label);
+        headerTextView.setTextColor(getResources().getColor(R.color.black));
         headerTextView.setGravity(Gravity.CENTER);
         headerTextView.setPadding(5, 5, 5, 5);
 
