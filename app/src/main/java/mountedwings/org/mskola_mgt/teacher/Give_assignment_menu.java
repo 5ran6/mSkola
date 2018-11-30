@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -34,7 +35,7 @@ public class Give_assignment_menu extends AppCompatActivity {
     private ProgressBar progressBar1, progressBar2, progressBar3;
     private int counter = 0;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,8 @@ public class Give_assignment_menu extends AppCompatActivity {
         // school_id = "cac180826043520";
         // staff_id = "admin";
         //load classes and assessments
-        new initialLoad().execute(school_id, staff_id);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new initialLoad().execute(school_id, staff_id);
 //        new initialLoad().execute("cac180826043520", "admin");
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -114,14 +116,19 @@ public class Give_assignment_menu extends AppCompatActivity {
         });
 
         load.setOnClickListener(v -> {
-            if (!class_name.isEmpty() || !assessment.isEmpty() || !arm.isEmpty() || !subject.isEmpty()) {
-                Intent intent1 = new Intent(getBaseContext(), GiveAssignment.class);
-                intent1.putExtra("school_id", school_id);
-                intent1.putExtra("class_name", class_name);
-                intent1.putExtra("arm", arm);
-                intent1.putExtra("subject", subject);
-                intent1.putExtra("email_address", staff_id);
-                startActivity(intent1);
+            if (!class_name.isEmpty() && !assessment.isEmpty() && !arm.isEmpty() && !subject.isEmpty()) {
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+
+                    Intent intent1 = new Intent(getBaseContext(), GiveAssignment.class);
+                    intent1.putExtra("school_id", school_id);
+                    intent1.putExtra("class_name", class_name);
+                    intent1.putExtra("arm", arm);
+                    intent1.putExtra("subject", subject);
+                    intent1.putExtra("email_address", staff_id);
+                    startActivity(intent1);
+                } else {
+                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+                }
             } else {
                 Tools.toast("Fill all necessary fields", Give_assignment_menu.this);
 
@@ -132,12 +139,14 @@ public class Give_assignment_menu extends AppCompatActivity {
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        new loadArms().execute(school_id, staff_id, class_name);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new loadArms().execute(school_id, staff_id, class_name);
     }
 
     private void loadSubject() {
         progressBar3.setVisibility(View.VISIBLE);
-        new loadSubject().execute(school_id, staff_id, class_name, arm);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new loadSubject().execute(school_id, staff_id, class_name, arm);
     }
 
 
@@ -292,18 +301,21 @@ public class Give_assignment_menu extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", Give_assignment_menu.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", Give_assignment_menu.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", Give_assignment_menu.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Give_assignment_menu.this, R.color.green_800);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Give_assignment_menu.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -313,6 +325,13 @@ public class Give_assignment_menu extends AppCompatActivity {
                 new IntentFilter(
                         ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(this.mReceiver);
+        w = 0;
     }
 
 }

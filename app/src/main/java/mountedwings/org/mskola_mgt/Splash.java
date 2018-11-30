@@ -18,7 +18,6 @@ import mountedwings.org.mskola_mgt.teacher.Dashboard;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Splash extends AppCompatActivity {
-    private ImageView img;
     private SharedPreferences.Editor editor;
     private static final int PREFRENCE_MODE_PRIVATE = 0;
     private Boolean singedIn;
@@ -31,7 +30,7 @@ public class Splash extends AppCompatActivity {
             SharedPreferences mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
         }
-        img = findViewById(R.id.img);
+        ImageView img = findViewById(R.id.img);
         final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
         final Transition transition = new Transition() {
             @Override

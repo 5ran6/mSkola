@@ -10,6 +10,8 @@ import java.util.Objects;
 
 public class NetWorkInfoUtility {
 
+    public static final int NETWORK_STATUS_NOT_CONNECTED = 0;
+
     public boolean isWifiEnable() {
         return isWifiEnable;
     }
@@ -40,10 +42,12 @@ public class NetWorkInfoUtility {
         if (isWifiEnable() || isMobileNetworkAvailable()) {
         /*Sometime wifi is connected but service provider never connected to internet
         so cross check one more time*/
-            if (isOnline())
-                isNetworkAvailable = true;
-        }
+            if (isOnline()) {
 
+                isNetworkAvailable = true;
+
+            }
+        }
         return isNetworkAvailable;
     }
 

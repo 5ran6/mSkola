@@ -12,7 +12,7 @@ import android.view.View;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
-import mountedwings.org.mskola_mgt.utils.NetworkUtil;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -22,7 +22,7 @@ public class Assignment_menu extends AppCompatActivity {
     private Intent intent;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +73,21 @@ public class Assignment_menu extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", Assignment_menu.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", Assignment_menu.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", Assignment_menu.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Assignment_menu.this, R.color.green_800);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Assignment_menu.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -96,4 +99,10 @@ public class Assignment_menu extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+    }
 }

@@ -44,8 +44,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1.8"
-                        android:gravity="center"
+                        android:fontFamily="@font/rocket_rinder"
                         android:maxLines="2"
+                        android:padding="@dimen/spacing_medium"
                         android:textAppearance="?android:attr/textAppearanceLargeInverse"
                         android:textStyle="italic" />
 

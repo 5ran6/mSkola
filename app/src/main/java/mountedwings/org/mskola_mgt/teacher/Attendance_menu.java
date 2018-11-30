@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -38,12 +39,11 @@ public class Attendance_menu extends AppCompatActivity {
     private TextView date;
     private TextView load;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
 
     private void initComponent() {
         (findViewById(R.id.pick_date)).setOnClickListener(this::dialogDatePickerLight);
     }
-
 
     private void dialogDatePickerLight(final View bt) {
         Calendar cur_calender = Calendar.getInstance();
@@ -90,7 +90,8 @@ public class Attendance_menu extends AppCompatActivity {
         progressBar2.setVisibility(View.INVISIBLE);
 
         //load classes and assessments
-        new loadClass().execute(school_id, staff_id);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new loadClass().execute(school_id, staff_id);
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -120,13 +121,19 @@ public class Attendance_menu extends AppCompatActivity {
 
 
         load.setOnClickListener(v -> {
-            if (!class_name.equals("") || !date.equals("") || !arm.equals("")) {
-                Intent intent1 = new Intent(getBaseContext(), AttendanceActivity.class);
-                intent1.putExtra("school_id", school_id);
-                intent1.putExtra("class_name", class_name);
-                intent1.putExtra("arm", arm);
-                intent1.putExtra("date", date.getText().toString().trim());
-                startActivity(intent1);
+            if (!class_name.equals("") && !date.equals("") && !arm.equals("")) {
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+
+                    Intent intent1 = new Intent(getBaseContext(), AttendanceActivity.class);
+                    intent1.putExtra("school_id", school_id);
+                    intent1.putExtra("class_name", class_name);
+                    intent1.putExtra("arm", arm);
+                    intent1.putExtra("date", date.getText().toString().trim());
+                    startActivity(intent1);
+
+                } else {
+                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+                }
             } else {
                 Tools.toast("Fill all necessary fields", Attendance_menu.this, R.color.yellow_900);
             }
@@ -136,7 +143,8 @@ public class Attendance_menu extends AppCompatActivity {
     //finished
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        new loadArms().execute(school_id, staff_id, class_name);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new loadArms().execute(school_id, staff_id, class_name);
     }
 
     private class loadArms extends AsyncTask<String, Integer, String> {
@@ -237,18 +245,21 @@ public class Attendance_menu extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", Attendance_menu.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", Attendance_menu.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", Attendance_menu.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Attendance_menu.this, R.color.green_800);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -258,5 +269,12 @@ public class Attendance_menu extends AppCompatActivity {
                 new IntentFilter(
                         ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
     }
 }

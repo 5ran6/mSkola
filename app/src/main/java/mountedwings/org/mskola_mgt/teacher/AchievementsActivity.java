@@ -1,7 +1,11 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +25,8 @@ import java.util.Objects;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersAchievementsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberAchievements;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -37,6 +43,9 @@ public class AchievementsActivity extends AppCompatActivity {
     private storageFile data = new storageFile();
     private ArrayList<String> achievements = new ArrayList<>();
     private ArrayList<String> title = new ArrayList<>();
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
+    private int status;
 
 
     ProgressBar loading;
@@ -46,12 +55,13 @@ public class AchievementsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
+
+
         Intent intent = getIntent();
 
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
 
-        //school_id/staff id from sharedPrefs
-
+        //school_id from sharedPrefs
         school_id = mPrefs.getString("school_id", intent.getStringExtra("school_id"));
 
         fab_done = findViewById(R.id.done);
@@ -70,7 +80,12 @@ public class AchievementsActivity extends AppCompatActivity {
         //hide parentView
         loading.setVisibility(View.VISIBLE);
 
-        new first_loading().execute(school_id);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            new first_loading().execute(school_id);
+        } else {
+            Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+            finish();
+        }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> finish());
     }
@@ -127,6 +142,45 @@ public class AchievementsActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", AchievementsActivity.this, R.color.green_800);
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), AchievementsActivity.this, R.color.red_500);
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+    }
+
 
 }
 

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
@@ -58,7 +59,7 @@ public class Assessment extends AppCompatActivity {
     private int last_index;
     private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,9 @@ public class Assessment extends AppCompatActivity {
         // initToolbar(assessment.toUpperCase() + " for " + class_name + arm);
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
-        new first_loading().execute(school_id, class_name, arm, assessment, subject);
+
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new first_loading().execute(school_id, class_name, arm, assessment, subject);
     }
 
 
@@ -147,8 +150,10 @@ public class Assessment extends AppCompatActivity {
             }
 
             //send to server
-            new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
-            collapseAndContinue(index);
+            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
+                collapseAndContinue(index);
+            }
 
         });
 
@@ -212,9 +217,11 @@ public class Assessment extends AppCompatActivity {
 
             //      Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
             //send to server
-            new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
+            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
+                collapseAndContinue(index);
+            }
 
-            collapseAndContinue(index);
 
         });
         skip.setOnClickListener(v -> {
@@ -311,11 +318,13 @@ public class Assessment extends AppCompatActivity {
             if (current_step >= view_list.size()) {
                 ViewAnimation.collapse(view_list.get(view_list.size() - 1).findViewById(R.id.lyt_title));
             } else {
-                new loading().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index));
-                success_step = index > success_step ? index : success_step;
-                ViewAnimation.expand(view_list.get(index).findViewById(R.id.lyt_title));
-                View vv = view_list.get(index);
-                subsequentView(index, vv);
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                    new loading().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index));
+                    success_step = index > success_step ? index : success_step;
+                    ViewAnimation.expand(view_list.get(index).findViewById(R.id.lyt_title));
+                    View vv = view_list.get(index);
+                    subsequentView(index, vv);
+                }
             }
         } else {
             //just collapse
@@ -524,18 +533,21 @@ public class Assessment extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", Assessment.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", Assessment.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", Assessment.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Assessment.this, R.color.green_800);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -547,4 +559,11 @@ public class Assessment extends AppCompatActivity {
         super.onResume();
     }
 
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+    }
 }

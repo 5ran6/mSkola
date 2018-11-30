@@ -134,7 +134,7 @@
     <string name="enter_score">Enter score</string>
     <string name="register_score">Register Score</string>
     <string name="mark_all">MARK ALL</string>
-    <string name="no_internet_connection">check your internet connection and try again</string>
+    <string name="no_internet_connection">Check your internet connection and try again</string>
     <string name="pay_fees">Pay Fees</string>
     <string name="payment_status">Payment Status</string>
     <string name="verifying_school_id">Verifying School ID</string>
