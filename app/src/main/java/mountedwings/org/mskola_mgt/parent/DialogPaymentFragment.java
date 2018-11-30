@@ -3,7 +3,6 @@ package mountedwings.org.mskola_mgt.parent;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +14,11 @@ import mountedwings.org.mskola_mgt.R;
 
 public class DialogPaymentFragment extends DialogFragment {
 
-    private View root_view;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root_view = inflater.inflate(R.layout.dialog_payment_success, container, false);
+        View root_view = inflater.inflate(R.layout.dialog_payment_success, container, false);
 
-        ((FloatingActionButton) root_view.findViewById(R.id.fab)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        root_view.findViewById(R.id.fab).setOnClickListener(v -> dismiss());
 
         return root_view;
     }

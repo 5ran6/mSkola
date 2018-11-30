@@ -1,9 +1,13 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
@@ -52,6 +57,8 @@ public class Assessment extends AppCompatActivity {
     private ViewGroup main;
     private int last_index;
     private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -511,4 +518,33 @@ public class Assessment extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int status = NetworkUtil.getConnectivityStatusString(context);
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
+                    Tools.toast("No Internet connection!", Assessment.this, R.color.red_500);
+                }
+                w++;
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Back Online!", Assessment.this, R.color.green_800);
+                    } else {
+                        Tools.toast("No Internet connection!", Assessment.this, R.color.red_500);
+                    }
+                }
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
 }

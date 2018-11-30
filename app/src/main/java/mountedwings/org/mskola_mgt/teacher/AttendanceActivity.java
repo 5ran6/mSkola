@@ -1,7 +1,12 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +26,7 @@ import java.util.ArrayList;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersAdapter;
 import mountedwings.org.mskola_mgt.data.Number;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
@@ -43,6 +49,8 @@ public class AttendanceActivity extends AppCompatActivity {
     String date, school_id, class_name, arm, TAG = "mSkola";
     ProgressBar loading;
     NumbersAdapter adapter;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -385,5 +393,34 @@ public class AttendanceActivity extends AppCompatActivity {
                 .show();
 
     }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int status = NetworkUtil.getConnectivityStatusString(context);
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
+                    Tools.toast("No Internet connection!", AttendanceActivity.this, R.color.red_500);
+                }
+                w++;
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Back Online!", AttendanceActivity.this, R.color.green_800);
+                    } else {
+                        Tools.toast("No Internet connection!", AttendanceActivity.this, R.color.red_500);
+                    }
+                }
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
 }
 

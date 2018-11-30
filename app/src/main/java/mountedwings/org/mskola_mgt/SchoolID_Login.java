@@ -1,8 +1,12 @@
 package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -26,6 +30,7 @@ import android.widget.TextView;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -40,6 +45,8 @@ public class SchoolID_Login extends AppCompatActivity {
     private SharedPreferences mPrefsSchoolID;
 
     private Spinner recentIds;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +111,6 @@ public class SchoolID_Login extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -237,4 +240,33 @@ public class SchoolID_Login extends AppCompatActivity {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int status = NetworkUtil.getConnectivityStatusString(context);
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
+                    Tools.toast("No Internet connection!", SchoolID_Login.this, R.color.red_500);
+                }
+                w++;
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Back Online!", SchoolID_Login.this, R.color.green_800);
+                    } else {
+                        Tools.toast("No Internet connection!", SchoolID_Login.this, R.color.red_500);
+                    }
+                }
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
 }

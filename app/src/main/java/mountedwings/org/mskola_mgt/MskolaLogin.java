@@ -1,8 +1,12 @@
 package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -22,6 +26,7 @@ import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import mountedwings.org.mskola_mgt.teacher.Dashboard;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -47,14 +52,16 @@ public class MskolaLogin extends AppCompatActivity {
     private byte[] pass;
     private Intent intent;
     private storageFile data;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
-//
+
 //    NetworkBroadcastReceiver networkBroadcastReceiver = new NetworkBroadcastReceiver();
 //
 //    public NetworkBroadcastReceiver getNetworkBroadcastReceiver() {
 //        return networkBroadcastReceiver;
 //    }
-//
+
 
     private void submitForm() {
         if (!validateEmail()) {
@@ -366,4 +373,33 @@ public class MskolaLogin extends AppCompatActivity {
 
         findViewById(R.id.sig_in).setOnClickListener(view -> submitForm());
     }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int status = NetworkUtil.getConnectivityStatusString(context);
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
+                    Tools.toast("No Internet connection!", MskolaLogin.this, R.color.red_500);
+                }
+                w++;
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Back Online!", MskolaLogin.this, R.color.green_800);
+                    } else {
+                        Tools.toast("No Internet connection!", MskolaLogin.this, R.color.red_500);
+                    }
+                }
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
 }

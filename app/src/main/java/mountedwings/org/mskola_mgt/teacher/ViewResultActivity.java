@@ -58,6 +58,7 @@ public class ViewResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_results);
+        Tools.toast("Requesting results.....", this, R.color.green_600);
         Intent intent = getIntent();
 
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
@@ -233,5 +234,6 @@ public class ViewResultActivity extends AppCompatActivity {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
+
 }
 

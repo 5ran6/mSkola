@@ -1,7 +1,11 @@
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +24,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -30,6 +35,8 @@ public class Psychomotor_menu extends AppCompatActivity {
     private ProgressBar progressBar1, progressBar2;
     private int counter = 0;
     private TextView load;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +210,34 @@ public class Psychomotor_menu extends AppCompatActivity {
                 load.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int status = NetworkUtil.getConnectivityStatusString(context);
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
+                    Tools.toast("No Internet connection!", Psychomotor_menu.this, R.color.red_500);
+                }
+                w++;
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Back Online!", Psychomotor_menu.this, R.color.green_800);
+                    } else {
+                        Tools.toast("No Internet connection!", Psychomotor_menu.this, R.color.red_500);
+                    }
+                }
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
     }
 
 }

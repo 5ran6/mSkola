@@ -1,8 +1,12 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +28,7 @@ import java.util.Collections;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -41,6 +46,8 @@ public class Promote_Students_menu extends AppCompatActivity {
     private String[] classes;
     private Intent intent;
     private TextView load;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -431,4 +438,33 @@ public class Promote_Students_menu extends AppCompatActivity {
         super.onPause();
         finish();
     }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int status = NetworkUtil.getConnectivityStatusString(context);
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
+                    Tools.toast("No Internet connection!", Promote_Students_menu.this, R.color.red_500);
+                }
+                w++;
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Back Online!", Promote_Students_menu.this, R.color.green_800);
+                    } else {
+                        Tools.toast("No Internet connection!", Promote_Students_menu.this, R.color.red_500);
+                    }
+                }
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
 }

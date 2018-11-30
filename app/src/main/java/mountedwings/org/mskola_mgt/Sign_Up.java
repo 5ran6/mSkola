@@ -70,7 +70,8 @@ public class Sign_Up extends AppCompatActivity {
     private String[] separatedValues;
     private View view;
     private String f, l, c = "Nigeria", t, p, a, e, pass, account_type;
-    BroadcastReceiver mReceiver;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +142,6 @@ public class Sign_Up extends AppCompatActivity {
             finish();
         } else {
             submitForm();
-            //showCustomDialogSuccess(newbie);
-            //Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -375,6 +374,14 @@ public class Sign_Up extends AppCompatActivity {
 
     }
 
+    private void stopBouncing() {
+        final LinearLayout lyt_progress = findViewById(R.id.lyt_progress);
+        lyt_progress.setVisibility(View.GONE);
+        parent_layout.setVisibility(View.VISIBLE);
+        toolbar.setVisibility(View.VISIBLE);
+
+    }
+
     private class MyTextWatcher implements TextWatcher {
 
         private View view;
@@ -496,11 +503,9 @@ public class Sign_Up extends AppCompatActivity {
             if (network) {
                 //   Toast.makeText(getApplicationContext(), "Connected to the internet", Toast.LENGTH_LONG).show();
                 //inflate the data on the spinner
-                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, seperatedValue);
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, seperatedValue);
                 spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 country.setAdapter(spinnerAdapter);
-            } else {
-                Toast.makeText(getApplicationContext(), "Check your connection to the internet", Toast.LENGTH_LONG).show();
             }
 
         }
@@ -525,13 +530,20 @@ public class Sign_Up extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                w++;
                 int status = NetworkUtil.getConnectivityStatusString(context);
-                Log.e(TAG, "receiver checking");
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction())) {
+                Log.i(TAG, "receiver checking");
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
                     if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Yes Internet connection!", Sign_Up.this, R.color.green_800);
                         //    new ResumeForceExitPause(context).execute();
                         new performInBackground().execute("getcountries");
-                    }  //      new ForceExitPause(context).execute();
+                    } else {
+                        Tools.toast("No Internet connection!", Sign_Up.this, R.color.red_500);
+
+                    }
+
+                    //      new ForceExitPause(context).execute();
 
                 }
             }
@@ -549,36 +561,35 @@ public class Sign_Up extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... strings) {
+            try {
 
-            storageFile storageObj = new storageFile();
-            //to get and send the picture
-            Bitmap bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] imageInByte = baos.toByteArray();
+                storageFile storageObj = new storageFile();
+                //to get and send the picture
+                Bitmap bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] imageInByte = baos.toByteArray();
 
-            storageObj.setOperation("createaccount");
-            storageObj.setStrData(Tools.personInfo(f, l, c, t, p, a, e, pass));
-            storageObj.addImageFile(imageInByte);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+                storageObj.setOperation("createaccount");
+                storageObj.setStrData(Tools.personInfo(f, l, c, t, p, a, e, pass));
+                storageObj.addImageFile(imageInByte);
+                storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            isSent = true;
-            if (isSent) Log.d(TAG, "registeration sent to server");
-
-            //received from server
-            String text = sentData.getStrData();
-            if (text.contains("success")) {
-                isSuccess = true;
-                Log.d(TAG, "registration successful");
-            } else if (text.contains("exists")) {
-                isSuccess = false;
-                error = "mSkola account already exists.";
-                Log.d(TAG, error);
-            } else {
-                isSuccess = false;
-                error = "Oops. an error occurred!";
-                Log.d(TAG, error);
+                //received from server
+                String text = sentData.getStrData();
+                if (text.contains("success")) {
+                    isSuccess = true;
+                } else if (text.contains("exists")) {
+                    isSuccess = false;
+                    error = "mSkola account with this email address already exists.";
+                } else {
+                    isSuccess = false;
+                    error = "Oops. an error occurred!";
+                }
+            } catch (Exception e) {
+                network = false;
             }
+
             return isSuccess;
         }
 
@@ -590,10 +601,13 @@ public class Sign_Up extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
-            if (isSuccess) {
-                showCustomDialogSuccess(newbie);
-            } else {
-                showCustomDialogFailure(error);
+            if (network) {
+                if (isSuccess) {
+                    showCustomDialogSuccess(newbie);
+                } else {
+                    showCustomDialogFailure(error);
+                }
+
             }
         }
     }

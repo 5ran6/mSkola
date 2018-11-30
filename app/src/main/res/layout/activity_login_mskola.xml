@@ -49,8 +49,7 @@
 
         <View
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="@dimen/spacing_xlarge" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -141,6 +140,10 @@
             android:textStyle="bold"
             android:theme="@style/Checkbox.Blue" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_xxxlarge" />
+
         <Button
             android:id="@+id/sig_in"
             android:layout_width="match_parent"
@@ -170,7 +173,7 @@
         <mountedwings.org.mskola_mgt.widget.ViewLoadingDotsBounce
             android:layout_width="50dp"
             android:layout_height="40dp"
-            android:background="@color/pink_300" />
+            android:background="@color/pink_400" />
     </LinearLayout>
 
 </RelativeLayout>

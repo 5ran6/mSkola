@@ -11,7 +11,7 @@ public class serverProcess {
     public storageFile requestProcess(storageFile data) {
         try {
             //to connect and send the values to the server
-            Socket client = null;
+            Socket client;
             int port;
             String host;
 
@@ -31,6 +31,7 @@ public class serverProcess {
                 sentData = (storageFile) (ois.readObject());
 
             } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
 
             return sentData;

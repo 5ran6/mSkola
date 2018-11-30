@@ -6,8 +6,9 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Objects;
 
-class NetWorkInfoUtility {
+public class NetWorkInfoUtility {
 
     public boolean isWifiEnable() {
         return isWifiEnable;
@@ -33,7 +34,7 @@ class NetWorkInfoUtility {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        setIsWifiEnable(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected());
+        setIsWifiEnable(Objects.requireNonNull(connectivityManager).getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected());
         setIsMobileNetworkAvailable(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected());
 
         if (isWifiEnable() || isMobileNetworkAvailable()) {

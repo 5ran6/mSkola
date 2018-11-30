@@ -1,12 +1,18 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -24,6 +30,7 @@ import java.util.Collections;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -38,6 +45,9 @@ public class Compile_Result_menu extends AppCompatActivity {
     private static final int PREFERENCE_MODE_PRIVATE = 0;
     private TextView load;
     private MaterialRippleLayout loadB;
+    private ViewGroup transitionsContainer;
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +74,8 @@ public class Compile_Result_menu extends AppCompatActivity {
         progressBar2 = findViewById(R.id.progress2);
         progressBar2.setVisibility(View.INVISIBLE);
         loadB = findViewById(R.id.loading);
+
+        transitionsContainer = findViewById(R.id.parent);
         //load classes and assessments
         new initialLoad().execute(school_id, staff_id);
 
@@ -185,7 +197,8 @@ public class Compile_Result_menu extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
+            TransitionManager.beginDelayedTransition(transitionsContainer);
+            progressBar.setVisibility(View.GONE);
             Tools.toast("Compiling......", Compile_Result_menu.this, R.color.green_600);
             loadB.setVisibility(View.GONE);
         }
@@ -305,6 +318,34 @@ public class Compile_Result_menu extends AppCompatActivity {
 
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int status = NetworkUtil.getConnectivityStatusString(context);
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
+                    Tools.toast("No Internet connection!", Compile_Result_menu.this, R.color.red_500);
+                }
+                w++;
+                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        Tools.toast("Back Online!", Compile_Result_menu.this, R.color.green_800);
+                    } else {
+                        Tools.toast("No Internet connection!", Compile_Result_menu.this, R.color.red_500);
+                    }
+                }
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
     }
 
 }

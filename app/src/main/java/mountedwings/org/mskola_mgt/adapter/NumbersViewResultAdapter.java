@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,7 @@ public class NumbersViewResultAdapter extends RecyclerView.Adapter<NumbersViewRe
                 setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, NumberViewResult obj, int position) {
-                        Log.i("mSkola", numbers.get(position).getName());
+                        //          Log.i("mSkola", numbers.get(position).getName());
                     }
                 });
             }
@@ -97,8 +96,8 @@ public class NumbersViewResultAdapter extends RecyclerView.Adapter<NumbersViewRe
 //          name.setText(number.get);
             name.setText(number.getName());
             total.setText(String.format("Total: %s", number.gettotal()));
-            average.setText(String.format("Avg: %s", number.getaverage()));
-            no_subjects.setText(String.format("No. Sub: %s", number.getno_subjects()));
+            average.setText(String.format("Average: %s", number.getaverage()));
+            no_subjects.setText(String.format("No. Subjects: %s", number.getno_subjects()));
             if (number.getPosition().equals("0"))
                 position.setText("");
             else

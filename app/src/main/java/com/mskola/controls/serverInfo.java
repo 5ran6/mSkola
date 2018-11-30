@@ -3,7 +3,7 @@ package com.mskola.controls;
 public class serverInfo {
     private String ip = "192.168.43.233";
     //   public String ip = "169.254.167.77";
-    //     public String ip = "10.1.1.7";
+    //   public String ip = "10.1.1.7";
     private String port = "9098";
 
     public String getIp() {
