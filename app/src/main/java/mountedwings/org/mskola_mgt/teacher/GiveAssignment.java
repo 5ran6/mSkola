@@ -23,6 +23,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import java.util.Calendar;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -38,7 +39,7 @@ public class GiveAssignment extends AppCompatActivity {
     private boolean dateSelected = false, timeSelected = false;
     private MaterialRippleLayout materialRippleLayout;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
 
     private void initComponents() {
         date = findViewById(R.id.date);
@@ -113,6 +114,7 @@ public class GiveAssignment extends AppCompatActivity {
     public void upload(View view) {
         if (dateSelected && timeSelected) {
             if (!assignment.getText().toString().isEmpty()) {
+
                 String dueDate = date.getText().toString().trim();
                 String questions = assignment.getText().toString();
                 //begin wait dialog
@@ -129,7 +131,11 @@ public class GiveAssignment extends AppCompatActivity {
 /////////////////////////////////////////////
 
                 //pass into background thread
-                new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+                    new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
+                else
+                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_500);
+
                 //        new uploadAssignment().execute("cac180826043520", questions, "English Language", "JSS1 A", dueDate, dueTime, "admin");
             } else {
                 Tools.toast("Assignment Field is empty", GiveAssignment.this, R.color.yellow_900);
@@ -191,18 +197,21 @@ public class GiveAssignment extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", GiveAssignment.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", GiveAssignment.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", GiveAssignment.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", GiveAssignment.this, R.color.green_800);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), GiveAssignment.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -212,6 +221,13 @@ public class GiveAssignment extends AppCompatActivity {
                 new IntentFilter(
                         ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
     }
 
 }

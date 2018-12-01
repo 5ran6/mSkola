@@ -159,7 +159,7 @@
                     android:layout_alignParentRight="true"
                     android:text="2017/2018"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/light_green_100"
+                    android:textColor="@color/light_green_800"
                     android:textStyle="bold" />
 
                 </LinearLayout>

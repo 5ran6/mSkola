@@ -23,7 +23,6 @@ import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersMySubjectsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberMySubjects;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
-import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.widget.LineItemDecoration;
 
@@ -37,6 +36,8 @@ public class MySubjects extends AppCompatActivity {
     private BroadcastReceiver mReceiver;
     private int w = 0;
     private int status;
+    private String staff_id;
+    private String school_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +67,9 @@ public class MySubjects extends AppCompatActivity {
 
 
         //school_id/staff id from sharedPrefs
-        String staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-        String school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
+        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new getMySubjects().execute(school_id, staff_id);
-        else {
-            finish();
-            Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-        }
 
     }
 
@@ -137,12 +132,15 @@ public class MySubjects extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", MySubjects.this, R.color.green_800);
+                        else
+                            new getMySubjects().execute(school_id, staff_id);
                     }
 
                     @Override
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
                         Tools.toast(getResources().getString(R.string.no_internet_connection), MySubjects.this, R.color.red_500);
+                        finish();
                     }
                 }).execute();
             }

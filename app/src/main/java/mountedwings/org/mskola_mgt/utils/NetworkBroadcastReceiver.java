@@ -11,6 +11,5 @@ public class NetworkBroadcastReceiver extends BroadcastReceiver {
 
         //code to display network error text
 
-
     }
 }

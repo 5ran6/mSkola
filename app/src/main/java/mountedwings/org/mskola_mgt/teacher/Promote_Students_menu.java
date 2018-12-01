@@ -29,6 +29,7 @@ import java.util.Collections;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -81,8 +82,6 @@ public class Promote_Students_menu extends AppCompatActivity {
         progressBar3 = findViewById(R.id.progress3);
         progressBar3.setVisibility(View.INVISIBLE);
 
-        //load classes and assessments
-        new initialLoad().execute(school_id, staff_id);
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
 
@@ -149,24 +148,26 @@ public class Promote_Students_menu extends AppCompatActivity {
         load.setOnClickListener(v ->
 
         {
-            if (!class_name.isEmpty() || !arm.isEmpty()) {
-                new getStudentsToPromote().execute();
-            } else {
-                Tools.toast("Fill all necessary fields!", Promote_Students_menu.this, R.color.yellow_500);
-
-            }
+            if (!class_name.isEmpty() && !arm.isEmpty()) {
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+                    new getStudentsToPromote().execute();
+                else
+                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+            } else
+                Tools.toast("Fill all necessary fields!", Promote_Students_menu.this, R.color.yellow_800);
         });
     }
 
     private void loadSessionList() {
         progressBar3.setVisibility(View.VISIBLE);
-        new loadSession().execute();
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) new loadSession().execute();
     }
 
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        new loadArms().execute(school_id, class_name);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new loadArms().execute(school_id, class_name);
     }
 
 
@@ -364,17 +365,10 @@ public class Promote_Students_menu extends AppCompatActivity {
             TextView error_message = dialog.findViewById(R.id.content);
             error_message.setText(error);
 
-            (dialog.findViewById(R.id.bt_close)).setOnClickListener(v -> {
-                dialog.dismiss();
-                try {
-//                if (lyt_progress.getVisibility() == View.VISIBLE && parent_layout.getVisibility() == View.INVISIBLE) {
-//                    lyt_progress.setVisibility(View.INVISIBLE);
-//                    parent_layout.setVisibility(View.VISIBLE);
-//                }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            (dialog.findViewById(R.id.bt_close)).setOnClickListener(v ->
+                    dialog.dismiss()
+
+            );
             dialog.show();
             dialog.getWindow().setAttributes(lp);
         }
@@ -406,7 +400,6 @@ public class Promote_Students_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 text = text.split("##")[0];
@@ -427,7 +420,6 @@ public class Promote_Students_menu extends AppCompatActivity {
                 counter = -1;
             } else {
                 Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Promote_Students_menu.this, R.color.red_800, Toast.LENGTH_LONG);
-                load.setVisibility(View.INVISIBLE);
 
             }
         }
@@ -452,6 +444,8 @@ public class Promote_Students_menu extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", Promote_Students_menu.this, R.color.green_800);
+                        else
+                            new initialLoad().execute(school_id, staff_id);
                     }
 
                     @Override

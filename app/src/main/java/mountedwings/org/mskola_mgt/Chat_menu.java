@@ -29,6 +29,7 @@ import mountedwings.org.mskola_mgt.data.NumberChat;
 import mountedwings.org.mskola_mgt.data.NumberChatParentsList;
 import mountedwings.org.mskola_mgt.data.NumberChatStaffList;
 import mountedwings.org.mskola_mgt.teacher.Chat_List_Teachers;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
@@ -54,7 +55,7 @@ public class Chat_menu extends AppCompatActivity {
     private ProgressBar loading;
     NumbersChatMenuAdapter adapter;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,6 @@ public class Chat_menu extends AppCompatActivity {
         //hide parentView
         loading.setVisibility(View.VISIBLE);
 
-        new first_loading().execute(school_id, staff_id);
         // on swipe list
         swipe_refresh.setOnRefreshListener(() -> pullAndRefresh());
 
@@ -146,7 +146,14 @@ public class Chat_menu extends AppCompatActivity {
 
     private void pullAndRefresh() {
         swipeProgress(true);
-        new Handler().postDelayed(() -> new first_loading().execute(school_id, staff_id), 3000);
+        new Handler().postDelayed(() -> {
+            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                new first_loading().execute(school_id, staff_id);
+            } else {
+                Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+            }
+
+        }, 3000);
     }
 
     @Override
@@ -313,23 +320,29 @@ public class Chat_menu extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onResume() {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", Chat_menu.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", Chat_menu.this, R.color.green_800);
-                    } else {
-                        Tools.toast("Offline!", Chat_menu.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Chat_menu.this, R.color.green_800);
+                        else
+                            new first_loading().execute(school_id, staff_id);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Chat_menu.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -340,6 +353,14 @@ public class Chat_menu extends AppCompatActivity {
                         ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
     }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+    }
+
 
 }
 

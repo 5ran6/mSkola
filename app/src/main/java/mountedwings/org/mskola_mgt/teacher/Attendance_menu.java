@@ -89,9 +89,6 @@ public class Attendance_menu extends AppCompatActivity {
         progressBar2 = findViewById(R.id.progress2);
         progressBar2.setVisibility(View.INVISIBLE);
 
-        //load classes and assessments
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadClass().execute(school_id, staff_id);
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -123,14 +120,12 @@ public class Attendance_menu extends AppCompatActivity {
         load.setOnClickListener(v -> {
             if (!class_name.equals("") && !date.equals("") && !arm.equals("")) {
                 if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-
                     Intent intent1 = new Intent(getBaseContext(), AttendanceActivity.class);
                     intent1.putExtra("school_id", school_id);
                     intent1.putExtra("class_name", class_name);
                     intent1.putExtra("arm", arm);
                     intent1.putExtra("date", date.getText().toString().trim());
                     startActivity(intent1);
-
                 } else {
                     Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
                 }
@@ -252,6 +247,8 @@ public class Attendance_menu extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", Attendance_menu.this, R.color.green_800);
+                        else //load classes and assessments
+                            new loadClass().execute(school_id, staff_id);
                     }
 
                     @Override

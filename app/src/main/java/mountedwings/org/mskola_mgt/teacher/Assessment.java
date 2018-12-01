@@ -546,6 +546,7 @@ public class Assessment extends AppCompatActivity {
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
                         Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment.this, R.color.red_500);
+                        finish();
                     }
                 }).execute();
             }

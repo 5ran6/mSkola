@@ -30,6 +30,7 @@ import java.util.Collections;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -47,7 +48,8 @@ public class Compile_Result_menu extends AppCompatActivity {
     private MaterialRippleLayout loadB;
     private ViewGroup transitionsContainer;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
+    private boolean compiling = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,6 @@ public class Compile_Result_menu extends AppCompatActivity {
 
         } else {
             Tools.toast("Previous Login invalidated. Login again!", this, R.color.red_500);
-
             finish();
             startActivity(new Intent(getBaseContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }
@@ -76,8 +77,6 @@ public class Compile_Result_menu extends AppCompatActivity {
         loadB = findViewById(R.id.loading);
 
         transitionsContainer = findViewById(R.id.parent);
-        //load classes and assessments
-        new initialLoad().execute(school_id, staff_id);
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -118,7 +117,10 @@ public class Compile_Result_menu extends AppCompatActivity {
 
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() && !arm.isEmpty()) {
-                new compileResult().execute(school_id, class_name, arm);
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+                    new compileResult().execute(school_id, class_name, arm);
+                else
+                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
             } else {
                 Tools.toast("Fill all necessary fields!", this, R.color.yellow_600);
 
@@ -129,7 +131,8 @@ public class Compile_Result_menu extends AppCompatActivity {
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        new loadArms().execute(school_id, staff_id, class_name);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new loadArms().execute(school_id, staff_id, class_name);
     }
 
 
@@ -189,7 +192,7 @@ public class Compile_Result_menu extends AppCompatActivity {
             storageObj.setOperation("compileresult");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
-
+            compiling = true;
             return sentData.getStrData();
 
         }
@@ -198,7 +201,7 @@ public class Compile_Result_menu extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             TransitionManager.beginDelayedTransition(transitionsContainer);
-            progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
             Tools.toast("Compiling......", Compile_Result_menu.this, R.color.green_600);
             loadB.setVisibility(View.GONE);
         }
@@ -207,7 +210,7 @@ public class Compile_Result_menu extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             progressBar.setVisibility(View.GONE);
-
+            compiling = false;
             if (text.equals("success")) {
                 //    Toast.makeText(getBaseContext(), "", Toast.LENGTH_SHORT).show();
                 showCustomDialogSuccess("Results successfully compiled");
@@ -325,18 +328,23 @@ public class Compile_Result_menu extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", Compile_Result_menu.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", Compile_Result_menu.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", Compile_Result_menu.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Compile_Result_menu.this, R.color.green_800);
+                        else
+                            new initialLoad().execute(school_id, staff_id);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Compile_Result_menu.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -348,4 +356,26 @@ public class Compile_Result_menu extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+    }
+
+    private long exitTime = 0;
+
+    @Override
+    public void onBackPressed() {
+        //stop the thread or don't go anywhere until the reply is given
+        if (compiling) {
+            if ((System.currentTimeMillis() - exitTime) > 100) {
+                Tools.toast("Result still compiling", Compile_Result_menu.this);
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+
+        }
+    }
 }

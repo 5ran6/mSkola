@@ -1,8 +1,12 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +28,8 @@ import java.util.Objects;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersViewResultAdapter;
 import mountedwings.org.mskola_mgt.data.NumberViewResult;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -50,6 +56,9 @@ public class ViewResultActivity extends AppCompatActivity {
     private ArrayList<String> no_subjects = new ArrayList<>();
     private ArrayList<String> position = new ArrayList<>();
     private ArrayList<String> average = new ArrayList<>();
+    private BroadcastReceiver mReceiver;
+    private int w = 0;
+    private int status;
 
     ProgressBar loading;
     private NumbersViewResultAdapter adapter;
@@ -89,7 +98,6 @@ public class ViewResultActivity extends AppCompatActivity {
         //hide parentView
         loading.setVisibility(View.VISIBLE);
 
-        new first_loading().execute(school_id, class_, arm);
         fab_done.setOnClickListener(v -> finish());
     }
 
@@ -135,7 +143,13 @@ public class ViewResultActivity extends AppCompatActivity {
                 finish();
             }
             //finally
-            new second_loading().execute();
+            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+                new second_loading().execute();
+            else {
+                Tools.toast(getResources().getString(R.string.no_internet_connection), ViewResultActivity.this, R.color.red_600);
+                finish();
+            }
+
         }
     }
 
@@ -234,6 +248,48 @@ public class ViewResultActivity extends AppCompatActivity {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", ViewResultActivity.this, R.color.green_800);
+                        else
+                            new first_loading().execute(school_id, class_, arm);
+
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), ViewResultActivity.this, R.color.red_600);
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+    }
+
 
 }
 

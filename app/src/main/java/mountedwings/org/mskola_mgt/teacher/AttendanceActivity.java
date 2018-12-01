@@ -87,8 +87,7 @@ public class AttendanceActivity extends AppCompatActivity {
 
         loading.setVisibility(View.VISIBLE);
 
-        new first_loading().execute(school_id, class_name, arm, date);
-//        new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
+        //        new first_loading().execute("cac180826043520", "JSS1", "A", "2018-10-03");
         //  new first_loading().execute("cac181009105222", "JSS1", "A", "2018-10-03");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -427,12 +426,16 @@ public class AttendanceActivity extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", AttendanceActivity.this, R.color.green_800);
+                        else
+                            new first_loading().execute(school_id, class_name, arm, date);
+
                     }
 
                     @Override
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
                         Tools.toast(getResources().getString(R.string.no_internet_connection), AttendanceActivity.this, R.color.red_500);
+                        //              finish();
                     }
                 }).execute();
             }

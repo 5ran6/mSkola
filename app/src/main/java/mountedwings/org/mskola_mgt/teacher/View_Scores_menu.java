@@ -85,9 +85,6 @@ public class View_Scores_menu extends AppCompatActivity {
         progressBar3 = findViewById(R.id.progress3);
         progressBar3.setVisibility(View.INVISIBLE);
 
-        //load classes
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new initialLoad().execute(school_id, staff_id);
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -595,6 +592,11 @@ public class View_Scores_menu extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", View_Scores_menu.this, R.color.green_800);
+                        else
+                            //load classes
+                            new initialLoad().execute(school_id, staff_id);
+
+
                     }
 
                     @Override

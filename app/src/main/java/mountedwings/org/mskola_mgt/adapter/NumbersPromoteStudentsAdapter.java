@@ -5,7 +5,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,7 +123,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
             items.add(numbers.get(pos).getregNo());
             selected_items.put(pos, true);
         }
-        Log.i("mSkola", items.toString());
+        //  Log.i("mSkola", items.toString());
         notifyItemChanged(pos);
     }
 
@@ -146,7 +145,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
     }
 
     public List<String> getSelectedItems() {
-        Log.i("mSkola", items.toString());
+        //     Log.i("mSkola", items.toString());
         return items;
     }
 

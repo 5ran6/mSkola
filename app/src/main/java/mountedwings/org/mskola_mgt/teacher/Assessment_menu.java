@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,6 +41,42 @@ public class Assessment_menu extends AppCompatActivity {
     private int status;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Assessment_menu.this, R.color.green_800);
+                        else
+                            //load classes and assessments
+                            new initialLoad().execute(school_id, staff_id);
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Log.d("mSkola", String.valueOf(status));
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment_menu.this, R.color.red_600);
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_menu);
@@ -68,9 +105,8 @@ public class Assessment_menu extends AppCompatActivity {
 
         progressBar4 = findViewById(R.id.progress4);
         progressBar4.setVisibility(View.INVISIBLE);
-        //load classes and assessments
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new initialLoad().execute(school_id, staff_id);
+//        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+//            new initialLoad().execute(school_id, staff_id);
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -327,36 +363,6 @@ public class Assessment_menu extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Assessment_menu.this, R.color.green_800);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment_menu.this, R.color.red_500);
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
-    }
 
     @Override
     protected void onPause() {

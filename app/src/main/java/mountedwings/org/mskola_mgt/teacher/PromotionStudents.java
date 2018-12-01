@@ -61,7 +61,7 @@ public class PromotionStudents extends AppCompatActivity {
 
         initToolbar();
         initComponent();
-        Tools.toast("Long press for selection", PromotionStudents.this, R.color.yellow_600);
+        Tools.toast("Long press for selection", PromotionStudents.this, R.color.yellow_900);
     }
 
     private void initToolbar() {
@@ -216,7 +216,7 @@ public class PromotionStudents extends AppCompatActivity {
     //  '
     private void selectAll() {
         List<String> listOfSelected = mAdapter.selectAll();
-        Tools.toast(listOfSelected.toString(), PromotionStudents.this, R.color.yellow_800);
+        //   Tools.toast(listOfSelected.toString(), PromotionStudents.this, R.color.yellow_800);
 
         actionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
     }

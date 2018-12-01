@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -36,7 +37,7 @@ public class Psychomotor_menu extends AppCompatActivity {
     private int counter = 0;
     private TextView load;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,6 @@ public class Psychomotor_menu extends AppCompatActivity {
         progressBar2 = findViewById(R.id.progress2);
         progressBar2.setVisibility(View.INVISIBLE);
 
-        //load classes and assessments
-        new initialLoad().execute(school_id, staff_id);
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -97,13 +96,17 @@ public class Psychomotor_menu extends AppCompatActivity {
         });
 
         load.setOnClickListener(v -> {
-            if (!class_name.isEmpty() || !arm.isEmpty()) {
-                Intent intent1 = new Intent(getBaseContext(), Psychomotor.class);
-                intent1.putExtra("school_id", school_id);
-                intent1.putExtra("class_name", class_name);
-                intent1.putExtra("arm", arm);
-                intent1.putExtra("email_address", staff_id);
-                startActivity(intent1);
+            if (!class_name.isEmpty() && !arm.isEmpty()) {
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                    Intent intent1 = new Intent(getBaseContext(), Psychomotor.class);
+                    intent1.putExtra("school_id", school_id);
+                    intent1.putExtra("class_name", class_name);
+                    intent1.putExtra("arm", arm);
+                    intent1.putExtra("email_address", staff_id);
+                    startActivity(intent1);
+                } else {
+                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+                }
             } else {
                 Tools.toast("Fill all necessary fields", Psychomotor_menu.this, R.color.yellow_800);
             }
@@ -113,7 +116,8 @@ public class Psychomotor_menu extends AppCompatActivity {
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        new loadArms().execute(school_id, staff_id, class_name);
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            new loadArms().execute(school_id, staff_id, class_name);
     }
 
 
@@ -141,9 +145,7 @@ public class Psychomotor_menu extends AppCompatActivity {
                 String[] dataRows = text.split(",");
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
-                for (int i = 1; i <= dataRows.length; i++) {
-                    data[i] = dataRows[(i - 1)];
-                }
+                System.arraycopy(dataRows, 0, data, 1, dataRows.length);
 
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -217,18 +219,23 @@ public class Psychomotor_menu extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", Psychomotor_menu.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", Psychomotor_menu.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", Psychomotor_menu.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Psychomotor_menu.this, R.color.green_800);
+                        else
+                            new initialLoad().execute(school_id, staff_id);
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Psychomotor_menu.this, R.color.red_500);
+                    }
+                }).execute();
             }
 
         };
@@ -239,5 +246,13 @@ public class Psychomotor_menu extends AppCompatActivity {
                         ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
     }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+    }
+
 
 }

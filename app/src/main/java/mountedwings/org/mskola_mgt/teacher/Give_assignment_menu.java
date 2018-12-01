@@ -60,10 +60,7 @@ public class Give_assignment_menu extends AppCompatActivity {
         progressBar3.setVisibility(View.INVISIBLE);
         // school_id = "cac180826043520";
         // staff_id = "admin";
-        //load classes and assessments
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new initialLoad().execute(school_id, staff_id);
-//        new initialLoad().execute("cac180826043520", "admin");
+        //        new initialLoad().execute("cac180826043520", "admin");
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -116,7 +113,7 @@ public class Give_assignment_menu extends AppCompatActivity {
         });
 
         load.setOnClickListener(v -> {
-            if (!class_name.isEmpty() && !assessment.isEmpty() && !arm.isEmpty() && !subject.isEmpty()) {
+            if (!class_name.isEmpty() && !arm.isEmpty() && !subject.isEmpty()) {
                 if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
 
                     Intent intent1 = new Intent(getBaseContext(), GiveAssignment.class);
@@ -298,16 +295,19 @@ public class Give_assignment_menu extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        w++;
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                w++;
                 new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", Give_assignment_menu.this, R.color.green_800);
+                        else
+                            //load classes and assessments
+                            new initialLoad().execute(school_id, staff_id);
                     }
 
                     @Override
@@ -317,7 +317,6 @@ public class Give_assignment_menu extends AppCompatActivity {
                     }
                 }).execute();
             }
-
         };
 
         registerReceiver(
@@ -333,5 +332,4 @@ public class Give_assignment_menu extends AppCompatActivity {
         unregisterReceiver(this.mReceiver);
         w = 0;
     }
-
 }

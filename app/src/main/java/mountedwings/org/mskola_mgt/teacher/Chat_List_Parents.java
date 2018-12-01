@@ -60,7 +60,6 @@ public class Chat_List_Parents extends AppCompatActivity {
         initToolbar();
         initComponent();
         Tools.toast("Long press for selection", this);
-
     }
 
     private void initToolbar() {
@@ -220,7 +219,6 @@ public class Chat_List_Parents extends AppCompatActivity {
         Tools.toast(listOfSelected.toString(), Chat_List_Parents.this);
         actionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
     }
-
 
 
     @Override

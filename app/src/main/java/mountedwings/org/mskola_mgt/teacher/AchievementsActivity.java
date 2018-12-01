@@ -26,7 +26,6 @@ import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.NumbersAchievementsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberAchievements;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
-import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -80,12 +79,6 @@ public class AchievementsActivity extends AppCompatActivity {
         //hide parentView
         loading.setVisibility(View.VISIBLE);
 
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-            new first_loading().execute(school_id);
-        } else {
-            Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-            finish();
-        }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> finish());
     }
@@ -155,12 +148,16 @@ public class AchievementsActivity extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", AchievementsActivity.this, R.color.green_800);
+                        else
+                            new first_loading().execute(school_id);
+
                     }
 
                     @Override
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
                         Tools.toast(getResources().getString(R.string.no_internet_connection), AchievementsActivity.this, R.color.red_500);
+                        finish();
                     }
                 }).execute();
             }
