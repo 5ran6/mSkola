@@ -8,9 +8,10 @@
 
     <LinearLayout
         android:id="@+id/parent_layout"
-        android:layout_width="330dp"
+        android:layout_width="500dp"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/spacing_large">
@@ -20,8 +21,8 @@
             android:layout_height="@dimen/spacing_small" />
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/logo"
             android:tint="@color/colorPrimary" />
@@ -36,7 +37,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/spacing_medium"
             android:text="Welcome to mSkola"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Display2"
             android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold" />
 
@@ -46,7 +47,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/spacing_medium"
             android:text="Login to continue"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
             android:textColor="@color/blue_grey_300" />
 
         <View
@@ -56,9 +57,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:text="@string/email_address"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
             android:textColor="@color/blue_grey_700" />
 
         <android.support.design.widget.TextInputLayout
@@ -83,9 +85,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:text="@string/password"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
             android:textColor="@color/blue_grey_700" />
 
         <android.support.design.widget.TextInputLayout
@@ -117,6 +120,7 @@
                 android:layout_alignParentLeft="true"
                 android:onClick="change"
                 android:text="@string/change_password"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead.Inverse"
                 android:textColor="@color/grey_600"
                 android:textStyle="italic" />
 
@@ -127,15 +131,21 @@
                 android:layout_gravity="end"
                 android:onClick="forgot"
                 android:text="@string/forgot_password"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead.Inverse"
                 android:textColor="@color/red_500"
                 android:textStyle="italic" />
         </RelativeLayout>
 
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_xxxlarge" />
+
         <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/keep_signed_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:layout_marginLeft="-4dp"
             android:layout_marginRight="-4dp"
             android:layout_marginTop="@dimen/spacing_middle"
@@ -144,9 +154,6 @@
             android:textStyle="bold"
             android:theme="@style/Checkbox.Blue" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_xlarge" />
 
         <Button
             android:id="@+id/sig_in"

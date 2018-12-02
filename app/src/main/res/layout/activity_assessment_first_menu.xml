@@ -87,8 +87,7 @@
                                 android:layout_width="@dimen/spacing_xxlarge"
                                 android:layout_height="@dimen/spacing_xxlarge"
                                 android:background="@color/blue_100"
-                                app:srcCompat="@drawable/ic_edit_black_24dp"
-                                android:tint="@color/blue_400" />
+                                app:srcCompat="@drawable/ic_edit_black_24dp" />
 
                             <View
                                 android:layout_width="@dimen/spacing_xlarge"
@@ -145,8 +144,7 @@
                                 android:layout_width="@dimen/spacing_xxlarge"
                                 android:layout_height="@dimen/spacing_xxlarge"
                                 android:background="@color/blue_100"
-                                app:srcCompat="@drawable/ic_view_modul"
-                                android:tint="@color/blue_400" />
+                                app:srcCompat="@drawable/ic_view_modul" />
 
                             <View
                                 android:layout_width="@dimen/spacing_xlarge"
@@ -203,8 +201,7 @@
                                 android:layout_width="@dimen/spacing_xxlarge"
                                 android:layout_height="@dimen/spacing_xxlarge"
                                 android:background="@color/blue_100"
-                                android:src="@drawable/id_card"
-                                android:tint="@color/blue_400" />
+                                android:src="@drawable/id_card" />
 
                             <View
                                 android:layout_width="@dimen/spacing_xlarge"

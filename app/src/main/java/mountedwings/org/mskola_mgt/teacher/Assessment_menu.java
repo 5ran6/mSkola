@@ -79,7 +79,7 @@ public class Assessment_menu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_menu);
+        setContentView(R.layout.activity_assessment_menu);
 
         //get stuff from sharedPrefs
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));

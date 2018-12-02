@@ -48,7 +48,7 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="400sp"
+                android:layout_height="300sp"
                 android:layout_margin="@dimen/spacing_large"
                 android:visibility="visible"
                 app:cardCornerRadius="2dp"
@@ -87,8 +87,7 @@
                                 android:layout_width="@dimen/spacing_xxlarge"
                                 android:layout_height="@dimen/spacing_xxlarge"
                                 android:background="@color/blue_100"
-                                android:src="@drawable/edit_property"
-                                android:tint="@color/blue_400" />
+                                android:src="@drawable/edit_property" />
 
                             <View
                                 android:layout_width="@dimen/spacing_xlarge"
@@ -203,8 +202,7 @@
                                 android:layout_width="@dimen/spacing_xxlarge"
                                 android:layout_height="@dimen/spacing_xxlarge"
                                 android:background="@color/blue_100"
-                                android:src="@drawable/sand_timer"
-                                android:tint="@color/blue_400" />
+                                android:src="@drawable/sand_timer" />
 
                             <View
                                 android:layout_width="@dimen/spacing_xlarge"
@@ -236,9 +234,6 @@
 
             </android.support.v7.widget.CardView>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/spacing_large" />
 
         </LinearLayout>
     </RelativeLayout>

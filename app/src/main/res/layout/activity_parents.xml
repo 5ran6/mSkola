@@ -443,7 +443,7 @@
                                 android:contentDescription="@string/app_name"
                                 android:focusable="true"
                                 android:onClick="clear_activities"
-                                android:tint="@color/colorPrimary"
+                                android:tint="@color/grey_90"
                                 app:srcCompat="@drawable/ic_clear_all_black_24dp" />
 
                         </LinearLayout>
