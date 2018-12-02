@@ -20,7 +20,7 @@ import java.util.List;
 
 import mountedwings.org.mskola_mgt.Chat_menu;
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersPromoteStudentsAdapter;
+import mountedwings.org.mskola_mgt.adapter.PromoteStudentsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberPromoteStudents;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.widget.LineItemDecoration;
@@ -43,11 +43,11 @@ public class Chat_List_Students extends AppCompatActivity {
     private int PREFERENCE_MODE_PRIVATE = 0;
     String school_id, staff_id, TAG = "mSkola";
 
-    NumbersPromoteStudentsAdapter adapter;
+    PromoteStudentsAdapter adapter;
 
 
     private RecyclerView recyclerView;
-    private NumbersPromoteStudentsAdapter mAdapter;
+    private PromoteStudentsAdapter mAdapter;
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
     private Toolbar toolbar;
@@ -84,7 +84,7 @@ public class Chat_List_Students extends AppCompatActivity {
 
         fab_done = findViewById(R.id.done);
 
-        adapter = new NumbersPromoteStudentsAdapter(this, numbers);
+        adapter = new PromoteStudentsAdapter(this, numbers);
 
         //school_id/staff id from sharedPrefs
         staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
@@ -105,9 +105,9 @@ public class Chat_List_Students extends AppCompatActivity {
         recyclerView.setHasFixedSize(false);
 
         //set data and list adapter
-        mAdapter = new NumbersPromoteStudentsAdapter(this, numbers);
+        mAdapter = new PromoteStudentsAdapter(this, numbers);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnClickListener(new NumbersPromoteStudentsAdapter.OnClickListener() {
+        mAdapter.setOnClickListener(new PromoteStudentsAdapter.OnClickListener() {
             @Override
             public void onItemClick(View view, NumberPromoteStudents obj, int pos) {
 

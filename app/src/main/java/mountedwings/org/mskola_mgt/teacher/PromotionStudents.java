@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersPromoteStudentsAdapter;
+import mountedwings.org.mskola_mgt.adapter.PromoteStudentsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberPromoteStudents;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -47,7 +47,7 @@ public class PromotionStudents extends AppCompatActivity {
 
 
     private RecyclerView recyclerView;
-    private NumbersPromoteStudentsAdapter mAdapter;
+    private PromoteStudentsAdapter mAdapter;
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
     private Toolbar toolbar;
@@ -104,9 +104,9 @@ public class PromotionStudents extends AppCompatActivity {
         recyclerView.setHasFixedSize(false);
 
         //set data and list adapter
-        mAdapter = new NumbersPromoteStudentsAdapter(this, numbers);
+        mAdapter = new PromoteStudentsAdapter(this, numbers);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnClickListener(new NumbersPromoteStudentsAdapter.OnClickListener() {
+        mAdapter.setOnClickListener(new PromoteStudentsAdapter.OnClickListener() {
             @Override
             public void onItemClick(View view, NumberPromoteStudents obj, int pos) {
 

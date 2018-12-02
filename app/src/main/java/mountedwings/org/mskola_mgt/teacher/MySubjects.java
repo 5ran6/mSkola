@@ -20,7 +20,7 @@ import com.mskola.files.storageFile;
 import java.util.ArrayList;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersMySubjectsAdapter;
+import mountedwings.org.mskola_mgt.adapter.MySubjectsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberMySubjects;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -103,7 +103,7 @@ public class MySubjects extends AppCompatActivity {
                 }
 
                 //set data to adapter
-                NumbersMySubjectsAdapter mAdapter = new NumbersMySubjectsAdapter(MySubjects.this, numbers);
+                MySubjectsAdapter mAdapter = new MySubjectsAdapter(MySubjects.this, numbers);
                 recyclerView.setAdapter(mAdapter);
 
             } else {

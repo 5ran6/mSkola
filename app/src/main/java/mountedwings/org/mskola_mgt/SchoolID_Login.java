@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -46,7 +48,8 @@ public class SchoolID_Login extends AppCompatActivity {
 
     private Spinner recentIds;
     private BroadcastReceiver mReceiver;
-    private int w = 0;
+    private int w = 0, status;
+    private AppCompatButton cont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class SchoolID_Login extends AppCompatActivity {
         verifying = findViewById(R.id.verifying);
         checking = findViewById(R.id.checking);
         recentIds = findViewById(R.id.recent_ids);
+        cont = findViewById(R.id.continued);
         recentIds.setVisibility(View.GONE);
         if (!mPrefsSchoolID.getString("school_id", "").isEmpty()) {
             String schoolIds = mPrefsSchoolID.getString("school_id", "");
@@ -72,7 +76,7 @@ public class SchoolID_Login extends AppCompatActivity {
                 data[i] = schools[(i - 1)];
             }
 
-            ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, data);
+            ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), R.layout.spinner_item, data);
             spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             recentIds.setAdapter(spinnerAdapter1);
 
@@ -99,7 +103,8 @@ public class SchoolID_Login extends AppCompatActivity {
             boolean handled = false;
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideSoftKeyboard();
-                verifyID();
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+                    verifyID();
                 handled = true;
             }
             return handled;
@@ -125,12 +130,16 @@ public class SchoolID_Login extends AppCompatActivity {
 
     public void continued(View view) {
         // check if the ID is valid
-        verifyID();
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            verifyID();
+        else
+            Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+
     }
 
     private void verifyID() {
         //check if the field is empty first
-        if (!school_id.getText().toString().isEmpty()) {
+        if (!school_id.getText().toString().isEmpty() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             //validate from server
             checking.setVisibility(View.VISIBLE);
             //animate textView
@@ -140,16 +149,12 @@ public class SchoolID_Login extends AppCompatActivity {
             animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
             animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
             verifying.startAnimation(animation);
+            cont.setEnabled(false);
+            cont.setTextColor(getResources().getColor(R.color.grey_3));
             new verifySchoolID().execute(school_id.getText().toString().trim());
         } else {
-            Tools.toast("Fill in School ID", SchoolID_Login.this, R.color.yellow_600);
+            Tools.toast("Fill in School ID", SchoolID_Login.this, R.color.yellow_800);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
     }
 
     public class verifySchoolID extends AsyncTask<String, Integer, String> {
@@ -211,8 +216,10 @@ public class SchoolID_Login extends AppCompatActivity {
                 startActivity(intent);
 
             } else if (text.equals("not found")) {
+                cont.setEnabled(true);
                 showCustomDialogFailure("The school ID you provided does not exist, please check the ID and try again.");
             } else {
+                cont.setEnabled(true);
                 showCustomDialogFailure("An error occurred, try again later.");
             }
         }
@@ -246,18 +253,24 @@ public class SchoolID_Login extends AppCompatActivity {
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int status = NetworkUtil.getConnectivityStatusString(context);
-                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED && w < 1) {
-                    Tools.toast("No Internet connection!", SchoolID_Login.this, R.color.red_500);
-                }
                 w++;
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Back Online!", SchoolID_Login.this, R.color.green_800);
-                    } else {
-                        Tools.toast("No Internet connection!", SchoolID_Login.this, R.color.red_500);
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", SchoolID_Login.this, R.color.green_800);
+                        else
+                            verifyID();
+
                     }
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), SchoolID_Login.this, R.color.red_700);
+                    }
+                }).execute();
             }
 
         };
@@ -269,4 +282,11 @@ public class SchoolID_Login extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        finish();
+    }
 }

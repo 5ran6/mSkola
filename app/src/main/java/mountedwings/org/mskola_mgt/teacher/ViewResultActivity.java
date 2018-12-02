@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersViewResultAdapter;
+import mountedwings.org.mskola_mgt.adapter.ViewResultAdapter;
 import mountedwings.org.mskola_mgt.data.NumberViewResult;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
@@ -61,7 +61,7 @@ public class ViewResultActivity extends AppCompatActivity {
     private int status;
 
     ProgressBar loading;
-    private NumbersViewResultAdapter adapter;
+    private ViewResultAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class ViewResultActivity extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(false);
 
-        adapter = new NumbersViewResultAdapter(numbers);
+        adapter = new ViewResultAdapter(numbers);
         list.setAdapter(adapter);
 
 
@@ -209,7 +209,7 @@ public class ViewResultActivity extends AppCompatActivity {
                 }
 
                 //show recyclerView with inflated views
-                adapter = new NumbersViewResultAdapter(numbers);
+                adapter = new ViewResultAdapter(numbers);
                 list.setAdapter(adapter);
 
                 adapter.setOnItemClickListener((view, obj, position) -> {

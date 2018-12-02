@@ -5,12 +5,13 @@
     android:background="@drawable/background_img"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@color/overlay_light_80"
         android:scaleType="centerCrop"
-        android:src="@drawable/image_13" />
+        android:src="@drawable/image_13"
+        android:tint="@color/overlay_light_80" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

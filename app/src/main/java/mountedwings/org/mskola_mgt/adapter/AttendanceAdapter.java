@@ -19,11 +19,11 @@ import mountedwings.org.mskola_mgt.data.Number;
 /**
  * Simple adapter class, used for show all numbers in list
  */
-public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHolder> {
+public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
 
     private ArrayList<Number> numbers;
 
-    public NumbersAdapter(List<Number> numbers) {
+    public AttendanceAdapter(List<Number> numbers) {
         this.numbers = new ArrayList<>(numbers);
     }
 

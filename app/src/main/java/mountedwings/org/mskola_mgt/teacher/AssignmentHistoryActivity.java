@@ -22,7 +22,7 @@ import com.mskola.files.storageFile;
 import java.util.ArrayList;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersAssHistAdapter;
+import mountedwings.org.mskola_mgt.adapter.AssHistAdapter;
 import mountedwings.org.mskola_mgt.data.NumberAssHist;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
@@ -43,7 +43,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
     String school_id, staff_id, TAG = "mSkola";
 
     ProgressBar loading;
-    NumbersAssHistAdapter adapter;
+    AssHistAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(false);
 
-        adapter = new NumbersAssHistAdapter(numbers);
+        adapter = new AssHistAdapter(numbers);
         list.setAdapter(adapter);
 
         //hide parentView
@@ -118,10 +118,10 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                     numbers.add(number);
                 }
                 //show recyclerView with inflated views
-                adapter = new NumbersAssHistAdapter(numbers);
+                adapter = new AssHistAdapter(numbers);
                 list.setAdapter(adapter);
 
-                adapter.setOnItemClickListener(new NumbersAssHistAdapter.OnItemClickListener() {
+                adapter.setOnItemClickListener(new AssHistAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, NumberAssHist obj, int position) {
                         String assignmentId = numbers.get(position).getAssignment();
@@ -196,7 +196,8 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", AssignmentHistoryActivity.this, R.color.green_800);
-                        else new first_loading().execute(school_id, staff_id);
+                        else
+                            new first_loading().execute(school_id, staff_id);
 
                     }
 
@@ -223,6 +224,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
         unregisterReceiver(this.mReceiver);
         w = 0;
         super.onPause();
+        finish();
     }
 
 

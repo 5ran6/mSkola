@@ -44,7 +44,7 @@ public class Tools {
     public static void toast(String message, Activity ctx) {
         View layout = ctx.getLayoutInflater().inflate(R.layout.toast_custom, ctx.findViewById(R.id.custom_toast_layout_id));
         TextView Ttext = layout.findViewById(R.id.text);
-        Ttext.setTextColor(ctx.getResources().getColor(R.color.blue_500));
+        Ttext.setTextColor(ctx.getResources().getColor(R.color.blue_800));
         Ttext.setText(message);
         Toast toast = new Toast(ctx.getApplicationContext());
         toast.setDuration(Toast.LENGTH_SHORT);

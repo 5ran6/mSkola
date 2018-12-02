@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersAchievementsAdapter;
+import mountedwings.org.mskola_mgt.adapter.AchievementsAdapter;
 import mountedwings.org.mskola_mgt.data.NumberAchievements;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -48,7 +48,7 @@ public class AchievementsActivity extends AppCompatActivity {
 
 
     ProgressBar loading;
-    NumbersAchievementsAdapter adapter;
+    AchievementsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class AchievementsActivity extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(false);
 
-        adapter = new NumbersAchievementsAdapter(numbers);
+        adapter = new AchievementsAdapter(numbers);
         list.setAdapter(adapter);
 
         //hide parentView
@@ -127,7 +127,7 @@ public class AchievementsActivity extends AppCompatActivity {
                     numbers.add(number);
                 }
                 //show recyclerView with inflated views
-                adapter = new NumbersAchievementsAdapter(numbers);
+                adapter = new AchievementsAdapter(numbers);
                 list.setAdapter(adapter);
             } else {
                 Tools.toast("No achievements found", AchievementsActivity.this, R.color.yellow_800);

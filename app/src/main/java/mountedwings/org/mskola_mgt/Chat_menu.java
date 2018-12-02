@@ -24,7 +24,7 @@ import com.mskola.files.storageFile;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import mountedwings.org.mskola_mgt.adapter.NumbersChatMenuAdapter;
+import mountedwings.org.mskola_mgt.adapter.ChatMenuAdapter;
 import mountedwings.org.mskola_mgt.data.NumberChat;
 import mountedwings.org.mskola_mgt.data.NumberChatParentsList;
 import mountedwings.org.mskola_mgt.data.NumberChatStaffList;
@@ -53,7 +53,7 @@ public class Chat_menu extends AppCompatActivity {
     private ArrayList<NumberChatParentsList> parents_list = new ArrayList<>();
 
     private ProgressBar loading;
-    NumbersChatMenuAdapter adapter;
+    ChatMenuAdapter adapter;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
 
@@ -95,7 +95,7 @@ public class Chat_menu extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(false);
 
-        adapter = new NumbersChatMenuAdapter(numbers);
+        adapter = new ChatMenuAdapter(numbers);
         list.setAdapter(adapter);
         //hide parentView
         loading.setVisibility(View.VISIBLE);
@@ -203,7 +203,7 @@ public class Chat_menu extends AppCompatActivity {
                 }
 
                 //show recyclerView with inflated views
-                adapter = new NumbersChatMenuAdapter(numbers);
+                adapter = new ChatMenuAdapter(numbers);
                 list.setAdapter(adapter);
                 adapter.setOnItemClickListener((view, obj, position) -> {
                     String recipient = numbers.get(position).getEmail();

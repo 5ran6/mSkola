@@ -23,7 +23,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 /**
  * Simple adapter class, used for show all numbers in list
  */
-public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersPromoteStudentsAdapter.ViewHolder> {
+public class PromoteStudentsAdapter extends RecyclerView.Adapter<PromoteStudentsAdapter.ViewHolder> {
     private Context ctx;
     private SparseBooleanArray selected_items;
     private int current_selected_idx = -1;
@@ -33,7 +33,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
     public ArrayList<String> selected = new ArrayList();
     private OnClickListener onClickListener = null;
 
-    public NumbersPromoteStudentsAdapter(Context context, List<NumberPromoteStudents> numbers) {
+    public PromoteStudentsAdapter(Context context, List<NumberPromoteStudents> numbers) {
         this.ctx = context;
         this.numbers = new ArrayList<>(numbers);
         selected_items = new SparseBooleanArray();
@@ -75,7 +75,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
     }
 
 
-    private void displayImage(NumbersPromoteStudentsAdapter.ViewHolder holder, NumberPromoteStudents inbox) {
+    private void displayImage(PromoteStudentsAdapter.ViewHolder holder, NumberPromoteStudents inbox) {
         if (inbox.image != null) {
             Tools.displayImageRound(ctx, holder.image, inbox.image);
             holder.image.setColorFilter(null);
@@ -87,7 +87,7 @@ public class NumbersPromoteStudentsAdapter extends RecyclerView.Adapter<NumbersP
         }
     }
 
-    private void toggleCheckedIcon(NumbersPromoteStudentsAdapter.ViewHolder holder, int position) {
+    private void toggleCheckedIcon(PromoteStudentsAdapter.ViewHolder holder, int position) {
         if (selected_items.get(position, false)) {
             holder.lyt_image.setVisibility(View.GONE);
             holder.lyt_checked.setVisibility(View.VISIBLE);

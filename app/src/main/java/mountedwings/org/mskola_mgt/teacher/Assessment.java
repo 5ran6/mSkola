@@ -82,8 +82,6 @@ public class Assessment extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
 
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new first_loading().execute(school_id, class_name, arm, assessment, subject);
     }
 
 
@@ -540,6 +538,8 @@ public class Assessment extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", Assessment.this, R.color.green_800);
+                        else
+                            new first_loading().execute(school_id, class_name, arm, assessment, subject);
                     }
 
                     @Override

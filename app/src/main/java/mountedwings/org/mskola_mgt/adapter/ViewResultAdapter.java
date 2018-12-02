@@ -21,12 +21,12 @@ import mountedwings.org.mskola_mgt.data.NumberViewResult;
 /**
  * Simple adapter class, used for show all numbers in list
  */
-public class NumbersViewResultAdapter extends RecyclerView.Adapter<NumbersViewResultAdapter.ViewHolder> {
+public class ViewResultAdapter extends RecyclerView.Adapter<ViewResultAdapter.ViewHolder> {
 
     private ArrayList<NumberViewResult> numbers;
     private OnItemClickListener mOnItemClickListener;
 
-    public NumbersViewResultAdapter(List<NumberViewResult> numbers) {
+    public ViewResultAdapter(List<NumberViewResult> numbers) {
         this.numbers = new ArrayList<>(numbers);
     }
 

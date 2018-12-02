@@ -24,7 +24,7 @@ import com.mskola.files.storageFile;
 import java.util.ArrayList;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.NumbersAdapter;
+import mountedwings.org.mskola_mgt.adapter.AttendanceAdapter;
 import mountedwings.org.mskola_mgt.data.Number;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
@@ -49,7 +49,7 @@ public class AttendanceActivity extends AppCompatActivity {
 
     String date, school_id, class_name, arm, TAG = "mSkola";
     ProgressBar loading;
-    NumbersAdapter adapter;
+    AttendanceAdapter adapter;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
 
@@ -236,7 +236,7 @@ public class AttendanceActivity extends AppCompatActivity {
                         numbers.add(number);
                     }
                     //show recyclerView with inflated views
-                    adapter = new NumbersAdapter(numbers);
+                    adapter = new AttendanceAdapter(numbers);
                     list.setAdapter(adapter);
                 } else {
                     // display an EMPTY error dialog and return to previous activity

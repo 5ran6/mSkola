@@ -17,28 +17,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.data.NumberChat;
+import mountedwings.org.mskola_mgt.data.NumberAchievements;
 
 /**
- * Simple adapter class, used for show all messages in list
+ * Simple adapter class, used for show all numbers in list
  */
-public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenuAdapter.ViewHolder> {
+public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapter.ViewHolder> {
 
-    private ArrayList<NumberChat> numbers;
+    ArrayList<NumberAchievements> numbers;
     private OnItemClickListener mOnItemClickListener;
 
-    public NumbersChatMenuAdapter(List<NumberChat> numbers) {
+    public AchievementsAdapter(List<NumberAchievements> numbers) {
         this.numbers = new ArrayList<>(numbers);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_menu, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_achievements, parent, false);
         return new ViewHolder(v);
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, NumberChat obj, int position);
+        void onItemClick(View view, NumberAchievements obj, int position);
     }
 
     @Override
@@ -48,10 +48,14 @@ public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenu
         holder.cardView.setOnClickListener(v -> {
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(v, numbers.get(position), position);
-                setOnItemClickListener((view, obj, position1) ->
-                        Log.i("mSkola", numbers.get(position).getRecipient()));
-
+                setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, NumberAchievements obj, int position) {
+                        Log.i("mSkola", numbers.get(position).getachievement());
+                    }
+                });
             }
+
         });
     }
 
@@ -69,28 +73,27 @@ public class NumbersChatMenuAdapter extends RecyclerView.Adapter<NumbersChatMenu
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView msg;
-        private TextView recipient;
-        private TextView date;
+        // each data item is just a string in this case
+        private TextView achievement;
+        private TextView title;
         private ImageView passport;
         private CardView cardView;
 
         private ViewHolder(View v) {
             super(v);
-            msg = v.findViewById(R.id.msg);
-            recipient = v.findViewById(R.id.recipient);
+            achievement = v.findViewById(R.id.title);
+            title = v.findViewById(R.id.title);
             passport = v.findViewById(R.id.image);
             cardView = v.findViewById(R.id.parent_layout);
-            date = v.findViewById(R.id.date);
-
         }
 
-        private void bindData(NumberChat number) {
-            recipient.setText(number.getRecipient().toUpperCase());
-            msg.setText(number.getmsg());
-            date.setText(number.getdate());
+        private void bindData(NumberAchievements number) {
+            title.setText(number.gettitle().toUpperCase());
+            achievement.setText(number.getachievement());
+
             Bitmap bitmap = BitmapFactory.decodeByteArray(number.getImageFile(), 0, number.getImageFile().length);
             passport.setImageBitmap(bitmap);
+
         }
     }
 
