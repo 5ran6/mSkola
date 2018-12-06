@@ -151,9 +151,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
 
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            String text = sentData.getStrData();
-
-            return text;
+            return sentData.getStrData();
         }
 
         @Override
@@ -171,7 +169,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                 }
 
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
 
         }

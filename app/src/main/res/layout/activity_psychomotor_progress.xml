@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_20"
+    android:background="@drawable/background_img"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -22,7 +22,7 @@
                 android:id="@+id/students_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".3"
+                android:layout_weight=".2"
                 android:background="@android:color/white"
                 android:maxLines="1"
                 android:minHeight="@dimen/spacing_xlarge"
@@ -35,7 +35,7 @@
                 android:id="@+id/steps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".7"
+                android:layout_weight=".8"
                 android:background="@android:color/darker_gray"
                 android:maxLines="1"
                 android:minHeight="@dimen/spacing_xlarge"
@@ -73,7 +73,7 @@
                     android:layout_weight=".3"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
                         android:id="@+id/passport"
@@ -81,6 +81,7 @@
                         android:layout_height="100sp"
                         android:layout_gravity="center"
                         android:contentDescription="@string/app_name"
+                        android:padding="@dimen/spacing_small"
                         android:src="@drawable/avatar" />
 
                     <LinearLayout
@@ -107,25 +108,26 @@
                             android:background="@color/gray_blue"
                             android:gravity="center"
                             android:text="VALUE"
-                            android:textColor="@color/Black"
+                            android:textColor="@color/grey_90"
                             android:textStyle="bold|italic" />
 
                     </LinearLayout>
                 </LinearLayout>
-
-                <ListView
-                    android:id="@+id/psycho_skills"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".7"
-                    android:visibility="visible" />
 
                 <ProgressBar
                     android:id="@+id/loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".7"
+                    android:visibility="visible" />
+
 
             </LinearLayout>
 
@@ -133,11 +135,13 @@
         </android.support.v4.widget.NestedScrollView>
 
         <LinearLayout
+            android:id="@+id/bottom_Layout"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:layout_alignParentBottom="true"
             android:background="@color/grey_3"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/lyt_back"

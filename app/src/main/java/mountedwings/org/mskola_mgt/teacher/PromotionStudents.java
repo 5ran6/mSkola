@@ -42,7 +42,6 @@ public class PromotionStudents extends AppCompatActivity {
 
     //    private RecyclerView list;
     private FloatingActionButton fab_done;
-    private int PREFERENCE_MODE_PRIVATE = 0;
     String school_id, staff_id, TAG = "mSkola";
 
 
@@ -74,6 +73,7 @@ public class PromotionStudents extends AppCompatActivity {
     }
 
     private void initComponent() {
+        int PREFERENCE_MODE_PRIVATE = 0;
         SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
 
         Intent intent = getIntent();

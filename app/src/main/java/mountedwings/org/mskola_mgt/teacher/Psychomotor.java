@@ -9,6 +9,8 @@ import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,10 +27,14 @@ import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.utils.ViewAnimation;
+import mountedwings.org.mskola_mgt.adapter.PsychomotorAdapter;
+import mountedwings.org.mskola_mgt.data.NumberPsychomotor;
+import mountedwings.org.mskola_mgt.utils.Tools;
+import mountedwings.org.mskola_mgt.widget.LineItemDecoration;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
@@ -39,6 +45,7 @@ public class Psychomotor extends AppCompatActivity {
     private int MAX_STEP = 20;
     private int current_step = 1;
 
+    private ArrayList<NumberPsychomotor> numbers = new ArrayList<>();
     private ArrayList<String> students = new ArrayList<>();
     private ArrayList<String> skills = new ArrayList<>();
     private ArrayList<String> regNo = new ArrayList<>();
@@ -46,13 +53,18 @@ public class Psychomotor extends AppCompatActivity {
     private ArrayList<byte[]> allPassport_aPerson = new ArrayList<>();
     private ProgressBar progressBar, loading;
     private TextView heading;
-    private ListView listView;
     private int no_skills;
     private String TAG = "mSkola";
     private String school_id;
     private String class_name;
     private String arm;
     private ImageView passport;
+    private RecyclerView recyclerView;
+    private PsychomotorAdapter mAdapter;
+    private String values_to_send = "";
+    private String ps_values = "";
+    private LinearLayout bottomLayout;
+    private boolean isEmpty = true;
 
     //DONE
     @Override
@@ -72,13 +84,14 @@ public class Psychomotor extends AppCompatActivity {
         passport = findViewById(R.id.passport);
 
         loading = findViewById(R.id.loading);
+        bottomLayout = findViewById(R.id.bottom_Layout);
+        bottomLayout.setVisibility(View.GONE);
         progressBar = findViewById(R.id.progress);
         progressBar.setVisibility(View.INVISIBLE);
         loading.setVisibility(View.VISIBLE);
         Intent intent = getIntent();
         class_name = intent.getStringExtra("class_name");
         arm = intent.getStringExtra("arm");
-        listView = findViewById(R.id.psycho_skills);
 
         new first_loading().execute(school_id, class_name, arm);
         // new first_loading().execute(school_id, "JSS1", "A");
@@ -91,6 +104,10 @@ public class Psychomotor extends AppCompatActivity {
 
 //        String str_progress = String.format(getString(R.string.step_of), current_step, MAX_STEP);
         ((TextView) findViewById(R.id.steps)).setText("---/---");
+        recyclerView = findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.addItemDecoration(new LineItemDecoration(getApplicationContext(), LinearLayout.VERTICAL));
+        recyclerView.setHasFixedSize(false);
 
     }
 
@@ -139,7 +156,6 @@ public class Psychomotor extends AppCompatActivity {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
                 //       Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-
                 allPassport_aPerson = data.getImageFiles();
 
                 String rows[] = text.split("<>");
@@ -189,17 +205,26 @@ public class Psychomotor extends AppCompatActivity {
                 String rows[] = text.split(";");
                 no_skills = rows.length;
 
-                for (String row : rows) {
+                for (int i = 0; i < rows.length; i++) {
+                    String row = rows[i];
+                    NumberPsychomotor number = new NumberPsychomotor();
                     skills.add(row.split(",")[1]);
+                    number.setskill(skills.get(i));
+                    numbers.add(number);
+                    ps_values += ";" + skills.get(i);
                 }
-                //                Toast.makeText(getApplicationContext(), String.valueOf(no_skills) + ": " + skills.get(1), Toast.LENGTH_SHORT).show();
+                ps_values = ps_values.substring(1, ps_values.length());
+                Toast.makeText(getApplicationContext(), ps_values, Toast.LENGTH_SHORT).show();
+                //set data and list adapter
+                mAdapter = new PsychomotorAdapter(numbers);
+                recyclerView.setAdapter(mAdapter);
             } else {
-                Toast.makeText(getApplicationContext(), "No skill set found", Toast.LENGTH_SHORT).show();
+                Tools.toast("No skill-set found", Psychomotor.this);
                 finish();
             }
             //finally
 
-            new loadPsychoValue().execute(regNo);
+            new loadAllPsychoValue().execute(regNo);
 
 
         }
@@ -243,12 +268,6 @@ public class Psychomotor extends AppCompatActivity {
         areYouSure();
     }
 
-
-    //--------------GREAT WALL OF CHINA-----------------
-    //--------------GREAT WALL OF CHINA-----------------
-    //--------------GREAT WALL OF CHINA-----------------
-    //--------------GREAT WALL OF CHINA-----------------
-
     private void load() {
         String[] skill_names = new String[no_skills];
         String[] skills_values = new String[no_skills];
@@ -261,7 +280,7 @@ public class Psychomotor extends AppCompatActivity {
             } else {
                 skills_values[x] = allSkills_aPerson.get(current_step - 1).split(";")[x];
             }
-            Toast.makeText(getApplicationContext(), skills_values[x], Toast.LENGTH_SHORT).show();
+            //     Toast.makeText(getApplicationContext(), skills_values[x], Toast.LENGTH_SHORT).show();
         }
 
         //  skillList customAdapter = new skillList();
@@ -269,59 +288,95 @@ public class Psychomotor extends AppCompatActivity {
     }
 
     private void nextStep(int progress) {
-        new savePsychoSkills().execute();
+        Toast.makeText(getApplicationContext(), "The value = " + Arrays.toString(mAdapter.getSkill_values_array()), Toast.LENGTH_SHORT).show();
+        //concat string here
+        for (int i = 0; i < no_skills; i++) {
+            values_to_send += ";" + mAdapter.getSkill_values_array()[i];
+        }
+        Toast.makeText(getApplicationContext(), "The string = " + values_to_send, Toast.LENGTH_SHORT).show();
+        //     new savePsychoSkills().execute();
+        if (values_to_send.contains("null")) {
+            values_to_send = values_to_send.replace("null", "_");
+        }
+        values_to_send = values_to_send.substring(1, values_to_send.length());
+        Toast.makeText(getApplicationContext(), "The new string = " + values_to_send, Toast.LENGTH_SHORT).show();
+//        int step = current_step;
+        Log.d(TAG, String.valueOf(mAdapter.isItEmpty()));
+        if (!mAdapter.isItEmpty())
+            new savePsychoSkills().execute(ps_values, values_to_send);
+        values_to_send = "";
+        Toast.makeText(getApplicationContext(), String.valueOf(current_step), Toast.LENGTH_SHORT).show();
+
         if (progress < MAX_STEP) {
             progress++;
             current_step = progress;
             //            ViewAnimation.fadeOutIn(status);
+            new loadPsychoValue().execute();
         }
+
         String str_progress = String.format(getString(R.string.step_of), current_step, MAX_STEP);
         ((TextView) findViewById(R.id.steps)).setText(str_progress);
         progressBar.setProgress(current_step);
 
         //LOAD EVERYTHING
         // - Name
-        ViewAnimation.fadeOutIn(heading);
-        heading.setText(String.format("Name: %s", students.get(current_step - 1)));
+        //      ViewAnimation.fadeOutIn(heading);
+        heading.setText(String.format("%s", students.get(current_step - 1)));
 
         // - Passport
         Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(current_step - 1), 0, allPassport_aPerson.get(current_step - 1).length);
         passport.setImageBitmap(bitmap);
 
 
-        loading.setVisibility(View.VISIBLE);
-        load();
-        loading.setVisibility(View.GONE);
-
+        //load();
+        Toast.makeText(getApplicationContext(), String.valueOf(current_step), Toast.LENGTH_SHORT).show();
     }
 
     private void backStep(int progress) {
-        new savePsychoSkills().execute();
+        Toast.makeText(getApplicationContext(), "The value = " + Arrays.toString(mAdapter.getSkill_values_array()), Toast.LENGTH_SHORT).show();
+        //concat string here
+        for (int i = 0; i < no_skills; i++) {
+            values_to_send += ";" + mAdapter.getSkill_values_array()[i];
+        }
+        Toast.makeText(getApplicationContext(), "The string = " + values_to_send, Toast.LENGTH_SHORT).show();
+        //     new savePsychoSkills().execute();
+        if (values_to_send.contains("null")) {
+            values_to_send = values_to_send.replace("null", "_");
+        }
+        values_to_send = values_to_send.substring(1, values_to_send.length());
+        Toast.makeText(getApplicationContext(), new StringBuilder().append("The new string = ").append(values_to_send).toString(), Toast.LENGTH_SHORT).show();
+//        int step = current_step;
+        Log.d(TAG, String.valueOf(mAdapter.isItEmpty()));
+        if (!mAdapter.isItEmpty())
+            new savePsychoSkills().execute(ps_values, values_to_send);
+        values_to_send = "";
+        Toast.makeText(getApplicationContext(), String.valueOf(current_step), Toast.LENGTH_SHORT).show();
+
         if (progress > 1) {
             progress--;
             current_step = progress;
+            new loadPsychoValue().execute();
         }
         String str_progress = String.format(getString(R.string.step_of), current_step, MAX_STEP);
-
         ((TextView) findViewById(R.id.steps)).setText(str_progress);
         progressBar.setProgress(current_step);
 
         //LOAD EVERYTHING
         // - Name
-        ViewAnimation.fadeOutIn(heading);
-        heading.setText(String.format("Name: %s", students.get(current_step - 1)));
+        //      ViewAnimation.fadeOutIn(heading);
+        heading.setText(String.format("%s", students.get(current_step - 1)));
 
         // - Passport
         Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(current_step - 1), 0, allPassport_aPerson.get(current_step - 1).length);
         passport.setImageBitmap(bitmap);
 
-        // - Skills and Values
-        loading.setVisibility(View.VISIBLE);
-        load();
-        loading.setVisibility(View.GONE);
+
+        //load();
+        Toast.makeText(getApplicationContext(), String.valueOf(current_step), Toast.LENGTH_SHORT).show();
+
     }
 
-    private class loadPsychoValue extends AsyncTask<ArrayList<String>, Integer, Boolean> {
+    private class loadAllPsychoValue extends AsyncTask<ArrayList<String>, Integer, Boolean> {
 
         @Override
         protected Boolean doInBackground(ArrayList... strings) {
@@ -355,7 +410,6 @@ public class Psychomotor extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), allSkills_aPerson.toString(), Toast.LENGTH_SHORT).show();
                 //TODO: From here
 
-
                 load();
                 Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(0), 0, allPassport_aPerson.get(current_step - 1).length);
                 passport.setImageBitmap(bitmap);
@@ -369,17 +423,18 @@ public class Psychomotor extends AppCompatActivity {
                 progressBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
                 heading = findViewById(R.id.students_name);
-                heading.setText(String.format("Name: %s", students.get(0)));
+                heading.setText(String.format("%s", students.get(0)));
 
 
                 //Load LIN_LAYS
 
-                listView.setVisibility(View.VISIBLE);
+                //    listView.setVisibility(View.VISIBLE);
 
             } else {
                 Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
             }
 
+            bottomLayout.setVisibility(View.VISIBLE);
             loading.setVisibility(View.GONE);
             //set passport, get name, step, psycho skills names and regNo
 
@@ -387,50 +442,19 @@ public class Psychomotor extends AppCompatActivity {
             // List of psycho skill     - Done
             // passport                 - Done
             // regNo                    - Done
+            new loadPsychoValue().execute();
         }
     }
 
     private class savePsychoSkills extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            //pre
-            String values_to_send = "";
-            String ps_values = "";
-            // TODO
-            /*
-            for (int i = 0; i < no_skills; i++) {
-                if (values_to_send.isEmpty()) {
-                    if (new skillList().getItemId(i) == R.id.psycho_skills) {
-                        values_to_send = "_";
-                    } else {
-                        values_to_send = myClass.psValues[i].getText();
-                    }
-                } else {
-                    if (myClass.psValues[i].getText().isEmpty()) {
-                        values_to_send += ";_";
-                    } else {
-                        values_to_send += ";" + myClass.psValues[i].getText();
-                    }
-                }
-
-                //to get all the psychomotor skills
-                if (ps_values.isEmpty()) {
-                    ps_values = myClass.allPSSkills.get(i).toString();
-                } else {
-                    ps_values += ";" + myClass.allPSSkills.get(i).toString();
-                }
-            }
-*/
-
             storageFile storageObj = new storageFile();
             data = storageObj;
-
-
             storageObj.setOperation("savepsychomotorvalues");
-
-            storageObj.setStrData(school_id + "<>" + regNo.get(current_step - 1) + "<>" + ps_values + "<>" + values_to_send);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            data = sentData;
+            storageObj.setStrData(school_id + "<>" + regNo.get(current_step - 1) + "<>" + strings[0] + "<>" + strings[1]);
+            //     storageObj.setStrData(school_id + "<>" + regNo.get(current_step - 1) + "<>" + ps_values + "<>" + values_to_send);
+            data = new serverProcess().requestProcess(storageObj);
             String text = data.getStrData();
             Log.d(TAG, text);
             return text;
@@ -439,20 +463,71 @@ public class Psychomotor extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            loading.setVisibility(View.VISIBLE);
+            loading.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            loading.setVisibility(View.GONE);
             if (text.equals("success")) {
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                Tools.toast(text, Psychomotor.this);
             } else {
-                Toast.makeText(getApplicationContext(), "Couldn't save previous record. Try again", Toast.LENGTH_SHORT).show();
+                Tools.toast("Couldn't save previous record. Try again", Psychomotor.this, R.color.red_500);
             }
 
         }
 
     }
 
+    private class loadPsychoValue extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            data = storageObj;
+            storageObj.setOperation("getstudentpsychomotor");
+            storageObj.setStrData(school_id + "<>" + regNo.get(current_step - 1));
+            //     storageObj.setStrData(school_id + "<>" + regNo.get(current_step - 1) + "<>" + ps_values + "<>" + values_to_send);
+            data = new serverProcess().requestProcess(storageObj);
+            String text = data.getStrData();
+            Log.d(TAG, text);
+            return text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            loading.setVisibility(View.GONE);
+            numbers.clear();
+            if (!text.isEmpty() && !text.equals("0")) {
+                String[] rows = text.split(";");
+                for (int i = 0; i < no_skills; i++) {
+//setText to edit text on recyclerview
+                    NumberPsychomotor numberPsychomotor = new NumberPsychomotor();
+                    numberPsychomotor.setskill(skills.get(i));
+                    numberPsychomotor.setvalue(rows[i]);
+                    numbers.add(numberPsychomotor);
+                    Log.d(TAG, rows[i]);
+                }
+
+            } else {
+                for (int i = 0; i < no_skills; i++) {
+//clearText to edit text on recyclerview
+                    NumberPsychomotor numberPsychomotor = new NumberPsychomotor();
+                    numberPsychomotor.setskill(skills.get(i));
+                    numberPsychomotor.setvalue("");
+                    numbers.add(numberPsychomotor);
+                    Log.d(TAG, "empty");
+                }
+            }
+            mAdapter = new PsychomotorAdapter(numbers);
+            recyclerView.setAdapter(mAdapter);
+        }
+    }
 }

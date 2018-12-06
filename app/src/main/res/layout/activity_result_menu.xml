@@ -22,7 +22,7 @@
 
             <View
                 android:layout_width="0dp"
-                android:layout_height="@dimen/spacing_xlarge" />
+                android:layout_height="@dimen/spacing_micro" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
 
             <View
                 android:layout_width="0dp"
-                android:layout_height="@dimen/spacing_mxlarge" />
+                android:layout_height="@dimen/spacing_large" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"

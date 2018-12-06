@@ -25,7 +25,6 @@ import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
-import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -56,6 +55,7 @@ public class Psychomotor_menu extends AppCompatActivity {
 
         progressBar2 = findViewById(R.id.progress2);
         progressBar2.setVisibility(View.INVISIBLE);
+        new initialLoad().execute(school_id, staff_id);
 
 
         select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -97,16 +97,16 @@ public class Psychomotor_menu extends AppCompatActivity {
 
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() && !arm.isEmpty()) {
-                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                    Intent intent1 = new Intent(getBaseContext(), Psychomotor.class);
-                    intent1.putExtra("school_id", school_id);
-                    intent1.putExtra("class_name", class_name);
-                    intent1.putExtra("arm", arm);
-                    intent1.putExtra("email_address", staff_id);
-                    startActivity(intent1);
-                } else {
-                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-                }
+                //    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                Intent intent1 = new Intent(getBaseContext(), Psychomotor.class);
+                intent1.putExtra("school_id", school_id);
+                intent1.putExtra("class_name", class_name);
+                intent1.putExtra("arm", arm);
+                intent1.putExtra("email_address", staff_id);
+                startActivity(intent1);
+//                } else {
+//                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+//                }
             } else {
                 Tools.toast("Fill all necessary fields", Psychomotor_menu.this, R.color.yellow_800);
             }
@@ -116,8 +116,8 @@ public class Psychomotor_menu extends AppCompatActivity {
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadArms().execute(school_id, staff_id, class_name);
+        //  if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        new loadArms().execute(school_id, staff_id, class_name);
     }
 
 
@@ -226,8 +226,8 @@ public class Psychomotor_menu extends AppCompatActivity {
                         status = 1;
                         if (w > 1)
                             Tools.toast("Back Online! Try again", Psychomotor_menu.this, R.color.green_800);
-                        else
-                            new initialLoad().execute(school_id, staff_id);
+                        //    else
+                        //                     new initialLoad().execute(school_id, staff_id);
                     }
 
                     @Override
