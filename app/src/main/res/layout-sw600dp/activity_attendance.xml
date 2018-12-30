@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_100"
+    android:fitsSystemWindows="true"
+    tools:context=".teacher.AttendanceActivity">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:showIn="@layout/activity_attendance">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="85sp"
+            android:weightSum="1">
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight=".3"
+                android:elevation="1dp"
+                card_view:cardBackgroundColor="@color/cardview_light_background"
+                card_view:cardCornerRadius="4dp"
+                tools:targetApi="lollipop">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/blue_500"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:text="S/No"
+                        android:textAppearance="?android:attr/textAppearanceMediumInverse"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.3"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="NAMES"
+                        android:textAppearance="?android:attr/textAppearanceLargeInverse"
+                        android:textStyle="italic" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".4"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".3"
+                            android:gravity="top|center"
+                            android:text="MARK ALL"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                            android:textDirection="firstStrong"
+                            android:textSize="6sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".7"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum=".4">
+
+                            <CheckBox
+                                android:id="@+id/all_checkbox1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.2" />
+
+                            <CheckBox
+                                android:id="@+id/all_checkbox2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.2" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="visible" />
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".7"
+                android:background="@color/White"
+                android:gravity="end"
+                android:text="Morn.|Aftrn."
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                android:textStyle="italic" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/app_bar_layout"
+            android:scrollbars="vertical"
+            android:scrollingCache="true" />
+
+        <View
+            android:id="@+id/back_drop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/overlay_dark_30"
+            android:clickable="true"
+            android:fitsSystemWindows="true"
+            android:focusable="true" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="end|right"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/lyt_mic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end|right"
+                    android:layout_margin="@dimen/spacing_middle"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="2dp"
+                    app:contentPadding="@dimen/spacing_medium">
+
+                    <TextView
+                        android:id="@+id/pub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Public Holidays"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_hols"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:layout_marginLeft="@dimen/spacing_smlarge"
+                    android:layout_marginRight="@dimen/spacing_smlarge"
+                    android:layout_marginTop="@dimen/spacing_middle"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:tint="@color/grey_80"
+                    app:backgroundTint="@android:color/white"
+                    app:fabSize="mini"
+                    app:rippleColor="@android:color/black"
+                    app:srcCompat="@drawable/ic_event_available_black_24dp" />
+
+                <View
+                    android:layout_width="@dimen/spacing_xmedium"
+                    android:layout_height="0dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyt_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end|right"
+                    android:layout_margin="@dimen/spacing_middle"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="2dp"
+                    app:contentPadding="@dimen/spacing_medium">
+
+                    <TextView
+                        android:id="@+id/sav"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Save"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:layout_marginLeft="@dimen/spacing_smlarge"
+                    android:layout_marginRight="@dimen/spacing_smlarge"
+                    android:layout_marginTop="@dimen/spacing_middle"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:tint="@color/grey_80"
+                    app:backgroundTint="@android:color/white"
+                    app:fabSize="mini"
+                    app:rippleColor="@android:color/black"
+                    app:srcCompat="@drawable/ic_save_black_24dp" />
+
+                <View
+                    android:layout_width="@dimen/spacing_xmedium"
+                    android:layout_height="0dp" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/see_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_middle"
+                android:layout_marginLeft="@dimen/spacing_smlarge"
+                android:layout_marginRight="@dimen/spacing_smlarge"
+                android:layout_marginTop="@dimen/spacing_middle"
+                android:clickable="true"
+                android:focusable="true"
+                android:tint="@android:color/white"
+                app:backgroundTint="@color/colorPrimary"
+                app:fabSize="normal"
+                app:rippleColor="@android:color/white"
+                app:srcCompat="@drawable/ic_add" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

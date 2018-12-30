@@ -121,7 +121,7 @@
         <activity android:name=".parent.SingleChild_menu" />
         <activity android:name=".parent.Assessment_menu" />
         <activity android:name=".parent.AssessmentView" />
-        <activity android:name=".parent.ResultActivity"></activity>
+        <activity android:name=".parent.ResultActivity" />
     </application>
 
 </manifest>

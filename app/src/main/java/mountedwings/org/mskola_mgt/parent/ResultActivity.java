@@ -8,8 +8,10 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -19,16 +21,19 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
 public class ResultActivity extends AppCompatActivity {
-    private ImageButton bt_toggle_student_info;
-    private View lyt_expand_student_info;
     private NestedScrollView nested_scroll_view;
-    private TextView school_name, school_address, students_info, students_details;
+    private ImageButton bt_toggle_student_info, bt_toggle_result, bt_toggle_result_summary, bt_toggle_result_keys, bt_toggle_psychomotor;
+    private View lyt_expand_student_info, lyt_expand_result_summary, lyt_expand_keys, lyt_expand_psychomotor;
+    private TextView school_name, school_address, students_info, keys_tv, pschomotor_tv, result_summary_tv, students_details;
     private CircularImageView school_logo;
     private BottomSheetBehavior mBehavior;
     private BottomSheetDialog mBottomSheetDialog;
     private View bottom_sheet;
+    private ViewGroup result;
+    private LinearLayout result_layout;
+    private String location = "Mbayande Gboko", email = "cac@gmail.com", website = "www.livingseed.org", full_address = "You know my fulll address dude", calendar = "Resumption = 5th January, 2019; Mid term = NIL; Vacation = We shall post that soon";
 
-    private String location, email, website, full_address, calendar;
+//    private String location, email, website, full_address, calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,17 @@ public class ResultActivity extends AppCompatActivity {
 
     private void initComponents() {
         // nested scrollview
-        nested_scroll_view = findViewById(R.id.nested_scroll_view);
+        nested_scroll_view = findViewById(R.id.nested_content);
+        result_layout = findViewById(R.id.result);
+
+//        result.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        result.addView(new TableMainLayoutOriginal(this));
+        result_layout.addView(new TableMainLayoutOriginal(this));
+        school_name = findViewById(R.id.school_name);
+        school_name.setText("Calvary Arrows College");
+        school_address = findViewById(R.id.address);
+        school_address.setText(full_address);
+
         //TODO: we display the uncertain text first before the certain text
 
         // students textView header
@@ -56,8 +71,35 @@ public class ResultActivity extends AppCompatActivity {
         toggleArrow(bt_toggle_student_info);
         lyt_expand_student_info.setVisibility(View.VISIBLE);
 
+        // section result summary
+        bt_toggle_result_summary = findViewById(R.id.bt_toggle_result_summary);
+        lyt_expand_result_summary = findViewById(R.id.lyt_expand_result_summary);
+        bt_toggle_result_summary.setOnClickListener(view -> toggleSection(view, lyt_expand_result_summary));
+
+        // section keys
+        bt_toggle_result_keys = findViewById(R.id.bt_toggle_keys);
+        lyt_expand_keys = findViewById(R.id.lyt_expand_keys);
+        bt_toggle_result_keys.setOnClickListener(view -> toggleSection(view, lyt_expand_keys));
+
+        // section psychomotor
+        bt_toggle_psychomotor = findViewById(R.id.bt_toggle_psychomotor);
+        lyt_expand_psychomotor = findViewById(R.id.lyt_expand_psychomotor);
+        bt_toggle_psychomotor.setOnClickListener(view -> toggleSection(view, lyt_expand_psychomotor));
+
+
         bottom_sheet = findViewById(R.id.bottom_sheet);
         mBehavior = BottomSheetBehavior.from(bottom_sheet);
+
+        // result section description
+        bt_toggle_result = findViewById(R.id.bt_toggle_result);
+//        bt_toggle_result.setOnClickListener(view -> toggleSection1(view, new TableMainLayoutOriginal(this)));
+        bt_toggle_result.setOnClickListener(view -> {
+            toggleSection1(view);
+            if (result_layout.getVisibility() == View.VISIBLE)
+                result_layout.setVisibility(View.GONE);
+            else
+                result_layout.setVisibility(View.VISIBLE);
+        });
 
     }
 
@@ -73,6 +115,10 @@ public class ResultActivity extends AppCompatActivity {
         } else {
             ViewAnimation.collapse(lyt);
         }
+    }
+
+    private void toggleSection1(View bt) {
+        toggleArrow(bt);
     }
 
     public boolean toggleArrow(View view) {

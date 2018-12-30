@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_10">
@@ -17,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -27,7 +26,7 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/spacing_middle"
                 android:layout_marginLeft="@dimen/spacing_large"
                 android:layout_marginRight="@dimen/spacing_large"
@@ -38,7 +37,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/spacing_micro">
@@ -60,6 +59,7 @@
                         android:gravity="center"
                         android:maxLines="2"
                         android:text="CALVARY ARROWS COLLEGE "
+                        android:textAllCaps="true"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                         android:textColor="@color/grey_90" />
 
@@ -81,23 +81,28 @@
                         android:maxLines="1"
                         android:text="FIRST TERM RESULT"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/grey_40" />
+                        android:textColor="@color/green_400" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:background="@color/grey_5" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_large"
+                        android:layout_marginTop="@dimen/spacing_small"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
 
                         <ImageButton
                             android:layout_width="?android:attr/actionBarSize"
                             android:layout_height="?android:attr/actionBarSize"
-                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:background="@color/white_transparency"
                             android:onClick="location"
                             android:tint="@color/grey_20"
-                            app:srcCompat="@drawable/ic_location"
-                            tools:targetApi="lollipop" />
+                            app:srcCompat="@drawable/ic_location" />
 
                         <View
                             android:layout_width="@dimen/spacing_xlarge"
@@ -106,11 +111,10 @@
                         <ImageButton
                             android:layout_width="?android:attr/actionBarSize"
                             android:layout_height="?android:attr/actionBarSize"
-                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:background="@color/white_transparency"
                             android:onClick="website"
                             android:tint="@color/grey_20"
-                            app:srcCompat="@drawable/ic_language_black_24dp"
-                            tools:targetApi="lollipop" />
+                            app:srcCompat="@drawable/ic_language_black_24dp" />
 
                         <View
                             android:layout_width="@dimen/spacing_xlarge"
@@ -119,11 +123,10 @@
                         <ImageButton
                             android:layout_width="?android:attr/actionBarSize"
                             android:layout_height="?android:attr/actionBarSize"
-                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:background="@color/white_transparency"
                             android:onClick="email"
                             android:tint="@color/grey_20"
-                            app:srcCompat="@drawable/ic_email"
-                            tools:targetApi="lollipop" />
+                            app:srcCompat="@drawable/ic_email" />
 
                     </LinearLayout>
 
@@ -198,6 +201,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:background="@color/grey_5" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -210,7 +219,7 @@
                             android:layout_height="?android:attr/actionBarSize"
                             android:background="@android:color/transparent"
                             android:tint="@color/grey_60"
-                            app:srcCompat="@drawable/ic_error_outline" />
+                            app:srcCompat="@drawable/ic_person" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -218,7 +227,7 @@
                             android:layout_weight="1"
                             android:text="Student Information"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/grey_80" />
+                            android:textColor="@color/black" />
 
                         <View
                             android:layout_width="@dimen/spacing_large"
@@ -228,10 +237,9 @@
                             android:id="@+id/bt_toggle_student_info"
                             android:layout_width="?android:attr/actionBarSize"
                             android:layout_height="?android:attr/actionBarSize"
-                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:background="@color/white_transparency"
                             android:tint="@color/grey_60"
-                            app:srcCompat="@drawable/ic_arrow_drop"
-                            tools:targetApi="lollipop" />
+                            app:srcCompat="@drawable/ic_arrow_drop" />
 
                     </LinearLayout>
 
@@ -268,8 +276,284 @@
                             android:text="@string/demo_name"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_90"
-                            android:textStyle="italic" />
+                            android:textStyle="normal" />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:background="@color/grey_5" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="?android:attr/actionBarSize"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_info" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="View Result"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="wrap_content" />
+
+                        <ImageButton
+                            android:id="@+id/bt_toggle_result"
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@color/white_transparency"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_arrow_drop" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:background="@color/grey_5" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="?android:attr/actionBarSize"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_reoder" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Result Summary"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="wrap_content" />
+
+                        <ImageButton
+                            android:id="@+id/bt_toggle_result_summary"
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@color/white_transparency"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_arrow_drop" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lyt_expand_result_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_middle"
+                        android:layout_marginEnd="@dimen/spacing_smlarge"
+                        android:layout_marginLeft="?android:attr/actionBarSize"
+                        android:layout_marginRight="@dimen/spacing_smlarge"
+                        android:layout_marginStart="?android:attr/actionBarSize"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/spacing_large"
+                        android:paddingTop="@dimen/spacing_medium"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:id="@+id/result_summary"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/demo_name"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@color/grey_90"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:background="@color/grey_5" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="?android:attr/actionBarSize"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_format_list_bulleted" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Key to Grading"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="wrap_content" />
+
+                        <ImageButton
+                            android:id="@+id/bt_toggle_keys"
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@color/white_transparency"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_arrow_drop" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lyt_expand_keys"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_middle"
+                        android:layout_marginEnd="@dimen/spacing_smlarge"
+                        android:layout_marginLeft="?android:attr/actionBarSize"
+                        android:layout_marginRight="@dimen/spacing_smlarge"
+                        android:layout_marginStart="?android:attr/actionBarSize"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/spacing_large"
+                        android:paddingTop="@dimen/spacing_medium"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/keys"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/demo_name"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@color/grey_90"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:background="@color/grey_5" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:minHeight="?android:attr/actionBarSize"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_directions_run_black_24dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Psychomotor Skills"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="wrap_content" />
+
+                        <ImageButton
+                            android:id="@+id/bt_toggle_psychomotor"
+                            android:layout_width="?android:attr/actionBarSize"
+                            android:layout_height="?android:attr/actionBarSize"
+                            android:background="@color/white_transparency"
+                            android:tint="@color/grey_60"
+                            app:srcCompat="@drawable/ic_arrow_drop" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lyt_expand_psychomotor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_middle"
+                        android:layout_marginEnd="@dimen/spacing_smlarge"
+                        android:layout_marginLeft="?android:attr/actionBarSize"
+                        android:layout_marginRight="@dimen/spacing_smlarge"
+                        android:layout_marginStart="?android:attr/actionBarSize"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/spacing_large"
+                        android:paddingTop="@dimen/spacing_medium"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/psychomotor_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.6"
+                            android:background="@color/grey_5"
+                            android:text="Handwriting:"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/psychomotor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:gravity="center"
+                            android:text="5"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@color/grey_90"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:background="@color/grey_5" />
 
                 </LinearLayout>
 
