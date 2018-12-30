@@ -177,6 +177,8 @@
     <string name="reveal_body3">View layout change animation with Circular Reveal Animation on finish</string>
     <string name="reveal_body4">Circular Reveal Animation from top with nested animations on end</string>
     <string name="assessment_menu">Assessment Menu</string>
+    <string name="assessment_information">Assessment Information</string>
+    <string name="result_information">Result Information</string>
 
 
 </resources>

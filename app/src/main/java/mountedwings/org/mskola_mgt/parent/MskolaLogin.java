@@ -1,4 +1,4 @@
-package mountedwings.org.mskola_mgt;
+package mountedwings.org.mskola_mgt.parent;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -15,16 +15,19 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mskola.controls.serverProcess;
+import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
-import mountedwings.org.mskola_mgt.teacher.Dashboard;
+import mountedwings.org.mskola_mgt.ChangePassword;
+import mountedwings.org.mskola_mgt.ForgotPassword;
+import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -186,31 +189,27 @@ public class MskolaLogin extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("requestlogin");
-            storageObj.setStrData(emailAddress + "," + password + "," + school_id);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageObj.setStrData(emailAddress + "," + password);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 
             //received from server
             text = sentData.getStrData();
             boolean isSuccess;
             if (text.contains("success")) {
                 isSuccess = true;
-                //          Log.d(TAG, "registration successful");
+                Log.d(TAG, "registration successful");
             } else if (text.contains("invalid")) {
                 isSuccess = false;
                 error_from_server = "Email and password mismatch. Try again";
-                //        Log.d(TAG, error_from_server);
+                Log.d(TAG, error_from_server);
             } else if (text.contains("not found")) {
                 isSuccess = false;
                 error_from_server = "Looks like you don't have an mSkola account. Make sure you register before login";
-                //      Log.d(TAG, error_from_server);
-            } else if (text.contains("no access")) {
-                isSuccess = false;
-                error_from_server = "You do not have access to this school. Contact the schools' admin to verify your account";
-                //    Log.d(TAG, error_from_server);
+                Log.d(TAG, error_from_server);
             } else {
                 isSuccess = false;
                 error_from_server = "An error occurred!";
-                //  Log.d(TAG, error_from_server);
+                Log.d(TAG, error_from_server);
             }
             return isSuccess;
         }
@@ -224,21 +223,18 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
-
                 intent = new Intent(getApplicationContext(), Dashboard.class);
 
                 //sharedPref
                 editor = mPrefs.edit();
                 editor.putBoolean("signed_in", true);
                 editor.putString("account_type", role);
-                editor.putString("staff_id", text.split("<>")[1]);
                 editor.putString("email_address", emailE.getText().toString());
 
                 editor.apply();
 
                 intent.putExtra("email_address", emailE.getText().toString());
-                intent.putExtra("school_role", text.split("<>")[1]);
-                new dashboardInfo().execute(school_id, emailE.getText().toString());
+                startActivity(intent);
 
             } else {
                 showCustomDialogFailure(error_from_server);
@@ -246,63 +242,6 @@ public class MskolaLogin extends AppCompatActivity {
 
             }
         }
-    }
-
-
-    //DONE
-    private class dashboardInfo extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            data = storageObj;
-
-            storageObj.setOperation("getinfoonlogin");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            data = sentData;
-            String text = sentData.getStrData();
-            return text;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-            if (!text.equals("0") && !text.equals("")) {
-                String rows[] = text.split("<>");
-                school = rows[0];
-                name = rows[2];
-//              school = rows[2];
-                pass = data.getImageFiles().get(0);
-
-
-                //finally and intent
-                lyt_progress.setVisibility(View.GONE);
-
-                //sharedPref
-                editor = mPrefs.edit();
-                editor.putString("name", name);
-                editor.putString("school", school);
-                editor.putString("email_address", emailE.getText().toString());
-                editor.putString("pass", android.util.Base64.encodeToString(pass, android.util.Base64.NO_WRAP));
-                editor.apply();
-
-                intent.putExtra("name", name);
-                intent.putExtra("school", school);
-                intent.putExtra("pass", pass);
-                startActivity(intent);
-
-            } else {
-                Tools.toast("An error occurred", MskolaLogin.this, R.color.red_800);
-            }
-            finish();
-        }
-
     }
 
 

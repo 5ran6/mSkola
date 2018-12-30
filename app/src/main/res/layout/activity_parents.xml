@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_img"
     android:fitsSystemWindows="true"
-    tools:context=".parent.Parents"
+    tools:context=".parent.Dashboard"
     tools:ignore="NewApi">
 
     <android.support.design.widget.AppBarLayout
@@ -114,70 +114,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
-                            app:cardBackgroundColor="@color/deep_orange_500"
-                            app:cardCornerRadius="2dp"
-                            app:cardElevation="2dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="?android:attr/actionBarSize"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-
-                                    <View
-                                        android:layout_width="@dimen/spacing_large"
-                                        android:layout_height="wrap_content" />
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="Chat"
-                                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                                        android:textColor="@android:color/white"
-                                        android:textStyle="italic" />
-
-                                    <ImageButton
-                                        android:layout_width="?android:attr/actionBarSize"
-                                        android:layout_height="?android:attr/actionBarSize"
-                                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                                        android:tint="@android:color/white"
-                                        app:srcCompat="@drawable/ic_email" />
-
-                                </LinearLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_margin="@dimen/spacing_large"
-                                        android:maxLines="1"
-                                        android:text="MESSAGES"
-                                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                        android:textColor="@android:color/white" />
-
-                                </RelativeLayout>
-
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/spacing_medium"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:foreground="?android:attr/selectableItemBackground"
+                            android:onClick="academics"
                             app:cardBackgroundColor="@color/deep_orange_500"
                             app:cardCornerRadius="2dp"
                             app:cardElevation="2dp">
@@ -210,6 +147,7 @@
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
                                         android:background="?android:attr/selectableItemBackgroundBorderless"
+                                        android:focusable="false"
                                         android:tint="@android:color/white"
                                         app:srcCompat="@drawable/ic_person_outline" />
 
@@ -234,6 +172,73 @@
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
 
+                        <android.support.v7.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/spacing_medium"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:onClick="settings"
+                            app:cardBackgroundColor="@color/deep_orange_500"
+                            app:cardCornerRadius="2dp"
+                            app:cardElevation="2dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="?android:attr/actionBarSize"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <View
+                                        android:layout_width="@dimen/spacing_large"
+                                        android:layout_height="wrap_content" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Settings"
+                                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                                        android:textColor="@android:color/white"
+                                        android:textStyle="italic" />
+
+                                    <ImageButton
+                                        android:layout_width="?android:attr/actionBarSize"
+                                        android:layout_height="?android:attr/actionBarSize"
+                                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                                        android:clickable="false"
+                                        android:focusable="false"
+                                        android:tint="@android:color/white"
+                                        app:srcCompat="@drawable/ic_settings" />
+
+                                </LinearLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_margin="@dimen/spacing_large"
+                                        android:maxLines="1"
+                                        android:text="MY MSKOLA"
+                                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                        android:textColor="@android:color/white" />
+
+                                </RelativeLayout>
+
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -250,6 +255,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
+                            android:onClick="fees"
                             app:cardBackgroundColor="@color/teal_700"
                             app:cardCornerRadius="2dp"
                             app:cardElevation="2dp">
@@ -302,6 +308,8 @@
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
                                         android:background="?android:attr/selectableItemBackgroundBorderless"
+                                        android:clickable="false"
+                                        android:focusable="false"
                                         android:tint="@android:color/white"
                                         app:srcCompat="@drawable/ic_credit_card"
                                         tools:targetApi="lollipop" />
@@ -317,6 +325,7 @@
                             android:layout_margin="@dimen/spacing_medium"
                             android:layout_weight="1"
                             android:clickable="true"
+                            android:onClick="information"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
                             app:cardBackgroundColor="@color/teal_700"
@@ -371,6 +380,8 @@
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
                                         android:background="?android:attr/selectableItemBackgroundBorderless"
+                                        android:clickable="false"
+                                        android:focusable="false"
                                         android:tint="@android:color/white"
                                         app:srcCompat="@drawable/ic_description" />
 
@@ -493,16 +504,29 @@
 
                     </LinearLayout>
 
+
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_large" />
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_smlarge"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="chat"
+                android:tint="@android:color/white"
+                app:backgroundTint="@color/green_400"
+                app:fabSize="normal"
+                app:layout_anchor="@id/passport"
+                app:layout_anchorGravity="bottom|end|right"
+                app:rippleColor="@android:color/white"
+                app:srcCompat="@drawable/ic_email" />
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
 
 </android.support.design.widget.CoordinatorLayout>

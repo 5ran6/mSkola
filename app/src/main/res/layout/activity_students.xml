@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_img"
     android:fitsSystemWindows="true"
-    tools:context=".parent.Parents"
+    tools:context=".parent.Dashboard"
     tools:ignore="NewApi">
 
     <android.support.design.widget.AppBarLayout

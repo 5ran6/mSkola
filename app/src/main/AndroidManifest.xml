@@ -53,7 +53,7 @@
         <activity
             android:name=".student.Login_SignUp"
             android:screenOrientation="portrait" />
-        <activity android:name=".parent.Parents" />
+        <activity android:name=".parent.Dashboard" />
         <activity android:name=".student.Students" />
         <activity android:name=".Chat" />
         <activity android:name=".SettingFlat" />
@@ -116,6 +116,12 @@
             android:name=".ChangePassword"
             android:screenOrientation="portrait" />
         <activity android:name=".Splash" />
+        <activity android:name=".parent.MskolaLogin" />
+        <activity android:name=".parent.ChildsList" />
+        <activity android:name=".parent.SingleChild_menu" />
+        <activity android:name=".parent.Assessment_menu" />
+        <activity android:name=".parent.AssessmentView" />
+        <activity android:name=".parent.ResultActivity"></activity>
     </application>
 
 </manifest>

@@ -50,20 +50,13 @@ public class PsychomotorAdapter extends RecyclerView.Adapter<PsychomotorAdapter.
         holder.value.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (holder.value.getText().toString().isEmpty()) {
-                    skill_values_array[holder.getAdapterPosition()] = "_";
-                    isEmpty = true;
-                } else {
-                    skill_values_array[holder.getAdapterPosition()] = String.valueOf(holder.value.getText().toString());
-                    isEmpty = false;
-                }
-
+                skill_values_array[holder.getAdapterPosition()] = String.valueOf(holder.value.getText().toString());
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (holder.value.getText().toString().isEmpty()) {
-                    skill_values_array[holder.getAdapterPosition()] = "_";
+//                    skill_values_array[holder.getAdapterPosition()] = "_";
                     isEmpty = true;
                 } else {
                     skill_values_array[holder.getAdapterPosition()] = String.valueOf(holder.value.getText().toString());
@@ -73,6 +66,7 @@ public class PsychomotorAdapter extends RecyclerView.Adapter<PsychomotorAdapter.
 
             @Override
             public void afterTextChanged(Editable s) {
+//                skill_values_array[holder.getAdapterPosition()] = String.valueOf(holder.value.getText().toString());
 
             }
         });
