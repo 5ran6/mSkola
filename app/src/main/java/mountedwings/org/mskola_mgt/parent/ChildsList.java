@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mskola.controls.serverProcess;
+import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class ChildsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_child);
-        //     Tools.toast("Requesting results.....", this, R.color.green_600);
+        //     Tools.toast("Requesting results.....", this);
         Intent intent = getIntent();
 
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
@@ -83,7 +83,7 @@ public class ChildsList extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), obj.getSchoolId(), Toast.LENGTH_SHORT).show();
             Toast.makeText(getApplicationContext(), obj.getRegNo(), Toast.LENGTH_SHORT).show();
             //sends the students' regNo and name(for menu header)
-            startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("", obj.getRegNo()).putExtra("", obj.getName()).putExtra("class_name", obj.getClass_name()));
+            startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("student_reg_no", obj.getRegNo()).putExtra("student_name", obj.getName()).putExtra("class_name", obj.getClass_name() + " " + obj.getArm()));
         });
     }
 
@@ -102,7 +102,7 @@ public class ChildsList extends AppCompatActivity {
 
             storageObj.setOperation("getchildren");
             storageObj.setStrData(strings[0]);
-            data = new serverProcess().requestProcess(storageObj);
+            data = new serverProcessParents().requestProcess(storageObj);
 
             return data.getStrData();
         }
@@ -125,14 +125,16 @@ public class ChildsList extends AppCompatActivity {
                     name.add(rows[i].split(";")[1]);
                     schoolId.add(rows[i].split(";")[2]);
                     schoolName.add(rows[i].split(";")[3]);
-                    class_name.add(rows[i].split(";")[4]);
+//                    class_name.add(rows[i].split(";")[4]);
 
                     NumberChildrenList numberChildrenList = new NumberChildrenList();
                     numberChildrenList.setRegNo(rows[i].split(";")[0]);
                     numberChildrenList.setName(rows[i].split(";")[1]);
                     numberChildrenList.setSchoolId(rows[i].split(";")[2]);
                     numberChildrenList.setSchoolName(rows[i].split(";")[3]);
-//                    numberChildrenList.setClass_name(rows[i].split(";")[4]);
+                    numberChildrenList.setClass_name(rows[i].split(";")[4]);  //seems it's not yet in the API
+                    numberChildrenList.setArm(rows[i].split(";")[5]);  //seems it's not yet in the API
+
                     numberChildrenList.setImage(allPassport_aPerson.get(i));
                     numbers.add(numberChildrenList);
                     loading.setVisibility(View.GONE);

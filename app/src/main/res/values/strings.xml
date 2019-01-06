@@ -179,6 +179,7 @@
     <string name="assessment_menu">Assessment Menu</string>
     <string name="assessment_information">Assessment Information</string>
     <string name="result_information">Result Information</string>
+    <string name="search">Search</string>
 
 
 </resources>

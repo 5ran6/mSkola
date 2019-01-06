@@ -337,8 +337,8 @@ public class View_Scores_menu extends AppCompatActivity {
             super.onPostExecute(text);
             progressBar.setVisibility(View.GONE);
 
-            if (!text.equals("0") && !text.isEmpty() && !text.equals("##3") && !text.equals("##9")) {
-                scores.setNoCas(Integer.parseInt(text.split("##")[1]) + 2); // + 2 for EXAM aand TOTAL
+            if (!text.equals("0") && !text.isEmpty()) {
+                scores.setNoCas(Integer.parseInt(text.split("##")[1]) + 2); // + 2 for EXAM and TOTAL
                 int no_cas = Integer.parseInt(text.split("##")[1]);
                 text = text.split("##")[0];
 

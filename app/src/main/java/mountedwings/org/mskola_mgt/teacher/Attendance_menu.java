@@ -118,7 +118,7 @@ public class Attendance_menu extends AppCompatActivity {
 
 
         load.setOnClickListener(v -> {
-            if (!class_name.equals("") && !date.equals("") && !arm.equals("")) {
+            if (!class_name.equals("") && !date.getText().equals("") && !arm.equals("")) {
                 if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                     Intent intent1 = new Intent(getBaseContext(), AttendanceActivity.class);
                     intent1.putExtra("school_id", school_id);

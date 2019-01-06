@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.scores;
+import mountedwings.org.mskola_mgt.data.result;
 
 public class TableMainLayout extends RelativeLayout {
 
     public final String TAG = "TableMainLayout.java";
 
     // set the header titles
-    String headers[] = new String[scores.getHEADERS().size()];
+    String headers[] = new String[result.getHEADERS().size()];
 
     TableLayout tableA;
     TableLayout tableB;
@@ -48,8 +48,8 @@ public class TableMainLayout extends RelativeLayout {
         super(context);
         this.context = context;
 
-        for (int i = 0; i < scores.getHEADERS().size(); i++) {
-            headers[i] = scores.getHEADERS().get(i);
+        for (int i = 0; i < result.getHEADERS().size(); i++) {
+            headers[i] = result.getHEADERS().get(i);
         }
 
         headerCellsWidth = new int[headers.length];
@@ -94,22 +94,26 @@ public class TableMainLayout extends RelativeLayout {
 
         List<SampleObject> sampleObjects = new ArrayList<>();
 
-        for (int x = 0; x < scores.getNoStudents(); x++) {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
 
             SampleObject sampleObject = new SampleObject(
-                    scores.getNAMES().get(x),
-                    scores.getCA1().get(x),
-                    scores.getCA2().get(x),
-                    scores.getCA3().get(x),
-                    scores.getCA4().get(x),
-                    scores.getCA5().get(x),
-                    scores.getCA6().get(x),
-                    scores.getCA7().get(x),
-                    scores.getCA8().get(x),
-                    scores.getCA9().get(x),
-                    scores.getCA10().get(x),
-                    scores.getEXAM().get(x),
-                    scores.getTOTAL().get(x)
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getCA4().get(x),
+                    result.getCA5().get(x),
+                    result.getCA6().get(x),
+                    result.getCA7().get(x),
+                    result.getCA8().get(x),
+                    result.getCA9().get(x),
+                    result.getCA10().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
             );
 
             sampleObjects.add(sampleObject);
@@ -210,7 +214,7 @@ public class TableMainLayout extends RelativeLayout {
         params.setMargins(2, 0, 0, 0);
 
 //        for (int x = 0; x < (headerFieldCount - 1); x++) {
-        for (int x = 0; x < scores.getNoCas(); x++) {
+        for (int x = 0; x < result.getNoCas(); x++) {
             TextView textView = this.headerTextView(this.headers[x + 1]);
             textView.setLayoutParams(params);
             componentBTableRow.addView(textView);
@@ -221,11 +225,6 @@ public class TableMainLayout extends RelativeLayout {
 
     // generate table row of table C and table D
     private void generateTableC_AndTable_B() {
-
-//        // just seeing some header cell width
-//        for (int x = 0; x < this.headerCellsWidth.length; x++) {
-//            Log.v("TableMainLayout.java", this.headerCellsWidth[x] + "");
-//        }
 
         for (SampleObject sampleObject : this.sampleObjects) {
 
@@ -248,7 +247,7 @@ public class TableMainLayout extends RelativeLayout {
         params.setMargins(0, 2, 0, 0);
 
         TableRow tableRowForTableC = new TableRow(this.context);
-        TextView textView = this.namesTextView(sampleObject.NAME);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
         tableRowForTableC.addView(textView, params);
 
         return tableRowForTableC;
@@ -257,16 +256,19 @@ public class TableMainLayout extends RelativeLayout {
     TableRow taleRowForTableD(SampleObject sampleObject) {
 
         TableRow taleRowForTableD = new TableRow(this.context);
-
-        if (scores.getNoCas() == 5) {
+        if (result.getNoCas() == 9) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
                     sampleObject.CA3,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
@@ -274,16 +276,20 @@ public class TableMainLayout extends RelativeLayout {
                 taleRowForTableD.addView(textViewB, params);
             }
 
-        } else if (scores.getNoCas() == 6) {
+        } else if (result.getNoCas() == 10) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
                     sampleObject.CA3,
                     sampleObject.CA4,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
@@ -292,7 +298,7 @@ public class TableMainLayout extends RelativeLayout {
             }
 
 
-        } else if (scores.getNoCas() == 7) {
+        } else if (result.getNoCas() == 11) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
@@ -300,9 +306,13 @@ public class TableMainLayout extends RelativeLayout {
                     sampleObject.CA4,
                     sampleObject.CA5,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
@@ -311,7 +321,7 @@ public class TableMainLayout extends RelativeLayout {
             }
 
 
-        } else if (scores.getNoCas() == 8) {
+        } else if (result.getNoCas() == 12) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
@@ -320,9 +330,13 @@ public class TableMainLayout extends RelativeLayout {
                     sampleObject.CA5,
                     sampleObject.CA6,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
@@ -331,7 +345,7 @@ public class TableMainLayout extends RelativeLayout {
             }
 
 
-        } else if (scores.getNoCas() == 9) {
+        } else if (result.getNoCas() == 13) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
@@ -341,9 +355,13 @@ public class TableMainLayout extends RelativeLayout {
                     sampleObject.CA6,
                     sampleObject.CA7,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
@@ -352,7 +370,7 @@ public class TableMainLayout extends RelativeLayout {
             }
 
 
-        } else if (scores.getNoCas() == 10) {
+        } else if (result.getNoCas() == 14) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
@@ -363,9 +381,13 @@ public class TableMainLayout extends RelativeLayout {
                     sampleObject.CA7,
                     sampleObject.CA8,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
@@ -374,7 +396,7 @@ public class TableMainLayout extends RelativeLayout {
             }
 
 
-        } else if (scores.getNoCas() == 11) {
+        } else if (result.getNoCas() == 15) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
@@ -386,9 +408,13 @@ public class TableMainLayout extends RelativeLayout {
                     sampleObject.CA8,
                     sampleObject.CA9,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
@@ -397,7 +423,7 @@ public class TableMainLayout extends RelativeLayout {
             }
 
 
-        } else if (scores.getNoCas() == 12) {
+        } else if (result.getNoCas() == 16) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
@@ -410,20 +436,21 @@ public class TableMainLayout extends RelativeLayout {
                     sampleObject.CA9,
                     sampleObject.CA10,
                     sampleObject.EXAM,
-                    sampleObject.TOTAL
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
             };
-            for (int x = 0; x < scores.getNoCas(); x++) {
+            for (int x = 0; x < result.getNoCas(); x++) {
                 TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
                 params.setMargins(2, 2, 0, 0);
 
                 TextView textViewB = this.bodyTextView(info[x]);
                 taleRowForTableD.addView(textViewB, params);
             }
-
-
         }
         //    int loopCount = ((TableRow) this.tableB.getChildAt(0)).getChildCount();
-
 
         return taleRowForTableD;
 

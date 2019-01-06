@@ -20,14 +20,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.mskola.controls.serverProcess;
+import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
 import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.teacher.Assessment;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -95,6 +94,7 @@ public class Assessment_menu extends AppCompatActivity {
         parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
         student_reg_no = getIntent().getStringExtra("student_reg_no");
+        class_name = getIntent().getStringExtra("class_name");
 
         TextView load = findViewById(R.id.load);
         select_term = findViewById(R.id.select_term);
@@ -185,7 +185,7 @@ public class Assessment_menu extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getstudentassessment");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             return sentData.getStrData();
         }
 
@@ -204,8 +204,7 @@ public class Assessment_menu extends AppCompatActivity {
             super.onPostExecute(text);
             //text = Exams;CA1;C2;CA3........;STUDENT NAME##NO OF CAs
             if (!text.equals("0") && !text.isEmpty()) {
-                Intent intent1 = new Intent(getBaseContext(), Assessment.class);
-                intent1.putExtra("school_id", school_id);
+                Intent intent1 = new Intent(getBaseContext(), AssessmentView.class);
                 intent1.putExtra("session", session);
                 intent1.putExtra("term", term);
                 intent1.putExtra("subject", subject);
@@ -236,7 +235,7 @@ public class Assessment_menu extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getstudentsubjects");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             return sentData.getStrData();
         }
 
@@ -287,7 +286,7 @@ public class Assessment_menu extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getallsessions");
             storageObj.setStrData(strings[0]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             return sentData.getStrData();
         }
 

@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.mskola.controls.serverProcess;
+import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
 import java.util.Collections;
@@ -145,7 +145,7 @@ public class Result_menu extends AppCompatActivity {
                 // new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
                 if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                     //    new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
-                    startActivity(new Intent(this, ResultActivity.class));
+                    startActivity(new Intent(this, ResultActivity.class).putExtra("term", term).putExtra("session", session).putExtra("student_reg_no", student_reg_no));
                 } else {
                     Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
                 }
@@ -165,7 +165,7 @@ public class Result_menu extends AppCompatActivity {
 //            storageFile storageObj = new storageFile();
 //            storageObj.setOperation("getstudentassessment");
 //            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4]);
-//            storageFile sentData = new serverProcess().requestProcess(storageObj);
+//            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 //            return sentData.getStrData();
 //        }
 //
@@ -214,7 +214,7 @@ public class Result_menu extends AppCompatActivity {
 //            storageFile storageObj = new storageFile();
 //            storageObj.setOperation("getstudentsubjects");
 //            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
-//            storageFile sentData = new serverProcess().requestProcess(storageObj);
+//            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 //            return sentData.getStrData();
 //        }
 //
@@ -265,7 +265,7 @@ public class Result_menu extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getallsessions");
             storageObj.setStrData(strings[0]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             return sentData.getStrData();
         }
 

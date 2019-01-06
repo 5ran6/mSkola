@@ -19,13 +19,17 @@ public class AssessmentView extends AppCompatActivity {
     private ParentAssessmentView adapter;
     private String text, session, term, subject, class_name, TAG = "mSkola";
     private RecyclerView list;
-    private TextView name;
+    private TextView name, subject_name, class_term, current_session;
     private ArrayList<String> cas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_assessment_view);
+        current_session = findViewById(R.id.session);
+        class_term = findViewById(R.id.class_term);
+        subject_name = findViewById(R.id.subject);
+
         initToolbar();
         list = findViewById(R.id.assessments);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -37,10 +41,13 @@ public class AssessmentView extends AppCompatActivity {
         term = getIntent().getStringExtra("term");
         subject = getIntent().getStringExtra("subject");
         class_name = getIntent().getStringExtra("class_name");
-        text = getIntent().getStringExtra("text");
-        text = getIntent().getStringExtra("text");
+        //heading
+        subject_name.setText(subject.toUpperCase());
+        class_term.setText(String.format("%s - %s Term", class_name, term));
+        current_session.setText(session);
 
-        // substring
+
+        // substring text and inflate accordingly
         substring(text);
         adapter = new ParentAssessmentView(numbers);
         list.setAdapter(adapter);
@@ -146,8 +153,12 @@ public class AssessmentView extends AppCompatActivity {
         }
 
         String[] scores = string.split(";");
+
+        //inflate all the other stuff
         name.setText(scores[cas.size()].toUpperCase());
-        for (int i = 1; i <= cas.size(); i++) {
+
+
+        for (int i = 1; i <= cas.size() + 1; i++) {
             NumberParentAssessmentView number = new NumberParentAssessmentView();
             number.setCa(cas.get(i));
             number.setScore(scores[i]);

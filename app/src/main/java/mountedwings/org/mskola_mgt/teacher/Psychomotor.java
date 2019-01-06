@@ -39,7 +39,7 @@ public class Psychomotor extends AppCompatActivity {
 
     private storageFile data;
     private int MAX_STEP = 20;
-    private int current_step = 1;
+    private int current_step = 0;
 
     private ArrayList<NumberPsychomotor> numbers = new ArrayList<>();
     private ArrayList<String> students = new ArrayList<>();
@@ -272,18 +272,17 @@ public class Psychomotor extends AppCompatActivity {
         String str_progress = String.format(getString(R.string.step_of), current_step, MAX_STEP);
         ((TextView) findViewById(R.id.steps)).setText(str_progress);
         progressBar.setProgress(current_step);
-        heading.setText(String.format("%s", students.get(current_step - 1)));
+        heading.setText(String.format("%s", students.get(current_step)));
 
         // - Passport
-        Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(current_step - 1), 0, allPassport_aPerson.get(current_step - 1).length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(current_step), 0, allPassport_aPerson.get(current_step).length);
         passport.setImageBitmap(bitmap);
     }
 
     private void backStep(int progress) {
         //concat string here
-        for (int i = 0; i < no_skills; i++) {
+        for (int i = 0; i < no_skills; i++)
             values_to_send += ";" + mAdapter.getSkill_values_array()[i];
-        }
         //     new savePsychoSkills().execute();
         if (values_to_send.contains("null")) {
             values_to_send = values_to_send.replace("null", "_");
@@ -302,10 +301,10 @@ public class Psychomotor extends AppCompatActivity {
         ((TextView) findViewById(R.id.steps)).setText(str_progress);
         progressBar.setProgress(current_step);
 
-        heading.setText(String.format("%s", students.get(current_step - 1)));
+        heading.setText(String.format("%s", students.get(current_step)));
 
         // - Passport
-        Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(current_step - 1), 0, allPassport_aPerson.get(current_step - 1).length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(current_step), 0, allPassport_aPerson.get(current_step).length);
         passport.setImageBitmap(bitmap);
 
     }
@@ -339,7 +338,7 @@ public class Psychomotor extends AppCompatActivity {
         protected void onPostExecute(Boolean done) {
             super.onPostExecute(done);
             if (done) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(0), 0, allPassport_aPerson.get(current_step - 1).length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(allPassport_aPerson.get(0), 0, allPassport_aPerson.get(current_step).length);
                 passport.setImageBitmap(bitmap);
 
                 String str_progress = String.format(getString(R.string.step_of), current_step, MAX_STEP);
@@ -370,7 +369,7 @@ public class Psychomotor extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             data = storageObj;
             storageObj.setOperation("savepsychomotorvalues");
-            storageObj.setStrData(school_id + "<>" + regNo.get(current_step - 1) + "<>" + strings[0] + "<>" + strings[1]);
+            storageObj.setStrData(school_id + "<>" + regNo.get(current_step) + "<>" + strings[0] + "<>" + strings[1]);
             data = new serverProcess().requestProcess(storageObj);
             return data.getStrData();
         }

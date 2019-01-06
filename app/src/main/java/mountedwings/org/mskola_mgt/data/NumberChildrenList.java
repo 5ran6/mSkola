@@ -6,6 +6,16 @@ public class NumberChildrenList {
     private String schoolId;
     private String schoolName;
     private String class_name;
+    private String arm;
+
+
+    public String getArm() {
+        return arm;
+    }
+
+    public void setArm(String arm) {
+        this.arm = arm;
+    }
     private byte[] Image;
 
     public String getRegNo() {
