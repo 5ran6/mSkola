@@ -180,6 +180,7 @@
     <string name="assessment_information">Assessment Information</string>
     <string name="result_information">Result Information</string>
     <string name="search">Search</string>
+    <string name="list_children">List of Children</string>
 
 
 </resources>

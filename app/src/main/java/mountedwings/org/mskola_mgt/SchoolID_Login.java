@@ -188,39 +188,43 @@ public class SchoolID_Login extends AppCompatActivity {
                 }
             });
 
-            if (text.equals("found")) {
-                //save school_id to sharedPrefs
-                //check if there's already a sheared pref, create or edit
+            switch (text) {
+                case "found":
+                    //save school_id to sharedPrefs
+                    //check if there's already a sheared pref, create or edit
 
-                SharedPreferences.Editor editor = mPrefs.edit();
-                SharedPreferences.Editor editorSchoolID = mPrefsSchoolID.edit();
+                    SharedPreferences.Editor editor = mPrefs.edit();
+                    SharedPreferences.Editor editorSchoolID = mPrefsSchoolID.edit();
 
-                editor.putString("school_id", school_id.getText().toString().trim());
-                //get School ID text
-                //append with a ,
-                String old_schoolID = mPrefsSchoolID.getString("school_id", "");
-                if (old_schoolID.isEmpty()) {
-                    editorSchoolID.putString("school_id", school_id.getText().toString().trim());
-                } else {
-                    if (!old_schoolID.contains(school_id.getText().toString().trim())) {
-                        editorSchoolID.putString("school_id", old_schoolID + "," + school_id.getText().toString().trim());
+                    editor.putString("school_id", school_id.getText().toString().trim());
+                    //get School ID text
+                    //append with a ,
+                    String old_schoolID = mPrefsSchoolID.getString("school_id", "");
+                    if (old_schoolID.isEmpty()) {
+                        editorSchoolID.putString("school_id", school_id.getText().toString().trim());
+                    } else {
+                        if (!old_schoolID.contains(school_id.getText().toString().trim())) {
+                            editorSchoolID.putString("school_id", old_schoolID + "," + school_id.getText().toString().trim());
+                        }
                     }
-                }
-                editor.apply();
-                editorSchoolID.apply();
+                    editor.apply();
+                    editorSchoolID.apply();
 
-                //intent
-                Intent intent = new Intent(getApplicationContext(), MskolaLogin.class);
-                intent.putExtra("account_type", role);
-                intent.putExtra("school_id", school_id.getText().toString().trim());
-                startActivity(intent);
+                    //intent
+                    Intent intent = new Intent(getApplicationContext(), MskolaLogin.class);
+                    intent.putExtra("account_type", role);
+                    intent.putExtra("school_id", school_id.getText().toString().trim());
+                    startActivity(intent);
 
-            } else if (text.equals("not found")) {
-                cont.setEnabled(true);
-                showCustomDialogFailure("The school ID you provided does not exist, please check the ID and try again.");
-            } else {
-                cont.setEnabled(true);
-                showCustomDialogFailure("An error occurred, try again later.");
+                    break;
+                case "not found":
+                    cont.setEnabled(true);
+                    showCustomDialogFailure("The school ID you provided does not exist, please check the ID and try again.");
+                    break;
+                default:
+                    cont.setEnabled(true);
+                    showCustomDialogFailure("An error occurred, try again later.");
+                    break;
             }
         }
 

@@ -1,7 +1,9 @@
 package mountedwings.org.mskola_mgt.parent;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -57,7 +59,10 @@ public class SchoolInformation extends AppCompatActivity {
 
         call.setOnClickListener(v -> {
             // code to open dialer with the number
-
+            String uri = "tel:" + phone.trim();
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse(uri));
+            startActivity(intent);
         });
     }
 
@@ -87,10 +92,12 @@ public class SchoolInformation extends AppCompatActivity {
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split(";");
-                about.setText(String.format("%s is a %s school which is located at %s, %s, %s, %s. ", school_full_name, rows[3], rows[4], rows[2], rows[1], rows[0]));
+                phone = rows[5];
+                about.setText(String.format("%s is a %s which is located at %s, %s, %s, %s. ", school_full_name, rows[3], rows[4], rows[2], rows[1], rows[0]));
                 contact.setText(String.format("%s\n%s, %s, %s", rows[4], rows[5], rows[6], rows[7]));
+
                 //set Logo
-                Bitmap bitmap = BitmapFactory.decodeByteArray(school_logo.get(0), 0, school_logo.size());
+                Bitmap bitmap = BitmapFactory.decodeByteArray(school_logo.get(0), 0, school_logo.get(0).length);
                 logo.setImageBitmap(bitmap);
 
                 //show

@@ -39,6 +39,6 @@ public class Dashboard extends AppCompatActivity {
     }
 
     public void information(View view) {
-        startActivity(new Intent(getApplicationContext(), Chat.class));
+        startActivity(new Intent(getApplicationContext(), SchoolInformation_menu.class));
     }
 }

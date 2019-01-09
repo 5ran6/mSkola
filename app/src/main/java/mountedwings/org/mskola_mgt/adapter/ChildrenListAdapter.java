@@ -47,12 +47,6 @@ public class ChildrenListAdapter extends RecyclerView.Adapter<ChildrenListAdapte
         holder.cardView.setOnClickListener(v -> {
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(v, numbers.get(position), position);
-                setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, NumberChildrenList obj, int position) {
-                        //          Log.i("mSkola", numbers.get(position).getName());
-                    }
-                });
             }
 
         });
@@ -76,7 +70,7 @@ public class ChildrenListAdapter extends RecyclerView.Adapter<ChildrenListAdapte
         private TextView name;
         private TextView class_name;
         private TextView school_name;
-        private TextView regNo;
+
         private ImageView passport;
         private CardView cardView;
 
@@ -93,7 +87,7 @@ public class ChildrenListAdapter extends RecyclerView.Adapter<ChildrenListAdapte
         private void bindData(NumberChildrenList number) {
 //          name.setText(number.get);
             name.setText(number.getName());
-            class_name.setText(number.getClass_name());
+            class_name.setText(String.format("%s %s", number.getClass_name(), number.getArm()));
             school_name.setText(number.getSchoolName());
 
             Bitmap bitmap = BitmapFactory.decodeByteArray(number.getImageFile(), 0, number.getImageFile().length);

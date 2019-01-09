@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcessParents;
@@ -62,7 +63,7 @@ public class Assessment_menu extends AppCompatActivity {
                             Tools.toast("Back Online! Try again", Assessment_menu.this, R.color.green_800);
                         else
                             //load classes and assessments
-                            new initialLoad().execute(school_id, parent_id);
+                            new initialLoad().execute(school_id);
                     }
 
                     @Override
@@ -92,9 +93,13 @@ public class Assessment_menu extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
         parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        //school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
         class_name = getIntent().getStringExtra("class_name");
+
+        Tools.toast(school_id + " -> reg no = " + student_reg_no + " class = " + class_name, this);
+
 
         TextView load = findViewById(R.id.load);
         select_term = findViewById(R.id.select_term);
@@ -110,7 +115,7 @@ public class Assessment_menu extends AppCompatActivity {
         progressBar3.setVisibility(View.INVISIBLE);
 
         progress = findViewById(R.id.lyt_progress);
-        parent = findViewById(R.id.lyt_parent);
+        parent = findViewById(R.id.parent_layout);
         loading = findViewById(R.id.loadButton);
         //        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
 //            new initialLoad().execute(school_id, parent_id);
@@ -122,8 +127,6 @@ public class Assessment_menu extends AppCompatActivity {
                     session = select_session.getSelectedItem().toString();
                     counter++;
                     //run new thread
-                    if (counter >= 1)
-                        loadSubject();
                 }
             }
 
@@ -135,9 +138,12 @@ public class Assessment_menu extends AppCompatActivity {
         select_term.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (select_term.getSelectedItemPosition() >= 0) {
+                if (select_term.getSelectedItemPosition() >= 1) {
                     term = select_term.getSelectedItem().toString();
                     counter++;
+                    if (counter >= 1)
+                        loadSubject();
+
                 }
             }
 
@@ -174,9 +180,10 @@ public class Assessment_menu extends AppCompatActivity {
     }
 
     private void loadSubject() {
+        Toast.makeText(getApplicationContext(), school_id + " " + parent_id + " " + session + " " + term, Toast.LENGTH_SHORT).show();
         progressBar3.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadSubject().execute(school_id, parent_id, session, term);
+        //     if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        new loadSubject().execute(school_id, session, term, student_reg_no);
     }
 
     private class loadAssessment extends AsyncTask<String, Integer, String> {
@@ -303,6 +310,7 @@ public class Assessment_menu extends AppCompatActivity {
             if (!text.equals("0") && !text.isEmpty()) {
                 String dataRows[] = text.split("<>");
                 String[] data = new String[(dataRows.length + 1)];
+                String[] data1 = {"", "First", "Second", "Third"};
                 data[0] = "";
                 System.arraycopy(dataRows, 0, data, 1, dataRows.length);
 
@@ -311,7 +319,14 @@ public class Assessment_menu extends AppCompatActivity {
                 select_session.setAdapter(spinnerAdapter1);
                 session = select_session.getSelectedItem().toString();
 
+                ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data1);
+                spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                select_term.setAdapter(spinnerAdapter2);
+                term = select_term.getSelectedItem().toString();
+
+
                 progressBar1.setVisibility(View.INVISIBLE);
+                progressBar3.setVisibility(View.INVISIBLE);
                 counter = -1;
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
@@ -319,6 +334,7 @@ public class Assessment_menu extends AppCompatActivity {
                 select_session.setAdapter(spinnerAdapter1);
 
                 progressBar1.setVisibility(View.INVISIBLE);
+                //display error message
 
             }
         }
@@ -326,6 +342,7 @@ public class Assessment_menu extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        finish();
         unregisterReceiver(this.mReceiver);
         w = 0;
         super.onPause();

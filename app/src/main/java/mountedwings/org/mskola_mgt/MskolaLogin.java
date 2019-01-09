@@ -229,7 +229,7 @@ public class MskolaLogin extends AppCompatActivity {
 
                 //sharedPref
                 editor = mPrefs.edit();
-                editor.putBoolean("signed_in", true);
+//                editor.putBoolean("signed_in", true);
                 editor.putString("account_type", role);
                 editor.putString("staff_id", text.split("<>")[1]);
                 editor.putString("email_address", emailE.getText().toString());
@@ -328,11 +328,11 @@ public class MskolaLogin extends AppCompatActivity {
             mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
 
-            editor = mPrefs.edit();
-            editor.putString("role", role);
-            editor.putString("school_id", school_id);
-            editor.putString("email_address", emailAddress);
-            editor.apply();
+//            editor = mPrefs.edit();
+//            editor.putString("role", role);
+//            editor.putString("school_id", school_id);
+//            editor.putString("email_address", emailAddress);
+//            editor.apply();
 
         }
 

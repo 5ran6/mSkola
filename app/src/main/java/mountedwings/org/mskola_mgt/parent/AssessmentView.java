@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class AssessmentView extends AppCompatActivity {
 
 
         text = getIntent().getStringExtra("text");
+        Log.i(TAG, text);
         session = getIntent().getStringExtra("session");
         term = getIntent().getStringExtra("term");
         subject = getIntent().getStringExtra("subject");
@@ -63,8 +65,9 @@ public class AssessmentView extends AppCompatActivity {
     private void substring(String string) {
         //text = Exams;CA1;C2;CA3........;STUDENT NAME##NO OF CAs
         String[] noCas = string.split("##");
+        Log.i(TAG, "No CAS: " + noCas[1].trim());
 
-        switch (noCas[0].trim()) {
+        switch (noCas[1].trim()) {
             case "1":
                 cas.add(0, "Exams");
                 cas.add(1, "CA1");
@@ -155,16 +158,17 @@ public class AssessmentView extends AppCompatActivity {
         String[] scores = string.split(";");
 
         //inflate all the other stuff
+
+        //student's name
         name.setText(scores[cas.size()].toUpperCase());
 
 
-        for (int i = 1; i <= cas.size() + 1; i++) {
+        for (int i = 0; i < cas.size(); i++) {
             NumberParentAssessmentView number = new NumberParentAssessmentView();
             number.setCa(cas.get(i));
             number.setScore(scores[i]);
             numbers.add(number);
         }
-
     }
 
     public void done(View view) {

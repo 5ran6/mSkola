@@ -540,11 +540,8 @@ public class Sign_Up extends AppCompatActivity {
                         new performInBackground().execute("getcountries");
                     } else {
                         Tools.toast("No Internet connection!", Sign_Up.this, R.color.red_500);
-
                     }
-
                     //      new ForceExitPause(context).execute();
-
                 }
             }
 

@@ -111,18 +111,6 @@
                             android:textColor="@color/grey_90"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/no_subjects"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_weight=".5"
-                            android:gravity="end"
-                            android:text="2018-09-19"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@color/blue_300"
-                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout

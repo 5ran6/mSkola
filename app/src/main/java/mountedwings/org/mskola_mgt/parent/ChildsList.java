@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
@@ -38,12 +37,6 @@ public class ChildsList extends AppCompatActivity {
     private ArrayList<byte[]> allPassport_aPerson = new ArrayList<>();
     private storageFile data = new storageFile();
 
-    private ArrayList<String> name = new ArrayList<>();
-    private ArrayList<String> regNo = new ArrayList<>();
-    private ArrayList<String> schoolId = new ArrayList<>();
-    private ArrayList<String> schoolName = new ArrayList<>();
-    private ArrayList<String> class_name = new ArrayList<>();
-
     private BroadcastReceiver mReceiver;
     private int w = 0;
     private int status;
@@ -64,13 +57,13 @@ public class ChildsList extends AppCompatActivity {
 
         email = mPrefs.getString("email_address", intent.getStringExtra("email_address"));
         TextView heading = findViewById(R.id.heading);
-        heading.setText("List of children");
+        heading.setText(R.string.list_children);
 
         loading = findViewById(R.id.loading);
 
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setHasFixedSize(false);
+        list.setHasFixedSize(true);
 
         adapter = new ChildrenListAdapter(numbers);
         list.setAdapter(adapter);
@@ -78,13 +71,6 @@ public class ChildsList extends AppCompatActivity {
 
         //hide parentView
         loading.setVisibility(View.VISIBLE);
-        adapter.setOnItemClickListener((view, obj, position) -> {
-            adapter.getItemId(position);
-            Toast.makeText(getApplicationContext(), obj.getSchoolId(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), obj.getRegNo(), Toast.LENGTH_SHORT).show();
-            //sends the students' regNo and name(for menu header)
-            startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("student_reg_no", obj.getRegNo()).putExtra("student_name", obj.getName()).putExtra("class_name", obj.getClass_name() + " " + obj.getArm()));
-        });
     }
 
     @Override
@@ -120,20 +106,14 @@ public class ChildsList extends AppCompatActivity {
                 allPassport_aPerson = data.getImageFiles();
                 String rows[] = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
-                    //regNo,name,schoolId,schoolName,class,name
-                    regNo.add(rows[i].split(";")[0]);
-                    name.add(rows[i].split(";")[1]);
-                    schoolId.add(rows[i].split(";")[2]);
-                    schoolName.add(rows[i].split(";")[3]);
-//                    class_name.add(rows[i].split(";")[4]);
 
                     NumberChildrenList numberChildrenList = new NumberChildrenList();
                     numberChildrenList.setRegNo(rows[i].split(";")[0]);
                     numberChildrenList.setName(rows[i].split(";")[1]);
                     numberChildrenList.setSchoolId(rows[i].split(";")[2]);
                     numberChildrenList.setSchoolName(rows[i].split(";")[3]);
-                    numberChildrenList.setClass_name(rows[i].split(";")[4]);  //seems it's not yet in the API
-                    numberChildrenList.setArm(rows[i].split(";")[5]);  //seems it's not yet in the API
+                    numberChildrenList.setClass_name(rows[i].split(";")[4]);
+                    numberChildrenList.setArm(rows[i].split(";")[5]);
 
                     numberChildrenList.setImage(allPassport_aPerson.get(i));
                     numbers.add(numberChildrenList);
@@ -142,6 +122,13 @@ public class ChildsList extends AppCompatActivity {
                 //setRecyclerView
                 adapter = new ChildrenListAdapter(numbers);
                 list.setAdapter(adapter);
+                adapter.setOnItemClickListener((view, obj, position) -> {
+                    adapter.getItemId(position);
+                    //sends the students' regNo and name(for menu header)
+                    Tools.toast(email + " " + obj.getRegNo() + " " + obj.getSchoolId(), ChildsList.this);
+                    startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("student_reg_no", obj.getRegNo()).putExtra("student_name", obj.getName()).putExtra("class_name", obj.getClass_name() + " " + obj.getArm()).putExtra("school_id", obj.getSchoolId()).putExtra("email_address", email));
+                    finish();
+                });
             } else {
                 Tools.toast("No student(s) assigned to you. Contact the school administration", ChildsList.this);
                 finish();
@@ -152,6 +139,9 @@ public class ChildsList extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+//        list.invalidate();
+//        list.setAdapter(adapter);
+
         this.mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

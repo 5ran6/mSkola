@@ -10,23 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         android:minHeight="?android:attr/actionBarSize"
         android:orientation="horizontal">
 
         <View
-            android:layout_width="@dimen/spacing_mlarge"
+            android:layout_width="@dimen/spacing_small"
             android:layout_height="0dp" />
 
-        <ImageView
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/image"
-            android:layout_width="@dimen/spacing_mxlarge"
-            android:layout_height="@dimen/spacing_mxlarge"
-            android:layout_gravity="center_vertical"
-            android:tint="@color/grey_60"
-            app:srcCompat="@drawable/ic_home" />
+            android:layout_width="@dimen/spacing_xxxlarge"
+            android:layout_height="@dimen/spacing_xxxlarge"
+            android:layout_gravity="center"
+            android:contentDescription="@string/app_name" />
 
         <View
-            android:layout_width="@dimen/spacing_mlarge"
+            android:layout_width="@dimen/spacing_small"
             android:layout_height="0dp" />
 
         <LinearLayout
@@ -58,7 +58,7 @@
                         android:layout_marginEnd="@dimen/spacing_middle"
                         android:layout_marginRight="@dimen/spacing_middle"
                         android:maxLines="2"
-                        android:text="Category Name"
+                        android:text="Student Name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                         android:textColor="@color/grey_90" />
 
@@ -70,7 +70,7 @@
                         android:layout_marginRight="@dimen/spacing_middle"
                         android:layout_marginTop="@dimen/spacing_small"
                         android:maxLines="2"
-                        android:text="Sub text"
+                        android:text="School name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@color/grey_40" />
 

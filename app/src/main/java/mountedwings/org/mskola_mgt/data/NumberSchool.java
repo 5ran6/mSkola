@@ -4,6 +4,15 @@ public class NumberSchool {
 
     private String school_name;
     private String school_id;
+    private byte[] logo;
+
+    public byte[] getLogo() {
+        return logo;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
+    }
 
     public String getSchool_name() {
         return school_name;

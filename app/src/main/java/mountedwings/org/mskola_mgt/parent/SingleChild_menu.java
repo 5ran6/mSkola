@@ -30,9 +30,10 @@ public class SingleChild_menu extends AppCompatActivity {
         Intent intent = getIntent();
         student_name = intent.getStringExtra("student_name");
 
-        //school_id/staff id from sharedPrefs
+        //school_id
+        // parent_id from sharedPrefs
         parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        school_id = getIntent().getStringExtra("school_id");
 
         class_name = intent.getStringExtra("class_name");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
@@ -45,8 +46,9 @@ public class SingleChild_menu extends AppCompatActivity {
         intent = new Intent(getBaseContext(), Assessment_menu.class);
         intent.putExtra("class_name", class_name);
         intent.putExtra("student_reg_no", student_reg_no);
+        intent.putExtra("email_address", parent_id);
+        intent.putExtra("school_id", school_id);
         startActivity(intent);
-
     }
 
     //DONE
@@ -60,17 +62,19 @@ public class SingleChild_menu extends AppCompatActivity {
     //MX-SHOPPING - CATEGORY LIST(LIST OF SCHOOLS)
     //MX-PROFILE - IMAGE APPBAR(SCHOOL DETAIL)
     public void information(View view) {
-        intent = new Intent(getBaseContext(), AssessmentView.class);
+        intent = new Intent(getBaseContext(), SchoolInformation_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", parent_id);
         intent.putExtra("class_name", class_name);
+        intent.putExtra("reg_no", student_reg_no);
+
         startActivity(intent);
 
     }
 
     //YET TO TEST
     public void result(View view) {
-        intent = new Intent(getBaseContext(), AssessmentView.class);
+        intent = new Intent(getBaseContext(), Result_menu.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", parent_id);
         intent.putExtra("class_name", class_name);
@@ -79,10 +83,11 @@ public class SingleChild_menu extends AppCompatActivity {
 
     //NI - ALMOST DONE
     public void timetable(View view) {
-        intent = new Intent(getBaseContext(), AssessmentView.class);
+        intent = new Intent(getBaseContext(), Timetable_menu_activity.class);
         intent.putExtra("school_id", school_id);
         intent.putExtra("email_address", parent_id);
         intent.putExtra("class_name", class_name);
+        intent.putExtra("reg_no", student_reg_no);
         startActivity(intent);
     }
 }

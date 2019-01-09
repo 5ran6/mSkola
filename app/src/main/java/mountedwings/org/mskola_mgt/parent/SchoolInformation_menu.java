@@ -38,6 +38,7 @@ public class SchoolInformation_menu extends AppCompatActivity {
     private String parent_email;
     private AdapterListSchools mAdapter;
     private ArrayList<NumberSchool> schools = new ArrayList<>();
+    private ArrayList<byte[]> logos = new ArrayList<>();
 
 
     @Override
@@ -52,7 +53,7 @@ public class SchoolInformation_menu extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_menu);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Children Schools");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,12 +78,6 @@ public class SchoolInformation_menu extends AppCompatActivity {
         //if network
         new initialLoad().execute(parent_email);
 
-        // on item list clicked
-        mAdapter.setOnItemClickListener((view, obj, position) -> {
-            //      Snackbar.make(parent_view, "Item " + obj.getSchool_name() + " clicked", Snackbar.LENGTH_SHORT).show();
-            startActivity(new Intent(this, SchoolInformation.class).putExtra("school_id", obj.getSchool_id()).putExtra("school_name", obj.getSchool_name()));
-        });
-
 
         //run API
 
@@ -97,6 +92,7 @@ public class SchoolInformation_menu extends AppCompatActivity {
             storageObj.setOperation("getschools");
             storageObj.setStrData(strings[0]);
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
+            logos = sentData.getImageFiles();
             return sentData.getStrData();
         }
 
@@ -109,7 +105,6 @@ public class SchoolInformation_menu extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
 //            System.out.println(text);
-
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
@@ -117,11 +112,18 @@ public class SchoolInformation_menu extends AppCompatActivity {
                     numberSchool.setSchool_id(rows[i].split(";")[0]);
                     numberSchool.setSchool_name(rows[i].split(";")[1]);
                     numberSchool.setSchool_address(rows[i].split(";")[2]);
+                    numberSchool.setLogo(logos.get(i));
                     schools.add(numberSchool);
                 }
                 //set data and list adapter
                 mAdapter = new AdapterListSchools(SchoolInformation_menu.this, schools);
                 recyclerView.setAdapter(mAdapter);
+                // on item list clicked
+                mAdapter.setOnItemClickListener((view, obj, position) -> {
+                    //      Snackbar.make(parent_view, "Item " + obj.getSchool_name() + " clicked", Snackbar.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), SchoolInformation.class).putExtra("school_id", obj.getSchool_id()).putExtra("school_name", obj.getSchool_name()));
+                });
+
                 list.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             } else {
@@ -141,9 +143,8 @@ public class SchoolInformation_menu extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
             //search function
-
         } else {
-            Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

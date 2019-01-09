@@ -121,17 +121,14 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                 adapter = new AssHistAdapter(numbers);
                 list.setAdapter(adapter);
 
-                adapter.setOnItemClickListener(new AssHistAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, NumberAssHist obj, int position) {
-                        String assignmentId = numbers.get(position).getAssignment();
+                adapter.setOnItemClickListener((view, obj, position) -> {
+                    String assignmentId = numbers.get(position).getAssignment();
 //                        Toast.makeText(getContext(), "Item " + assignmentId + " clicked", Toast.LENGTH_SHORT).show();
-                        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                            new loadIndividualAssignment().execute(assignmentId);
-                        } else {
-                            Tools.toast(getResources().getString(R.string.no_internet_connection), AssignmentHistoryActivity.this, R.color.red_500);
-                            finish();
-                        }
+                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                        new loadIndividualAssignment().execute(assignmentId);
+                    } else {
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), AssignmentHistoryActivity.this, R.color.red_500);
+                        finish();
                     }
                 });
 

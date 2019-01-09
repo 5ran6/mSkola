@@ -1,11 +1,15 @@
 package mountedwings.org.mskola_mgt.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +41,14 @@ public class AdapterListSchools extends RecyclerView.Adapter<RecyclerView.ViewHo
         public TextView school_name;
         public TextView school_address;
         public View lyt_parent;
+        public CircularImageView logo;
 
         public OriginalViewHolder(View v) {
             super(v);
             school_name = v.findViewById(R.id.school_name);
             school_address = v.findViewById(R.id.address);
             lyt_parent = v.findViewById(R.id.lyt_parent);
+            logo = v.findViewById(R.id.image);
         }
     }
 
@@ -61,14 +67,15 @@ public class AdapterListSchools extends RecyclerView.Adapter<RecyclerView.ViewHo
             OriginalViewHolder view = (OriginalViewHolder) holder;
 
             NumberSchool p = items.get(position);
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(p.getLogo(), 0, p.getLogo().length);
+            view.logo.setImageBitmap(bitmap);
+
             view.school_name.setText(p.getSchool_name());
             view.school_address.setText(p.getSchool_address());
-            view.lyt_parent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(view, items.get(position), position);
-                    }
+            view.lyt_parent.setOnClickListener(view1 -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(view1, items.get(position), position);
                 }
             });
         }

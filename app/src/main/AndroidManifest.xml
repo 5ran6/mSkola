@@ -126,6 +126,7 @@
         <activity android:name=".parent.SchoolInformation"></activity>
         <activity android:name=".parent.SchoolInformation_menu" />
         <activity android:name=".parent.Timetable_menu_activity" />
+        <activity android:name=".parent.StudentInformation" />
     </application>
 
 </manifest>

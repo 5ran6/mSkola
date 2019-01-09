@@ -44,7 +44,7 @@ public class MskolaLogin extends AppCompatActivity {
     private String emailAddress, password, TAG = "mSkola";
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor editor;
-    private String role, school_id;
+    private String role;
     private static final int PREFRENCE_MODE_PRIVATE = 0;
     private AppCompatCheckBox checkedTextView;
     private String text;
@@ -223,11 +223,12 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
+
                 intent = new Intent(getApplicationContext(), Dashboard.class);
 
                 //sharedPref
                 editor = mPrefs.edit();
-                editor.putBoolean("signed_in", true);
+                //      editor.putBoolean("signed_in", true);
                 editor.putString("account_type", role);
                 editor.putString("email_address", emailE.getText().toString());
 
@@ -239,9 +240,14 @@ public class MskolaLogin extends AppCompatActivity {
             } else {
                 showCustomDialogFailure(error_from_server);
                 lyt_progress.setVisibility(View.GONE);
-
+                //clear sharedPref
+                clearSharedPreferences(MskolaLogin.this);
             }
         }
+    }
+
+    public static void clearSharedPreferences(Context ctx) {
+        ctx.getSharedPreferences("mSkola", 0).edit().clear().apply();
     }
 
 
@@ -259,20 +265,20 @@ public class MskolaLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //not necessary when you have implemented logout
+//        clearSharedPreferences(MskolaLogin.this);
+
         Intent intent = getIntent();
         role = intent.getStringExtra("account_type");
-        school_id = intent.getStringExtra("school_id");
 
         if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
             mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
 
-            editor = mPrefs.edit();
-            editor.putString("role", role);
-            editor.putString("school_id", school_id);
-            editor.putString("email_address", emailAddress);
-            editor.apply();
-
+//            editor = mPrefs.edit();
+//            editor.putString("role", role);
+//            editor.putString("email_address", emailAddress);
+//            editor.apply();
         }
 
         if (singedIn) {
