@@ -25,12 +25,13 @@
                 android:id="@+id/students_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/rocket_rinder"
+                android:fontFamily="@font/GlametrixBold"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/demo_name"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                android:textColor="@color/black" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display2"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -228,10 +229,10 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="?android:attr/actionBarSize"
-                            android:onClick="done"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
                             android:gravity="center"
+                            android:onClick="done"
                             android:orientation="horizontal">
 
                             <TextView
