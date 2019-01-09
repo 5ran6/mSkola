@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import mountedwings.org.mskola_mgt.parent.Login_SignUp;
+import mountedwings.org.mskola_mgt.parent.Dashboard;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Test extends AppCompatActivity {
@@ -15,10 +15,9 @@ public class Test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         Tools.setSystemBarTransparent(this);
-
     }
 
     public void testing(View view) {
-        startActivity(new Intent(this, Login_SignUp.class));
+        startActivity(new Intent(this, Dashboard.class));
     }
 }

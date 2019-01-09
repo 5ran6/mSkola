@@ -1,11 +1,8 @@
 package mountedwings.org.mskola_mgt.parent;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +21,6 @@ import java.util.Objects;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.ChildrenListAdapter;
 import mountedwings.org.mskola_mgt.data.NumberChildrenList;
-import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -41,7 +37,7 @@ public class ChildsList extends AppCompatActivity {
     private int w = 0;
     private int status;
 
-    ProgressBar loading;
+    private ProgressBar loading;
     private ChildrenListAdapter adapter;
 
     @Override
@@ -59,18 +55,20 @@ public class ChildsList extends AppCompatActivity {
         TextView heading = findViewById(R.id.heading);
         heading.setText(R.string.list_children);
 
+
         loading = findViewById(R.id.loading);
 
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(true);
+        new first_loading().execute(email);
 
-        adapter = new ChildrenListAdapter(numbers);
-        list.setAdapter(adapter);
-
+//        adapter = new ChildrenListAdapter(numbers);
+//        list.setAdapter(adapter);
 
         //hide parentView
         loading.setVisibility(View.VISIBLE);
+        list.setVisibility(View.GONE);
     }
 
     @Override
@@ -122,10 +120,13 @@ public class ChildsList extends AppCompatActivity {
                 //setRecyclerView
                 adapter = new ChildrenListAdapter(numbers);
                 list.setAdapter(adapter);
+                loading.setVisibility(View.GONE);
+                list.setVisibility(View.VISIBLE);
+
                 adapter.setOnItemClickListener((view, obj, position) -> {
                     adapter.getItemId(position);
                     //sends the students' regNo and name(for menu header)
-                    Tools.toast(email + " " + obj.getRegNo() + " " + obj.getSchoolId(), ChildsList.this);
+                    //      Tools.toast(email + " " + obj.getRegNo() + " " + obj.getSchoolId(), ChildsList.this);
                     startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("student_reg_no", obj.getRegNo()).putExtra("student_name", obj.getName()).putExtra("class_name", obj.getClass_name() + " " + obj.getArm()).putExtra("school_id", obj.getSchoolId()).putExtra("email_address", email));
                     finish();
                 });
@@ -142,42 +143,42 @@ public class ChildsList extends AppCompatActivity {
 //        list.invalidate();
 //        list.setAdapter(adapter);
 
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", ChildsList.this, R.color.green_800);
-                        else
-                            new first_loading().execute(email);
+//        this.mReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                w++;
+//                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+//                    @Override
+//                    public void onConnectionSuccess() {
+//                        status = 1;
+//                        if (w > 1)
+//                            Tools.toast("Back Online! Try again", ChildsList.this, R.color.green_800);
+//                        else
+//                            new first_loading().execute(email);
+//
+//                    }
+//
+//                    @Override
+//                    public void onConnectionFail(String errorMsg) {
+//                        status = 0;
+//                        Tools.toast(getResources().getString(R.string.no_internet_connection), ChildsList.this, R.color.red_600);
+//                    }
+//                }).execute();
+//            }
+//
+//        };
 
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), ChildsList.this, R.color.red_600);
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
+//        registerReceiver(
+//                this.mReceiver,
+//                new IntentFilter(
+//                        ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
+//        unregisterReceiver(this.mReceiver);
+//        w = 0;
         super.onPause();
     }
 

@@ -78,6 +78,7 @@ public class AdapterTimeTableListSectioned extends RecyclerView.Adapter<Recycler
             OriginalViewHolder view = (OriginalViewHolder) holder;
 
             view.subject.setText(p.subject);
+            view.time.setText(p.time);
 //            view.lyt_parent.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {

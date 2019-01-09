@@ -7,12 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.mskola.controls.serverProcess;
+import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class Timetable_menu_activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+        new loadTimeTable().execute(school_id, regNo);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class Timetable_menu_activity extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("gettimetable");
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             return sentData.getStrData();
         }
 
@@ -79,6 +81,7 @@ public class Timetable_menu_activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            Log.i("mSkola", text);
             if (!text.equals("0") && !text.isEmpty()) {
                 String days[] = text.split("##");
 
@@ -89,48 +92,52 @@ public class Timetable_menu_activity extends AppCompatActivity {
                 //get days
                 for (int i = 0; i < days.length; i++) {
                     day.add(days[i].split("<>")[0]);
-                    Toast.makeText(getApplicationContext(), day.get(i), Toast.LENGTH_SHORT).show();
-                }
-
-                //get Activity
-
-                for (int j = 0; j < days.length; j++) {
-                    for (int i = 0; i < days[j].split("<>").length - 1; i++) {
-                        activities.add(days[i].split("<>")[i + 1].split(";")[0]);
-                        Toast.makeText(getApplicationContext(), activities.get(i), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                //get Time
-                for (int j = 0; j < days.length; j++) {
-                    for (int i = 0; i < days[j].split("<>").length - 1; i++) {
-                        time.add(days[i].split("<>")[i + 1].split(";")[1]);
-                        Toast.makeText(getApplicationContext(), time.get(i), Toast.LENGTH_SHORT).show();
+                    Log.i("mSkola", day.get(i));
+                    for (int j = 0; j < days[i].split("<>").length - 1; j++) {
+                        try {
+                            activities.add(days[i].split("<>")[j + 1].split(";")[0]);
+                            time.add(days[i].split("<>")[j + 1].split(";")[1]);
+                            Log.i("mSkola", activities.get(j));
+                            Log.i("mSkola", time.get(j));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
                 int no_activities_per_day = days[0].split("<>").length - 1;
                 int header_count = 1;
                 int j = 0;
-
-
+                int q = 0;
                 //first_instance
                 items.add(new TimeTable(day.get(0), "", true));
 
-                //master array list
-                for (int i = 0; i <= (time.size() + activities.size()); i++) {
-                    if (j >= no_activities_per_day) {
-                        //put new header
-                        items.add(new TimeTable(day.get(header_count), "", true));
-                        header_count++;
-                        j = 0;
-                    } else {
-                        //put activities
-                        items.add(new TimeTable(activities.get(i), time.get(i), false));
-                        j++;
-                    }
-                }
+                try {
+                    //master array list
+                    for (int i = 0; i < (day.size() + activities.size()) - 1; i++) {
+                        Log.i("mSkola", "master loop round = " + i);
 
+                        if (j < no_activities_per_day) {
+                            Log.i("mSkola", "act per day = " + j);
+                            Log.i("mSkola", "inner q = " + q);
+
+                            //put activities
+                            items.add(new TimeTable(activities.get(q), time.get(q), false));
+                            j++;
+                        } else {
+                            //put new header
+                            Log.i("mSkola", "header = " + header_count);
+
+                            items.add(new TimeTable(day.get(header_count), "", true));
+                            header_count++;
+                            j = 0;
+                            q--;
+                        }
+                        q++;
+                    }
+                } catch (Exception e) {
+
+                }
 
                 //set data and list adapter
                 mAdapter = new AdapterTimeTableListSectioned(getApplicationContext(), items);
@@ -144,8 +151,6 @@ public class Timetable_menu_activity extends AppCompatActivity {
                 Tools.toast("Timetable not available", Timetable_menu_activity.this, R.color.red_800, Toast.LENGTH_LONG);
                 finish();
             }
-
-
         }
     }
 
