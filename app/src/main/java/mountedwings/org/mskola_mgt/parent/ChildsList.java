@@ -126,8 +126,8 @@ public class ChildsList extends AppCompatActivity {
                 adapter.setOnItemClickListener((view, obj, position) -> {
                     adapter.getItemId(position);
                     //sends the students' regNo and name(for menu header)
-                    //      Tools.toast(email + " " + obj.getRegNo() + " " + obj.getSchoolId(), ChildsList.this);
-                    startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("student_reg_no", obj.getRegNo()).putExtra("student_name", obj.getName()).putExtra("class_name", obj.getClass_name() + " " + obj.getArm()).putExtra("school_id", obj.getSchoolId()).putExtra("email_address", email));
+                    Tools.toast(email + " reg no = " + obj.getRegNo() + " " + obj.getSchoolId(), ChildsList.this);
+                    startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("student_reg_no", obj.getRegNo()).putExtra("student_name", obj.getName()).putExtra("class_name", obj.getClass_name() + "arm" + obj.getArm()).putExtra("school_id", obj.getSchoolId()).putExtra("email_address", email));
                     finish();
                 });
             } else {

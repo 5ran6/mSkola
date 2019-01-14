@@ -160,7 +160,7 @@ public class AssessmentView extends AppCompatActivity {
         //inflate all the other stuff
 
         //student's name
-        name.setText(scores[cas.size()].toUpperCase());
+        name.setText(scores[cas.size()].toUpperCase().split("##")[0]);
 
 
         for (int i = 0; i < cas.size(); i++) {

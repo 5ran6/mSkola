@@ -18,6 +18,7 @@ import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.AdapterTimeTableListSectioned;
@@ -25,27 +26,24 @@ import mountedwings.org.mskola_mgt.model.TimeTable;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Timetable_menu_activity extends AppCompatActivity {
-    private String school_id = "", regNo = "";
     private ProgressBar progressBar1;
     private BroadcastReceiver mReceiver;
     private RecyclerView recyclerView;
     private int w = 0, status;
     private List<TimeTable> items = new ArrayList<>();
 
-    private AdapterTimeTableListSectioned mAdapter;
-
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Timetable");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Timetable");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initComponent() {
 
-        school_id = getIntent().getStringExtra("school_id");
-        regNo = getIntent().getStringExtra("reg_no");
+        String school_id = getIntent().getStringExtra("school_id");
+        String regNo = getIntent().getStringExtra("reg_no");
         progressBar1 = findViewById(R.id.progress);
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -136,11 +134,11 @@ public class Timetable_menu_activity extends AppCompatActivity {
                         q++;
                     }
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
                 //set data and list adapter
-                mAdapter = new AdapterTimeTableListSectioned(getApplicationContext(), items);
+                AdapterTimeTableListSectioned mAdapter = new AdapterTimeTableListSectioned(getApplicationContext(), items);
                 recyclerView.setAdapter(mAdapter);
 
 

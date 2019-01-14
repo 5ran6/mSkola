@@ -49,6 +49,7 @@
                         android:layout_marginTop="@dimen/spacing_small"
                         android:src="@drawable/photo_male_2"
                         app:civ_border="true"
+                        android:id="@+id/logo"
                         app:civ_border_color="@color/colorPrimary"
                         app:civ_border_width="1dp" />
 

@@ -127,6 +127,17 @@
         <activity android:name=".parent.SchoolInformation_menu" />
         <activity android:name=".parent.Timetable_menu_activity" />
         <activity android:name=".parent.StudentInformation" />
+        <activity android:name=".parent.Result_menu" />
+        <activity android:name=".parent.MainActivity">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

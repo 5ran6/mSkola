@@ -14,7 +14,7 @@ import mountedwings.org.mskola_mgt.R;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class SingleChild_menu extends AppCompatActivity {
-    private String school_id = "", parent_id = "", student_name = "", class_name = "";
+    private String school_id = "", parent_id = "", student_name = "", class_name = "", arm;
     private Intent intent;
     private TextView heading;
     private String student_reg_no;
@@ -34,6 +34,7 @@ public class SingleChild_menu extends AppCompatActivity {
         // parent_id from sharedPrefs
         parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = getIntent().getStringExtra("school_id");
+        arm = getIntent().getStringExtra("arm");
 
         class_name = intent.getStringExtra("class_name");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
@@ -55,6 +56,8 @@ public class SingleChild_menu extends AppCompatActivity {
     //THE ATTENDANCE MENU WILL HAVE A BOTTOM SHEET. THAT'S WHERE WE SHALL DISPLAY THE ATTENDANCE
     public void attendance(View view) {
         intent = new Intent(getBaseContext(), Attendance_menu_activity.class);
+        intent.putExtra("reg_no", student_reg_no);
+        intent.putExtra("school_id", school_id);
         startActivity(intent);
     }
 
@@ -62,11 +65,12 @@ public class SingleChild_menu extends AppCompatActivity {
     //MX-SHOPPING - CATEGORY LIST(LIST OF SCHOOLS)
     //MX-PROFILE - IMAGE APPBAR(SCHOOL DETAIL)
     public void information(View view) {
-        intent = new Intent(getBaseContext(), SchoolInformation_menu.class);
-        intent.putExtra("school_id", school_id);
+        intent = new Intent(getBaseContext(), StudentInformation.class);
         intent.putExtra("email_address", parent_id);
         intent.putExtra("class_name", class_name);
         intent.putExtra("reg_no", student_reg_no);
+        intent.putExtra("school_id", school_id);
+        intent.putExtra("student_name", student_name);
 
         startActivity(intent);
 

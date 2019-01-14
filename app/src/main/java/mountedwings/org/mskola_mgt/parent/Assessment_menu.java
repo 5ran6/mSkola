@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcessParents;
@@ -97,8 +96,6 @@ public class Assessment_menu extends AppCompatActivity {
         school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
         class_name = getIntent().getStringExtra("class_name");
-
-        Tools.toast(school_id + " -> reg no = " + student_reg_no + " class = " + class_name, this);
 
 
         TextView load = findViewById(R.id.load);
@@ -180,7 +177,6 @@ public class Assessment_menu extends AppCompatActivity {
     }
 
     private void loadSubject() {
-        Toast.makeText(getApplicationContext(), school_id + " " + parent_id + " " + session + " " + term, Toast.LENGTH_SHORT).show();
         progressBar3.setVisibility(View.VISIBLE);
         //     if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
         new loadSubject().execute(school_id, session, term, student_reg_no);
@@ -218,7 +214,6 @@ public class Assessment_menu extends AppCompatActivity {
                 intent1.putExtra("class_name", class_name);
                 intent1.putExtra("text", text);
                 startActivity(intent1);
-
             } else {
                 //let all the other views fade away #5ran6Sings
                 progress.setVisibility(View.GONE);

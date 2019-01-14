@@ -27,7 +27,8 @@ public class SchoolInformation extends AppCompatActivity {
 
     private TextView about;
     private TextView contact;
-    private String phone, school_id, school_full_name;
+    private String phone;
+    private String school_full_name;
     private FloatingActionButton call;
     private ImageView logo;
     private ArrayList<byte[]> school_logo = new ArrayList<>();
@@ -39,7 +40,7 @@ public class SchoolInformation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_information);
 
-        school_id = getIntent().getStringExtra("school_id");
+        String school_id = getIntent().getStringExtra("school_id");
         school_full_name = getIntent().getStringExtra("school_name");
         TextView school_name = findViewById(R.id.school_name);
         school_name.setText(school_full_name);

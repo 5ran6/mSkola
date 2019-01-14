@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -39,14 +40,15 @@ public class SchoolInformation_menu extends AppCompatActivity {
     private AdapterListSchools mAdapter;
     private ArrayList<NumberSchool> schools = new ArrayList<>();
     private ArrayList<byte[]> logos = new ArrayList<>();
-
+    private LinearLayout search_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parents_information_menu);
         parent_view = findViewById(R.id.parent_view);
-
+        search_layout = findViewById(R.id.search_layout);
+        search_layout.setVisibility(View.GONE);
         initToolbar();
         initComponent();
     }
@@ -119,10 +121,7 @@ public class SchoolInformation_menu extends AppCompatActivity {
                 mAdapter = new AdapterListSchools(SchoolInformation_menu.this, schools);
                 recyclerView.setAdapter(mAdapter);
                 // on item list clicked
-                mAdapter.setOnItemClickListener((view, obj, position) -> {
-                    //      Snackbar.make(parent_view, "Item " + obj.getSchool_name() + " clicked", Snackbar.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), SchoolInformation.class).putExtra("school_id", obj.getSchool_id()).putExtra("school_name", obj.getSchool_name()));
-                });
+                mAdapter.setOnItemClickListener((view, obj, position) -> startActivity(new Intent(getApplicationContext(), SchoolInformation.class).putExtra("school_id", obj.getSchool_id()).putExtra("school_name", obj.getSchool_name())));
 
                 list.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
@@ -143,6 +142,7 @@ public class SchoolInformation_menu extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
             //search function
+            search_layout.setVisibility(View.VISIBLE);
         } else {
             finish();
         }

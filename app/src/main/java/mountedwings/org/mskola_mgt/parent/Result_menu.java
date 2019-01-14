@@ -1,15 +1,11 @@
 package mountedwings.org.mskola_mgt.parent;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,8 +23,6 @@ import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
-import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -48,37 +42,36 @@ public class Result_menu extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Result_menu.this, R.color.green_800);
-                        else
-                            //load classes and assessments
-                            new initialLoad().execute(school_id, parent_id);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Log.d("mSkola", String.valueOf(status));
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), Result_menu.this, R.color.red_600);
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
+        //        this.mReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                w++;
+//                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+//                    @Override
+//                    public void onConnectionSuccess() {
+//                        status = 1;
+//                        if (w > 1)
+//                            Tools.toast("Back Online! Try again", Result_menu.this, R.color.green_800);
+//                        else
+//                            //load classes and assessments
+//                            new initialLoad().execute(school_id, parent_id);
+//                    }
+//
+//                    @Override
+//                    public void onConnectionFail(String errorMsg) {
+//                        status = 0;
+//                        Log.d("mSkola", String.valueOf(status));
+//                        Tools.toast(getResources().getString(R.string.no_internet_connection), Result_menu.this, R.color.red_600);
+//                    }
+//                }).execute();
+//            }
+//
+//        };
+//
+//        registerReceiver(
+//                this.mReceiver,
+//                new IntentFilter(
+//                        ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
@@ -91,8 +84,9 @@ public class Result_menu extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
         parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
+        new initialLoad().execute(school_id, parent_id);
 
         TextView load = findViewById(R.id.load);
         select_term = findViewById(R.id.select_term);
@@ -143,12 +137,12 @@ public class Result_menu extends AppCompatActivity {
         load.setOnClickListener(v -> {
             if (!session.isEmpty() && !term.isEmpty()) {
                 // new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
-                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                    //    new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
-                    startActivity(new Intent(this, ResultActivity.class).putExtra("term", term).putExtra("session", session).putExtra("student_reg_no", student_reg_no));
-                } else {
-                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-                }
+                // if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                //    new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
+                startActivity(new Intent(this, ResultActivity.class).putExtra("term", term).putExtra("session", session).putExtra("student_reg_no", student_reg_no).putExtra("school_id", school_id));
+                // } else {
+                Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+                //}
             } else {
                 Tools.toast("Fill all necessary fields", Result_menu.this, R.color.yellow_700);
             }
@@ -208,8 +202,8 @@ public class Result_menu extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
+//        unregisterReceiver(this.mReceiver);
+//        w = 0;
         super.onPause();
     }
 

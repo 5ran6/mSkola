@@ -183,4 +183,9 @@
     <string name="list_children">List of Children</string>
 
 
+    <string name="toolbar_title">Contacts</string>
+    <string name="action_search">Search</string>
+    <string name="search_hint">Schools using mSkola</string>
+
+
 </resources>

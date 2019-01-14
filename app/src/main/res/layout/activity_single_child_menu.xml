@@ -27,14 +27,14 @@
                 android:layout_marginBottom="@dimen/spacing_middle"
                 android:layout_marginLeft="@dimen/spacing_medium"
                 android:layout_marginStart="@dimen/spacing_medium"
-                android:fontFamily="@font/GlametrixBold"
+                android:fontFamily="@font/glametrixbold"
                 android:maxLines="1"
-                android:text="Child details"
+                android:text="Child name"
                 android:textAllCaps="true"
 
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="italic" />
+                android:textColor="@color/blue_800"
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="40dp"

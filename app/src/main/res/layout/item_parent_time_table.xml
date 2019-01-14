@@ -17,8 +17,8 @@
         android:paddingLeft="@dimen/spacing_middle"
         android:paddingStart="@dimen/spacing_middle"
         android:text="Explanation to why you couldn't come"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:textColor="@color/grey_90" />
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/grey_60" />
 
     <TextView
         android:id="@+id/time"

@@ -55,7 +55,7 @@ public class StudentInformation extends AppCompatActivity {
         lyt_form.setVisibility(View.GONE);
 
         //run API if network
-        new initialLoad().execute(school_id);
+        new initialLoad().execute(school_id, reg_no);
     }
 
     //loads students info
@@ -111,7 +111,7 @@ public class StudentInformation extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
             } else {
-                Tools.toast("Oops! This school has not yrt published her school information.", StudentInformation.this, R.color.red_500, Toast.LENGTH_LONG);
+                Tools.toast("Oops! This school has not yet published this information.", StudentInformation.this, R.color.red_500, Toast.LENGTH_LONG);
                 finish();
             }
         }

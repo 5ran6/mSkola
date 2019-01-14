@@ -101,7 +101,6 @@ public class ResultActivity extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getschoolinfo");
             storageObj.setStrData(strings[0]);
-///            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4]);
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             schoolLogo = sentData.getImageFiles();
             return sentData.getStrData();
@@ -115,8 +114,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
-            Log.d(TAG, text);
+            Log.d(TAG, "Loaded round 1: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String school_info[] = text.split("<>");
@@ -189,10 +187,9 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
-            Log.d(TAG, text);
+            Log.d(TAG, "Loaded round 2: " + text);
 
-            if (!text.equals("0") && !text.isEmpty()) {
+            if (!text.equals("0") && !text.isEmpty() && !text.equals("0")) {
                 String data[] = text.split("##");
 
                 String raw_data1, raw_data2, raw_data3;
@@ -247,8 +244,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
-            Log.d(TAG, text);
+            Log.d(TAG, "Loaded round 3: " + text);
 
             if (!text.equals("0") && !text.isEmpty() && !text.equals("not compiled")) {
                 String data[] = text.split("<>");
@@ -408,6 +404,7 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
                         break;
+
                 }
 
                 for (int j = 0; j <= no_subjects; j++) {
@@ -636,8 +633,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
-            Log.d(TAG, text);
+            Log.d(TAG, "Loaded round 4: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String data[] = text.split("##");
@@ -688,7 +684,7 @@ public class ResultActivity extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             System.out.println(text);
-            Log.d(TAG, text);
+            Log.d(TAG, "Loaded round 5: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String data[] = text.split("<>");
@@ -736,8 +732,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
-            Log.d(TAG, text);
+            Log.d(TAG, "Loaded round 6: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String data[] = text.split(";");
@@ -780,11 +775,11 @@ public class ResultActivity extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
         parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
         term = getIntent().getStringExtra("term");
         session = getIntent().getStringExtra("session");
-
+        school_logo = findViewById(R.id.logo);
 
         // nested scrollview
         nested_scroll_view = findViewById(R.id.nested_content);
