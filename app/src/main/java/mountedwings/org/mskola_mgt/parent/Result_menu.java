@@ -11,11 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
@@ -28,16 +26,19 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Result_menu extends AppCompatActivity {
-    private String school_id = "", parent_id = "", session = "", term = "", subject = "", student_reg_no = "", class_name = "";
-    private RelativeLayout parent;
-    private LinearLayout progress;
-    private Spinner select_session, select_term, select_subject;
+    private String school_id = "";
+    private String session = "";
+    private String term = "";
+    private String subject = "";
+    private String student_reg_no = "";
+    private String class_name = "";
+    private Spinner select_session;
+    private Spinner select_term;
     private ProgressBar progressBar1;
     private int counter = 0;
     private BroadcastReceiver mReceiver;
     private int w = 0;
     private int status;
-    private MaterialRippleLayout loading;
 
     @Override
     protected void onResume() {
@@ -77,13 +78,13 @@ public class Result_menu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_assessment_menu);
+        setContentView(R.layout.activity_parent_result_menu);
 
         //get stuff from sharedPrefs
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
 
         //school_id/staff id from sharedPrefs
-        parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
+        String parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
         new initialLoad().execute(school_id, parent_id);
@@ -91,16 +92,14 @@ public class Result_menu extends AppCompatActivity {
         TextView load = findViewById(R.id.load);
         select_term = findViewById(R.id.select_term);
         select_session = findViewById(R.id.select_session);
-        select_subject = findViewById(R.id.subject);
+        Spinner select_subject = findViewById(R.id.subject);
         progressBar1 = findViewById(R.id.progress1);
         progressBar1.setVisibility(View.VISIBLE);
 
         ProgressBar progressBar2 = findViewById(R.id.progress2);
         progressBar2.setVisibility(View.INVISIBLE);
 
-        progress = findViewById(R.id.lyt_progress);
-        parent = findViewById(R.id.lyt_parent);
-        loading = findViewById(R.id.loadButton);
+        LinearLayout progress = findViewById(R.id.lyt_progress);
         //        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
 //            new initialLoad().execute(school_id, parent_id);
 
@@ -139,6 +138,7 @@ public class Result_menu extends AppCompatActivity {
                 // new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
                 // if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 //    new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
+                Tools.toast(student_reg_no, this);
                 startActivity(new Intent(this, ResultActivity.class).putExtra("term", term).putExtra("session", session).putExtra("student_reg_no", student_reg_no).putExtra("school_id", school_id));
                 // } else {
                 Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);

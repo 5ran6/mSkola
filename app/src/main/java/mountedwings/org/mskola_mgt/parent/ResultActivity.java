@@ -1,6 +1,5 @@
 package mountedwings.org.mskola_mgt.parent;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -48,7 +47,6 @@ public class ResultActivity extends AppCompatActivity {
 
     private LinearLayout result_layout;
     private LinearLayout parent_layout;
-    private ProgressDialog progressDialog;
     private String TAG = "mSkola", location = "Mbayande Gboko", email = "cac@gmail.com", website = "www.livingseed.org", full_address = "You know my fulll address dude", calendar = "Resumption = 5th January, 2019; Mid term = NIL; Vacation = We shall post that soon", term, school_id, session, student_reg_no, parent_id;
     private String class_arm, student_info_titles = "", student_info_values = "", no_cas;
     private ArrayList<byte[]> schoolLogo = new ArrayList<>();
@@ -119,41 +117,46 @@ public class ResultActivity extends AppCompatActivity {
             if (!text.equals("0") && !text.isEmpty()) {
                 String school_info[] = text.split("<>");
                 String raw_info, raw_next_term;
-                raw_info = school_info[0];
-                raw_next_term = school_info[1];
+                try {
+                    raw_info = school_info[0];
+                    raw_next_term = school_info[1];
 
-                String[] info = raw_info.split(";");
-                String[] next_term = raw_next_term.split(";");
+                    String[] info = raw_info.split(";");
+                    String[] next_term = raw_next_term.split(";");
 
-                ResultHeader resultHeader = new ResultHeader();
-                resultHeader.setTerm(term);
-                resultHeader.setSchool_name(info[0]);
-                resultHeader.setLocation(info[1]);
-                resultHeader.setWebsite(info[2]);
-                resultHeader.setEmail(info[3]);
-                resultHeader.setContact(info[3]);
-                resultHeader.setFull_address("Address: " + resultHeader.getLocation() + "; Contact: " + resultHeader.getContact());
+                    ResultHeader resultHeader = new ResultHeader();
+                    resultHeader.setTerm(term);
+                    resultHeader.setSchool_name(info[0]);
+                    resultHeader.setLocation(info[1]);
+                    resultHeader.setWebsite(info[2]);
+                    resultHeader.setEmail(info[3]);
+                    resultHeader.setContact(info[3]);
+                    resultHeader.setFull_address("Address: " + resultHeader.getLocation() + "; Contact: " + resultHeader.getContact());
 
-                String resumption, mid_term, vacation;
-                resumption = next_term[0];
-                mid_term = next_term[1];
-                vacation = next_term[2];
-                resultHeader.setCalendar("Resumption Date: " + resumption + "; Mid Term Date: " + mid_term + "; Vacation Date: " + vacation);
+                    String resumption, mid_term, vacation;
+                    resumption = next_term[0];
+                    mid_term = next_term[1];
+                    vacation = next_term[2];
+                    resultHeader.setCalendar("Resumption Date: " + resumption + "; Mid Term Date: " + mid_term + "; Vacation Date: " + vacation);
 
-                //school Logo
-                Bitmap bitmap = BitmapFactory.decodeByteArray(schoolLogo.get(0), 0, schoolLogo.size());
-                school_logo.setImageBitmap(bitmap);
+                    //school Logo
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(schoolLogo.get(0), 0, schoolLogo.size());
+                    school_logo.setImageBitmap(bitmap);
 
-                //inflate on UI
-                school_name.setText(resultHeader.getSchool_name().toUpperCase());
-                school_address.setText(resultHeader.getLocation());
-                term_result.setText(term.toUpperCase() + " TERM RESULT");
-                location = resultHeader.getLocation();
-                email = resultHeader.getEmail().toLowerCase();
-                website = resultHeader.getWebsite().toLowerCase();
-                calendar = resultHeader.getCalendar();
-                full_address = resultHeader.getFull_address();
+                    //inflate on UI
+                    school_name.setText(resultHeader.getSchool_name().toUpperCase());
+                    school_address.setText(resultHeader.getLocation());
+                    term_result.setText(term.toUpperCase() + " TERM RESULT");
+                    location = resultHeader.getLocation();
+                    email = resultHeader.getEmail().toLowerCase();
+                    website = resultHeader.getWebsite().toLowerCase();
+                    calendar = resultHeader.getCalendar();
+                    full_address = resultHeader.getFull_address();
 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             } else {
                 Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
@@ -201,11 +204,12 @@ public class ResultActivity extends AppCompatActivity {
                 String[] data2 = raw_data2.split("<>");
                 String[] data3 = raw_data3.split("<>");
 
-                class_arm = data1[0].toUpperCase() + " " + data1[1].toUpperCase();
-                session = data1[2];
-                term = data1[3];
+//                class_arm = data1[0].toUpperCase() + " " + data1[1].toUpperCase();
+                class_arm = data1[0].toUpperCase();
+                session = data1[1];
+                term = data1[2];
 
-                for (int i = 0; i <= data2.length; i++) {
+                for (int i = 0; i < data2.length; i++) {
                     student_info_titles = student_info_titles + data2[i] + ": \n";
                     student_info_values = student_info_values + data3[i] + " \n";
                 }
@@ -219,6 +223,7 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             //run next thread
+            Log.i(TAG, "sch = " + school_id + "std reg = " + student_reg_no + "sess = " + session + "term = " + term);
             new getsubjectsca().execute(school_id, student_reg_no, session, term); //have to be sure which format the term came in
         }
     }
@@ -246,19 +251,21 @@ public class ResultActivity extends AppCompatActivity {
             super.onPostExecute(text);
             Log.d(TAG, "Loaded round 3: " + text);
 
-            if (!text.equals("0") && !text.isEmpty() && !text.equals("not compiled")) {
+            if (!text.equals("0") && !text.isEmpty() && !text.trim().equals("not compiled")) {
                 String data[] = text.split("<>");
 
                 String raw_subjects = data[0], raw_short_codes = data[1];
                 no_cas = data[2];
                 result.setNoCas(Integer.valueOf(no_cas) + 6); // for exam, total, average....grade
                 int no_subjects = raw_subjects.split(";").length;
-                for (int i = 0; i <= no_subjects; i++) {
+                Log.i(TAG, "no subjects = " + String.valueOf(no_subjects));
+
+                for (int i = 0; i < no_subjects; i++) {
                     subjects.add(raw_subjects.split(";")[i]);
                     short_codes.add(raw_short_codes.split(";")[i]);
                 }
 
-                switch (Integer.valueOf(no_cas)) {
+                switch (Integer.valueOf(no_cas.trim())) {
                     case 1:
                         HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
                         HEADERS.add("CA1");
@@ -368,6 +375,7 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("GRADE");
                         break;
                     case 9:
+                        Log.i(TAG, " 9 CAs");
                         HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
                         HEADERS.add("CA1");
                         HEADERS.add("CA2");
@@ -407,12 +415,12 @@ public class ResultActivity extends AppCompatActivity {
 
                 }
 
-                for (int j = 0; j <= no_subjects; j++) {
-                    for (int i = 0; i <= result.getNoCas(); i++) {
+                for (int j = 0; j < no_subjects; j++) {
+                    for (int i = 0; i < result.getNoCas(); i++) {
                         switch (i) {
                             case 1:
-                                for (int k = 0; k <= no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
+                                for (int k = 0; k < no_subjects; k++) {
+//                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     EXAM.add(subjects_with_scores.get(k).split(";")[2]);
                                     TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
@@ -423,7 +431,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 2:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -436,7 +444,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 3:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -450,7 +458,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 4:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -465,7 +473,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 5:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -481,7 +489,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 6:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -498,7 +506,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 7:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -516,7 +524,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 8:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -535,7 +543,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 9:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -555,7 +563,7 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                             case 10:
-                                for (int k = 0; k <= no_subjects; k++) {
+                                for (int k = 0; k < no_subjects; k++) {
                                     SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
                                     CA1.add(subjects_with_scores.get(k).split(";")[1]);
                                     CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -576,7 +584,6 @@ public class ResultActivity extends AppCompatActivity {
                                 }
                                 break;
                         }
-
                         //CA1.add(subjects_with_scores.get(j).split(";")[1]);
                     }
                 }
@@ -600,6 +607,10 @@ public class ResultActivity extends AppCompatActivity {
                 result.setHEADERS(HEADERS);
                 result.setSUBJECTS(subjects);
                 result.setNoSubjects(no_subjects);
+
+            } else if (text.trim().equals("not compiled")) {
+                Tools.toast("Results have not been compiled for this term", ResultActivity.this, R.color.red_800);
+                finish();
 
             } else {
                 Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
@@ -784,8 +795,8 @@ public class ResultActivity extends AppCompatActivity {
         // nested scrollview
         nested_scroll_view = findViewById(R.id.nested_content);
         loading = findViewById(R.id.loading);
-        // loading.setVisibility(View.VISIBLE);
-        // nested_scroll_view.setVisibility(View.GONE);
+        nested_scroll_view.setVisibility(View.GONE);
+        loading.setVisibility(View.VISIBLE);
         result_layout = findViewById(R.id.result);
 
         result_layout.addView(new TableMainLayoutOriginal(this));

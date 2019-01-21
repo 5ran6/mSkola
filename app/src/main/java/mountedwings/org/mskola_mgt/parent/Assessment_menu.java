@@ -57,12 +57,12 @@ public class Assessment_menu extends AppCompatActivity {
                 new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Assessment_menu.this, R.color.green_800);
-                        else
-                            //load classes and assessments
-                            new initialLoad().execute(school_id);
+//                        status = 1;
+//                        if (w > 1)
+//                            Tools.toast("Back Online! Try again", Assessment_menu.this, R.color.green_800);
+//                        else
+                        //                    //load classes and assessments
+                        //                     new initialLoad().execute(school_id);
                     }
 
                     @Override
@@ -101,7 +101,7 @@ public class Assessment_menu extends AppCompatActivity {
         TextView load = findViewById(R.id.load);
         select_term = findViewById(R.id.select_term);
         select_session = findViewById(R.id.select_session);
-        select_subject = findViewById(R.id.subject);
+        select_subject = findViewById(R.id.select_subject);
         progressBar1 = findViewById(R.id.progress1);
         progressBar1.setVisibility(View.VISIBLE);
 
@@ -116,6 +116,9 @@ public class Assessment_menu extends AppCompatActivity {
         loading = findViewById(R.id.loadButton);
         //        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
 //            new initialLoad().execute(school_id, parent_id);
+
+        new initialLoad().execute(school_id);
+
 
         select_session.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

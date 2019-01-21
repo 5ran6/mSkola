@@ -44,12 +44,12 @@
                     android:paddingLeft="@dimen/spacing_micro">
 
                     <com.mikhaellopez.circularimageview.CircularImageView
+                        android:id="@+id/logo"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_marginTop="@dimen/spacing_small"
                         android:src="@drawable/photo_male_2"
                         app:civ_border="true"
-                        android:id="@+id/logo"
                         app:civ_border_color="@color/colorPrimary"
                         app:civ_border_width="1dp" />
 

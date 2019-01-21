@@ -141,6 +141,41 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/spacing_middle" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SUBJECT"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                        android:textColor="@color/grey_40" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/select_subject"
+                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight=".1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/grey_40" />
+
+                        <ProgressBar
+                            android:id="@+id/progress3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="@dimen/spacing_xlarge" />

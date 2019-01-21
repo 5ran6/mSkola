@@ -256,7 +256,44 @@ public class TableMainLayout extends RelativeLayout {
     TableRow taleRowForTableD(SampleObject sampleObject) {
 
         TableRow taleRowForTableD = new TableRow(this.context);
-        if (result.getNoCas() == 9) {
+        if (result.getNoCas() == 7) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
+            };
+            for (int x = 0; x < result.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+        } else if (result.getNoCas() == 8) {
+            String info[] = {
+                    sampleObject.CA1,
+                    sampleObject.CA2,
+                    sampleObject.EXAM,
+                    sampleObject.TOTAL,
+                    sampleObject.CLASS_AVERAGE,
+                    sampleObject.HIGHEST,
+                    sampleObject.LOWEST,
+                    sampleObject.GRADE
+            };
+            for (int x = 0; x < result.getNoCas(); x++) {
+                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+                params.setMargins(2, 2, 0, 0);
+
+                TextView textViewB = this.bodyTextView(info[x]);
+                taleRowForTableD.addView(textViewB, params);
+            }
+
+        } else if (result.getNoCas() == 9) {
             String info[] = {
                     sampleObject.CA1,
                     sampleObject.CA2,
@@ -422,7 +459,6 @@ public class TableMainLayout extends RelativeLayout {
                 taleRowForTableD.addView(textViewB, params);
             }
 
-
         } else if (result.getNoCas() == 16) {
             String info[] = {
                     sampleObject.CA1,
@@ -468,7 +504,7 @@ public class TableMainLayout extends RelativeLayout {
         return bodyTextView;
     }
 
-    // table cell standard TextView
+    // table cell custom TextView
     TextView namesTextView(String label) {
 
         TextView bodyTextView = new TextView(this.context);
@@ -481,7 +517,7 @@ public class TableMainLayout extends RelativeLayout {
         return bodyTextView;
     }
 
-    // header standard TextView
+    // header custom TextView
     TextView headerTextView(String label) {
 
         TextView headerTextView = new TextView(this.context);
