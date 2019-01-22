@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_img"
     android:fitsSystemWindows="true"
-    tools:context=".parent.Dashboard"
+    tools:context=".student.Dashboard"
     tools:ignore="NewApi">
 
     <android.support.design.widget.AppBarLayout
@@ -114,6 +114,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
+                            android:onClick="assignment"
                             app:cardBackgroundColor="@color/blue_400"
                             app:cardCornerRadius="2dp"
                             app:cardElevation="2dp">
@@ -137,7 +138,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:text="Chat"
+                                        android:text="Assignment"
                                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                                         android:textColor="@android:color/white"
                                         android:textStyle="italic" />
@@ -147,7 +148,7 @@
                                         android:layout_height="?android:attr/actionBarSize"
                                         android:background="?android:attr/selectableItemBackgroundBorderless"
                                         android:tint="@android:color/white"
-                                        app:srcCompat="@drawable/ic_email" />
+                                        app:srcCompat="@drawable/ic_recent" />
 
                                 </LinearLayout>
 
@@ -161,7 +162,7 @@
                                         android:layout_centerVertical="true"
                                         android:layout_margin="@dimen/spacing_large"
                                         android:maxLines="1"
-                                        android:text="MESSAGES"
+                                        android:text="HOMEWORK"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                         android:textColor="@android:color/white" />
 
@@ -178,6 +179,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
+                            android:onClick="academics"
                             app:cardBackgroundColor="@color/blue_400"
                             app:cardCornerRadius="2dp"
                             app:cardElevation="2dp">
@@ -250,6 +252,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
+                            android:onClick="chat"
                             app:cardBackgroundColor="@color/green_600"
                             app:cardCornerRadius="2dp"
                             app:cardElevation="2dp">
@@ -269,7 +272,7 @@
                                         android:layout_centerVertical="true"
                                         android:layout_margin="@dimen/spacing_large"
                                         android:maxLines="1"
-                                        android:text="Assignment"
+                                        android:text="CHAT"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                         android:textColor="@android:color/white" />
 
@@ -294,7 +297,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:text="Latest Assignments"
+                                        android:text="Chat with others"
                                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                                         android:textColor="@android:color/white" />
 
@@ -303,7 +306,7 @@
                                         android:layout_height="?android:attr/actionBarSize"
                                         android:background="?android:attr/selectableItemBackgroundBorderless"
                                         android:tint="@android:color/white"
-                                        app:srcCompat="@drawable/ic_recent"
+                                        app:srcCompat="@drawable/ic_email"
                                         tools:targetApi="lollipop" />
 
                                 </LinearLayout>
@@ -319,6 +322,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground"
+                            android:onClick="information"
                             app:cardBackgroundColor="@color/green_600"
                             app:cardCornerRadius="2dp"
                             app:cardElevation="2dp">

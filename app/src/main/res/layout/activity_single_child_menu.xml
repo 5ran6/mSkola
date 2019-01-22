@@ -29,7 +29,7 @@
                 android:layout_marginStart="@dimen/spacing_medium"
                 android:fontFamily="@font/glametrixbold"
                 android:maxLines="1"
-                android:text="Child name"
+                android:text="@string/demo_name"
                 android:textAllCaps="true"
 
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"

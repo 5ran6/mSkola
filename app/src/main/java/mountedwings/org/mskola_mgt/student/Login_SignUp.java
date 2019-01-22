@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
-import mountedwings.org.mskola_mgt.MskolaLogin;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.Sign_Up;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -220,7 +219,7 @@ public class Login_SignUp extends AppCompatActivity {
             finish();
         });
         dialog.findViewById(R.id.bt_login).setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), MskolaLogin.class));
+            startActivity(new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.student.MskolaLogin.class));
             dialog.dismiss();
             finish();
         });

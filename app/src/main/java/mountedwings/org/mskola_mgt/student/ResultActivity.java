@@ -1,4 +1,4 @@
-package mountedwings.org.mskola_mgt.parent;
+package mountedwings.org.mskola_mgt.student;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -30,6 +30,7 @@ import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.data.ResultFooter;
 import mountedwings.org.mskola_mgt.data.ResultHeader;
 import mountedwings.org.mskola_mgt.data.result;
+import mountedwings.org.mskola_mgt.parent.TableMainLayoutOriginal;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
 
@@ -224,12 +225,10 @@ public class ResultActivity extends AppCompatActivity {
 
             //run next thread
             Log.i(TAG, "sch = " + school_id + "std reg = " + student_reg_no + "sess = " + session + "term = " + term);
-            //      new getsubjectsca().execute(school_id, student_reg_no, session, term); //have to be sure which format the term came in
             new getstdscores().execute(school_id, session, term, student_reg_no);
 
         }
     }
-
 
     //  3. loads students scores
     private class getstdscores extends AsyncTask<String, Integer, String> {
@@ -251,25 +250,22 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d(TAG, "Loaded round 3: " + text);
+            Log.d(TAG, "Loaded round 4: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String data[] = text.split("##");
-                try {
-                    String raw_scores = data[0], raw_others = data[1], raw_psychomotor = data[2];
-                    int no_scores = raw_scores.split("<>").length;
 
-                    for (int i = 0; i < no_scores; i++) {
-                        subjects_with_scores.add(raw_scores.split("<>")[i]);
-                        class_average__highest__lowest.add(raw_others.split("<>")[i]);
-                        class_average__highest__lowest.add(raw_others.split("<>")[i]);
-                    }
-                    for (int i = 0; i < raw_psychomotor.split("<>").length; i++) {
-                        psychomotor_skills.add(raw_psychomotor.split("<>")[i].split(";")[0]);
-                        psychomotor_values.add(raw_psychomotor.split("<>")[i].split(";")[1]);
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                String raw_scores = data[0], raw_others = data[1], raw_psychomotor = data[2];
+                int no_scores = raw_scores.split("<>").length;
+
+                for (int i = 0; i < no_scores; i++) {
+                    subjects_with_scores.add(raw_scores.split("<>")[i]);
+                    class_average__highest__lowest.add(raw_others.split("<>")[i]);
+                    class_average__highest__lowest.add(raw_others.split("<>")[i]);
+                }
+                for (int i = 0; i < raw_psychomotor.split("<>").length; i++) {
+                    psychomotor_skills.add(raw_psychomotor.split("<>")[i].split(";")[0]);
+                    psychomotor_values.add(raw_psychomotor.split("<>")[i].split(";")[1]);
                 }
                 //inflate on UI
 
@@ -304,7 +300,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d(TAG, "Loaded round 4: " + text);
+            Log.d(TAG, "Loaded round 3: " + text);
 
             if (!text.equals("0") && !text.isEmpty() && !text.trim().equals("not compiled")) {
                 String data[] = text.split("<>");
@@ -678,6 +674,7 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
+
     //  5. loads grades
     private class getgrades extends AsyncTask<String, Integer, String> {
 
@@ -707,7 +704,7 @@ public class ResultActivity extends AppCompatActivity {
                 String raw_grades = data[0], raw_upper_values = data[1], raw_lower_values = data[2], raw_tags = data[3];
                 int no_grades = raw_grades.split(";").length;
 
-                for (int i = 0; i < no_grades; i++) {
+                for (int i = 0; i <= no_grades; i++) {
                     grades.add(raw_grades.split(";")[i]);
                     upper_values.add(raw_upper_values.split(";")[i]);
                     lower_values.add(raw_lower_values.split(";")[i]);
@@ -734,7 +731,7 @@ public class ResultActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getstudentresult");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             return sentData.getStrData();
         }
@@ -766,17 +763,15 @@ public class ResultActivity extends AppCompatActivity {
                 resultFooter.setTotal_number_students_in_class(data[10]);
 
                 //concat and inflate on UI
-                result_summary_tv.setText(String.format("Total: %s\nAverage: %s\n\nNumber of Subjects: %s\nPosition: %s\n\nHead Teachers' Remark: " +
-                                "%s\n\nClass Teachers' Remark: " +
-                                "%s\n\nHead Teachers' Name: %s\n\nClass Teachers' Name: %s\n\nAttendance: " +
-                                "%s\nTotal Attendance: %s\n\nTotal Number of students in Class: %s",
-                        resultFooter.getTotal(), resultFooter.getAverage(), resultFooter.getNo_subjects(), resultFooter.getPosition(), resultFooter.getHead_teacher_remark(), resultFooter.getClass_teacher_remark(), resultFooter.getHead_teacher_name(), resultFooter.getClass_teacher_name(), resultFooter.getAttendance(), resultFooter.getTotal_attendance(), resultFooter.getTotal_number_students_in_class()));
+                result_summary_tv.setText(String.format("Total: %s;\tAverage: %s;\tNumber of Subjects: %s;\tPosition: %s;\tHead Teachers' Remark: %s;\tClass Teachers' Remark: %s;\tHead Teachers' Name: %s;\tClass Teachers' Name: %s;\tAttendance: %s;\tTotal Attendance: %s;\tTotal Number of Dashboard in Class: %s", resultFooter.getTotal(), resultFooter.getAverage(), resultFooter.getNo_subjects(), resultFooter.getPosition(), resultFooter.getHead_teacher_remark(), resultFooter.getClass_teacher_remark(), resultFooter.getHead_teacher_name(), resultFooter.getClass_teacher_name(), resultFooter.getAttendance(), resultFooter.getTotal_attendance(), resultFooter.getTotal_number_students_in_class())
+                );
             } else {
                 Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
                 finish();
             }
 
             //inflate everything in UI, then unveil
+
             //TODO: unveil gradually from top to bottom. How about that?
             loading.setVisibility(View.GONE);
             nested_scroll_view.setVisibility(View.VISIBLE);
@@ -797,7 +792,7 @@ public class ResultActivity extends AppCompatActivity {
         term = getIntent().getStringExtra("term");
         session = getIntent().getStringExtra("session");
         school_logo = findViewById(R.id.logo);
-        result_summary_tv = findViewById(R.id.result_summary);
+
         // nested scrollview
         nested_scroll_view = findViewById(R.id.nested_content);
         loading = findViewById(R.id.loading);

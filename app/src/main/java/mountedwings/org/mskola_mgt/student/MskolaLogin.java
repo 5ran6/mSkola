@@ -1,4 +1,4 @@
-package mountedwings.org.mskola_mgt.parent;
+package mountedwings.org.mskola_mgt.student;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -22,7 +22,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mskola.controls.serverProcessParents;
+import com.mskola.controls.serverProcessStudents;
 import com.mskola.files.storageFile;
 
 import mountedwings.org.mskola_mgt.ChangePassword;
@@ -190,7 +190,7 @@ public class MskolaLogin extends AppCompatActivity {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("requestlogin");
             storageObj.setStrData(emailAddress + "," + password);
-            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
+            storageFile sentData = new serverProcessStudents().requestProcess(storageObj);
 
             //received from server
             text = sentData.getStrData();
@@ -223,8 +223,42 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
+                new getDeatails().execute(emailAddress);
+            } else {
+                showCustomDialogFailure(error_from_server);
+                lyt_progress.setVisibility(View.GONE);
+                //clear sharedPref
+                clearSharedPreferences(MskolaLogin.this);
+            }
+        }
+    }
 
-                intent = new Intent(getApplicationContext(), Dashboard.class);
+    private class getDeatails extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getstudentdetails");
+            storageObj.setStrData(strings[0]);
+            storageFile sentData = new serverProcessStudents().requestProcess(storageObj);
+            //received from server
+            return sentData.getStrData();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            if (!text.trim().equals("0") || !text.trim().isEmpty() || !text.trim().equals("")) {
+
+                // the split code here then pass extras to Dashboard activity
+
+
+                //finally
+                intent = new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.student.Dashboard.class);
 
                 //sharedPref
                 editor = mPrefs.edit();
@@ -235,11 +269,10 @@ public class MskolaLogin extends AppCompatActivity {
                 editor.apply();
 
                 intent.putExtra("email_address", emailE.getText().toString());
-
                 startActivity(intent);
-                finish();
+
             } else {
-                showCustomDialogFailure(error_from_server);
+                showCustomDialogFailure("Account not linked to your profile. Contact your school Admin");
                 lyt_progress.setVisibility(View.GONE);
                 //clear sharedPref
                 clearSharedPreferences(MskolaLogin.this);
@@ -250,7 +283,6 @@ public class MskolaLogin extends AppCompatActivity {
     public static void clearSharedPreferences(Context ctx) {
         ctx.getSharedPreferences("mSkola", 0).edit().clear().apply();
     }
-
 
     private void doLogin() {
         lyt_progress = findViewById(R.id.lyt_progress);
@@ -275,17 +307,12 @@ public class MskolaLogin extends AppCompatActivity {
         if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
             mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
-
-//            editor = mPrefs.edit();
-//            editor.putString("role", role);
-//            editor.putString("email_address", emailAddress);
-//            editor.apply();
         }
 
         if (singedIn) {
             //startIntent to next activity
             finish();
-            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+            startActivity(new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.student.Dashboard.class));
         }
 
         setContentView(R.layout.activity_login_mskola);

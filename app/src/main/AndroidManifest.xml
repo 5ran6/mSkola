@@ -54,7 +54,7 @@
             android:name=".student.Login_SignUp"
             android:screenOrientation="portrait" />
         <activity android:name=".parent.Dashboard" />
-        <activity android:name=".student.Students" />
+        <activity android:name=".student.Dashboard" />
         <activity android:name=".Chat" />
         <activity android:name=".SettingFlat" />
         <activity android:name=".teacher.Assessment" />
@@ -138,6 +138,16 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".student.MskolaLogin" />
+        <activity android:name=".student.Assignment_history_detail" />
+        <activity android:name=".student.AssignmentHistoryActivity" />
+        <activity android:name=".student.Academics_menu" />
+        <activity android:name=".student.Attendance_menu_activity" />
+        <activity android:name=".student.Timetable_menu_activity" />
+        <activity android:name=".student.Result_menu" />
+        <activity android:name=".student.ResultActivity" />
+        <activity android:name=".student.StudentInformation" />
+        <activity android:name=".student.AssessmentView" />
     </application>
 
 </manifest>

@@ -215,7 +215,7 @@ public class Compile_Result_menu extends AppCompatActivity {
                 //    Toast.makeText(getBaseContext(), "", Toast.LENGTH_SHORT).show();
                 showCustomDialogSuccess("Results successfully compiled");
             } else if (text.equals("not found")) {
-                showCustomDialogFailure("Students not found in the selected class");
+                showCustomDialogFailure("Dashboard not found in the selected class");
             } else {
                 showCustomDialogFailure("An error occurred");
             }
