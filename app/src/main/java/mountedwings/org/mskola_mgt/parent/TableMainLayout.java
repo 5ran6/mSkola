@@ -39,6 +39,15 @@ public class TableMainLayout extends RelativeLayout {
 
     Context context;
 
+    List<SampleObject1> sampleObjects1;
+    List<SampleObject2> sampleObjects2;
+    List<SampleObject3> sampleObjects3;
+    List<SampleObject4> sampleObjects4;
+    List<SampleObject5> sampleObjects5;
+    List<SampleObject6> sampleObjects6;
+    List<SampleObject7> sampleObjects7;
+    List<SampleObject8> sampleObjects8;
+    List<SampleObject9> sampleObjects9;
     List<SampleObject> sampleObjects;
 
     int[] headerCellsWidth;
@@ -54,7 +63,40 @@ public class TableMainLayout extends RelativeLayout {
 
         headerCellsWidth = new int[headers.length];
 
-        sampleObjects = this.sampleObjects();
+
+        switch (result.getNoCas() - 6) {
+            case 1:
+                sampleObjects1 = this.sampleObjects1();
+                break;
+            case 2:
+                sampleObjects2 = this.sampleObjects2();
+                break;
+            case 3:
+                sampleObjects3 = this.sampleObjects3();
+                break;
+            case 4:
+                sampleObjects4 = this.sampleObjects4();
+                break;
+            case 5:
+                sampleObjects5 = this.sampleObjects5();
+                break;
+            case 6:
+                sampleObjects6 = this.sampleObjects6();
+                break;
+            case 7:
+                sampleObjects7 = this.sampleObjects7();
+                break;
+            case 8:
+                sampleObjects8 = this.sampleObjects8();
+                break;
+            case 9:
+                sampleObjects9 = this.sampleObjects9();
+                break;
+            case 10:
+                sampleObjects = this.sampleObjects();
+                break;
+        }
+
 
         // initialize the main components (TableLayouts, HorizontalScrollView, ScrollView)
         this.initComponents();
@@ -74,7 +116,6 @@ public class TableMainLayout extends RelativeLayout {
         this.addComponentToMainLayout();
         this.setBackgroundColor(Color.WHITE);
 
-
         // add some table rows
         this.addTableRowToTableA();
         this.addTableRowToTableB();
@@ -89,13 +130,266 @@ public class TableMainLayout extends RelativeLayout {
 
     }
 
-    // this is just the sample data
+    // this is the data
+    List<SampleObject1> sampleObjects1() {
+
+        List<SampleObject1> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject1 sampleObject = new SampleObject1(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+
+    }
+
+    List<SampleObject2> sampleObjects2() {
+
+        List<SampleObject2> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject2 sampleObject = new SampleObject2(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+
+    }
+
+
+    List<SampleObject3> sampleObjects3() {
+
+        List<SampleObject3> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject3 sampleObject = new SampleObject3(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+    }
+
+
+    List<SampleObject4> sampleObjects4() {
+
+        List<SampleObject4> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject4 sampleObject = new SampleObject4(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getCA4().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+    }
+
+
+    List<SampleObject5> sampleObjects5() {
+
+        List<SampleObject5> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject5 sampleObject = new SampleObject5(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getCA4().get(x),
+                    result.getCA5().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+
+    }
+
+    List<SampleObject6> sampleObjects6() {
+
+        List<SampleObject6> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject6 sampleObject = new SampleObject6(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getCA4().get(x),
+                    result.getCA5().get(x),
+                    result.getCA6().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+
+    }
+
+
+    List<SampleObject7> sampleObjects7() {
+
+        List<SampleObject7> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject7 sampleObject = new SampleObject7(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getCA4().get(x),
+                    result.getCA5().get(x),
+                    result.getCA6().get(x),
+                    result.getCA7().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+
+    }
+
+    List<SampleObject8> sampleObjects8() {
+
+        List<SampleObject8> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject8 sampleObject = new SampleObject8(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getCA4().get(x),
+                    result.getCA5().get(x),
+                    result.getCA6().get(x),
+                    result.getCA7().get(x),
+                    result.getCA8().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+
+    }
+
+    List<SampleObject9> sampleObjects9() {
+
+        List<SampleObject9> sampleObjects = new ArrayList<>();
+        //     try {
+        for (int x = 0; x < result.getNoSubjects(); x++) {
+            SampleObject9 sampleObject = new SampleObject9(
+                    result.getSUBJECTS().get(x),
+                    result.getCA1().get(x),
+                    result.getCA2().get(x),
+                    result.getCA3().get(x),
+                    result.getCA4().get(x),
+                    result.getCA5().get(x),
+                    result.getCA6().get(x),
+                    result.getCA7().get(x),
+                    result.getCA8().get(x),
+                    result.getCA9().get(x),
+                    result.getEXAM().get(x),
+                    result.getTOTAL().get(x),
+                    result.getClassAverage().get(x),
+                    result.getHIGHEST().get(x),
+                    result.getLOWEST().get(x),
+                    result.getGRADE().get(x)
+            );
+            sampleObjects.add(sampleObject);
+        }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        return sampleObjects;
+
+    }
+
     List<SampleObject> sampleObjects() {
 
         List<SampleObject> sampleObjects = new ArrayList<>();
-
+        //     try {
         for (int x = 0; x < result.getNoSubjects(); x++) {
-
             SampleObject sampleObject = new SampleObject(
                     result.getSUBJECTS().get(x),
                     result.getCA1().get(x),
@@ -115,13 +409,15 @@ public class TableMainLayout extends RelativeLayout {
                     result.getLOWEST().get(x),
                     result.getGRADE().get(x)
             );
-
             sampleObjects.add(sampleObject);
         }
-
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
         return sampleObjects;
 
     }
+
 
     // initialized components
     private void initComponents() {
@@ -226,21 +522,280 @@ public class TableMainLayout extends RelativeLayout {
     // generate table row of table C and table D
     private void generateTableC_AndTable_B() {
 
-        for (SampleObject sampleObject : this.sampleObjects) {
+        switch (result.getNoCas() - 6) {
+            case 1:
+                for (SampleObject1 sampleObject : this.sampleObjects1) {
 
-            TableRow tableRowForTableC = this.tableRowForTableC(sampleObject);
-            TableRow taleRowForTableD = this.taleRowForTableD(sampleObject);
+                    TableRow tableRowForTableC = this.tableRowForTableC1(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD1(sampleObject);
 
-            tableRowForTableC.setBackgroundColor(Color.LTGRAY);
-            taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
 
-            this.tableC.addView(tableRowForTableC);
-            this.tableD.addView(taleRowForTableD);
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 2:
+                for (SampleObject2 sampleObject : this.sampleObjects2) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC2(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD2(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 3:
+                for (SampleObject3 sampleObject : this.sampleObjects3) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC3(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD3(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 4:
+                for (SampleObject4 sampleObject : this.sampleObjects4) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC4(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD4(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 5:
+                for (SampleObject5 sampleObject : this.sampleObjects5) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC5(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD5(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 6:
+                for (SampleObject6 sampleObject : this.sampleObjects6) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC6(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD6(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 7:
+                for (SampleObject7 sampleObject : this.sampleObjects7) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC7(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD7(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 8:
+                for (SampleObject8 sampleObject : this.sampleObjects8) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC8(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD8(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 9:
+                for (SampleObject9 sampleObject : this.sampleObjects9) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC9(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD9(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+
+                break;
+
+            case 10:
+                for (SampleObject sampleObject : this.sampleObjects) {
+
+                    TableRow tableRowForTableC = this.tableRowForTableC(sampleObject);
+                    TableRow taleRowForTableD = this.taleRowForTableD(sampleObject);
+
+                    tableRowForTableC.setBackgroundColor(Color.LTGRAY);
+                    taleRowForTableD.setBackgroundColor(Color.LTGRAY);
+
+                    this.tableC.addView(tableRowForTableC);
+                    this.tableD.addView(taleRowForTableD);
+
+                }
+                break;
 
         }
+
+
     }
 
     // a TableRow for table C
+    TableRow tableRowForTableC1(SampleObject1 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC2(SampleObject2 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC3(SampleObject3 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC4(SampleObject4 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC5(SampleObject5 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC6(SampleObject6 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC7(SampleObject7 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC8(SampleObject8 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
+    TableRow tableRowForTableC9(SampleObject9 sampleObject) {
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 2, 0, 0);
+
+        TableRow tableRowForTableC = new TableRow(this.context);
+        TextView textView = this.namesTextView(sampleObject.SUBJECT);
+        tableRowForTableC.addView(textView, params);
+
+        return tableRowForTableC;
+    }
+
     TableRow tableRowForTableC(SampleObject sampleObject) {
 
         TableRow.LayoutParams params = new TableRow.LayoutParams(this.headerCellsWidth[0], LayoutParams.MATCH_PARENT);
@@ -253,244 +808,301 @@ public class TableMainLayout extends RelativeLayout {
         return tableRowForTableC;
     }
 
-    TableRow taleRowForTableD(SampleObject sampleObject) {
+
+    TableRow taleRowForTableD1(SampleObject1 sampleObject) {
 
         TableRow taleRowForTableD = new TableRow(this.context);
-        if (result.getNoCas() == 7) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
 
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-        } else if (result.getNoCas() == 8) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-        } else if (result.getNoCas() == 9) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-        } else if (result.getNoCas() == 10) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.CA4,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-
-        } else if (result.getNoCas() == 11) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.CA4,
-                    sampleObject.CA5,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-
-        } else if (result.getNoCas() == 12) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.CA4,
-                    sampleObject.CA5,
-                    sampleObject.CA6,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-
-        } else if (result.getNoCas() == 13) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.CA4,
-                    sampleObject.CA5,
-                    sampleObject.CA6,
-                    sampleObject.CA7,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-
-        } else if (result.getNoCas() == 14) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.CA4,
-                    sampleObject.CA5,
-                    sampleObject.CA6,
-                    sampleObject.CA7,
-                    sampleObject.CA8,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-
-        } else if (result.getNoCas() == 15) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.CA4,
-                    sampleObject.CA5,
-                    sampleObject.CA6,
-                    sampleObject.CA7,
-                    sampleObject.CA8,
-                    sampleObject.CA9,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
-
-        } else if (result.getNoCas() == 16) {
-            String info[] = {
-                    sampleObject.CA1,
-                    sampleObject.CA2,
-                    sampleObject.CA3,
-                    sampleObject.CA4,
-                    sampleObject.CA5,
-                    sampleObject.CA6,
-                    sampleObject.CA7,
-                    sampleObject.CA8,
-                    sampleObject.CA9,
-                    sampleObject.CA10,
-                    sampleObject.EXAM,
-                    sampleObject.TOTAL,
-                    sampleObject.CLASS_AVERAGE,
-                    sampleObject.HIGHEST,
-                    sampleObject.LOWEST,
-                    sampleObject.GRADE
-            };
-            for (int x = 0; x < result.getNoCas(); x++) {
-                TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
-                params.setMargins(2, 2, 0, 0);
-
-                TextView textViewB = this.bodyTextView(info[x]);
-                taleRowForTableD.addView(textViewB, params);
-            }
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
         }
+
+
         //    int loopCount = ((TableRow) this.tableB.getChildAt(0)).getChildCount();
 
         return taleRowForTableD;
 
     }
+
+    TableRow taleRowForTableD2(SampleObject2 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD3(SampleObject3 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD4(SampleObject4 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.CA4,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD5(SampleObject5 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.CA4,
+                sampleObject.CA5,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD6(SampleObject6 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.CA4,
+                sampleObject.CA5,
+                sampleObject.CA6,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD7(SampleObject7 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.CA4,
+                sampleObject.CA5,
+                sampleObject.CA6,
+                sampleObject.CA7,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD8(SampleObject8 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.CA4,
+                sampleObject.CA5,
+                sampleObject.CA6,
+                sampleObject.CA7,
+                sampleObject.CA8,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD9(SampleObject9 sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.CA4,
+                sampleObject.CA5,
+                sampleObject.CA6,
+                sampleObject.CA7,
+                sampleObject.CA8,
+                sampleObject.CA9,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+        return taleRowForTableD;
+
+    }
+
+    TableRow taleRowForTableD(SampleObject sampleObject) {
+
+        TableRow taleRowForTableD = new TableRow(this.context);
+        String info[] = {
+                sampleObject.CA1,
+                sampleObject.CA2,
+                sampleObject.CA3,
+                sampleObject.CA4,
+                sampleObject.CA5,
+                sampleObject.CA6,
+                sampleObject.CA7,
+                sampleObject.CA8,
+                sampleObject.CA9,
+                sampleObject.CA10,
+                sampleObject.EXAM,
+                sampleObject.TOTAL,
+                sampleObject.CLASS_AVERAGE,
+                sampleObject.HIGHEST,
+                sampleObject.LOWEST,
+                sampleObject.GRADE
+        };
+        for (int x = 0; x < result.getNoCas(); x++) {
+            TableRow.LayoutParams params = new TableRow.LayoutParams(headerCellsWidth[x + 1], LayoutParams.MATCH_PARENT);
+            params.setMargins(2, 2, 0, 0);
+
+            TextView textViewB = this.bodyTextView(info[x]);
+            taleRowForTableD.addView(textViewB, params);
+        }
+
+        return taleRowForTableD;
+
+    }
+
 
     // table cell standard TextView
     TextView bodyTextView(String label) {

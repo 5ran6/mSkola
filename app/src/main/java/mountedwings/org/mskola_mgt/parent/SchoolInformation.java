@@ -96,10 +96,14 @@ public class SchoolInformation extends AppCompatActivity {
                 phone = rows[5];
                 about.setText(String.format("%s is a %s which is located at %s, %s, %s, %s. ", school_full_name, rows[3], rows[4], rows[2], rows[1], rows[0]));
                 contact.setText(String.format("%s\n%s, %s, %s", rows[4], rows[5], rows[6], rows[7]));
+                try {
+                    //set Logo
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(school_logo.get(0), 0, school_logo.get(0).length);
+                    logo.setImageBitmap(bitmap);
 
-                //set Logo
-                Bitmap bitmap = BitmapFactory.decodeByteArray(school_logo.get(0), 0, school_logo.get(0).length);
-                logo.setImageBitmap(bitmap);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
                 //show
                 call.setVisibility(View.VISIBLE);

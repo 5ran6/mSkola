@@ -210,13 +210,13 @@ public class ResultActivity extends AppCompatActivity {
                 session = data1[1];
                 term = data1[2];
 
-                for (int i = 0; i < data2.length; i++) {
-                    student_info_titles = student_info_titles + data2[i] + ": \n";
-                    student_info_values = student_info_values + data3[i] + " \n";
-                }
-                //inflate on UI
-                students_info.setText(student_info_titles);
-                students_details.setText(student_info_values);
+//                for (int i = 0; i < data2.length; i++) {
+//                    student_info_titles = student_info_titles + data2[i] + ": \n";
+//                    student_info_values = student_info_values + data3[i] + " \n";
+//                }
+//                //inflate on UI
+//                students_info.setText(student_info_titles);
+//                students_details.setText(student_info_values);
 
             } else {
                 Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
@@ -807,12 +807,6 @@ public class ResultActivity extends AppCompatActivity {
         school_address.setText(full_address);
         term_result = findViewById(R.id.term_result);
         //TODO: HINT >>> we display the uncertain text first before the certain text
-
-        // students textView header
-        students_info = findViewById(R.id.students_info);
-        // students textView details
-        students_details = findViewById(R.id.students_details);
-
         // section description
         bt_toggle_student_info = findViewById(R.id.bt_toggle_student_info);
         lyt_expand_student_info = findViewById(R.id.lyt_expand_student_info);

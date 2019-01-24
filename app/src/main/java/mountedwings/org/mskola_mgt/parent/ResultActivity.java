@@ -11,6 +11,8 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,14 +21,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
 import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.adapter.ParentResultListHeader;
+import mountedwings.org.mskola_mgt.data.NumberResultItem;
 import mountedwings.org.mskola_mgt.data.ResultFooter;
 import mountedwings.org.mskola_mgt.data.ResultHeader;
 import mountedwings.org.mskola_mgt.data.result;
@@ -39,16 +44,15 @@ public class ResultActivity extends AppCompatActivity {
     private NestedScrollView nested_scroll_view;
     private ImageButton bt_toggle_student_info, bt_toggle_result, bt_toggle_result_summary, bt_toggle_result_keys, bt_toggle_psychomotor;
     private View lyt_expand_student_info, lyt_expand_result_summary, lyt_expand_keys, lyt_expand_psychomotor;
-    private TextView school_name, school_address, students_info, keys_tv, pschomotor_tv, result_summary_tv, students_details, term_result;
-    private CircularImageView school_logo;
+    private TextView school_name, school_address, keys_tv, pschomotor_tv, result_summary_tv, term_result;
+    private CircleImageView school_logo;
     private BottomSheetBehavior mBehavior;
     private BottomSheetDialog mBottomSheetDialog;
     private View bottom_sheet;
 
     private LinearLayout result_layout;
-    private LinearLayout parent_layout;
     private String TAG = "mSkola", location = "Mbayande Gboko", email = "cac@gmail.com", website = "www.livingseed.org", full_address = "You know my fulll address dude", calendar = "Resumption = 5th January, 2019; Mid term = NIL; Vacation = We shall post that soon", term, school_id, session, student_reg_no, parent_id;
-    private String class_arm, student_info_titles = "", student_info_values = "", no_cas;
+    private String class_arm, no_cas, raw_upper_values, raw_lower_values, raw_tags;
     private ArrayList<byte[]> schoolLogo = new ArrayList<>();
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> short_codes = new ArrayList<>();
@@ -56,10 +60,6 @@ public class ResultActivity extends AppCompatActivity {
     private ArrayList<String> class_average__highest__lowest = new ArrayList<>();
     private ArrayList<String> psychomotor_skills = new ArrayList<>();
     private ArrayList<String> psychomotor_values = new ArrayList<>();
-    private ArrayList<String> grades = new ArrayList<>();
-    private ArrayList<String> upper_values = new ArrayList<>();
-    private ArrayList<String> lower_values = new ArrayList<>();
-    private ArrayList<String> tags = new ArrayList<>();
 
     private ArrayList<String> CA1 = new ArrayList<>();
     private ArrayList<String> CA2 = new ArrayList<>();
@@ -77,11 +77,13 @@ public class ResultActivity extends AppCompatActivity {
     private ArrayList<String> HIGHEST = new ArrayList<>();
     private ArrayList<String> LOWEST = new ArrayList<>();
     private ArrayList<String> GRADE = new ArrayList<>();
-    private ArrayList<String> SUBJECTS = new ArrayList<>();
+
+    private ArrayList<String> grades = new ArrayList<>();
+    private ArrayList<String> lower_limit = new ArrayList<>();
+    private ArrayList<String> higher_limit = new ArrayList<>();
 
     private ArrayList<String> HEADERS = new ArrayList<>();
     private ProgressBar loading;
-    //    private String location, email, website, full_address, calendar, school;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class ResultActivity extends AppCompatActivity {
         new getschoolinfo().execute(school_id);
     }
 
+    //DONE
     //  1. loads header results (w/o term sha)
     private class getschoolinfo extends AsyncTask<String, Integer, String> {
 
@@ -139,9 +142,14 @@ public class ResultActivity extends AppCompatActivity {
                     vacation = next_term[2];
                     resultHeader.setCalendar("Resumption Date: " + resumption + "; Mid Term Date: " + mid_term + "; Vacation Date: " + vacation);
 
-                    //school Logo
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(schoolLogo.get(0), 0, schoolLogo.size());
-                    school_logo.setImageBitmap(bitmap);
+                    try {
+                        //    Log.i(TAG, Arrays.toString(schoolLogo.get(0)));
+                        //school Logo
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(schoolLogo.get(0), 0, schoolLogo.get(0).length);
+                        school_logo.setImageBitmap(bitmap);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
 
                     //inflate on UI
                     school_name.setText(resultHeader.getSchool_name().toUpperCase());
@@ -169,7 +177,7 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
-
+    //DONE
     //  2. loads student basic info
     private class getstudentinfo extends AsyncTask<String, Integer, String> {
 
@@ -204,18 +212,34 @@ public class ResultActivity extends AppCompatActivity {
                 String[] data2 = raw_data2.split("<>");
                 String[] data3 = raw_data3.split("<>");
 
-//                class_arm = data1[0].toUpperCase() + " " + data1[1].toUpperCase();
                 class_arm = data1[0].toUpperCase();
                 session = data1[1];
                 term = data1[2];
 
-                for (int i = 0; i < data2.length; i++) {
-                    student_info_titles = student_info_titles + data2[i] + ": \n";
-                    student_info_values = student_info_values + data3[i] + " \n";
+                //Use Recycler instead
+                ParentResultListHeader adapter;
+                ArrayList<NumberResultItem> num = new ArrayList<>();
+
+
+                for (int i = 1; i < data2.length; i++) {
+                    NumberResultItem numbers = new NumberResultItem();
+//                    student_info_titles = student_info_titles + data2[i] + ": \n";
+//                    student_info_values = student_info_values + data3[i] + " \n";
+                    numbers.setTitle(data2[i]);
+                    numbers.setValue(data3[i]);
+                    num.add(numbers);
                 }
+                NumberResultItem numbers = new NumberResultItem();
+                numbers.setTitle("CLASS");
+                numbers.setValue(class_arm);
+                num.add(numbers);
+
                 //inflate on UI
-                students_info.setText(student_info_titles);
-                students_details.setText(student_info_values);
+                RecyclerView recyclerView = findViewById(R.id.x);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                recyclerView.setHasFixedSize(false);
+                adapter = new ParentResultListHeader(num);
+                recyclerView.setAdapter(adapter);
 
             } else {
                 Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
@@ -223,7 +247,7 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             //run next thread
-            Log.i(TAG, "sch = " + school_id + "std reg = " + student_reg_no + "sess = " + session + "term = " + term);
+            //   Log.i(TAG, "sch = " + school_id + "std reg = " + student_reg_no + "sess = " + session + "term = " + term);
             //      new getsubjectsca().execute(school_id, student_reg_no, session, term); //have to be sure which format the term came in
             new getstdscores().execute(school_id, session, term, student_reg_no);
 
@@ -231,7 +255,7 @@ public class ResultActivity extends AppCompatActivity {
     }
 
 
-    //  3. loads students scores
+    //  3. loads students subject with all its scores
     private class getstdscores extends AsyncTask<String, Integer, String> {
 
         @Override
@@ -262,410 +286,17 @@ public class ResultActivity extends AppCompatActivity {
                     for (int i = 0; i < no_scores; i++) {
                         subjects_with_scores.add(raw_scores.split("<>")[i]);
                         class_average__highest__lowest.add(raw_others.split("<>")[i]);
-                        class_average__highest__lowest.add(raw_others.split("<>")[i]);
                     }
+
                     for (int i = 0; i < raw_psychomotor.split("<>").length; i++) {
                         psychomotor_skills.add(raw_psychomotor.split("<>")[i].split(";")[0]);
                         psychomotor_values.add(raw_psychomotor.split("<>")[i].split(";")[1]);
                     }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 //inflate on UI
-
-            } else {
-                Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
-                finish();
-            }
-
-            //run next thread
-            new getsubjectsca().execute(school_id, student_reg_no, session, term); //have to be sure which format the term came in
-
-        }
-    }
-
-    //  4. loads subjects info
-    private class getsubjectsca extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getsubjectsca");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
-            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
-            return sentData.getStrData();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-            Log.d(TAG, "Loaded round 4: " + text);
-
-            if (!text.equals("0") && !text.isEmpty() && !text.trim().equals("not compiled")) {
-                String data[] = text.split("<>");
-
-                String raw_subjects = data[0], raw_short_codes = data[1];
-                no_cas = data[2];
-                result.setNoCas(Integer.valueOf(no_cas) + 6); // for exam, total, average....grade
-                int no_subjects = raw_subjects.split(";").length;
-                Log.i(TAG, "no subjects = " + String.valueOf(no_subjects));
-
-                for (int i = 0; i < no_subjects; i++) {
-                    subjects.add(raw_subjects.split(";")[i]);
-                    short_codes.add(raw_short_codes.split(";")[i]);
-                }
-
-                switch (Integer.valueOf(no_cas.trim())) {
-                    case 1:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 2:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 3:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 4:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("CA4");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 5:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("CA4");
-                        HEADERS.add("CA5");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 6:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("CA4");
-                        HEADERS.add("CA5");
-                        HEADERS.add("CA6");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 7:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("CA4");
-                        HEADERS.add("CA5");
-                        HEADERS.add("CA6");
-                        HEADERS.add("CA7");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 8:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("CA4");
-                        HEADERS.add("CA5");
-                        HEADERS.add("CA6");
-                        HEADERS.add("CA7");
-                        HEADERS.add("CA8");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 9:
-                        Log.i(TAG, " 9 CAs");
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("CA4");
-                        HEADERS.add("CA5");
-                        HEADERS.add("CA6");
-                        HEADERS.add("CA7");
-                        HEADERS.add("CA8");
-                        HEADERS.add("CA9");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-                    case 10:
-                        HEADERS.add(" NAMES\t\t\t\t\t\t\t\t\t\t\t\t");
-                        HEADERS.add("CA1");
-                        HEADERS.add("CA2");
-                        HEADERS.add("CA3");
-                        HEADERS.add("CA4");
-                        HEADERS.add("CA5");
-                        HEADERS.add("CA6");
-                        HEADERS.add("CA7");
-                        HEADERS.add("CA8");
-                        HEADERS.add("CA9");
-                        HEADERS.add("CA10");
-                        HEADERS.add("EXAM");
-                        HEADERS.add("TOTAL");
-                        HEADERS.add("AVERAGE");
-                        HEADERS.add("HIGHEST");
-                        HEADERS.add("LOWEST");
-                        HEADERS.add("GRADE");
-                        break;
-
-                }
-
-                for (int j = 0; j < no_subjects; j++) {
-                    for (int i = 0; i < result.getNoCas(); i++) {
-                        switch (i) {
-                            case 1:
-                                for (int k = 0; k < no_subjects; k++) {
-//                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[2]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 2:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 3:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 4:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 5:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                                    CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 6:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                                    CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                                    CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 7:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                                    CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                                    CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                                    CA7.add(subjects_with_scores.get(k).split(";")[7]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 8:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                                    CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                                    CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                                    CA7.add(subjects_with_scores.get(k).split(";")[7]);
-                                    CA8.add(subjects_with_scores.get(k).split(";")[8]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 9:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                                    CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                                    CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                                    CA7.add(subjects_with_scores.get(k).split(";")[7]);
-                                    CA8.add(subjects_with_scores.get(k).split(";")[8]);
-                                    CA9.add(subjects_with_scores.get(k).split(";")[9]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                            case 10:
-                                for (int k = 0; k < no_subjects; k++) {
-                                    SUBJECTS.add(subjects_with_scores.get(k).split(";")[0]);
-                                    CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                                    CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                                    CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                                    CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                                    CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                                    CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                                    CA7.add(subjects_with_scores.get(k).split(";")[7]);
-                                    CA8.add(subjects_with_scores.get(k).split(";")[8]);
-                                    CA9.add(subjects_with_scores.get(k).split(";")[9]);
-                                    CA10.add(subjects_with_scores.get(k).split(";")[10]);
-                                    EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                                    TOTAL.add(subjects_with_scores.get(k).split(";")[4]);
-                                    AVERAGE.add(subjects_with_scores.get(k).split(";")[4]);
-                                    HIGHEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    LOWEST.add(subjects_with_scores.get(k).split(";")[4]);
-                                    GRADE.add(subjects_with_scores.get(k).split(";")[4]);
-                                }
-                                break;
-                        }
-                        //CA1.add(subjects_with_scores.get(j).split(";")[1]);
-                    }
-                }
-
-                result.setCA1(CA1);
-                result.setCA2(CA2);
-                result.setCA3(CA3);
-                result.setCA4(CA4);
-                result.setCA5(CA5);
-                result.setCA6(CA6);
-                result.setCA7(CA7);
-                result.setCA8(CA8);
-                result.setCA9(CA9);
-                result.setCA10(CA10);
-                result.setEXAM(EXAM);
-                result.setTOTAL(TOTAL);
-                result.setTOTAL(AVERAGE);
-                result.setTOTAL(HIGHEST);
-                result.setTOTAL(LOWEST);
-                result.setTOTAL(GRADE);
-                result.setHEADERS(HEADERS);
-                result.setSUBJECTS(subjects);
-                result.setNoSubjects(no_subjects);
-
-            } else if (text.trim().equals("not compiled")) {
-                Tools.toast("Results have not been compiled for this term", ResultActivity.this, R.color.red_800);
-                finish();
 
             } else {
                 Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
@@ -678,7 +309,9 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
-    //  5. loads grades
+
+    //DONE
+    //  4. loads grades
     private class getgrades extends AsyncTask<String, Integer, String> {
 
         @Override
@@ -699,22 +332,502 @@ public class ResultActivity extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             System.out.println(text);
-            Log.d(TAG, "Loaded round 5: " + text);
+            Log.d(TAG, "Loaded round 4: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String data[] = text.split("<>");
 
-                String raw_grades = data[0], raw_upper_values = data[1], raw_lower_values = data[2], raw_tags = data[3];
-                int no_grades = raw_grades.split(";").length;
+                String raw_grades = data[0];
+                raw_upper_values = data[1];
+                raw_lower_values = data[2];
 
+                for (int i = 0; i < raw_upper_values.split(";").length; i++) {
+                    lower_limit.add(raw_lower_values.split(";")[i]);
+                    higher_limit.add(raw_upper_values.split(";")[i]);
+                }
+
+                raw_tags = data[3];
+                int no_grades = raw_grades.split(";").length;
+                String grade_text = "";
                 for (int i = 0; i < no_grades; i++) {
+                    grade_text = grade_text + raw_grades.split(";")[i] + " (" + raw_upper_values.split(";")[i] + "-" + raw_lower_values.split(";")[i] + ")\t" + " " + raw_tags.split(";")[i] + "\n";
                     grades.add(raw_grades.split(";")[i]);
-                    upper_values.add(raw_upper_values.split(";")[i]);
-                    lower_values.add(raw_lower_values.split(";")[i]);
-                    tags.add(raw_tags.split(";")[i]);
                 }
                 //inflate on UI
+                keys_tv.setText(grade_text);
+            } else {
+                Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
+                finish();
+            }
 
+            //run next thread
+            new getsubjectsca().execute(school_id, student_reg_no, session, term); //have to be sure which format the term came in
+
+        }
+    }
+
+    //  5. loads subjects and their shorts codes + no_CAS
+    private class getsubjectsca extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getsubjectsca");
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
+            return sentData.getStrData();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            Log.d(TAG, "Loaded round 5: " + text);
+
+            if (!text.equals("0") && !text.isEmpty() && !text.trim().equals("not compiled")) {
+                String data[] = text.split("<>");
+
+                String raw_subjects = data[0], raw_short_codes = data[1];
+                no_cas = data[2];
+                result.setNoCas(Integer.valueOf(no_cas) + 6); // for exam, total, average....grade
+                int no_subjects = raw_subjects.split(";").length;
+                Log.i(TAG, "no subjects = " + String.valueOf(no_subjects));
+
+
+                for (int i = 0; i < no_subjects; i++) {
+                    subjects.add(raw_subjects.split(";")[i]);
+                    short_codes.add(raw_short_codes.split(";")[i]);
+                }
+                ArrayList<String> SUBJECTS = short_codes;
+                Log.i(TAG, Arrays.toString(SUBJECTS.toArray()));
+
+                switch (Integer.valueOf(no_cas.trim())) {
+                    case 1:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 2:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 3:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 4:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("CA4");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 5:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("CA4");
+                        HEADERS.add("CA5");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 6:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("CA4");
+                        HEADERS.add("CA5");
+                        HEADERS.add("CA6");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 7:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("CA4");
+                        HEADERS.add("CA5");
+                        HEADERS.add("CA6");
+                        HEADERS.add("CA7");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 8:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("CA4");
+                        HEADERS.add("CA5");
+                        HEADERS.add("CA6");
+                        HEADERS.add("CA7");
+                        HEADERS.add("CA8");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 9:
+                        Log.i(TAG, " 9 CAs");
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("CA4");
+                        HEADERS.add("CA5");
+                        HEADERS.add("CA6");
+                        HEADERS.add("CA7");
+                        HEADERS.add("CA8");
+                        HEADERS.add("CA9");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                    case 10:
+                        HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
+                        HEADERS.add("CA1");
+                        HEADERS.add("CA2");
+                        HEADERS.add("CA3");
+                        HEADERS.add("CA4");
+                        HEADERS.add("CA5");
+                        HEADERS.add("CA6");
+                        HEADERS.add("CA7");
+                        HEADERS.add("CA8");
+                        HEADERS.add("CA9");
+                        HEADERS.add("CA10");
+                        HEADERS.add("EXAM");
+                        HEADERS.add("TOTAL");
+                        HEADERS.add("AVERAGE");
+                        HEADERS.add("HIGHEST");
+                        HEADERS.add("LOWEST");
+                        HEADERS.add("GRADE");
+                        break;
+                }
+
+                /////////////////////////////////////////////////////////
+
+                // for (int j = 0; j < no_subjects; j++) {
+                //   for (int i = 0; i < result.getNoCas(); i++) {
+                switch (Integer.valueOf(no_cas.trim())) {
+                    case 1:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[2]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 2:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[3]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 3:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[4]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 4:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[5]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 5:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[6]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 6:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[7]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 7:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[8]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 8:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
+                            CA8.add(subjects_with_scores.get(k).split(";")[8]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[9]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(CA8.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 9:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
+                            CA8.add(subjects_with_scores.get(k).split(";")[8]);
+                            CA9.add(subjects_with_scores.get(k).split(";")[9]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[10]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(CA8.get(k)) + Integer.valueOf(CA9.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                    case 10:
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
+                            CA8.add(subjects_with_scores.get(k).split(";")[8]);
+                            CA9.add(subjects_with_scores.get(k).split(";")[9]);
+                            CA10.add(subjects_with_scores.get(k).split(";")[10]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[11]);
+                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(CA8.get(k)) + Integer.valueOf(CA9.get(k)) + Integer.valueOf(CA10.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
+                        break;
+                }
+                Log.i(TAG, Arrays.toString(CA1.toArray()));
+                result.setCA1(CA1);
+                result.setCA2(CA2);
+                result.setCA3(CA3);
+                result.setCA4(CA4);
+                result.setCA5(CA5);
+                result.setCA6(CA6);
+                result.setCA7(CA7);
+                result.setCA8(CA8);
+                result.setCA9(CA9);
+                result.setCA10(CA10);
+                result.setEXAM(EXAM);
+                result.setTOTAL(TOTAL);
+                result.setClassAverage(AVERAGE);
+                result.setHIGHEST(HIGHEST);
+                result.setLOWEST(LOWEST);
+                result.setGRADE(GRADE);
+                result.setHEADERS(HEADERS);
+                result.setSUBJECTS(subjects);
+                result.setNoSubjects(no_subjects);
+                result_layout.addView(new TableMainLayout(getApplicationContext()));
+
+            } else if (text.trim().equals("not compiled")) {
+                Tools.toast("Results have not been compiled for this term", ResultActivity.this, R.color.red_800);
+                finish();
 
             } else {
                 Tools.toast("An error occurred", ResultActivity.this, R.color.red_800);
@@ -723,10 +836,10 @@ public class ResultActivity extends AppCompatActivity {
 
             //run next thread
             new getstudentresult().execute(school_id, student_reg_no, session, term);
-
         }
     }
 
+    //DONE
     //  6. loads grades
     private class getstudentresult extends AsyncTask<String, Integer, String> {
 
@@ -783,7 +896,6 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //DONE
     private void initComponents() {
@@ -798,6 +910,7 @@ public class ResultActivity extends AppCompatActivity {
         session = getIntent().getStringExtra("session");
         school_logo = findViewById(R.id.logo);
         result_summary_tv = findViewById(R.id.result_summary);
+        keys_tv = findViewById(R.id.keys);
         // nested scrollview
         nested_scroll_view = findViewById(R.id.nested_content);
         loading = findViewById(R.id.loading);
@@ -805,7 +918,6 @@ public class ResultActivity extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
         result_layout = findViewById(R.id.result);
 
-        result_layout.addView(new TableMainLayoutOriginal(this));
         school_name = findViewById(R.id.school_name);
         school_name.setText("Calvary Arrows College");
         school_address = findViewById(R.id.address);
@@ -813,10 +925,6 @@ public class ResultActivity extends AppCompatActivity {
         term_result = findViewById(R.id.term_result);
         //TODO: HINT >>> we display the uncertain text first before the certain text
 
-        // students textView header
-        students_info = findViewById(R.id.students_info);
-        // students textView details
-        students_details = findViewById(R.id.students_details);
 
         // section description
         bt_toggle_student_info = findViewById(R.id.bt_toggle_student_info);
@@ -841,7 +949,6 @@ public class ResultActivity extends AppCompatActivity {
         bt_toggle_psychomotor = findViewById(R.id.bt_toggle_psychomotor);
         lyt_expand_psychomotor = findViewById(R.id.lyt_expand_psychomotor);
         bt_toggle_psychomotor.setOnClickListener(view -> toggleSection(view, lyt_expand_psychomotor));
-
 
         bottom_sheet = findViewById(R.id.bottom_sheet);
         mBehavior = BottomSheetBehavior.from(bottom_sheet);

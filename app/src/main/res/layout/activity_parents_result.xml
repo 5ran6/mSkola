@@ -41,17 +41,19 @@
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/spacing_micro">
+                    android:paddingLeft="@dimen/spacing_micro"
+                    android:paddingStart="@dimen/spacing_micro">
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/logo"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_marginTop="@dimen/spacing_small"
-                        android:src="@drawable/photo_male_2"
+                        android:background="@color/grey_3"
                         app:civ_border="true"
                         app:civ_border_color="@color/colorPrimary"
-                        app:civ_border_width="1dp" />
+                        app:civ_border_width="1dp"
+                        app:srcCompat="@drawable/ic_school_black_24dp" />
 
                     <TextView
                         android:id="@+id/school_name"
@@ -60,7 +62,6 @@
                         android:layout_marginTop="@dimen/spacing_small"
                         android:gravity="center"
                         android:maxLines="2"
-                        android:text="SCHOOL NAME"
                         android:textAllCaps="true"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                         android:textColor="@color/grey_90" />
@@ -72,7 +73,6 @@
                         android:layout_marginTop="@dimen/spacing_small"
                         android:gravity="center"
                         android:maxLines="2"
-                        android:text="SCHOOL FULL ADDRESS"
                         android:textAllCaps="true"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                         android:textColor="@color/grey_80" />
@@ -82,7 +82,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:text="1ST TERM RESULT"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/green_500" />
 
@@ -150,6 +149,7 @@
                             android:layout_weight="1"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
                             android:onClick="contact"
                             android:orientation="horizontal"
@@ -182,6 +182,7 @@
                             android:layout_weight="1"
                             android:background="?android:attr/selectableItemBackground"
                             android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
                             android:onClick="calendar"
                             android:orientation="horizontal"
@@ -259,26 +260,12 @@
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/spacing_large"
                         android:paddingTop="@dimen/spacing_medium"
-                        android:visibility="gone"
-                        android:weightSum="2">
+                        android:visibility="gone">
 
-                        <TextView
-                            android:id="@+id/students_info"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight=".7"
-                            android:text="Name:"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/students_details"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.3"
-                            android:text="@string/demo_name"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                            android:textStyle="normal" />
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/x"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                     <View
@@ -396,7 +383,6 @@
                             android:layout_weight="1"
                             android:paddingEnd="@dimen/spacing_middle"
                             android:paddingRight="@dimen/spacing_middle"
-                            android:text="@string/demo_name"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_90"
                             android:textStyle="normal" />
@@ -465,7 +451,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/demo_name"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_90"
                             android:textStyle="normal" />
@@ -537,7 +522,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
                             android:background="@color/grey_5"
-                            android:text="Handwriting:"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold" />
 
@@ -547,7 +531,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight=".4"
                             android:gravity="center"
-                            android:text="5"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_90"
                             android:textStyle="normal" />

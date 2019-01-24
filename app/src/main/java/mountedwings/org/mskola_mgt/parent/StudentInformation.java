@@ -111,7 +111,7 @@ public class StudentInformation extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
             } else {
-                Tools.toast("Oops! This school has not yet published this information.", StudentInformation.this, R.color.red_500, Toast.LENGTH_LONG);
+                Tools.toast("Oops! This information has not yet been published by the school.", StudentInformation.this, R.color.red_500, Toast.LENGTH_LONG);
                 finish();
             }
         }

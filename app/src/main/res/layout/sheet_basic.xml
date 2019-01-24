@@ -34,18 +34,19 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/bt_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COPY"
+            android:theme="@style/Button.Primary" />
+
+        <Button
             android:id="@+id/bt_close"
             style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CLOSE" />
 
-        <Button
-            android:id="@+id/bt_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="COPY"
-            android:theme="@style/Button.Primary" />
     </LinearLayout>
 
 </LinearLayout>

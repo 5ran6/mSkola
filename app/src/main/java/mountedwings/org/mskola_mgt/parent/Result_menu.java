@@ -186,7 +186,7 @@ public class Result_menu extends AppCompatActivity {
                 ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data1);
                 spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_term.setAdapter(spinnerAdapter2);
-                term = select_term.getSelectedItem().toString();
+                term = select_term.getSelectedItem().toString().trim();
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
