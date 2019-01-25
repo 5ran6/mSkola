@@ -4,6 +4,7 @@ package mountedwings.org.mskola_mgt.parent;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -521,7 +522,6 @@ public class TableMainLayout extends RelativeLayout {
 
     // generate table row of table C and table D
     private void generateTableC_AndTable_B() {
-
         switch (result.getNoCas() - 6) {
             case 1:
                 for (SampleObject1 sampleObject : this.sampleObjects1) {
@@ -884,6 +884,7 @@ public class TableMainLayout extends RelativeLayout {
             taleRowForTableD.addView(textViewB, params);
         }
 
+        Log.i(TAG, "reached here");
 
         return taleRowForTableD;
 

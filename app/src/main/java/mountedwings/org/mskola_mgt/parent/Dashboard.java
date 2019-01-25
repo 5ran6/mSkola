@@ -31,7 +31,7 @@ public class Dashboard extends AppCompatActivity {
     }
 
     public void settings(View view) {
-        startActivity(new Intent(getApplicationContext(), Chat.class));
+        startActivity(new Intent(getApplicationContext(), Settings.class));
     }
 
     public void fees(View view) {

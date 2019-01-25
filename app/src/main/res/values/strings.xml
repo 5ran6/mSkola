@@ -157,6 +157,7 @@
     <string name="change_password_text">Change Password</string>
     <string name="old_password">OLD PASSWORD</string>
     <string name="enter_old_password">Enter old password</string>
+    <string name="invite_a_friend">Check out mSkola, I use it to keep abreast with the academic progress of my ward(s). Get it for free at https://www.mskola.com</string>
 
 
     <!-- for transitions-->
@@ -186,6 +187,7 @@
     <string name="toolbar_title">Contacts</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Schools using mSkola</string>
+    <string name="version">Version 1.0</string>
 
 
 </resources>

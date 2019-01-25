@@ -74,6 +74,7 @@ public class ResultActivity extends AppCompatActivity {
     private ArrayList<String> HIGHEST = new ArrayList<>();
     private ArrayList<String> LOWEST = new ArrayList<>();
     private ArrayList<String> GRADE = new ArrayList<>();
+    private ArrayList<String> SUBJECTS = new ArrayList<>();
 
     private ArrayList<String> grades = new ArrayList<>();
     private ArrayList<String> lower_limit = new ArrayList<>();
@@ -112,7 +113,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d(TAG, "Loaded round 1: " + text);
+            //  Log.d(TAG, "Loaded round 1: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String school_info[] = text.split("<>");
@@ -195,7 +196,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d(TAG, "Loaded round 2: " + text);
+            // Log.d(TAG, "Loaded round 2: " + text);
 
             if (!text.equals("0") && !text.isEmpty() && !text.equals("0")) {
                 String data[] = text.split("##");
@@ -247,8 +248,6 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             //run next thread
-            //   Log.i(TAG, "sch = " + school_id + "std reg = " + student_reg_no + "sess = " + session + "term = " + term);
-            //      new getsubjectsca().execute(school_id, student_reg_no, session, term); //have to be sure which format the term came in
             new getstdscores().execute(school_id, session, term, student_reg_no);
 
         }
@@ -287,13 +286,13 @@ public class ResultActivity extends AppCompatActivity {
                         subjects_with_scores.add(raw_scores.split("<>")[i]);
                         class_average__highest__lowest.add(raw_others.split("<>")[i]);
                     }
-                    String psychomotor = "";
+                    StringBuilder psychomotor = new StringBuilder();
                     for (int i = 0; i < raw_psychomotor.split("<>").length; i++) {
-                        psychomotor_skills.add(raw_psychomotor.split("<>")[i].split(";")[0]);
-                        psychomotor_values.add(raw_psychomotor.split("<>")[i].split(";")[1]);
-                        psychomotor = psychomotor + raw_psychomotor.split("<>")[i].split(";")[0] + " : " + raw_psychomotor.split("<>")[i].split(";")[1];
+//                        psychomotor_skills.add(raw_psychomotor.split("<>")[i].split(";")[0]);
+//                        psychomotor_values.add(raw_psychomotor.split("<>")[i].split(";")[1]);
+                        psychomotor.append(raw_psychomotor.split("<>")[i].split(";")[0]).append(" : ").append(raw_psychomotor.split("<>")[i].split(";")[1]);
                     }
-                    pschomotor_tv.setText(psychomotor);
+                    pschomotor_tv.setText(psychomotor.toString());
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -333,7 +332,6 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
             Log.d(TAG, "Loaded round 4: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
@@ -368,6 +366,7 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
+    //DONE
     //  5. loads subjects and their shorts codes + no_CAS
     private class getsubjectsca extends AsyncTask<String, Integer, String> {
 
@@ -388,7 +387,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.d(TAG, "Loaded round 5: " + text);
+            //  Log.d(TAG, "Loaded round 5: " + text);
 
             if (!text.equals("0") && !text.isEmpty() && !text.trim().equals("not compiled")) {
                 String data[] = text.split("<>");
@@ -404,8 +403,7 @@ public class ResultActivity extends AppCompatActivity {
                     subjects.add(raw_subjects.split(";")[i]);
                     short_codes.add(raw_short_codes.split(";")[i]);
                 }
-                ArrayList<String> SUBJECTS = short_codes;
-                Log.i(TAG, Arrays.toString(SUBJECTS.toArray()));
+                SUBJECTS = short_codes;
 
                 switch (Integer.valueOf(no_cas.trim())) {
                     case 1:
@@ -593,7 +591,6 @@ public class ResultActivity extends AppCompatActivity {
                             String grade = "";
                             for (int y = 0; y < grades.size(); y++) {
                                 if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-
                                     grade = grades.get(y);
                                     break;
                                 }
@@ -805,7 +802,7 @@ public class ResultActivity extends AppCompatActivity {
                         }
                         break;
                 }
-                Log.i(TAG, Arrays.toString(CA1.toArray()));
+
                 result.setCA1(CA1);
                 result.setCA2(CA2);
                 result.setCA3(CA3);
@@ -823,9 +820,11 @@ public class ResultActivity extends AppCompatActivity {
                 result.setLOWEST(LOWEST);
                 result.setGRADE(GRADE);
                 result.setHEADERS(HEADERS);
+//                result.setSUBJECTS(SUBJECTS);
                 result.setSUBJECTS(subjects);
                 result.setNoSubjects(no_subjects);
-                result_layout.addView(new TableMainLayout(getApplicationContext()));
+
+                Log.i(TAG, Arrays.toString(GRADE.toArray()));
 
             } else if (text.trim().equals("not compiled")) {
                 Tools.toast("Results have not been compiled for this term", ResultActivity.this, R.color.red_800);
@@ -851,6 +850,10 @@ public class ResultActivity extends AppCompatActivity {
             storageObj.setOperation("getstudentresult");
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
+
+            //do this in background
+            result_layout.addView(new TableMainLayout(getApplicationContext()));
+
             return sentData.getStrData();
         }
 
@@ -892,6 +895,7 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             //inflate everything in UI, then unveil
+
             //TODO: unveil gradually from top to bottom. How about that?
             loading.setVisibility(View.GONE);
             nested_scroll_view.setVisibility(View.VISIBLE);

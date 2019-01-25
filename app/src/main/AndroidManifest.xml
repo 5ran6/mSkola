@@ -123,7 +123,7 @@
         <activity android:name=".parent.AssessmentView" />
         <activity android:name=".parent.ResultActivity" />
         <activity android:name=".parent.Attendance_menu_activity" />
-        <activity android:name=".parent.SchoolInformation"></activity>
+        <activity android:name=".parent.SchoolInformation" />
         <activity android:name=".parent.SchoolInformation_menu" />
         <activity android:name=".parent.Timetable_menu_activity" />
         <activity android:name=".parent.StudentInformation" />
@@ -136,7 +136,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
         </activity>
         <activity android:name=".student.MskolaLogin" />
         <activity android:name=".student.Assignment_history_detail" />
@@ -145,9 +144,11 @@
         <activity android:name=".student.Attendance_menu_activity" />
         <activity android:name=".student.Timetable_menu_activity" />
         <activity android:name=".student.Result_menu" />
-        <activity android:name=".student.ResultActivity" />
         <activity android:name=".student.StudentInformation" />
         <activity android:name=".student.AssessmentView" />
+        <activity android:name=".parent.Settings" />
+        <activity android:name=".About" />
+        <activity android:name=".Licenses"></activity>
     </application>
 
 </manifest>

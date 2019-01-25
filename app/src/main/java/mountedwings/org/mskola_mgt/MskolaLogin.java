@@ -106,15 +106,9 @@ public class MskolaLogin extends AppCompatActivity {
         if (checkedTextView.isChecked()) {
             keep_signed_in = 1;
             singedIn = true;
-            editor = mPrefs.edit();
-            editor.putBoolean("signed_in", singedIn);
-            editor.apply();
         } else {
             keep_signed_in = 0;
             singedIn = false;
-            editor = mPrefs.edit();
-            editor.putBoolean("signed_in", singedIn);
-            editor.apply();
         }
     }
 
@@ -229,7 +223,7 @@ public class MskolaLogin extends AppCompatActivity {
                 editor.putString("account_type", role);
                 editor.putString("staff_id", text.split("<>")[1]);
                 editor.putString("email_address", emailE.getText().toString());
-
+                editor.putBoolean("signed_in", singedIn);
                 editor.apply();
 
                 intent.putExtra("email_address", emailE.getText().toString());
