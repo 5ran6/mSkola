@@ -149,6 +149,7 @@
         <activity android:name=".parent.Settings" />
         <activity android:name=".About" />
         <activity android:name=".Licenses"></activity>
+        <activity android:name=".DialogAddReview" />
     </application>
 
 </manifest>

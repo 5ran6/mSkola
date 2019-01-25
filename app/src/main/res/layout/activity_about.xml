@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="© 2017 - 2019 Mountedwings Cybersytems LTD \n All rights reserved"
+        android:text="© 2017 - 2019 Mountedwings Cybersystems LTD \n All rights reserved"
         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     <TextView

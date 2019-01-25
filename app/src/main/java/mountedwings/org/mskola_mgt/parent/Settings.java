@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import mountedwings.org.mskola_mgt.About;
+import mountedwings.org.mskola_mgt.DialogAddReview;
 import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -56,6 +57,8 @@ public class Settings extends AppCompatActivity {
     }
 
     public void feedback(View view) {
+        startActivity(new Intent(getApplicationContext(), DialogAddReview.class));
+
     }
 
     public void logout(View view) {
