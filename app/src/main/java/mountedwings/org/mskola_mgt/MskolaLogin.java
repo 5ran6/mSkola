@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
+import java.util.Objects;
+
 import mountedwings.org.mskola_mgt.teacher.Dashboard;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -43,8 +45,6 @@ public class MskolaLogin extends AppCompatActivity {
     private String text;
     private LinearLayout parent_layout;
     private LinearLayout lyt_progress;
-    private String name, school;
-    private byte[] pass;
     private Intent intent;
     private storageFile data;
     private BroadcastReceiver mReceiver;
@@ -119,7 +119,7 @@ public class MskolaLogin extends AppCompatActivity {
         dialog.setCancelable(true);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         TextView error_message = dialog.findViewById(R.id.content);
@@ -250,8 +250,7 @@ public class MskolaLogin extends AppCompatActivity {
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             data = sentData;
-            String text = sentData.getStrData();
-            return text;
+            return sentData.getStrData();
         }
 
         @Override
@@ -265,10 +264,10 @@ public class MskolaLogin extends AppCompatActivity {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
                 String rows[] = text.split("<>");
-                school = rows[0];
-                name = rows[2];
+                String school = rows[0];
+                String name = rows[2];
 //              school = rows[2];
-                pass = data.getImageFiles().get(0);
+                byte[] pass = data.getImageFiles().get(0);
 
 
                 //finally and intent

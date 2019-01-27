@@ -19,7 +19,7 @@ public class Dashboard extends AppCompatActivity {
     }
 
     public void clear_activities(View view) {
-        Toast.makeText(getApplicationContext(), "Clear Clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_SHORT).show();
     }
 
     public void chat(View view) {

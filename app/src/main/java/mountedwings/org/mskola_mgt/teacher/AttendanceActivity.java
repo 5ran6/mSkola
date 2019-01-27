@@ -40,16 +40,16 @@ public class AttendanceActivity extends AppCompatActivity {
     private View lyt_hols;
     private View lyt_save;
     public CheckBox all_morning, all_afternoon;
-    ArrayList<Number> numbers;
+    private ArrayList<Number> numbers;
     private ArrayList names = new ArrayList();
     private ArrayList regNo = new ArrayList();
     private RecyclerView list;
     private FloatingActionButton fab_add;
     public String[] morning = null, afternoon = null;
 
-    String date, school_id, class_name, arm, TAG = "mSkola";
-    ProgressBar loading;
-    AttendanceAdapter adapter;
+    private String date, school_id, class_name, arm, TAG = "mSkola";
+    private ProgressBar loading;
+    private AttendanceAdapter adapter;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
 

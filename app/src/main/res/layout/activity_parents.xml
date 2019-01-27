@@ -149,6 +149,7 @@
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
                                         android:background="?android:attr/selectableItemBackgroundBorderless"
+                                        android:clickable="false"
                                         android:focusable="false"
                                         android:tint="@android:color/white"
                                         app:srcCompat="@drawable/ic_person_outline" />
@@ -232,7 +233,7 @@
                                         android:layout_centerVertical="true"
                                         android:layout_margin="@dimen/spacing_large"
                                         android:maxLines="1"
-                                        android:text="MY MSKOLA"
+                                        android:text="MY mSKOLA"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                         android:textColor="@android:color/white" />
 
@@ -519,6 +520,7 @@
                 android:focusable="true"
                 android:onClick="chat"
                 android:tint="@android:color/white"
+                android:visibility="gone"
                 app:backgroundTint="@color/green_400"
                 app:fabSize="normal"
                 app:layout_anchor="@id/passport"
@@ -529,6 +531,5 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
 
 </android.support.design.widget.CoordinatorLayout>

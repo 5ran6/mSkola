@@ -2,11 +2,8 @@ package mountedwings.org.mskola_mgt.student;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -15,20 +12,20 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mskola.controls.serverProcessStudents;
+import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
+
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.ChangePassword;
 import mountedwings.org.mskola_mgt.ForgotPassword;
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -44,14 +41,12 @@ public class MskolaLogin extends AppCompatActivity {
     private String emailAddress, password, TAG = "mSkola";
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor editor;
-    private String role;
+    private String role, school_id;
     private static final int PREFRENCE_MODE_PRIVATE = 0;
     private AppCompatCheckBox checkedTextView;
     private String text;
     private LinearLayout parent_layout;
     private LinearLayout lyt_progress;
-    private String name, school;
-    private byte[] pass;
     private Intent intent;
     private storageFile data;
     private BroadcastReceiver mReceiver;
@@ -113,15 +108,9 @@ public class MskolaLogin extends AppCompatActivity {
         if (checkedTextView.isChecked()) {
             keep_signed_in = 1;
             singedIn = true;
-            editor = mPrefs.edit();
-            editor.putBoolean("signed_in", singedIn);
-            editor.apply();
         } else {
             keep_signed_in = 0;
             singedIn = false;
-            editor = mPrefs.edit();
-            editor.putBoolean("signed_in", singedIn);
-            editor.apply();
         }
     }
 
@@ -132,7 +121,7 @@ public class MskolaLogin extends AppCompatActivity {
         dialog.setCancelable(true);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         TextView error_message = dialog.findViewById(R.id.content);
@@ -189,27 +178,31 @@ public class MskolaLogin extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("requestlogin");
-            storageObj.setStrData(emailAddress + "," + password);
-            storageFile sentData = new serverProcessStudents().requestProcess(storageObj);
+            storageObj.setStrData(emailAddress + "," + password + "," + school_id);
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             //received from server
             text = sentData.getStrData();
             boolean isSuccess;
             if (text.contains("success")) {
                 isSuccess = true;
-                Log.d(TAG, "registration successful");
+                //          Log.d(TAG, "registration successful");
             } else if (text.contains("invalid")) {
                 isSuccess = false;
                 error_from_server = "Email and password mismatch. Try again";
-                Log.d(TAG, error_from_server);
+                //        Log.d(TAG, error_from_server);
             } else if (text.contains("not found")) {
                 isSuccess = false;
                 error_from_server = "Looks like you don't have an mSkola account. Make sure you register before login";
-                Log.d(TAG, error_from_server);
+                //      Log.d(TAG, error_from_server);
+            } else if (text.contains("no access")) {
+                isSuccess = false;
+                error_from_server = "You do not have access to this school. Contact the schools' admin to verify your account";
+                //    Log.d(TAG, error_from_server);
             } else {
                 isSuccess = false;
                 error_from_server = "An error occurred!";
-                Log.d(TAG, error_from_server);
+                //  Log.d(TAG, error_from_server);
             }
             return isSuccess;
         }
@@ -223,66 +216,86 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
-                new getDeatails().execute(emailAddress);
+
+                intent = new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.student.List_of_schools.class);
+
+                //sharedPref
+                editor = mPrefs.edit();
+//                editor.putBoolean("signed_in", true);
+                editor.putString("account_type", role);
+                editor.putString("staff_id", text.split("<>")[1]);
+                editor.putString("email_address", emailE.getText().toString());
+                editor.putBoolean("signed_in", singedIn);
+                editor.apply();
+
+                intent.putExtra("email_address", emailE.getText().toString());
+                intent.putExtra("school_role", text.split("<>")[1]);
+                new dashboardInfo().execute(school_id, emailE.getText().toString());
+
             } else {
                 showCustomDialogFailure(error_from_server);
                 lyt_progress.setVisibility(View.GONE);
-                //clear sharedPref
-                clearSharedPreferences(MskolaLogin.this);
+
             }
         }
     }
 
-    private class getDeatails extends AsyncTask<String, Integer, String> {
+
+    //DONE
+    private class dashboardInfo extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
-            storageObj.setOperation("getstudentdetails");
-            storageObj.setStrData(strings[0]);
-            storageFile sentData = new serverProcessStudents().requestProcess(storageObj);
-            //received from server
+            data = storageObj;
+
+            storageObj.setOperation("getinfoonlogin");
+            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            data = sentData;
             return sentData.getStrData();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            if (!text.trim().equals("0") || !text.trim().isEmpty() || !text.trim().equals("")) {
+            if (!text.equals("0") && !text.equals("")) {
+                String rows[] = text.split("<>");
+                String school = rows[0];
+                String name = rows[2];
+//              school = rows[2];
+                byte[] pass = data.getImageFiles().get(0);
 
-                // the split code here then pass extras to Dashboard activity
 
-
-                //finally
-                intent = new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.student.Dashboard.class);
+                //finally and intent
+                lyt_progress.setVisibility(View.GONE);
 
                 //sharedPref
                 editor = mPrefs.edit();
-                //      editor.putBoolean("signed_in", true);
-                editor.putString("account_type", role);
+                editor.putString("name", name);
+                editor.putString("school", school);
                 editor.putString("email_address", emailE.getText().toString());
-
+                editor.putString("pass", android.util.Base64.encodeToString(pass, android.util.Base64.NO_WRAP));
                 editor.apply();
 
-                intent.putExtra("email_address", emailE.getText().toString());
+                intent.putExtra("name", name);
+                intent.putExtra("school", school);
+                intent.putExtra("pass", pass);
                 startActivity(intent);
 
             } else {
-                showCustomDialogFailure("Account not linked to your profile. Contact your school Admin");
-                lyt_progress.setVisibility(View.GONE);
-                //clear sharedPref
-                clearSharedPreferences(MskolaLogin.this);
+                Tools.toast("An error occurred", MskolaLogin.this, R.color.red_800);
             }
+            finish();
         }
+
     }
 
-    public static void clearSharedPreferences(Context ctx) {
-        ctx.getSharedPreferences("mSkola", 0).edit().clear().apply();
-    }
 
     private void doLogin() {
         lyt_progress = findViewById(R.id.lyt_progress);
@@ -298,11 +311,9 @@ public class MskolaLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //not necessary when you have implemented logout
-//        clearSharedPreferences(MskolaLogin.this);
-
         Intent intent = getIntent();
         role = intent.getStringExtra("account_type");
+        school_id = intent.getStringExtra("school_id");
 
         if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
             mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
@@ -339,38 +350,38 @@ public class MskolaLogin extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", MskolaLogin.this, R.color.green_800);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_700);
-                    }
-                }).execute();
-            }
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
+//        this.mReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                w++;
+//                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+//                    @Override
+//                    public void onConnectionSuccess() {
+//                        status = 1;
+//                        if (w > 1)
+//                            Tools.toast("Back Online! Try again", MskolaLogin.this, R.color.green_800);
+//                    }
+//
+//                    @Override
+//                    public void onConnectionFail(String errorMsg) {
+//                        status = 0;
+//                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_700);
+//                    }
+//                }).execute();
+//            }
+//        };
+//
+//        registerReceiver(
+//                this.mReceiver,
+//                new IntentFilter(
+//                        ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
+//        unregisterReceiver(this.mReceiver);
+//        w = 0;
         super.onPause();
     }
 }

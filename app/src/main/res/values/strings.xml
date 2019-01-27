@@ -188,6 +188,7 @@
     <string name="action_search">Search</string>
     <string name="search_hint">Schools using mSkola</string>
     <string name="version">Version 1.0</string>
+    <string name="my_class">My Class</string>
 
 
 </resources>

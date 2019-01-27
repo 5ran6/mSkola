@@ -34,7 +34,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Assessment_menu extends AppCompatActivity {
-    private String school_id = "", parent_id = "", session = "", term = "", subject = "", student_reg_no = "", class_name = "";
+    private String school_id = "", parent_id = "", session = "", term = "", subject = "", student_reg_no = "";
     private RelativeLayout parent;
     private LinearLayout progress;
     private Spinner select_session, select_term, select_subject;
@@ -95,7 +95,6 @@ public class Assessment_menu extends AppCompatActivity {
         //school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
         school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
-        class_name = getIntent().getStringExtra("class_name");
 
 
         TextView load = findViewById(R.id.load);
@@ -214,7 +213,6 @@ public class Assessment_menu extends AppCompatActivity {
                 intent1.putExtra("session", session);
                 intent1.putExtra("term", term);
                 intent1.putExtra("subject", subject);
-                intent1.putExtra("class_name", class_name);
                 intent1.putExtra("text", text);
                 startActivity(intent1);
             } else {

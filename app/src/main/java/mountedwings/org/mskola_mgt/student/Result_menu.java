@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.parent.ResultActivity;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -85,10 +84,9 @@ public class Result_menu extends AppCompatActivity {
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
 
         //school_id/staff id from sharedPrefs
-        String parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
-        new initialLoad().execute(school_id, student_reg_no);
+        new initialLoad().execute(school_id);
 
         TextView load = findViewById(R.id.load);
         select_term = findViewById(R.id.select_term);
@@ -187,7 +185,7 @@ public class Result_menu extends AppCompatActivity {
                 ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data1);
                 spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 select_term.setAdapter(spinnerAdapter2);
-                term = select_term.getSelectedItem().toString();
+                term = select_term.getSelectedItem().toString().trim();
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
