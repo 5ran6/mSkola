@@ -152,6 +152,9 @@
         <activity android:name=".student.Assessment_menu" />
         <activity android:name=".student.List_of_schools" />
         <activity android:name=".student.MyClass"></activity>
+        <activity android:name=".student.SchoolInformation_menu" />
+        <activity android:name=".student.ResultActivity" />
+        <activity android:name=".student.SchoolInformation" />
     </application>
 
 </manifest>

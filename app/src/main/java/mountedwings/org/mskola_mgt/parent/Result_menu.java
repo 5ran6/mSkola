@@ -169,7 +169,6 @@ public class Result_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String dataRows[] = text.split("<>");

@@ -36,7 +36,7 @@ public class SchoolInformation_menu extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private CardView list;
-    private String parent_email;
+    private String student_email;
     private AdapterListSchools mAdapter;
     private ArrayList<NumberSchool> schools = new ArrayList<>();
     private ArrayList<byte[]> logos = new ArrayList<>();
@@ -57,14 +57,14 @@ public class SchoolInformation_menu extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Children Schools");
+        getSupportActionBar().setTitle("Schools using mSkola");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initComponent() {
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
 
-        parent_email = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
+        student_email = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
 
         progressBar = findViewById(R.id.progress);
         list = findViewById(R.id.list);
@@ -78,7 +78,7 @@ public class SchoolInformation_menu extends AppCompatActivity {
         recyclerView.setNestedScrollingEnabled(false);
 
         //if network
-        new initialLoad().execute(parent_email);
+        new initialLoad().execute(student_email);
 
 
         //run API

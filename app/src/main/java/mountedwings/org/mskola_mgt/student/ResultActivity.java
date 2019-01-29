@@ -49,7 +49,7 @@ public class ResultActivity extends AppCompatActivity {
     private BottomSheetDialog mBottomSheetDialog;
 
     private LinearLayout result_layout;
-    private String TAG = "mSkola", location = "Mbayande Gboko", email = "cac@gmail.com", website = "www.livingseed.org", full_address = "You know my fulll address dude", calendar = "Resumption = 5th January, 2019; Mid term = NIL; Vacation = We shall post that soon", term, school_id, session, student_reg_no, parent_id;
+    private String TAG = "mSkola", location = "", email = "", website = "", full_address = "", calendar = "", term, school_id, session, student_reg_no, parent_id;
     private ArrayList<byte[]> schoolLogo = new ArrayList<>();
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> short_codes = new ArrayList<>();

@@ -55,7 +55,6 @@ public class AchievementsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
 
-
         Intent intent = getIntent();
 
         SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
@@ -95,12 +94,10 @@ public class AchievementsActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             data = storageObj;
-
             storageObj.setOperation("getpsstudentinfo");
             storageObj.setStrData(strings[0]);
             data = new serverProcess().requestProcess(storageObj);
-            String text = data.getStrData();
-            return text;
+            return data.getStrData();
         }
 
         @Override

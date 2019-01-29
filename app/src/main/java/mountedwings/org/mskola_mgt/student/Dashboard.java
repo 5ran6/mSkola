@@ -2,21 +2,28 @@ package mountedwings.org.mskola_mgt.student;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
 
-import mountedwings.org.mskola_mgt.Chat_menu;
+import java.util.Arrays;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.SchoolID_Login;
+import mountedwings.org.mskola_mgt.parent.Settings;
 import mountedwings.org.mskola_mgt.teacher.Assignment_menu;
-import mountedwings.org.mskola_mgt.teacher.Attendance_menu;
 import mountedwings.org.mskola_mgt.utils.Tools;
+
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 
 public class Dashboard extends AppCompatActivity {
@@ -25,12 +32,12 @@ public class Dashboard extends AppCompatActivity {
 
     private String role = "";
     private String full_name = "";
-    private String school_id = "sd";
-    private String email = "sdsd";
-    private String student_reg_no = "sdsd";
-    private String class_name = "sdsd";
-    private String school = "sdsd";
-    private String name = "sds";
+    private String school_id;
+    private String email;
+    private String student_reg_no;
+    private String class_name;
+    private String school;
+    private String name;
     //private byte[] pass = new byte[1000];
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
@@ -41,54 +48,56 @@ public class Dashboard extends AppCompatActivity {
         Tools.setSystemBarColor(this, R.color.teal_400);
         Tools.setSystemBarLight(this);
 
-//        if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
-//
-//            SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
-//            email = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-//            role = mPrefs.getString("role", getIntent().getStringExtra("role"));
-//            school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
-//
-//            name = mPrefs.getString("name", getIntent().getStringExtra("name"));
-//            school = mPrefs.getString("school", getIntent().getStringExtra("school"));
-//
-//            String raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
-//            try {
-//                byte[] pass = Base64.decode(raw_pass, Base64.NO_WRAP);
-//
-//                CircleImageView passport = findViewById(R.id.passport);
-//
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
-//                passport.setImageBitmap(bitmap);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//        } else {
-//            Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
-//
-//            //clear mPrefs
-//            clearSharedPreferences(this);
-//            finish();
-//            startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
-//        }
+        if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
+
+            SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
+            email = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
+            // role = mPrefs.getString("role", getIntent().getStringExtra("role"));
+            school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+
+            name = mPrefs.getString("student_name", getIntent().getStringExtra("student_name"));
+            student_reg_no = mPrefs.getString("student_reg_no", getIntent().getStringExtra("reg_no"));
+            school = mPrefs.getString("school", getIntent().getStringExtra("school"));
+
+            String raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
+            try {
+                byte[] pass = Base64.decode(raw_pass, Base64.NO_WRAP);
+
+                CircleImageView passport = findViewById(R.id.passport);
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
+                passport.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
+
+            //clear mPrefs
+            clearSharedPreferences(this);
+            finish();
+            startActivity(new Intent(getApplicationContext(), MskolaLogin.class).putExtra("account_type", "Student"));
+        }
+
         initComponent();
     }
 
     private void initComponent() {
-        if (school == null) {
+        if (school_id == null) {
             Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
             //clear mPrefs
             clearSharedPreferences(this);
             finish();
-            startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
+            startActivity(new Intent(getApplicationContext(), MskolaLogin.class).putExtra("account_type", "Student"));
         }
 
         TextView student_name = findViewById(R.id.tv_student_name);
         TextView school_name = findViewById(R.id.tv_school_name);
         parent_view = findViewById(R.id.parent_layout);
         student_name.setText(name);
-        school_name.setText(school);
+        school_name.setText(school.toUpperCase());
 
         CardView assessment = findViewById(R.id.assessment);
         assessment.setOnClickListener(v -> {
@@ -100,9 +109,7 @@ public class Dashboard extends AppCompatActivity {
 
         CardView information = findViewById(R.id.information);
         information.setOnClickListener(v -> {
-            //Bottom sheet with two options
-
-            Intent intent = new Intent(getApplicationContext(), Attendance_menu.class);
+            Intent intent = new Intent(getApplicationContext(), SchoolInformation_menu.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("reg_no", student_reg_no);
             intent.putExtra("email_address", email);
@@ -139,7 +146,7 @@ public class Dashboard extends AppCompatActivity {
         myclass.setOnClickListener(v ->
         {
 //            Snackbar.make(parent_view, "Your school doesn't support CBT", Snackbar.LENGTH_SHORT).show();
-            Intent intent = new Intent(getApplicationContext(), Timetable_menu_activity.class);
+            Intent intent = new Intent(getApplicationContext(), MyClass.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("student_reg_no", student_reg_no);
             intent.putExtra("class_name", class_name);
@@ -148,7 +155,7 @@ public class Dashboard extends AppCompatActivity {
 
         FloatingActionButton settings = findViewById(R.id.settings);
         settings.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), Chat_menu.class);
+            Intent intent = new Intent(getApplicationContext(), Settings.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("role", role);
             intent.putExtra("email_address", email);

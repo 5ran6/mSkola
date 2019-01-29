@@ -98,8 +98,10 @@ public class StudentInformation extends AppCompatActivity {
                 String data3[] = rows[2].split("<>");
                 for (int i = 0; i < data2.length; i++) {
                     NumberStudentsInformation numberStudentsInformation = new NumberStudentsInformation();
+                    //TODO: check whats happening here
                     numberStudentsInformation.setField(data2[i]);
-                    numberStudentsInformation.setField(data3[i]);
+                    numberStudentsInformation.setValue(data3[i]);
+                    //     numberStudentsInformation.setField(data3[i]);
                     studentsInformation.add(numberStudentsInformation);
                 }
 

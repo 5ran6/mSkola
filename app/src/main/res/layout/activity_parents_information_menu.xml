@@ -38,7 +38,8 @@
                     android:hint="Schools using mSkola"
                     android:imeOptions="actionSearch"
                     android:maxLines="1"
-                    android:singleLine="true">
+                    android:singleLine="true"
+                    android:inputType="text">
 
                     <requestFocus />
 

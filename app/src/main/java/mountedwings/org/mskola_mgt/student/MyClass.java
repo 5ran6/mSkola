@@ -49,10 +49,8 @@ public class MyClass extends AppCompatActivity {
         ViewAnimation.initShowOut(lyt_hols);
         ViewAnimation.initShowOut(lyt_save);
 
-
         //   disappear();
         appear();
-
     }
 
     private void disappear() {
