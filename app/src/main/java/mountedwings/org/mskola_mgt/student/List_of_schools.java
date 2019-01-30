@@ -121,13 +121,10 @@ public class List_of_schools extends AppCompatActivity {
                     editor.putString("student_reg_no", obj.getStudent_reg_no());
                     editor.apply();
 
-
                     new finalLoad().execute(obj.getSchool_id().trim(), obj.getStudent_reg_no().trim());
                     //disappear
 
-
                 });
-
 
             } else {
                 Tools.toast("Oops. Seems this mSkola account isn't linked with any school. Contact your school Administrator.", List_of_schools.this, getResources().getColor(R.color.red_600), Toast.LENGTH_LONG);

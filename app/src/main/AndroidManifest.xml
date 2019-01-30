@@ -155,6 +155,8 @@
         <activity android:name=".student.SchoolInformation_menu" />
         <activity android:name=".student.ResultActivity" />
         <activity android:name=".student.SchoolInformation" />
+        <activity android:name=".student.ClassTeachers" />
+        <activity android:name=".student.SubjectTeachers" />
     </application>
 
 </manifest>

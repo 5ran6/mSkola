@@ -64,7 +64,7 @@ public class StudentInformation extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getstudentinfo");
-            storageObj.setStrData(strings[0] + "<>" + strings[0]);
+            storageObj.setStrData(strings[0] + "<>" + strings[1]);
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
             student_passport = sentData.getImageFiles();
             return sentData.getStrData();
@@ -99,7 +99,7 @@ public class StudentInformation extends AppCompatActivity {
                 for (int i = 0; i < data2.length; i++) {
                     NumberStudentsInformation numberStudentsInformation = new NumberStudentsInformation();
                     numberStudentsInformation.setField(data2[i]);
-                    numberStudentsInformation.setField(data3[i]);
+                    numberStudentsInformation.setValue(data3[i]);
                     studentsInformation.add(numberStudentsInformation);
                 }
 
