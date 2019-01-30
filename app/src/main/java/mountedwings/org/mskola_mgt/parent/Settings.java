@@ -94,7 +94,7 @@ public class Settings extends AppCompatActivity {
     }
 
     public void logout(View view) {
-        clearSharedPreferences(this);
+        clearSharedPreferences(Settings.this);
         Tools.toast("Logged out", Settings.this, R.color.green_600);
         finish();
         startActivity(new Intent(getApplicationContext(), Home.class));
