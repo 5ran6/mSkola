@@ -36,8 +36,8 @@ public class Dashboard extends AppCompatActivity {
     private String email;
     private String student_reg_no;
     private String class_name;
-    private String school;
-    private String name;
+    private String school = "";
+    private String name = "";
     //private byte[] pass = new byte[1000];
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
