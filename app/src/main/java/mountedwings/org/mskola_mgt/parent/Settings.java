@@ -56,7 +56,6 @@ public class Settings extends AppCompatActivity {
 
         } else {
             Tools.toast("Previous Login invalidated. Login again!", Settings.this, R.color.red_600);
-
             //clear mPrefs
             clearSharedPreferences(this);
             finish();
