@@ -16,14 +16,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.mskola.controls.serverProcess;
+import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.adapter.AssHistAdapter;
-import mountedwings.org.mskola_mgt.data.NumberAssHist;
+import mountedwings.org.mskola_mgt.adapter.StudentAssHistAdapter;
+import mountedwings.org.mskola_mgt.data.NumberStudentsAssignment;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -31,19 +31,17 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class AssignmentHistoryActivity extends AppCompatActivity {
-    ArrayList<NumberAssHist> numbers = new ArrayList<>();
+    ArrayList<NumberStudentsAssignment> numbers = new ArrayList<>();
 
     private BroadcastReceiver mReceiver;
     private int w = 0;
     private int status;
 
     private RecyclerView list;
-    private FloatingActionButton fab_done;
-    private TextView heading;
-    String school_id, staff_id, TAG = "mSkola";
+    private String school_id, student_reg_no, TAG = "mSkola";
 
     ProgressBar loading;
-    AssHistAdapter adapter;
+    StudentAssHistAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +53,11 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
 
-        staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
+        student_reg_no = mPrefs.getString("student_reg_no", getIntent().getStringExtra("reg_no"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
-        fab_done = findViewById(R.id.done);
-        heading = findViewById(R.id.assignment_history_title);
+        FloatingActionButton fab_done = findViewById(R.id.done);
+        TextView heading = findViewById(R.id.assignment_history_title);
         heading.setText(R.string.given_ass);
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
@@ -68,17 +66,12 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(false);
 
-        adapter = new AssHistAdapter(numbers);
-        list.setAdapter(adapter);
-
         //hide parentView
         loading.setVisibility(View.VISIBLE);
 
 //        new first_loading().execute("cac180826043520", "admin");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> finish());
-
-
     }
 
     public class first_loading extends AsyncTask<String, Integer, String> {
@@ -86,13 +79,11 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             //  Boolean success = false;
             storageFile storageObj = new storageFile();
-            storageObj.setOperation("getasshistory");
+            storageObj.setOperation("getassignments");
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 
-            String text = sentData.getStrData();
-
-            return text;
+            return sentData.getStrData();
         }
 
         @Override
@@ -108,24 +99,22 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                 loading.setVisibility(View.GONE);
                 //worked. Split into reg and names
                 String rows[] = text.split("<>");
-                for (int i = 0; i < rows.length; i++) {
-                    NumberAssHist number = new NumberAssHist();
-                    number.setDate(rows[i].split(";")[0]);
-                    number.setSubject(rows[i].split(";")[1]);
-                    number.setClassArm(rows[i].split(";")[2]);
-                    number.setStaff(rows[i].split(";")[3]);
-                    number.setAssignment(rows[i].split(";")[4]);
-                    numbers.add(number);
+                for (String row : rows) {
+                    NumberStudentsAssignment numberStudentsAssignment = new NumberStudentsAssignment();
+                    numberStudentsAssignment.setAssignment_date(row.split(";")[0]);
+                    numberStudentsAssignment.setSubject(row.split(";")[1]);
+                    numberStudentsAssignment.setCode(row.split(";")[2]);
+                    numbers.add(numberStudentsAssignment);
                 }
                 //show recyclerView with inflated views
-                adapter = new AssHistAdapter(numbers);
+                adapter = new StudentAssHistAdapter(numbers);
                 list.setAdapter(adapter);
 
                 adapter.setOnItemClickListener((view, obj, position) -> {
-                    String assignmentId = numbers.get(position).getAssignment();
-//                        Toast.makeText(getContext(), "Item " + assignmentId + " clicked", Toast.LENGTH_SHORT).show();
+                    //run last API
                     if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        new loadIndividualAssignment().execute(assignmentId);
+                        Tools.toast("Fetching assignment...", AssignmentHistoryActivity.this);
+                        new loadIndividualAssignment().execute(obj.getCode());
                     } else {
                         Tools.toast(getResources().getString(R.string.no_internet_connection), AssignmentHistoryActivity.this, R.color.red_500);
                         finish();
@@ -146,7 +135,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
             storageObj.setOperation("getassdetails");
             storageObj.setStrData(school_id + "<>" + strings[0]);
 
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 
             return sentData.getStrData();
         }
@@ -192,7 +181,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                         if (w > 1)
                             Tools.toast("Back Online! Try again", AssignmentHistoryActivity.this, R.color.green_800);
                         else
-                            new first_loading().execute(school_id, staff_id);
+                            new first_loading().execute(school_id, student_reg_no);
 
                     }
 

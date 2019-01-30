@@ -60,9 +60,7 @@ public class Settings extends AppCompatActivity {
             clearSharedPreferences(this);
             finish();
             startActivity(new Intent(getApplicationContext(), Home.class));
-
         }
-
     }
 
     //DONE

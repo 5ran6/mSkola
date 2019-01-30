@@ -20,7 +20,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.parent.Settings;
-import mountedwings.org.mskola_mgt.teacher.Assignment_menu;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -119,7 +118,7 @@ public class Dashboard extends AppCompatActivity {
 
         CardView assignment = findViewById(R.id.assignment);
         assignment.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), Assignment_menu.class);
+            Intent intent = new Intent(getApplicationContext(), AssignmentHistoryActivity.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("role", role);
             intent.putExtra("email_address", email);
