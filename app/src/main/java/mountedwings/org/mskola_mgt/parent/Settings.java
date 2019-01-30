@@ -37,7 +37,6 @@ public class Settings extends AppCompatActivity {
 
         TextView email = findViewById(R.id.email);
 
-
         if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
             SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
             email.setText(mPrefs.getString("email_address", getIntent().getStringExtra("email_address")));
