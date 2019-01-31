@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRatingBar;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
+import email.LongOperation;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -57,12 +59,19 @@ public class DialogAddReview extends AppCompatActivity {
                 String review = et_post.getText().toString().trim();
                 String rating = "";
                 if (review.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Please fill review text", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please fill a review text", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    rating = review + ".\n" + rating_bar.getRating() + " star(s) rating";
+                    rating = "From: " + email + "\n" + review + "\n" + rating_bar.getRating() + " star(s) rating";
                     //TODO: email to mountedwings customer care
+                    try {
+                        LongOperation l = new LongOperation();
+                        l.execute(rating, email);  //sends the email in background
+                        Toast.makeText(getApplicationContext(), l.get(), Toast.LENGTH_SHORT).show();
 
+                    } catch (Exception e) {
+                        Log.e("mSkola", e.getMessage(), e);
+                    }
                     dialog.dismiss();
                     Tools.toast("Submitted. Thanks for your review.", DialogAddReview.this, R.color.green_600);
                     finish();

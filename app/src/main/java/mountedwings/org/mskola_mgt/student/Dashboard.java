@@ -19,7 +19,7 @@ import java.util.Arrays;
 import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.parent.Settings;
+import mountedwings.org.mskola_mgt.Settings;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;

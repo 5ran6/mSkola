@@ -145,7 +145,7 @@
         <activity android:name=".student.Result_menu" />
         <activity android:name=".student.StudentInformation" />
         <activity android:name=".student.AssessmentView" />
-        <activity android:name=".parent.Settings" />
+        <activity android:name=".Settings" />
         <activity android:name=".About" />
         <activity android:name=".Licenses" />
         <activity android:name=".DialogAddReview" />

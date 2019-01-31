@@ -1,4 +1,4 @@
-package mountedwings.org.mskola_mgt.parent;
+package mountedwings.org.mskola_mgt;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +16,6 @@ import android.widget.TextView;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import mountedwings.org.mskola_mgt.About;
-import mountedwings.org.mskola_mgt.DialogAddReview;
-import mountedwings.org.mskola_mgt.Home;
-import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -80,15 +76,16 @@ public class Settings extends AppCompatActivity {
     public void get_help(View view) {
     }
 
+    public void feedback(View view) {
+        startActivity(new Intent(getApplicationContext(), DialogAddReview.class));
+    }
+
+    //DONE
     public void invite(View view) {
         shareText(getResources().getString(R.string.invite_a_friend));
     }
 
-    public void feedback(View view) {
-        startActivity(new Intent(getApplicationContext(), DialogAddReview.class));
-
-    }
-
+    //DONE
     public void logout(View view) {
         clearSharedPreferences(Settings.this);
         Tools.toast("Logged out", Settings.this, R.color.green_600);
