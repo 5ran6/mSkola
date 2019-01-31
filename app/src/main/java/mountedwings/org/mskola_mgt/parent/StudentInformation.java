@@ -86,7 +86,7 @@ public class StudentInformation extends AppCompatActivity {
                 String rows[] = text.split("##");
                 //data1
                 String data1[] = rows[0].split("<>");
-                class_arm_session.setText(String.format("Current Class: %s %s \n %s %s", data1[0], data1[1], data1[3], data1[2]));
+                class_arm_session.setText(String.format("Current Class: %s %s", data1[0], data1[1]));
 
                 //set Logo
                 Bitmap bitmap = BitmapFactory.decodeByteArray(student_passport.get(0), 0, student_passport.get(0).length);

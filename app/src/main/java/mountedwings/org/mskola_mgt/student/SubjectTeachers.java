@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
@@ -95,18 +96,24 @@ public class SubjectTeachers extends AppCompatActivity {
                 String rows[] = text.split("##");
                 String subjects[] = rows[0].split(";");
                 String teachers[] = rows[1].split("<>");
+                try {
 
-                for (int i = 0; i < rows.length; i++) {
-                    String teacher = teachers[i];
-                    NumberSubjectTeachers number = new NumberSubjectTeachers();
-                    number.setName(teacher.split(";")[0]);
-                    number.setPhone(teacher.split(";")[1]);
-                    number.setEmail(teacher.split(";")[2]);
-                    number.setSubject(subjects[i]);
-                    number.setPassport(teachers_passport.get(i));
-                    numbers.add(number);
+
+                    for (int i = 0; i < rows.length; i++) {
+                        String teacher = teachers[i];
+                        NumberSubjectTeachers number = new NumberSubjectTeachers();
+                        number.setName(teacher.split(";")[0]);
+                        number.setPhone(teacher.split(";")[1]);
+                        number.setEmail(teacher.split(";")[2]);
+                        number.setSubject(subjects[i]);
+                        number.setPassport(teachers_passport.get(i));
+                        numbers.add(number);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Seems something went wrong", Toast.LENGTH_SHORT).show();
+                    finish();
+                    e.printStackTrace();
                 }
-
                 //set data to adapter
                 AdapterStudentsSubjectTeachers mAdapter = new AdapterStudentsSubjectTeachers(SubjectTeachers.this, numbers);
                 recyclerView.setAdapter(mAdapter);

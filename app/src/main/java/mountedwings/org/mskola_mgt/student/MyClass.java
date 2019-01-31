@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -164,7 +163,8 @@ public class MyClass extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-//            System.out.println(text);
+            System.out.println(text);
+
             //TODO: come and check which is term and for others
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("##");
@@ -173,9 +173,9 @@ public class MyClass extends AppCompatActivity {
 
                 //data1
                 String data1[] = rows[0].split("<>");
-                class_session.setText(String.format("Current Class: %s %s \n %s %s", data1[0], data1[1], data1[3], data1[2]));
-                String current_term = data1[3];
-                term.setText(current_term.toUpperCase());
+                class_session.setText(String.format("%s\t %s", data1[0], data1[1]));
+                String current_term = data1[2];
+                term.setText(String.format("%s TERM", current_term.toUpperCase()));
 
                 //set Logo
                 Bitmap bitmap = BitmapFactory.decodeByteArray(student_passport.get(0), 0, student_passport.get(0).length);
@@ -183,7 +183,8 @@ public class MyClass extends AppCompatActivity {
 
                 //data3
                 String data3[] = rows[2].split("<>");
-                others.setText(data3[1].toUpperCase() + " " + data3[2].toUpperCase());
+//                others.setText(String.format("REG NO: %s %s", data3[1].toUpperCase(), data3[5].toUpperCase()));
+                others.setText(String.format("REG NO: %s", data3[1].toUpperCase()));
 
 
                 //runNext API - classmates
@@ -217,21 +218,28 @@ public class MyClass extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            Log.i("mSkola", "Class mates info " + text);
+//            Log.i("mSkola", "Class mates info " + text);
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
+                try {
+                    for (int i = 0; i < rows.length; i++) {
+                        NumberClassMates numberClassMates = new NumberClassMates();
+                        numberClassMates.setName(rows[i].split(";")[0]);
+                        numberClassMates.setGender(rows[i].split(";")[1]);
+                        numberClassMates.setLogo(classmates_passport.get(i));
+                        schools.add(numberClassMates);
+                    }
 
-                for (int i = 0; i < rows.length; i++) {
-                    NumberClassMates numberClassMates = new NumberClassMates();
-                    numberClassMates.setName(rows[i].split(";")[0]);
-                    numberClassMates.setGender(rows[i].split(";")[1]);
-                    numberClassMates.setLogo(classmates_passport.get(i));
-                    schools.add(numberClassMates);
+                    //set data and list adapter
+                    mAdapter = new AdapterListClassmates(MyClass.this, schools);
+                    list.setAdapter(mAdapter);
+
+                } catch (Exception e) {
+                    //   Tools.toast("Seems something went wrong", MyClass.this, getResources().getColor(R.color.red_600), Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "Seems something went wrong", Toast.LENGTH_SHORT).show();
+                    finish();
+                    e.printStackTrace();
                 }
-
-                //set data and list adapter
-                mAdapter = new AdapterListClassmates(MyClass.this, schools);
-                list.setAdapter(mAdapter);
 
                 //appear
                 appear();

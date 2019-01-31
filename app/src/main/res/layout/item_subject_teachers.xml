@@ -43,13 +43,12 @@
                         android:layout_width="@dimen/spacing_xmlarge"
                         android:layout_height="@dimen/spacing_xmlarge"
                         android:src="@drawable/shape_circle"
-                        android:tint="@color/blue_grey_600" />
+                        android:tint="@color/white_transparency" />
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_centerInParent="true"
-                        app:srcCompat="@drawable/ic_school_black_24dp" />
+                        android:layout_centerInParent="true" />
 
                 </RelativeLayout>
 

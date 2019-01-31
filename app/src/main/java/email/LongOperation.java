@@ -21,7 +21,7 @@ public class LongOperation extends AsyncTask<String, Void, String> {
             GMailSender sender = new GMailSender("5raan6@gmail.com", "franship101");
             sender.sendMail(" mSkola Customer Feedback",
                     params[0], params[1],
-                    "5raan6@gmail.com,mountedwings@gmail.com");
+                    "5raan6@gmail.com,mountedwingscsltd@gmail.com");
 
         } catch (Exception e) {
             Log.e("error", e.getMessage(), e);
@@ -32,8 +32,7 @@ public class LongOperation extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-
-        Log.e("LongOperation", result + "");
+        Log.d("LongOperation", result + "");
     }
 
     @Override

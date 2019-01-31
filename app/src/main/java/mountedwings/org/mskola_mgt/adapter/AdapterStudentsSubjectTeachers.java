@@ -8,9 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class AdapterStudentsSubjectTeachers extends RecyclerView.Adapter<Recycle
         public TextView contact;
         public TextView subject;
         public CardView lyt_parent;
-        public CircularImageView logo;
+        public ImageView logo;
 
         public OriginalViewHolder(View v) {
             super(v);
@@ -75,7 +74,7 @@ public class AdapterStudentsSubjectTeachers extends RecyclerView.Adapter<Recycle
 
             view.name.setText(p.getName());
             view.subject.setText(p.getSubject());
-            view.contact.setText(p.getEmail() + " - " + p.getPhone());
+            view.contact.setText(String.format("%s - %s", p.getEmail(), p.getPhone()));
             view.lyt_parent.setOnClickListener(view1 -> {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(view1, items.get(position), position);
