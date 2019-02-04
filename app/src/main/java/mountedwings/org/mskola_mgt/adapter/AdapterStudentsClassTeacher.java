@@ -34,6 +34,7 @@ public class AdapterStudentsClassTeacher extends RecyclerView.Adapter<RecyclerVi
     public AdapterStudentsClassTeacher(Context context, List<NumberClassTeachers> items) {
         this.items = items;
         ctx = context;
+        setHasStableIds(true);
     }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
@@ -85,4 +86,13 @@ public class AdapterStudentsClassTeacher extends RecyclerView.Adapter<RecyclerVi
         return items.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

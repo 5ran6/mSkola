@@ -353,4 +353,55 @@
         <item>Synchronisation</item>
     </string-array>
 
+
+    <string-array name="faq_questions_teachers">
+        <item>Fashion B07 Keara 933</item>
+        <item>2</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>3</item>
+        <item>Fashion B07 Keara 933</item>
+    </string-array>
+
+    <string-array name="faq_answers_teachers">
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+    </string-array>
+
+
+    <string-array name="faq_questions_students">
+        <item>Fashion B07 Keara 933</item>
+        <item>2</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>3</item>
+        <item>Fashion B07 Keara 933</item>
+    </string-array>
+
+    <string-array name="faq_answers_students">
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+    </string-array>
+
+
+    <string-array name="faq_questions_parents">
+        <item>Fashion B07 Keara 933</item>
+        <item>2</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>3</item>
+        <item>Fashion B07 Keara 933</item>
+    </string-array>
+
+    <string-array name="faq_answers_parents">
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+        <item>Fashion B07 Keara 933</item>
+    </string-array>
+
 </resources>

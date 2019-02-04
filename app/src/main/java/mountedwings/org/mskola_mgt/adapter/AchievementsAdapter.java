@@ -81,7 +81,7 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
 
         private ViewHolder(View v) {
             super(v);
-            achievement = v.findViewById(R.id.title);
+            achievement = v.findViewById(R.id.subtitle);
             title = v.findViewById(R.id.title);
             passport = v.findViewById(R.id.image);
             cardView = v.findViewById(R.id.parent_layout);
@@ -97,5 +97,13 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

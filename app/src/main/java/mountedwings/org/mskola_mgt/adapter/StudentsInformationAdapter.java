@@ -75,4 +75,13 @@ public class StudentsInformationAdapter extends RecyclerView.Adapter<StudentsInf
         void onItemClick(View view, NumberStudentsInformation obj, int pos);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

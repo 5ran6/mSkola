@@ -40,16 +40,16 @@ public class AdapterListInbox extends RecyclerView.Adapter<AdapterListInbox.View
 
         public ViewHolder(View view) {
             super(view);
-            from = (TextView) view.findViewById(R.id.from);
-            email = (TextView) view.findViewById(R.id.email);
-            message = (TextView) view.findViewById(R.id.message);
-            date = (TextView) view.findViewById(R.id.date);
-            image_letter = (TextView) view.findViewById(R.id.image_letter);
-            image = (ImageView) view.findViewById(R.id.image);
+            from = view.findViewById(R.id.from);
+            email = view.findViewById(R.id.email);
+            message = view.findViewById(R.id.message);
+            date = view.findViewById(R.id.date);
+            image_letter = view.findViewById(R.id.image_letter);
+            image = view.findViewById(R.id.image);
 
-            lyt_checked = (RelativeLayout) view.findViewById(R.id.lyt_checked);
-            lyt_image = (RelativeLayout) view.findViewById(R.id.lyt_image);
-            lyt_parent = (View) view.findViewById(R.id.lyt_parent);
+            lyt_checked = view.findViewById(R.id.lyt_checked);
+            lyt_image = view.findViewById(R.id.lyt_image);
+            lyt_parent = view.findViewById(R.id.lyt_parent);
         }
     }
 
@@ -173,5 +173,15 @@ public class AdapterListInbox extends RecyclerView.Adapter<AdapterListInbox.View
         void onItemClick(View view, Inbox obj, int pos);
 
         void onItemLongClick(View view, Inbox obj, int pos);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

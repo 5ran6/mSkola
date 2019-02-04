@@ -110,4 +110,13 @@ public class PsychomotorAdapter extends RecyclerView.Adapter<PsychomotorAdapter.
         return isEmpty;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

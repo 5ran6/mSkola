@@ -75,4 +75,13 @@ public class MySubjectsAdapter extends RecyclerView.Adapter<MySubjectsAdapter.Vi
         void onItemClick(View view, NumberMySubjects obj, int pos);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

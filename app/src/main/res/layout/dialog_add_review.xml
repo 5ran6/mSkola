@@ -91,7 +91,7 @@
             android:layout_height="match_parent"
             android:background="@color/grey_3"
             android:gravity="top"
-            android:hint="Write review ..."
+            android:hint="Write your review/question ..."
             android:lines="4"
             android:padding="@dimen/spacing_middle" />
 
@@ -107,6 +107,7 @@
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_middle"
             android:visibility="gone" />
 
         <View

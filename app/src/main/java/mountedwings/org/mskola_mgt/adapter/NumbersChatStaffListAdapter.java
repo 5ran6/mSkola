@@ -208,4 +208,13 @@ public class NumbersChatStaffListAdapter extends RecyclerView.Adapter<NumbersCha
         void onItemLongClick(View view, NumberChatStaffList obj, int pos);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

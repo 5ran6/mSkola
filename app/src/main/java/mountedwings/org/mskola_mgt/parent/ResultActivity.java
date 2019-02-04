@@ -415,6 +415,24 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[2]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 2:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -426,6 +444,24 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[3]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 3:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -438,6 +474,26 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[4]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 4:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -451,6 +507,27 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[5]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(CA4.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 5:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -465,6 +542,28 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[6]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(CA4.get(k)) + Double.valueOf(CA5.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 6:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -480,6 +579,28 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[7]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(CA4.get(k)) + Double.valueOf(CA5.get(k)) + Double.valueOf(CA6.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 7:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -496,6 +617,30 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[8]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(CA4.get(k)) + Double.valueOf(CA5.get(k)) + Double.valueOf(CA6.get(k)) + Double.valueOf(CA7.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 8:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -513,9 +658,33 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
+                            CA8.add(subjects_with_scores.get(k).split(";")[8]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[9]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(CA4.get(k)) + Double.valueOf(CA5.get(k)) + Double.valueOf(CA6.get(k)) + Double.valueOf(CA7.get(k)) + Double.valueOf(CA8.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 9:
-                        Log.i(TAG, " 9 CAs");
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
                         HEADERS.add("CA1");
                         HEADERS.add("CA2");
@@ -532,6 +701,32 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
+                        for (int k = 0; k < no_subjects; k++) {
+                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
+                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
+                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
+                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
+                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
+                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
+                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
+                            CA8.add(subjects_with_scores.get(k).split(";")[8]);
+                            CA9.add(subjects_with_scores.get(k).split(";")[9]);
+                            EXAM.add(subjects_with_scores.get(k).split(";")[10]);
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(CA4.get(k)) + Double.valueOf(CA5.get(k)) + Double.valueOf(CA6.get(k)) + Double.valueOf(CA7.get(k)) + Double.valueOf(CA8.get(k)) + Double.valueOf(CA9.get(k)) + Double.valueOf(EXAM.get(k))));
+                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
+                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
+                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
+
+                            String grade = "";
+                            for (int y = 0; y < grades.size(); y++) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
+
+                                    grade = grades.get(y);
+                                    break;
+                                }
+                            }
+                            GRADE.add(grade);
+                        }
                         break;
                     case 10:
                         HEADERS.add(" SUBJECT\t\t\t\t\t\t\t\t\t\t\t\t");
@@ -551,228 +746,6 @@ public class ResultActivity extends AppCompatActivity {
                         HEADERS.add("HIGHEST");
                         HEADERS.add("LOWEST");
                         HEADERS.add("GRADE");
-                        break;
-                }
-
-                /////////////////////////////////////////////////////////
-
-                // for (int j = 0; j < no_subjects; j++) {
-                //   for (int i = 0; i < result.getNoCas(); i++) {
-                switch (Integer.valueOf(no_cas.trim())) {
-                    case 1:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[2]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 2:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[3]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 3:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[4]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 4:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[5]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 5:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[6]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 6:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[7]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 7:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[8]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 8:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
-                            CA8.add(subjects_with_scores.get(k).split(";")[8]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[9]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(CA8.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 9:
-                        for (int k = 0; k < no_subjects; k++) {
-                            CA1.add(subjects_with_scores.get(k).split(";")[1]);
-                            CA2.add(subjects_with_scores.get(k).split(";")[2]);
-                            CA3.add(subjects_with_scores.get(k).split(";")[3]);
-                            CA4.add(subjects_with_scores.get(k).split(";")[4]);
-                            CA5.add(subjects_with_scores.get(k).split(";")[5]);
-                            CA6.add(subjects_with_scores.get(k).split(";")[6]);
-                            CA7.add(subjects_with_scores.get(k).split(";")[7]);
-                            CA8.add(subjects_with_scores.get(k).split(";")[8]);
-                            CA9.add(subjects_with_scores.get(k).split(";")[9]);
-                            EXAM.add(subjects_with_scores.get(k).split(";")[10]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(CA8.get(k)) + Integer.valueOf(CA9.get(k)) + Integer.valueOf(EXAM.get(k))));
-                            AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
-                            HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
-                            LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
-
-                            String grade = "";
-                            for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
-
-                                    grade = grades.get(y);
-                                    break;
-                                }
-                            }
-                            GRADE.add(grade);
-                        }
-                        break;
-                    case 10:
                         for (int k = 0; k < no_subjects; k++) {
                             CA1.add(subjects_with_scores.get(k).split(";")[1]);
                             CA2.add(subjects_with_scores.get(k).split(";")[2]);
@@ -785,14 +758,14 @@ public class ResultActivity extends AppCompatActivity {
                             CA9.add(subjects_with_scores.get(k).split(";")[9]);
                             CA10.add(subjects_with_scores.get(k).split(";")[10]);
                             EXAM.add(subjects_with_scores.get(k).split(";")[11]);
-                            TOTAL.add(String.valueOf(Integer.valueOf(CA1.get(k)) + Integer.valueOf(CA2.get(k)) + Integer.valueOf(CA3.get(k)) + Integer.valueOf(CA4.get(k)) + Integer.valueOf(CA5.get(k)) + Integer.valueOf(CA6.get(k)) + Integer.valueOf(CA7.get(k)) + Integer.valueOf(CA8.get(k)) + Integer.valueOf(CA9.get(k)) + Integer.valueOf(CA10.get(k)) + Integer.valueOf(EXAM.get(k))));
+                            TOTAL.add(String.valueOf(Double.valueOf(CA1.get(k)) + Double.valueOf(CA2.get(k)) + Double.valueOf(CA3.get(k)) + Double.valueOf(CA4.get(k)) + Double.valueOf(CA5.get(k)) + Double.valueOf(CA6.get(k)) + Double.valueOf(CA7.get(k)) + Double.valueOf(CA8.get(k)) + Double.valueOf(CA9.get(k)) + Double.valueOf(CA10.get(k)) + Double.valueOf(EXAM.get(k))));
                             AVERAGE.add(class_average__highest__lowest.get(k).split(";")[0]);
                             HIGHEST.add(class_average__highest__lowest.get(k).split(";")[1]);
                             LOWEST.add(class_average__highest__lowest.get(k).split(";")[2]);
 
                             String grade = "";
                             for (int y = 0; y < grades.size(); y++) {
-                                if ((Integer.valueOf(TOTAL.get(k))) <= Integer.parseInt(higher_limit.get(y)) && (Integer.valueOf(TOTAL.get(k))) >= Integer.parseInt(lower_limit.get(y))) {
+                                if ((Double.valueOf(TOTAL.get(k))) <= Double.parseDouble(higher_limit.get(y)) && (Double.valueOf(TOTAL.get(k))) >= Double.parseDouble(lower_limit.get(y))) {
 
                                     grade = grades.get(y);
                                     break;
@@ -851,8 +824,6 @@ public class ResultActivity extends AppCompatActivity {
             storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 
-            //do this in background
-            result_layout.addView(new TableMainLayout(getApplicationContext()));
 
             return sentData.getStrData();
         }
@@ -895,6 +866,7 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             //inflate everything in UI, then unveil
+            result_layout.addView(new TableMainLayout(getApplicationContext()));
 
             //TODO: unveil gradually from top to bottom. How about that?
             loading.setVisibility(View.GONE);

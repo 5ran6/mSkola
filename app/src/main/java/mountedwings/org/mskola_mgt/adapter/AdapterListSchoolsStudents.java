@@ -85,4 +85,13 @@ public class AdapterListSchoolsStudents extends RecyclerView.Adapter<RecyclerVie
         return items.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

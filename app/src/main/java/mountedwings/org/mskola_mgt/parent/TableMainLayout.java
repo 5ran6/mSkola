@@ -1110,6 +1110,7 @@ public class TableMainLayout extends RelativeLayout {
 
         TextView bodyTextView = new TextView(this.context);
         bodyTextView.setBackgroundColor(Color.WHITE);
+        bodyTextView.setTextColor(getResources().getColor(R.color.grey_800));
         bodyTextView.setText(label);
         bodyTextView.setGravity(Gravity.CENTER);
         bodyTextView.setPadding(5, 5, 5, 5);

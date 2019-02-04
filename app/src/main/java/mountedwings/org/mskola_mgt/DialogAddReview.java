@@ -113,14 +113,15 @@ public class DialogAddReview extends AppCompatActivity {
             if (result.equalsIgnoreCase("Email Sent")) {
                 response = "Submitted. Thanks for your review.";
                 color = R.color.green_600;
+                Tools.toast(response, DialogAddReview.this, color);
+                progressBar.setVisibility(View.GONE);
+                finish();
             } else {
                 response = "Something went wrong. Try again.";
                 color = R.color.red_600;
+                progressBar.setVisibility(View.GONE);
             }
-            progressBar.setVisibility(View.GONE);
-            //    dialog.dismiss();
-            Tools.toast(response, DialogAddReview.this, color);
-            finish();
+
         }
 
         @Override

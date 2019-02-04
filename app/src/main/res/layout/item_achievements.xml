@@ -23,8 +23,8 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/spacing_large"
-            android:paddingTop="@dimen/spacing_large">
+            android:paddingTop="@dimen/spacing_large"
+            android:paddingBottom="@dimen/spacing_large">
 
             <View
                 android:layout_width="@dimen/spacing_large"
@@ -112,7 +112,8 @@
                             android:text="2018-09-19"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                             android:textColor="@color/blue_300"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <TextView
@@ -139,7 +140,7 @@
                             android:layout_weight=".8"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:text="By: Lawrence Adu"
+                            android:text="By: Admin"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                             android:textColor="@color/grey_40" />
 

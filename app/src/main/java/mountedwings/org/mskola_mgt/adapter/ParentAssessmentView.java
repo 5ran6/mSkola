@@ -67,5 +67,13 @@ public class ParentAssessmentView extends RecyclerView.Adapter<ParentAssessmentV
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

@@ -67,5 +67,14 @@ public class ParentResultListHeader extends RecyclerView.Adapter<ParentResultLis
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
 }

@@ -108,4 +108,10 @@ public class AdapterTimeTableListSectioned extends RecyclerView.Adapter<Recycler
         notifyItemInserted(index);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
 }

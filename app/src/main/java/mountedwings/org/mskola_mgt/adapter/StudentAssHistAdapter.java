@@ -86,5 +86,13 @@ public class StudentAssHistAdapter extends RecyclerView.Adapter<StudentAssHistAd
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

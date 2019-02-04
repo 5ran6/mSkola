@@ -128,15 +128,6 @@
         <activity android:name=".parent.Timetable_menu_activity" />
         <activity android:name=".parent.StudentInformation" />
         <activity android:name=".parent.Result_menu" />
-        <activity android:name=".parent.MainActivity">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-        </activity>
         <activity android:name=".student.MskolaLogin" />
         <activity android:name=".student.Assignment_history_detail" />
         <activity android:name=".student.AssignmentHistoryActivity" />
@@ -151,12 +142,15 @@
         <activity android:name=".DialogAddReview" />
         <activity android:name=".student.Assessment_menu" />
         <activity android:name=".student.List_of_schools" />
-        <activity android:name=".student.MyClass"></activity>
+        <activity android:name=".student.MyClass" />
         <activity android:name=".student.SchoolInformation_menu" />
         <activity android:name=".student.ResultActivity" />
         <activity android:name=".student.SchoolInformation" />
         <activity android:name=".student.ClassTeachers" />
         <activity android:name=".student.SubjectTeachers" />
+        <activity android:name=".student.FAQ" />
+        <activity android:name=".parent.FAQ" />
+        <activity android:name=".teacher.FAQ" />
     </application>
 
 </manifest>

@@ -105,4 +105,14 @@ public class NumbersChatCategories extends RecyclerView.Adapter<NumbersChatCateg
     public void unSelectAll1() {
         notifyDataSetChanged();
     }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

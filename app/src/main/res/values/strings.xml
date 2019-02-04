@@ -157,7 +157,8 @@
     <string name="change_password_text">Change Password</string>
     <string name="old_password">OLD PASSWORD</string>
     <string name="enter_old_password">Enter old password</string>
-    <string name="invite_a_friend">Check out mSkola, I use it to keep abreast with the academic progress of my ward(s). Get it for free at https://www.mskola.com</string>
+    <string name="invite_a_friend">Check out mSkola, I use it to keep abreast with the academic
+    progress of my ward(s). Get it for free at mskola.com </string>
 
 
     <!-- for transitions-->
