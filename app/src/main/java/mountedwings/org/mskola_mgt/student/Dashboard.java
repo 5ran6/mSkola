@@ -1,3 +1,16 @@
+/*
+ * Copyright 2019 Mountedwings Cybersystems LTD. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package mountedwings.org.mskola_mgt.student;
 
 import android.content.Context;
@@ -70,7 +83,6 @@ public class Dashboard extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         } else {
             Tools.toast("Previous Login invalidated. Login again!", Dashboard.this, R.color.red_600);
 
@@ -79,7 +91,6 @@ public class Dashboard extends AppCompatActivity {
             finish();
             startActivity(new Intent(getApplicationContext(), MskolaLogin.class).putExtra("account_type", "Student"));
         }
-
         initComponent();
     }
 
@@ -148,7 +159,6 @@ public class Dashboard extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MyClass.class);
             intent.putExtra("school_id", school_id);
             intent.putExtra("student_reg_no", student_reg_no);
-            intent.putExtra("class_name", class_name);
             startActivity(intent);
         });
 

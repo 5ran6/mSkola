@@ -1,3 +1,16 @@
+/*
+ * Copyright 2019 Mountedwings Cybersystems LTD. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.AlertDialog;
@@ -194,7 +207,7 @@ public class Psychomotor extends AppCompatActivity {
                     numbers.add(number);
                     ps_values += ";" + skills.get(i);
                 }
-                ps_values = ps_values.substring(1, ps_values.length());
+                ps_values = ps_values.substring(1);
                 //set data and list adapter
                 mAdapter = new PsychomotorAdapter(numbers);
                 recyclerView.setAdapter(mAdapter);
@@ -255,7 +268,7 @@ public class Psychomotor extends AppCompatActivity {
         if (values_to_send.contains("null")) {
             values_to_send = values_to_send.replace("null", "_");
         }
-        values_to_send = values_to_send.substring(1, values_to_send.length());
+        values_to_send = values_to_send.substring(1);
 
 
         if (!mAdapter.isItEmpty())
@@ -287,7 +300,7 @@ public class Psychomotor extends AppCompatActivity {
         if (values_to_send.contains("null")) {
             values_to_send = values_to_send.replace("null", "_");
         }
-        values_to_send = values_to_send.substring(1, values_to_send.length());
+        values_to_send = values_to_send.substring(1);
         if (!mAdapter.isItEmpty())
             new savePsychoSkills().execute(ps_values, values_to_send);
         values_to_send = "";

@@ -1,3 +1,16 @@
+/*
+ * Copyright 2019 Mountedwings Cybersystems LTD. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package mountedwings.org.mskola_mgt.widget;
 
 import android.animation.ObjectAnimator;
@@ -119,8 +132,8 @@ public class ViewLoadingDotsBounce extends LinearLayout {
         animator = new ObjectAnimator[OBJECT_SIZE];
         for (int i = 0; i < OBJECT_SIZE; i++) {
             img[i].setTranslationY(getHeight() / POST_DIV);
-            PropertyValuesHolder Y = PropertyValuesHolder.ofFloat(img[i].TRANSLATION_Y, -getHeight() / POST_DIV);
-            PropertyValuesHolder X = PropertyValuesHolder.ofFloat(img[i].TRANSLATION_X, 0);
+            PropertyValuesHolder Y = PropertyValuesHolder.ofFloat(TRANSLATION_Y, -getHeight() / POST_DIV);
+            PropertyValuesHolder X = PropertyValuesHolder.ofFloat(TRANSLATION_X, 0);
             animator[i] = ObjectAnimator.ofPropertyValuesHolder(img[i], X, Y);
             animator[i].setRepeatCount(-1);
             animator[i].setRepeatMode(ValueAnimator.REVERSE);

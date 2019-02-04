@@ -1,3 +1,16 @@
+/*
+ * Copyright 2019 Mountedwings Cybersystems LTD. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.Dialog;
@@ -79,9 +92,7 @@ public class PromoteStudentsActivity extends AppCompatActivity {
         progressBar3.setVisibility(View.INVISIBLE);
 
 
-        select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-
-        {
+        select_class.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (select_class.getSelectedItemPosition() >= 0) {
@@ -98,9 +109,7 @@ public class PromoteStudentsActivity extends AppCompatActivity {
 
             }
         });
-        select_arm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-
-        {
+        select_arm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (select_arm.getSelectedItemPosition() >= 0) {
@@ -120,9 +129,7 @@ public class PromoteStudentsActivity extends AppCompatActivity {
             }
 
         });
-        select_session.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-
-        {
+        select_session.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (select_session.getSelectedItemPosition() >= 0) {

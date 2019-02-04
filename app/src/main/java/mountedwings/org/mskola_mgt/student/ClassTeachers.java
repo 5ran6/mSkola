@@ -1,3 +1,16 @@
+/*
+ * Copyright 2019 Mountedwings Cybersystems LTD. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package mountedwings.org.mskola_mgt.student;
 
 import android.content.BroadcastReceiver;
@@ -12,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.mskola.controls.serverProcessParents;
@@ -69,6 +83,9 @@ public class ClassTeachers extends AppCompatActivity {
         //school_id/students id from sharedPrefs
         reg_no = mPrefs.getString("student_reg_no", getIntent().getStringExtra("reg_no"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+
+        new getClassTeacher().execute(school_id, reg_no);
+
     }
 
     private class getClassTeacher extends AsyncTask<String, Integer, String> {
@@ -90,7 +107,7 @@ public class ClassTeachers extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-
+            Log.d("mSkola", text);
             if (!text.equals("0") && !text.isEmpty()) {
                 String rows[] = text.split("<>");
 
@@ -131,11 +148,11 @@ public class ClassTeachers extends AppCompatActivity {
                 new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", ClassTeachers.this, R.color.green_800);
-                        else
-                            new getClassTeacher().execute(school_id, reg_no);
+//                        status = 1;
+//                        if (w > 1)
+                        //             Tools.toast("Back Online! Try again", ClassTeachers.this, R.color.green_800);
+                        //       else
+                        //             new getClassTeacher().execute(school_id, reg_no);
                     }
 
                     @Override
