@@ -30,14 +30,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <ImageButton
-            android:id="@+id/bt_close"
-            android:layout_width="?android:attr/actionBarSize"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:tint="@color/grey_20"
-            app:srcCompat="@drawable/ic_close" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -48,12 +40,12 @@
         android:orientation="vertical"
         android:padding="@dimen/spacing_mlarge">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/image"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/photo_female_8"
-            android:tint="@color/green_500"
+            android:tint="@color/green_300"
             app:civ_border_color="@color/grey_5"
             app:civ_border_width="1dp" />
 
@@ -87,8 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_middle"
-            android:layout_marginRight="@dimen/spacing_middle"
             android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginRight="@dimen/spacing_middle"
             android:text="Registeration Successful!"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
@@ -99,12 +91,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_middle"
-            android:layout_marginRight="@dimen/spacing_middle"
             android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginRight="@dimen/spacing_middle"
             android:text="Contact school admin for account activation."
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/grey_40" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/bt_follow"

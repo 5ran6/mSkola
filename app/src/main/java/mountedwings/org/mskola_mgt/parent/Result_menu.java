@@ -51,7 +51,7 @@ public class Result_menu extends AppCompatActivity {
     private int counter = 0;
     private BroadcastReceiver mReceiver;
     private int w = 0;
-    private int status;
+    private int status = 1;
 
     @Override
     protected void onResume() {

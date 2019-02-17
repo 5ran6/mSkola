@@ -27,9 +27,10 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.Arrays;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.Chat_menu;
 import mountedwings.org.mskola_mgt.Home;
 import mountedwings.org.mskola_mgt.R;
@@ -41,15 +42,11 @@ import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 
 public class Dashboard extends AppCompatActivity {
-
-    private View parent_view;
-
     private String role = "";
     private String school_id;
     private String email;
     private String school = "";
     private String name;
-    //private byte[] pass = new byte[1000];
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     @Override
@@ -70,7 +67,7 @@ public class Dashboard extends AppCompatActivity {
             try {
                 byte[] pass = Base64.decode(raw_pass, Base64.NO_WRAP);
 
-                CircleImageView passport = findViewById(R.id.passport);
+                CircularImageView passport = findViewById(R.id.passport);
 
                 Bitmap bitmap = BitmapFactory.decodeByteArray(pass, 0, pass.length);
                 passport.setImageBitmap(bitmap);
@@ -101,7 +98,6 @@ public class Dashboard extends AppCompatActivity {
 
         TextView staff_name = findViewById(R.id.tv_staff_name);
         TextView school_name = findViewById(R.id.tv_school_name);
-        parent_view = findViewById(R.id.parent_layout);
         staff_name.setText(name);
         school_name.setText(school);
 

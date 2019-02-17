@@ -147,8 +147,8 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/spacing_mxlarge" />
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/continued"
+                <Button
+                    android:id="@+id/conti"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_rounded_blue_300"

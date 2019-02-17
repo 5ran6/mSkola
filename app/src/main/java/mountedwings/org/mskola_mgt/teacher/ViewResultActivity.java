@@ -26,6 +26,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -144,6 +145,7 @@ public class ViewResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            Log.d(TAG, text);
             if (!text.equals("0") && !text.equals("")) {
 
                 String rows[] = text.split("<>");

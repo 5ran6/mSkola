@@ -13,6 +13,7 @@
 
 package mountedwings.org.mskola_mgt.parent;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -48,6 +49,7 @@ public class SchoolInformation extends AppCompatActivity {
     private LinearLayout lyt_form;
     private ProgressBar progressBar;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +101,7 @@ public class SchoolInformation extends AppCompatActivity {
 
         }
 
+        @SuppressLint("RestrictedApi")
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);

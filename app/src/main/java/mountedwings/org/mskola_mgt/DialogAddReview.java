@@ -110,7 +110,7 @@ public class DialogAddReview extends AppCompatActivity {
 //
                 GMailSender sender = new GMailSender("5raan6@gmail.com", "franship101");
                 sender.sendMail(" mSkola Customer Feedback",
-                        params[0], params[1],
+                        "\nReview: " + params[0] + "\n", params[1],
                         "5raan6@gmail.com,mountedwingscsltd@gmail.com");
 
             } catch (Exception e) {

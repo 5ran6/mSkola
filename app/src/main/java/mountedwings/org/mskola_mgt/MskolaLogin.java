@@ -25,6 +25,7 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,7 +53,7 @@ public class MskolaLogin extends AppCompatActivity {
     private String emailAddress, password, TAG = "mSkola";
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor editor;
-    private String role, school_id;
+    private String role = "Teacher", school_id;
     private static final int PREFRENCE_MODE_PRIVATE = 0;
     private AppCompatCheckBox checkedTextView;
     private String text;
@@ -72,7 +73,7 @@ public class MskolaLogin extends AppCompatActivity {
         }
 
         emailAddress = emailE.getText().toString().trim();
-        password = pass1.getText().toString();
+        password = pass1.getText().toString().trim();
         doLogin();
     }
 
@@ -184,19 +185,73 @@ public class MskolaLogin extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        role = intent.getStringExtra("account_type");
+        school_id = intent.getStringExtra("school_id").trim();
+
+        if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
+            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+            singedIn = mPrefs.getBoolean("signed_in", false);
+        }
+
+        if (singedIn) {
+            //startIntent to next activity
+            finish();
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+        }
+
+        setContentView(R.layout.activity_login_mskola);
+        parent_layout = findViewById(R.id.parent_layout);
+        Tools.setSystemBarColor(this, android.R.color.white);
+        Tools.setSystemBarLight(this);
+        mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+
+        checkedTextView = findViewById(R.id.keep_signed_in);
+
+        email = findViewById(R.id.email);
+        password1 = findViewById(R.id.password1);
+
+        emailE = findViewById(R.id.emailE);
+        pass1 = findViewById(R.id.pass1);
+
+        emailE.addTextChangedListener(new MyTextWatcher(emailE));
+        pass1.addTextChangedListener(new MyTextWatcher(pass1));
+
+        checkedTextView.setOnCheckedChangeListener((buttonView, isChecked) -> checkKeepState());
+
+        findViewById(R.id.sig_in).setOnClickListener(view -> submitForm());
+    }
+
+    private void doLogin() {
+        lyt_progress = findViewById(R.id.lyt_progress);
+        lyt_progress.setVisibility(View.VISIBLE);
+        lyt_progress.setAlpha(1.0f);
+        parent_layout.setVisibility(View.GONE);
+        hideSoftKeyboard();
+        new login().execute();
+    }
+
     private class login extends AsyncTask<String, Integer, Boolean> {
         @Override
         protected Boolean doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("requestlogin");
-            storageObj.setStrData(emailAddress + "," + password + "," + school_id);
+            // Log.d(TAG, school_id.toLowerCase() + " - " + emailAddress + " - " + password);
+            storageObj.setStrData(emailAddress + "," + password + "," + school_id.toLowerCase());
+
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             //received from server
             text = sentData.getStrData();
             boolean isSuccess;
+
+            Log.d(TAG, text);
             if (text.contains("success")) {
                 isSuccess = true;
+                role = text.split("<>")[1];
                 //          Log.d(TAG, "registration successful");
             } else if (text.contains("invalid")) {
                 isSuccess = false;
@@ -235,12 +290,13 @@ public class MskolaLogin extends AppCompatActivity {
 //                editor.putBoolean("signed_in", true);
                 editor.putString("account_type", role);
                 editor.putString("staff_id", text.split("<>")[1]);
-                editor.putString("email_address", emailE.getText().toString());
+                editor.putString("email_address", Objects.requireNonNull(emailE.getText()).toString());
+                editor.putString("role", role.toLowerCase());
                 editor.putBoolean("signed_in", singedIn);
                 editor.apply();
 
                 intent.putExtra("email_address", emailE.getText().toString());
-                intent.putExtra("school_role", text.split("<>")[1]);
+                intent.putExtra("role", text.split("<>")[1]);
                 new dashboardInfo().execute(school_id, emailE.getText().toString());
 
             } else {
@@ -250,7 +306,6 @@ public class MskolaLogin extends AppCompatActivity {
             }
         }
     }
-
 
     //DONE
     private class dashboardInfo extends AsyncTask<String, Integer, String> {
@@ -290,7 +345,7 @@ public class MskolaLogin extends AppCompatActivity {
                 editor = mPrefs.edit();
                 editor.putString("name", name);
                 editor.putString("school", school);
-                editor.putString("email_address", emailE.getText().toString());
+                editor.putString("email_address", Objects.requireNonNull(emailE.getText()).toString());
                 editor.putString("pass", android.util.Base64.encodeToString(pass, android.util.Base64.NO_WRAP));
                 editor.apply();
 
@@ -305,65 +360,6 @@ public class MskolaLogin extends AppCompatActivity {
             finish();
         }
 
-    }
-
-
-    private void doLogin() {
-        lyt_progress = findViewById(R.id.lyt_progress);
-        lyt_progress.setVisibility(View.VISIBLE);
-        lyt_progress.setAlpha(1.0f);
-        parent_layout.setVisibility(View.GONE);
-        hideSoftKeyboard();
-        //toolbar.setVisibility(View.GONE);
-        new login().execute();
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        role = intent.getStringExtra("account_type");
-        school_id = intent.getStringExtra("school_id");
-
-        if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
-            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
-            singedIn = mPrefs.getBoolean("signed_in", false);
-
-//            editor = mPrefs.edit();
-//            editor.putString("role", role);
-//            editor.putString("school_id", school_id);
-//            editor.putString("email_address", emailAddress);
-//            editor.apply();
-
-        }
-
-        if (singedIn) {
-            //startIntent to next activity
-            finish();
-            startActivity(new Intent(getApplicationContext(), Dashboard.class));
-        }
-
-        setContentView(R.layout.activity_login_mskola);
-        parent_layout = findViewById(R.id.parent_layout);
-        Tools.setSystemBarColor(this, android.R.color.white);
-        Tools.setSystemBarLight(this);
-        mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
-
-        checkedTextView = findViewById(R.id.keep_signed_in);
-
-        email = findViewById(R.id.email);
-        password1 = findViewById(R.id.password1);
-
-        emailE = findViewById(R.id.emailE);
-        pass1 = findViewById(R.id.pass1);
-
-        emailE.addTextChangedListener(new MyTextWatcher(emailE));
-        pass1.addTextChangedListener(new MyTextWatcher(pass1));
-
-        checkedTextView.setOnCheckedChangeListener((buttonView, isChecked) -> checkKeepState());
-
-        findViewById(R.id.sig_in).setOnClickListener(view -> submitForm());
     }
 
     @Override

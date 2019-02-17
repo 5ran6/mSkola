@@ -22,6 +22,7 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -319,12 +320,11 @@ public class View_Scores_menu extends AppCompatActivity {
         }
     }
 
-    /*TODO:WORK
-     *
-     * This collects the values of all the CA's and switch for different numbers of CA's
+    /* This collects the values of all the CA's and switch for different numbers of CA's
      * Then in passes everything to the scores object
      *
      * */
+
     private class loadScores extends AsyncTask<String, Integer, String> {
         String text;
         String col0 = "", col1 = "", col2 = "", col3 = "", col4 = "", col5 = "", col6 = "", col7 = "", col8 = "", col9 = "";
@@ -349,6 +349,7 @@ public class View_Scores_menu extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             progressBar.setVisibility(View.GONE);
+            Log.d("mSkola", text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 scores.setNoCas(Integer.parseInt(text.split("##")[1]) + 2); // + 2 for EXAM and TOTAL
@@ -434,8 +435,9 @@ public class View_Scores_menu extends AppCompatActivity {
                         total += Float.parseFloat(exams);
                     }
 
-                    String nameVar = rows[i].split(";")[(rows[i].split(";").length - 1)];
-                    NAMES.add(rows[i].split(";")[(rows[i].split(";").length - 1)]);
+                    String nameVar = rows[i].split(";")[(rows[i].split(";").length - 2)];
+                    NAMES.add(nameVar);
+                    //       NAMES.add(rows[i].split(";")[(rows[i].split(";").length - 1)]);
 
                     CA1.add(col0);
                     CA2.add(col1);

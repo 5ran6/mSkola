@@ -32,16 +32,12 @@
             android:orientation="vertical"
             android:padding="@dimen/spacing_smlarge">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/spacing_micro" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_middle"
-                android:layout_marginLeft="@dimen/spacing_medium"
                 android:layout_marginStart="@dimen/spacing_medium"
+                android:layout_marginLeft="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_middle"
                 android:text="Manage Result"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimary"
@@ -50,17 +46,14 @@
             <View
                 android:layout_width="40dp"
                 android:layout_height="4dp"
-                android:layout_marginLeft="@dimen/spacing_medium"
                 android:layout_marginStart="@dimen/spacing_medium"
+                android:layout_marginLeft="@dimen/spacing_medium"
                 android:background="@color/colorPrimaryDark" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/spacing_large" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="450sp"
+                android:layout_height="match_parent"
                 android:layout_margin="@dimen/spacing_large"
                 android:visibility="visible"
                 app:cardCornerRadius="2dp"
@@ -76,10 +69,10 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:layout_marginLeft="@dimen/spacing_middle"
-                        android:layout_marginRight="@dimen/spacing_middle"
                         android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginRight="@dimen/spacing_middle"
+                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -102,7 +95,7 @@
                                 android:src="@drawable/exercise" />
 
                             <View
-                                android:layout_width="@dimen/spacing_xlarge"
+                                android:layout_width="@dimen/spacing_large"
                                 android:layout_height="0sp" />
 
                             <LinearLayout
@@ -118,8 +111,6 @@
                                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                                     android:textColor="@color/light_blue_600"
                                     android:textStyle="bold" />
-
-
                             </LinearLayout>
 
                         </LinearLayout>
@@ -133,10 +124,10 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:layout_marginLeft="@dimen/spacing_middle"
-                        android:layout_marginRight="@dimen/spacing_middle"
                         android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginRight="@dimen/spacing_middle"
+                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -159,7 +150,7 @@
                                 android:src="@drawable/timesheet" />
 
                             <View
-                                android:layout_width="@dimen/spacing_xlarge"
+                                android:layout_width="@dimen/spacing_large"
                                 android:layout_height="0sp" />
 
                             <LinearLayout
@@ -190,10 +181,10 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:layout_marginLeft="@dimen/spacing_middle"
-                        android:layout_marginRight="@dimen/spacing_middle"
                         android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginRight="@dimen/spacing_middle"
+                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -216,7 +207,7 @@
                                 android:src="@drawable/id_card" />
 
                             <View
-                                android:layout_width="@dimen/spacing_xlarge"
+                                android:layout_width="@dimen/spacing_large"
                                 android:layout_height="0sp" />
 
                             <LinearLayout
@@ -247,10 +238,10 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:layout_marginLeft="@dimen/spacing_middle"
-                        android:layout_marginRight="@dimen/spacing_middle"
                         android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginRight="@dimen/spacing_middle"
+                        android:layout_marginBottom="@dimen/spacing_medium"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -273,7 +264,7 @@
                                 android:src="@drawable/push" />
 
                             <View
-                                android:layout_width="@dimen/spacing_xlarge"
+                                android:layout_width="@dimen/spacing_large"
                                 android:layout_height="0sp" />
 
                             <LinearLayout

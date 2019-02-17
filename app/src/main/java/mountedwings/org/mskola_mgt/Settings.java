@@ -80,13 +80,18 @@ public class Settings extends AppCompatActivity {
     //DONE
     public void privacy_policy(View view) {
         //go to website from browser
-        String uri = "http://www.mountedwings.org/mskola_privacy_policy.php";
+        String uri = "http://mountedwings.org/mskola_privacy_policy.php";
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
         startActivity(i);
     }
 
     public void get_help(View view) {
+        //go to website from browser
+        String uri = "http://mountedwings.org";
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(uri));
+        startActivity(i);
     }
 
     public void feedback(View view) {

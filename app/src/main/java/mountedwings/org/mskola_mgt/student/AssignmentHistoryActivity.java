@@ -14,11 +14,8 @@
 package mountedwings.org.mskola_mgt.student;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -37,7 +34,6 @@ import java.util.ArrayList;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.StudentAssHistAdapter;
 import mountedwings.org.mskola_mgt.data.NumberStudentsAssignment;
-import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
@@ -48,7 +44,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
 
     private BroadcastReceiver mReceiver;
     private int w = 0;
-    private int status;
+    private int status = 1;
 
     private RecyclerView list;
     private String school_id, student_reg_no, TAG = "mSkola";
@@ -81,7 +77,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
 
         //hide parentView
         loading.setVisibility(View.VISIBLE);
-
+        new first_loading().execute(school_id, student_reg_no);
 //        new first_loading().execute("cac180826043520", "admin");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> finish());
@@ -183,45 +179,45 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", AssignmentHistoryActivity.this, R.color.green_800);
-                        else
-                            new first_loading().execute(school_id, student_reg_no);
-
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), AssignmentHistoryActivity.this, R.color.red_500);
-
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
+//        this.mReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                w++;
+//                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+//                    @Override
+//                    public void onConnectionSuccess() {
+//                        status = 1;
+//                        if (w > 1)
+//                            Tools.toast("Back Online! Try again", AssignmentHistoryActivity.this, R.color.green_800);
+//                        else
+//                            new first_loading().execute(school_id, student_reg_no);
+//
+//                    }
+//
+//                    @Override
+//                    public void onConnectionFail(String errorMsg) {
+//                        status = 0;
+//                        Tools.toast(getResources().getString(R.string.no_internet_connection), AssignmentHistoryActivity.this, R.color.red_500);
+//
+//                    }
+//                }).execute();
+//            }
+//
+//        };
+//
+//        registerReceiver(
+//                this.mReceiver,
+//                new IntentFilter(
+//                        ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
+        //  unregisterReceiver(this.mReceiver);
+        //w = 0;
         super.onPause();
-        finish();
+        // finish();
     }
 
 

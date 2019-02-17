@@ -181,7 +181,9 @@ public class Give_assignment_menu extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.isEmpty()) {
-                String[] dataRows = text.split(",");
+
+                String[] d = text.split("<>");
+                String[] dataRows = d[0].split(",");
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
                 for (int i = 1; i <= dataRows.length; i++) {

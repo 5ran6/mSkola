@@ -389,6 +389,8 @@ public class Compile_Result_menu extends AppCompatActivity {
                 finish();
             }
 
+        } else {
+            finish();
         }
     }
 }

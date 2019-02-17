@@ -91,6 +91,9 @@ dependencies {
     implementation('com.mikepenz:materialdrawer:5.3.1@aar') {
         transitive = true
     }
+    //check for a valid email address
+    implementation 'commons-validator:commons-validator:1.5.1'
+
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')

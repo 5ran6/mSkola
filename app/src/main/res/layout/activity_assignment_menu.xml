@@ -102,7 +102,7 @@
                                 android:src="@drawable/edit_property" />
 
                             <View
-                                android:layout_width="@dimen/spacing_xlarge"
+                                android:layout_width="@dimen/spacing_medium"
                                 android:layout_height="0sp" />
 
                             <LinearLayout
@@ -217,7 +217,7 @@
                                 android:src="@drawable/sand_timer" />
 
                             <View
-                                android:layout_width="@dimen/spacing_xlarge"
+                                android:layout_width="@dimen/spacing_medium"
                                 android:layout_height="0sp" />
 
                             <LinearLayout

@@ -13,6 +13,7 @@
 
 package mountedwings.org.mskola_mgt;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -26,7 +27,10 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -49,13 +53,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
+
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import mountedwings.org.mskola_mgt.model.People;
 import mountedwings.org.mskola_mgt.utils.ImagePicker;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
@@ -73,6 +79,7 @@ public class Sign_Up extends AppCompatActivity {
     private People newbie;
     boolean isSent = false;
     Boolean network, newPassport = false;
+    private static final int PICK_IMAGE_ID_CAMERA = 334; // the number doesn't matter
 
     private TextInputLayout firstName, lastName, phone, email, town, password1, password2;
     private Spinner country;
@@ -80,6 +87,7 @@ public class Sign_Up extends AppCompatActivity {
     private ImageView passport;
     private boolean isFilled = false;
     private static final int PICK_IMAGE_ID = 234; // the number doesn't matter
+    private int status;
     private String[] separatedValues;
     private View view;
     private String f, l, c = "Nigeria", t, p, a, e, pass, account_type;
@@ -97,14 +105,12 @@ public class Sign_Up extends AppCompatActivity {
         parent_layout = findViewById(R.id.parent_layout);
         initToolbar();
         initUI();
-
-
     }
 
     private void initToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Tools.clearSystemBarLight(this);
     }
@@ -242,7 +248,12 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     private boolean validateEmail() {
-        if (emailE.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(emailE.getText()).toString().trim().isEmpty()) {
+            email.setError(getString(R.string.err_msg_email));
+            requestFocus(emailE);
+            return false;
+        }
+        if (!EmailValidator.getInstance().isValid(emailE.getText().toString().trim())) {
             email.setError(getString(R.string.err_msg_email));
             requestFocus(emailE);
             return false;
@@ -277,7 +288,7 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     private boolean validatePassword2() {
-        if (pass2.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(pass2.getText()).toString().trim().isEmpty()) {
             password2.setError(getString(R.string.err_msg_pass2));
             requestFocus(pass2);
             return false;
@@ -288,7 +299,7 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     private boolean validatePassword() {
-        if (!pass2.getText().toString().equals(pass1.getText().toString())) {
+        if (!Objects.requireNonNull(pass2.getText()).toString().equals(Objects.requireNonNull(pass1.getText()).toString())) {
             password2.setError(getString(R.string.err_msg_pass_mismatch));
             requestFocus(pass2);
             return false;
@@ -308,15 +319,7 @@ public class Sign_Up extends AppCompatActivity {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         ((TextView) dialog.findViewById(R.id.title)).setText(p.name);
-        ((CircleImageView) dialog.findViewById(R.id.image)).setImageResource(p.image);
-
-        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                finish();
-            }
-        });
+        ((CircularImageView) dialog.findViewById(R.id.image)).setImageResource(p.image);
 
         dialog.findViewById(R.id.bt_follow).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,7 +343,7 @@ public class Sign_Up extends AppCompatActivity {
         dialog.setCancelable(false);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
@@ -367,14 +370,61 @@ public class Sign_Up extends AppCompatActivity {
         }
     }
 
-    public void getPhoto(View view) {
-        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
-        if (checkPermission()) {
-            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+    public void getPhoto(View v) {
+        //show dialog for selection
+        BottomSheetBehavior mBehavior;
+        BottomSheetDialog[] mBottomSheetDialog = new BottomSheetDialog[1];
 
-        } else {
-            requestPermission();
+        View bottom_sheet = findViewById(R.id.bottom_sheet);
+        mBehavior = BottomSheetBehavior.from(bottom_sheet);
+
+        //show bottom sheet
+        if (mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
+
+        final View view = getLayoutInflater().inflate(R.layout.sign_up_sheet, null);
+        (view.findViewById(R.id.bt_camera)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                mBottomSheetDialog[0].dismiss();
+
+
+                if (checkPermission()) {
+                    mBottomSheetDialog[0].dismiss();
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, PICK_IMAGE_ID_CAMERA);
+                } else {
+                    requestPermission();
+                }
+
+
+            }
+        });
+
+        (view.findViewById(R.id.bt_gallery)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent chooseImageIntent = ImagePicker.getPickImageIntent(getApplicationContext());
+                if (checkPermission()) {
+                    mBottomSheetDialog[0].dismiss();
+                    startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+                } else {
+                    requestPermission();
+                }
+            }
+        });
+
+        mBottomSheetDialog[0] = new BottomSheetDialog(this);
+        mBottomSheetDialog[0].setContentView(view);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mBottomSheetDialog[0].getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+
+        mBottomSheetDialog[0].show();
+        mBottomSheetDialog[0].setOnDismissListener(dialog -> mBottomSheetDialog[0] = null);
+
+
     }
 
     private void doRegister() {
@@ -442,6 +492,13 @@ public class Sign_Up extends AppCompatActivity {
             case PICK_IMAGE_ID:
                 if (data != null) {
                     Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                    passport.setImageBitmap(bitmap);
+                    newPassport = true;
+                }
+                break;
+            case PICK_IMAGE_ID_CAMERA:
+                if (data != null) {
+                    Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                     passport.setImageBitmap(bitmap);
                     newPassport = true;
                 }
@@ -544,7 +601,7 @@ public class Sign_Up extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 w++;
-                int status = NetworkUtil.getConnectivityStatusString(context);
+                status = NetworkUtil.getConnectivityStatusString(context);
                 Log.i(TAG, "receiver checking");
                 if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
                     if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
@@ -575,7 +632,7 @@ public class Sign_Up extends AppCompatActivity {
 
                 storageFile storageObj = new storageFile();
                 //to get and send the picture
-                Bitmap bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
+                @SuppressLint("WrongThread") Bitmap bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                 byte[] imageInByte = baos.toByteArray();

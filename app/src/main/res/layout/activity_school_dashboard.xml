@@ -27,7 +27,7 @@
         android:layout_height="65sp"
         android:weightSum="1">
 
-        <LinearLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        <LinearLayout
             android:id="@+id/card_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,8 +37,6 @@
             android:elevation="1dp"
             android:gravity="end"
             android:weightSum="1"
-            card_view:cardBackgroundColor="@color/colorPrimary"
-            card_view:cardCornerRadius="4dp"
             tools:targetApi="lollipop">
 
             <LinearLayout
@@ -101,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Logout"
+                    android:text="Log out"
                     android:textColor="@color/md_red_400" />
             </LinearLayout>
         </LinearLayout>
@@ -110,7 +108,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/app_bar_layout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,21 +121,21 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/spacing_smlarge"
                 android:paddingLeft="@dimen/spacing_medium"
+                android:paddingTop="@dimen/spacing_medium"
                 android:paddingRight="@dimen/spacing_medium"
-                android:paddingTop="@dimen/spacing_medium">
+                android:paddingBottom="@dimen/spacing_smlarge">
 
                 <RelativeLayout
                     android:layout_width="@dimen/spacing_xxlarge"
                     android:layout_height="@dimen/spacing_xxlarge">
 
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <com.mikhaellopez.circularimageview.CircularImageView
                         android:id="@+id/passport"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_account_circle"
+
                         tools:ignore="VectorDrawableCompat" />
                 </RelativeLayout>
 
@@ -199,9 +198,9 @@
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"

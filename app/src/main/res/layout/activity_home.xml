@@ -112,6 +112,7 @@
                 <com.mikhaellopez.circularimageview.CircularImageView
                     android:layout_width="@dimen/spacing_xxlarge"
                     android:layout_height="@dimen/spacing_xxlarge"
+                    android:elevation="@dimen/spacing_large"
                     android:foreground="@color/overlay_light_20"
                     android:src="@drawable/teacher"
                     app:civ_border="false" />

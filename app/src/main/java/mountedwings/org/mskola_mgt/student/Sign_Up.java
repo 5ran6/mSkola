@@ -13,6 +13,7 @@
 
 package mountedwings.org.mskola_mgt.student;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -372,7 +373,6 @@ public class Sign_Up extends AppCompatActivity {
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         if (checkPermission()) {
             startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-
         } else {
             requestPermission();
         }
@@ -545,7 +545,8 @@ public class Sign_Up extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 w++;
-                int status = NetworkUtil.getConnectivityStatusString(context);
+                int status = 1;
+                // int status = NetworkUtil.getConnectivityStatusString(context);
                 Log.i(TAG, "receiver checking");
                 if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
                     if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
@@ -576,7 +577,7 @@ public class Sign_Up extends AppCompatActivity {
 
                 storageFile storageObj = new storageFile();
                 //to get and send the picture
-                Bitmap bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
+                @SuppressLint("WrongThread") Bitmap bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                 byte[] imageInByte = baos.toByteArray();

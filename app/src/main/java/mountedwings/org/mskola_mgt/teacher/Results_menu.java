@@ -14,24 +14,33 @@
 package mountedwings.org.mskola_mgt.teacher;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import mountedwings.org.mskola_mgt.R;
 
+import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
+
 public class Results_menu extends AppCompatActivity {
-    private String school_id = "", staff_id = "";
+    private String school_id = "";
+    private String staff_id = "";
     private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_result_menu);
+        SharedPreferences mPrefs = getSharedPreferences(myPref, 0);
+        String role = mPrefs.getString("role", getIntent().getStringExtra("role"));
 
         Intent intent = getIntent();
         school_id = intent.getStringExtra("school_id");
         staff_id = intent.getStringExtra("email_address");
+        if (role.equalsIgnoreCase("admin"))
+            setContentView(R.layout.activity_result_menu);
+        else
+            setContentView(R.layout.activity_result_menu_not_admin);
 
     }
 

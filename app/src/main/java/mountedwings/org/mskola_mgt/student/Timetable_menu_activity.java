@@ -42,7 +42,7 @@ public class Timetable_menu_activity extends AppCompatActivity {
     private ProgressBar progressBar1;
     private BroadcastReceiver mReceiver;
     private RecyclerView recyclerView;
-    private int w = 0, status;
+    private int w = 0, status = 1;
     private List<TimeTable> items = new ArrayList<>();
 
     private void initToolbar() {

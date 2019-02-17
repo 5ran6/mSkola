@@ -50,7 +50,7 @@ public class ClassTeachers extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BroadcastReceiver mReceiver;
     private int w = 0;
-    private int status;
+    private int status = 1;
     private String reg_no;
     private String school_id;
 
@@ -176,8 +176,8 @@ public class ClassTeachers extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
+//        unregisterReceiver(this.mReceiver);
+//        w = 0;
         super.onPause();
     }
 

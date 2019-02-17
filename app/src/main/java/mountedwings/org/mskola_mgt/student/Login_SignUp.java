@@ -65,10 +65,9 @@ public class Login_SignUp extends AppCompatActivity {
             R.drawable.homework,
     };
     private int color_array[] = {
-            //R.drawable.image_15,
             R.drawable.image_10,
             R.drawable.image_3,
-            R.drawable.image_12
+            R.drawable.image_21
     };
 
     @Override

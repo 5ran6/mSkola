@@ -43,7 +43,7 @@ public class Attendance_menu_activity extends AppCompatActivity {
     private TextView date;
     private TextView load;
     private BroadcastReceiver mReceiver;
-    private int w = 0, status;
+    private int w = 0, status = 1;
     ArrayList<NumberChildrenList> numbers = new ArrayList<>();
 
     private BottomSheetBehavior mBehavior;

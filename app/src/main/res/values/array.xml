@@ -367,36 +367,38 @@
 
 
     <string-array name="faq_questions_teachers">
-        <item>Fashion B07 Keara 933</item>
-        <item>2</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>3</item>
-        <item>Fashion B07 Keara 933</item>
+        <item>Can a parent also be a Teacher\?</item>
+        <item>Most you have two different accounts as a parent and teacher using mSkola\?</item>
+        <item>How do I contact my ward(s) teacher\?</item>
+        <item>How do I reset my password\?</item>
+        <item>Can I pay school fees from this app\?</item>
+        <item>What is the maximum number of students a parent can be linked with\?</item>
+        <item>Can I change my user accounts\' email address?</item>
+        <item>What permission does the app use?</item>
     </string-array>
 
     <string-array name="faq_answers_teachers">
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
+        <item>Yes\! You can use this same app to login as a prent and teacher.</item>
+        <item>No\! You can log out at anytime from any module to the other using the same email and password.</item>
+        <item>mSkola has been enabled with an interconnected chat system where teachers, parents and teachers can intercommunicate at any time.</item>
+        <item>On the Login page, there is a \"Forgot password\" option where you\'ll be asked to supply your email. A link will be sent to your email. Once you click on it, you will be taken to a page where you\'ll be asked to supply your email, new password and confirm your new password</item>
+        <item>Yes. All you need to do is to select the ward you want to pay for, fill in your card details and confirm payment.</item>
+        <item>There is no limit to the number of students that can be linked to an account.</item>
+        <item>No\!</item>
+        <item>Just the permission to use you camera when registering a new mSkola users account.</item>
     </string-array>
 
 
     <string-array name="faq_questions_students">
-        <item>Fashion B07 Keara 933</item>
-        <item>2</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>3</item>
-        <item>Fashion B07 Keara 933</item>
+        <item>Can I be able to view my assessments\?</item>
+        <item>Can I be able to see my final terminal or annual result\?</item>
+        <item>Can I see my timetable\?</item>
     </string-array>
 
     <string-array name="faq_answers_students">
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
-        <item>Fashion B07 Keara 933</item>
+        <item>Yes. You can log in at any time to view the score of any assessment for any of your subjects</item>
+        <item>Yes, only if your result fees of N100 have been paid for</item>
+        <item>You can only see your timetable if it has been uploaded by your school</item>
     </string-array>
 
 

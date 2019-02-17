@@ -15,12 +15,9 @@ package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mountedwings.org.mskola_mgt.R;
-import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
@@ -72,7 +68,7 @@ public class Assessment extends AppCompatActivity {
     private int last_index;
     private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject;
     private BroadcastReceiver mReceiver;
-    private int w = 0, status;
+    private int w = 0, status = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +87,10 @@ public class Assessment extends AppCompatActivity {
 
         heading.setText(new StringBuilder().append(assessment.toUpperCase()).append(" for ").append(class_name).append(arm).toString());
 
-        // initToolbar(assessment.toUpperCase() + " for " + class_name + arm);
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
-
+        // initToolbar(assessment.toUpperCase() + " for " + class_name + arm);
+        new first_loading().execute(school_id, class_name, arm, assessment, subject);
     }
 
 
@@ -541,43 +537,43 @@ public class Assessment extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Assessment.this, R.color.green_800);
-                        else
-                            new first_loading().execute(school_id, class_name, arm, assessment, subject);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment.this, R.color.red_500);
-                        finish();
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
+//        this.mReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                w++;
+//                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+//                    @Override
+//                    public void onConnectionSuccess() {
+//                        status = 1;
+//                        if (w > 1)
+//                            Tools.toast("Back Online! Try again", Assessment.this, R.color.green_800);
+//                        else
+//                            new first_loading().execute(school_id, class_name, arm, assessment, subject);
+//                    }
+//
+//                    @Override
+//                    public void onConnectionFail(String errorMsg) {
+//                        status = 0;
+//                        Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment.this, R.color.red_500);
+//                        finish();
+//                    }
+//                }).execute();
+//            }
+//
+//        };
+//
+//        registerReceiver(
+//                this.mReceiver,
+//                new IntentFilter(
+//                        ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
     }
 
 
     @Override
     protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
+//        unregisterReceiver(this.mReceiver);
+//        w = 0;
         super.onPause();
     }
 }

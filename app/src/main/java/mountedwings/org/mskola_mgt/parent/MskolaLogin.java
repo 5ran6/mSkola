@@ -38,6 +38,8 @@ import android.widget.TextView;
 import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
 
+import java.util.Objects;
+
 import mountedwings.org.mskola_mgt.ChangePassword;
 import mountedwings.org.mskola_mgt.ForgotPassword;
 import mountedwings.org.mskola_mgt.R;
@@ -56,17 +58,11 @@ public class MskolaLogin extends AppCompatActivity {
     private AppCompatEditText emailE, pass1;
     private String emailAddress, password, TAG = "mSkola";
     private SharedPreferences mPrefs;
-    private SharedPreferences.Editor editor;
     private String role;
     private static final int PREFRENCE_MODE_PRIVATE = 0;
     private AppCompatCheckBox checkedTextView;
-    private String text;
     private LinearLayout parent_layout;
     private LinearLayout lyt_progress;
-    private String name, school;
-    private byte[] pass;
-    private Intent intent;
-    private storageFile data;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
 
@@ -78,8 +74,8 @@ public class MskolaLogin extends AppCompatActivity {
             return;
         }
 
-        emailAddress = emailE.getText().toString().trim();
-        password = pass1.getText().toString();
+        emailAddress = Objects.requireNonNull(emailE.getText()).toString().trim();
+        password = Objects.requireNonNull(pass1.getText()).toString();
         doLogin();
     }
 
@@ -89,7 +85,7 @@ public class MskolaLogin extends AppCompatActivity {
     }
 
     private boolean validateEmail() {
-        if (emailE.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(emailE.getText()).toString().trim().isEmpty()) {
             email.setError(getString(R.string.err_msg_email));
             requestFocus(emailE);
             return false;
@@ -101,7 +97,7 @@ public class MskolaLogin extends AppCompatActivity {
     }
 
     private boolean validatePassword1() {
-        if (pass1.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(pass1.getText()).toString().trim().isEmpty()) {
             password1.setError(getString(R.string.err_msg_pass1));
             requestFocus(pass1);
             return false;
@@ -139,7 +135,7 @@ public class MskolaLogin extends AppCompatActivity {
         dialog.setCancelable(true);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         TextView error_message = dialog.findViewById(R.id.content);
@@ -200,7 +196,7 @@ public class MskolaLogin extends AppCompatActivity {
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 
             //received from server
-            text = sentData.getStrData();
+            String text = sentData.getStrData();
             boolean isSuccess;
             if (text.contains("success")) {
                 isSuccess = true;
@@ -231,13 +227,13 @@ public class MskolaLogin extends AppCompatActivity {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
 
-                intent = new Intent(getApplicationContext(), Dashboard.class);
+                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
 
                 //sharedPref
-                editor = mPrefs.edit();
+                SharedPreferences.Editor editor = mPrefs.edit();
                 //      editor.putBoolean("signed_in", true);
                 editor.putString("account_type", role);
-                editor.putString("email_address", emailE.getText().toString());
+                editor.putString("email_address", Objects.requireNonNull(emailE.getText()).toString());
                 editor.putBoolean("signed_in", singedIn);
 
                 editor.apply();
@@ -258,7 +254,6 @@ public class MskolaLogin extends AppCompatActivity {
     public static void clearSharedPreferences(Context ctx) {
         ctx.getSharedPreferences("mSkola", 0).edit().clear().apply();
     }
-
 
     private void doLogin() {
         lyt_progress = findViewById(R.id.lyt_progress);
@@ -283,11 +278,6 @@ public class MskolaLogin extends AppCompatActivity {
         if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
             mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
-
-//            editor = mPrefs.edit();
-//            editor.putString("role", role);
-//            editor.putString("email_address", emailAddress);
-//            editor.apply();
         }
 
         if (singedIn) {

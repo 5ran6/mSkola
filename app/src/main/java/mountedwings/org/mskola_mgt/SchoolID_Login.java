@@ -24,8 +24,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -36,6 +34,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -44,12 +43,13 @@ import android.widget.TextView;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
+import java.util.Objects;
+
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
-
 
 public class SchoolID_Login extends AppCompatActivity {
     private TextInputEditText school_id;
@@ -62,7 +62,7 @@ public class SchoolID_Login extends AppCompatActivity {
     private Spinner recentIds;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
-    private AppCompatButton cont;
+    private Button cont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class SchoolID_Login extends AppCompatActivity {
         verifying = findViewById(R.id.verifying);
         checking = findViewById(R.id.checking);
         recentIds = findViewById(R.id.recent_ids);
-        cont = findViewById(R.id.continued);
+        cont = findViewById(R.id.conti);
         recentIds.setVisibility(View.GONE);
         if (!mPrefsSchoolID.getString("school_id", "").isEmpty()) {
             String schoolIds = mPrefsSchoolID.getString("school_id", "");
@@ -85,9 +85,7 @@ public class SchoolID_Login extends AppCompatActivity {
             String[] schools = schoolIds.split(",");
             String[] data = new String[(schools.length + 1)];
             data[0] = "Recent School IDs.....";
-            for (int i = 1; i <= schools.length; i++) {
-                data[i] = schools[(i - 1)];
-            }
+            System.arraycopy(schools, 0, data, 1, schools.length);
 
             ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getBaseContext(), R.layout.spinner_item, data);
             spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -152,7 +150,7 @@ public class SchoolID_Login extends AppCompatActivity {
 
     private void verifyID() {
         //check if the field is empty first
-        if (!school_id.getText().toString().isEmpty() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+        if (!Objects.requireNonNull(school_id.getText()).toString().isEmpty() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             //validate from server
             checking.setVisibility(View.VISIBLE);
             //animate textView
@@ -161,13 +159,35 @@ public class SchoolID_Login extends AppCompatActivity {
             animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
             animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
             animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+
             verifying.startAnimation(animation);
             cont.setEnabled(false);
-            cont.setTextColor(getResources().getColor(R.color.grey_3));
-            new verifySchoolID().execute(school_id.getText().toString().trim());
+            cont.setVisibility(View.GONE);
+            new verifySchoolID().execute(school_id.getText().toString().trim().toLowerCase());
         } else {
-            Tools.toast("Fill in School ID", SchoolID_Login.this, R.color.yellow_800);
+            Tools.toast("Fill in School ID", SchoolID_Login.this, R.color.md_yellow_900);
         }
+    }
+
+    private void showCustomDialogFailure(String error) {
+        //progress bar and text will disappear
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.dialog_error);
+        dialog.setCancelable(true);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(Objects.requireNonNull(dialog.getWindow()).getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView error_message = dialog.findViewById(R.id.content);
+        error_message.setText(error);
+
+        dialog.findViewById(R.id.bt_close).setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
     }
 
     public class verifySchoolID extends AsyncTask<String, Integer, String> {
@@ -178,9 +198,8 @@ public class SchoolID_Login extends AppCompatActivity {
             storageObj.setOperation("verifyid");
             storageObj.setStrData(strings[0]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
-            String text = sentData.getStrData();
-            Log.d("mSkola", text);
-            return text;
+            //  Log.d("mSkola", text);
+            return sentData.getStrData();
         }
 
         @Override
@@ -209,15 +228,15 @@ public class SchoolID_Login extends AppCompatActivity {
                     SharedPreferences.Editor editor = mPrefs.edit();
                     SharedPreferences.Editor editorSchoolID = mPrefsSchoolID.edit();
 
-                    editor.putString("school_id", school_id.getText().toString().trim());
+                    editor.putString("school_id", Objects.requireNonNull(school_id.getText()).toString().trim().toLowerCase());
                     //get School ID text
                     //append with a ,
                     String old_schoolID = mPrefsSchoolID.getString("school_id", "");
                     if (old_schoolID.isEmpty()) {
-                        editorSchoolID.putString("school_id", school_id.getText().toString().trim());
+                        editorSchoolID.putString("school_id", school_id.getText().toString().trim().toLowerCase());
                     } else {
                         if (!old_schoolID.contains(school_id.getText().toString().trim())) {
-                            editorSchoolID.putString("school_id", old_schoolID + "," + school_id.getText().toString().trim());
+                            editorSchoolID.putString("school_id", old_schoolID + "," + school_id.getText().toString().trim().toLowerCase());
                         }
                     }
                     editor.apply();
@@ -232,37 +251,17 @@ public class SchoolID_Login extends AppCompatActivity {
                     break;
                 case "not found":
                     cont.setEnabled(true);
+                    cont.setVisibility(View.VISIBLE);
                     showCustomDialogFailure("The school ID you provided does not exist, please check the ID and try again.");
                     break;
                 default:
                     cont.setEnabled(true);
+                    cont.setVisibility(View.VISIBLE);
                     showCustomDialogFailure("An error occurred, try again later.");
                     break;
             }
         }
 
-    }
-
-    private void showCustomDialogFailure(String error) {
-
-        //progress bar and text will disappear
-
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-        dialog.setContentView(R.layout.dialog_error);
-        dialog.setCancelable(true);
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        TextView error_message = dialog.findViewById(R.id.content);
-        error_message.setText(error);
-
-        dialog.findViewById(R.id.bt_close).setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-        dialog.getWindow().setAttributes(lp);
     }
 
     @Override
@@ -279,7 +278,6 @@ public class SchoolID_Login extends AppCompatActivity {
                             Tools.toast("Back Online! Try again", SchoolID_Login.this, R.color.green_800);
                         else
                             verifyID();
-
                     }
 
                     @Override

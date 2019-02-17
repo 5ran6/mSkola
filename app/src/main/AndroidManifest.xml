@@ -163,6 +163,7 @@
         <activity android:name=".student.FAQ" />
         <activity android:name=".parent.FAQ" />
         <activity android:name=".teacher.FAQ" />
+        <activity android:name=".teacher.RecordScores" />
     </application>
 
 </manifest>

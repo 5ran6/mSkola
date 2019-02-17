@@ -48,7 +48,7 @@ public class ChildsList extends AppCompatActivity {
 
     private BroadcastReceiver mReceiver;
     private int w = 0;
-    private int status;
+    private int status = 1;
 
     private ProgressBar loading;
     private ChildrenListAdapter adapter;

@@ -56,7 +56,7 @@ public class Assessment_menu extends AppCompatActivity {
     private int counter = 0;
     private BroadcastReceiver mReceiver;
     private int w = 0;
-    private int status;
+    private int status = 1;
     private MaterialRippleLayout loading;
 
     @Override
@@ -353,8 +353,8 @@ public class Assessment_menu extends AppCompatActivity {
     @Override
     protected void onPause() {
         finish();
-        unregisterReceiver(this.mReceiver);
-        w = 0;
+//        unregisterReceiver(this.mReceiver);
+//        w = 0;
         super.onPause();
     }
 
