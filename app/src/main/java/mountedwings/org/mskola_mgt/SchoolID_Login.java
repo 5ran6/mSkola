@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -53,7 +54,7 @@ import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class SchoolID_Login extends AppCompatActivity {
     private TextInputEditText school_id;
-    private String role;
+    private String role, schoolID;
     private TextView verifying;
     private ProgressBar checking;
     private SharedPreferences mPrefs;
@@ -63,6 +64,7 @@ public class SchoolID_Login extends AppCompatActivity {
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
     private Button cont;
+    private AsyncTask lastThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +165,9 @@ public class SchoolID_Login extends AppCompatActivity {
             verifying.startAnimation(animation);
             cont.setEnabled(false);
             cont.setVisibility(View.GONE);
-            new verifySchoolID().execute(school_id.getText().toString().trim().toLowerCase());
+            schoolID = school_id.getText().toString().trim().toLowerCase();
+            lastThread = new verifySchoolID().execute();
+
         } else {
             Tools.toast("Fill in School ID", SchoolID_Login.this, R.color.md_yellow_900);
         }
@@ -190,15 +194,69 @@ public class SchoolID_Login extends AppCompatActivity {
         dialog.getWindow().setAttributes(lp);
     }
 
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                Log.d("mSkola", "W = " + String.valueOf(w));
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            try {
+                                lastThread.execute();
+                                Tools.toast("Back Online! Resuming request....", SchoolID_Login.this, R.color.green_800);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        } else
+                            verifyID();
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        if (w > 1) {
+                            Tools.toast(getResources().getString(R.string.no_internet_connection), SchoolID_Login.this, R.color.red_700);
+                            try {
+                                lastThread.cancel(true);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        Log.d("mSkola", "W = " + String.valueOf(w));
+        super.onPause();
+        finish();
+    }
+
     public class verifySchoolID extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
             //  Boolean success = false;
             storageFile storageObj = new storageFile();
             storageObj.setOperation("verifyid");
-            storageObj.setStrData(strings[0]);
+            storageObj.setStrData(schoolID);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
-            //  Log.d("mSkola", text);
             return sentData.getStrData();
         }
 
@@ -262,46 +320,5 @@ public class SchoolID_Login extends AppCompatActivity {
             }
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", SchoolID_Login.this, R.color.green_800);
-                        else
-                            verifyID();
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), SchoolID_Login.this, R.color.red_700);
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
-        super.onPause();
-        finish();
     }
 }

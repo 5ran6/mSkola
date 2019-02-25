@@ -13,7 +13,6 @@
 
 package mountedwings.org.mskola_mgt;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -63,6 +62,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.model.People;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.ImagePicker;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
@@ -93,6 +93,8 @@ public class Sign_Up extends AppCompatActivity {
     private String f, l, c = "Nigeria", t, p, a, e, pass, account_type;
     private BroadcastReceiver mReceiver;
     private int w = 0;
+    private AsyncTask lastThread;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +193,10 @@ public class Sign_Up extends AppCompatActivity {
         if (!validatePassword()) {
             return;
         }
-//        isFilled = true;
+        if (!validateCountry()) {
+            return;
+        }
+
         f = fName.getText().toString();
         l = lName.getText().toString();
         p = phoneE.getText().toString();
@@ -307,6 +312,14 @@ public class Sign_Up extends AppCompatActivity {
         return true;
     }
 
+    private boolean validateCountry() {
+        if (Objects.requireNonNull(country.getSelectedItem().toString().isEmpty())) {
+            Tools.toast("Select a country from the list", Sign_Up.this);
+            return false;
+        }
+        return true;
+    }
+
     private void showCustomDialogSuccess(People p) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
@@ -364,7 +377,7 @@ public class Sign_Up extends AppCompatActivity {
     private void loadingAndDisplayContent() {
 
         if (!newPassport) {
-            showDialog(this, "Seems you didn't set a passport", "Are you sure you want to use the default passport?");
+            showDialog(this, "Seems you didn't set a passport", "Do you want to use the default passport?");
         } else {
             doRegister();
         }
@@ -433,7 +446,10 @@ public class Sign_Up extends AppCompatActivity {
         lyt_progress.setAlpha(1.0f);
         parent_layout.setVisibility(View.GONE);
         toolbar.setVisibility(View.GONE);
-        new register().execute();
+        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
+            lastThread = new register().execute();
+        }
 
     }
 
@@ -518,9 +534,7 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     private void requestPermission() {
-
         ActivityCompat.requestPermissions(this, new String[]{CAMERA}, PERMISSION_REQUEST_CODE);
-
     }
 
     @Override
@@ -589,11 +603,17 @@ public class Sign_Up extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-//unregister receiver
+        //unregister receiver
+        w = 0;
         unregisterReceiver(this.mReceiver);
         super.onPause();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     @Override
     protected void onResume() {
@@ -601,18 +621,39 @@ public class Sign_Up extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 w++;
-                status = NetworkUtil.getConnectivityStatusString(context);
-                Log.i(TAG, "receiver checking");
-                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
-                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                        Tools.toast("Yes Internet connection!", Sign_Up.this, R.color.green_800);
-                        //    new ResumeForceExitPause(context).execute();
-                        new performInBackground().execute("getcountries");
-                    } else {
-                        Tools.toast("No Internet connection!", Sign_Up.this, R.color.red_500);
+//                status = NetworkUtil.getConnectivityStatusString(context);
+//                Log.i(TAG, "receiver checking");
+//                if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction()) && w > 1) {
+//                    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+//                        Tools.toast("Online!", Sign_Up.this, R.color.green_800);
+//                        new performInBackground().execute("getcountries");
+//                    } else {
+//                        Tools.toast("No Internet connection!", Sign_Up.this, R.color.red_500);
+//                    }
+//                }
+
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+
+                    @Override
+                    public void onConnectionSuccess() {
+
+                        status = 1;
+                        if (w > 1) {
+                            lastThread.execute();
+                            Tools.toast("Back Online! Resuming request....", Sign_Up.this, R.color.green_800);
+                        } else
+                            new performInBackground().execute("getcountries");
                     }
-                    //      new ForceExitPause(context).execute();
-                }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        if (w > 1) {
+                            Tools.toast(getResources().getString(R.string.no_internet_connection), Sign_Up.this, R.color.red_700);
+                            lastThread.cancel(true);
+                        }
+                    }
+                }).execute();
             }
 
         };
@@ -632,7 +673,6 @@ public class Sign_Up extends AppCompatActivity {
 
                 storageFile storageObj = new storageFile();
                 //to get and send the picture
-                @SuppressLint("WrongThread") Bitmap bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                 byte[] imageInByte = baos.toByteArray();

@@ -46,7 +46,6 @@
                 android:layout_weight=".2"
                 android:gravity="center"
                 android:orientation="horizontal"
-
                 android:weightSum="1">
 
                 <TextView

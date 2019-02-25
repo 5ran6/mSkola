@@ -52,6 +52,7 @@ public class Assessment_menu extends AppCompatActivity {
     private BroadcastReceiver mReceiver;
     private int w = 0;
     private int status;
+    private AsyncTask lastThread;
 
     @Override
     protected void onResume() {
@@ -65,11 +66,12 @@ public class Assessment_menu extends AppCompatActivity {
                     @Override
                     public void onConnectionSuccess() {
                         status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Assessment_menu.this, R.color.green_800);
-                        else
+                        if (w > 1) {
+                            lastThread.execute();
+                            Tools.toast("Back Online! Resuming request....", Assessment_menu.this, R.color.green_800);
+                        } else
                             //load classes and assessments
-                            new initialLoad().execute(school_id, staff_id);
+                            lastThread = new initialLoad().execute();
                     }
 
                     @Override
@@ -77,6 +79,7 @@ public class Assessment_menu extends AppCompatActivity {
                         status = 0;
                         Log.d("mSkola", String.valueOf(status));
                         Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment_menu.this, R.color.red_600);
+                        lastThread.cancel(true);
                     }
                 }).execute();
             }
@@ -205,13 +208,13 @@ public class Assessment_menu extends AppCompatActivity {
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
         if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadArms().execute(school_id, staff_id, class_name);
+            lastThread = new loadArms().execute();
     }
 
     private void loadSubject() {
         progressBar3.setVisibility(View.VISIBLE);
         if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadSubject().execute(school_id, staff_id, class_name, arm);
+            lastThread = new loadSubject().execute();
     }
 
     //loads arms and cas
@@ -220,7 +223,8 @@ public class Assessment_menu extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getrsarm");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
+//            school_id, staff_id, class_name
+            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             return sentData.getStrData();
@@ -290,7 +294,8 @@ public class Assessment_menu extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getrssubject");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
+            //school_id, staff_id, class_name, arm
+            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name + "<>" + arm);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             return sentData.getStrData();
         }
@@ -341,7 +346,7 @@ public class Assessment_menu extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getrsclass");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+            storageObj.setStrData(school_id + "<>" + staff_id);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             return sentData.getStrData();
         }

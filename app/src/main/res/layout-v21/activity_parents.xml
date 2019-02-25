@@ -18,6 +18,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_img"
     android:fitsSystemWindows="true"
+    app:contentScrim="?android:attr/colorPrimary"
     tools:context=".parent.Dashboard">
 
     <android.support.design.widget.AppBarLayout
@@ -158,7 +159,7 @@
                                     <ImageButton
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
-                                        android:background="@color/deep_orange_500"
+                                        android:background="?android:attr/selectableItemBackgroundBorderless"
                                         android:clickable="false"
                                         android:focusable="false"
                                         android:tint="@android:color/white"
@@ -225,7 +226,7 @@
                                     <ImageButton
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
-                                        android:background="@color/deep_orange_500"
+                                        android:background="?android:attr/selectableItemBackgroundBorderless"
                                         android:clickable="false"
                                         android:focusable="false"
                                         android:tint="@android:color/white"
@@ -320,7 +321,7 @@
                                     <ImageButton
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
-                                        android:background="@color/teal_700"
+                                        android:background="?android:attr/selectableItemBackgroundBorderless"
                                         android:clickable="false"
                                         android:focusable="false"
                                         android:tint="@android:color/white"
@@ -392,7 +393,7 @@
                                     <ImageButton
                                         android:layout_width="?android:attr/actionBarSize"
                                         android:layout_height="?android:attr/actionBarSize"
-                                        android:background="@color/teal_700"
+                                        android:background="?android:attr/selectableItemBackgroundBorderless"
                                         android:clickable="false"
                                         android:focusable="false"
                                         android:tint="@android:color/white"
@@ -462,7 +463,7 @@
                                 android:id="@+id/clear_all"
                                 android:layout_width="?android:attr/actionBarSize"
                                 android:layout_height="?android:attr/actionBarSize"
-                                android:background="@color/white_transparency"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:contentDescription="@string/app_name"
                                 android:focusable="true"

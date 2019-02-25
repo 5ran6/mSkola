@@ -37,8 +37,6 @@
             android:elevation="1dp"
             android:gravity="end"
             android:weightSum="1"
-            android:cardBackgroundColor="@color/colorPrimary"
-            android:cardCornerRadius="4dp"
             tools:targetApi="lollipop">
 
             <LinearLayout
@@ -60,7 +58,7 @@
                     android:fontFamily="@font/rocket_rinder"
                     android:gravity="center|end"
                     android:text="m-Skola"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     android:textColor="@color/white"
                     tools:ignore="NestedWeights" />
 

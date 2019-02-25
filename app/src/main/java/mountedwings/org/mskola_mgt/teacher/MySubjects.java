@@ -51,6 +51,7 @@ public class MySubjects extends AppCompatActivity {
     private int status;
     private String staff_id;
     private String school_id;
+    private AsyncTask lastThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +87,49 @@ public class MySubjects extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            lastThread.execute();
+                            Tools.toast("Back Online! Resuming request....", MySubjects.this, R.color.green_800);
+                        } else
+                            lastThread = new getMySubjects().execute();
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        lastThread.cancel(true);
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), MySubjects.this, R.color.red_500);
+                        finish();
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
     private class getMySubjects extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getmysubjects");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+            //school_id, staff_id
+            storageObj.setStrData(school_id + "<>" + staff_id);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             return sentData.getStrData();
         }
@@ -130,41 +168,6 @@ public class MySubjects extends AppCompatActivity {
             super.onProgressUpdate(values);
 
         }
-    }
-
-
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", MySubjects.this, R.color.green_800);
-                        else
-                            new getMySubjects().execute(school_id, staff_id);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), MySubjects.this, R.color.red_500);
-                        finish();
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
     }
 
 

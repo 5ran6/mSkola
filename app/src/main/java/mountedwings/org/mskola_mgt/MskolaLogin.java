@@ -15,8 +15,11 @@ package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -35,9 +38,13 @@ import android.widget.TextView;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.teacher.Dashboard;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
+import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -63,6 +70,7 @@ public class MskolaLogin extends AppCompatActivity {
     private storageFile data;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
 
     private void submitForm() {
         if (!validateEmail()) {
@@ -231,7 +239,53 @@ public class MskolaLogin extends AppCompatActivity {
         lyt_progress.setAlpha(1.0f);
         parent_layout.setVisibility(View.GONE);
         hideSoftKeyboard();
-        new login().execute();
+        if (EmailValidator.getInstance().isValid(emailE.getText().toString().trim()) && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+            lastThread = new login().execute();
+        else
+            Tools.toast("Input a valid email address", MskolaLogin.this, R.color.red_500);
+
+    }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                Log.d("mSkola", "W = " + String.valueOf(w));
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            lastThread.execute();
+                            Tools.toast("Back Online! Resuming request...", MskolaLogin.this, R.color.green_800);
+                        }
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_700);
+                        lastThread.cancel(true);
+                    }
+                }).execute();
+            }
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        Log.d("mSkola", "W = " + String.valueOf(w));
+        super.onPause();
     }
 
     private class login extends AsyncTask<String, Integer, Boolean> {
@@ -297,7 +351,8 @@ public class MskolaLogin extends AppCompatActivity {
 
                 intent.putExtra("email_address", emailE.getText().toString());
                 intent.putExtra("role", text.split("<>")[1]);
-                new dashboardInfo().execute(school_id, emailE.getText().toString());
+                emailAddress = emailE.getText().toString().toLowerCase().trim();
+                lastThread = new dashboardInfo().execute();
 
             } else {
                 showCustomDialogFailure(error_from_server);
@@ -315,7 +370,7 @@ public class MskolaLogin extends AppCompatActivity {
             data = storageObj;
 
             storageObj.setOperation("getinfoonlogin");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+            storageObj.setStrData(school_id + "<>" + emailAddress);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             data = sentData;
             return sentData.getStrData();
@@ -360,42 +415,5 @@ public class MskolaLogin extends AppCompatActivity {
             finish();
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-//        this.mReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                w++;
-//                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-//                    @Override
-//                    public void onConnectionSuccess() {
-//                        status = 1;
-//                        if (w > 1)
-//                            Tools.toast("Back Online! Try again", MskolaLogin.this, R.color.green_800);
-//                    }
-//
-//                    @Override
-//                    public void onConnectionFail(String errorMsg) {
-//                        status = 0;
-//                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_700);
-//                    }
-//                }).execute();
-//            }
-//        };
-//
-//        registerReceiver(
-//                this.mReceiver,
-//                new IntentFilter(
-//                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-//        unregisterReceiver(this.mReceiver);
-//        w = 0;
-        super.onPause();
     }
 }

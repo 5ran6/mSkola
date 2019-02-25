@@ -18,7 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
     android:layout_gravity="center_horizontal|top"
-    android:background="?android:attr/colorPrimary"
+    android:background="@color/colorPrimary"
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"

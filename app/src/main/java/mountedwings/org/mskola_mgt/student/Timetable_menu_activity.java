@@ -207,6 +207,8 @@ public class Timetable_menu_activity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //TODO: when back on the toolbar is pressed, you should finish activity
+
         if (item.getItemId() == R.id.homeAsUp) {
             finish();
         }

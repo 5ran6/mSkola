@@ -68,6 +68,7 @@ public class View_Scores_menu extends AppCompatActivity {
     Bundle savedInstance;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,12 +154,12 @@ public class View_Scores_menu extends AppCompatActivity {
             if (!class_name.isEmpty() && !arm.isEmpty() && !subject.isEmpty()) {
                 //load the scores
                 if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-                    new loadScores().execute(school_id, class_name, arm, subject);
+                    lastThread = new loadScores().execute();
                 else
                     Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
 
             } else {
-                Tools.toast("Fill all necessary fields", this, R.color.yellow_700);
+                Tools.toast("Fill all necessary fields", this, R.color.yellow_900);
             }
         });
         savedInstance = savedInstanceState;
@@ -169,13 +170,58 @@ public class View_Scores_menu extends AppCompatActivity {
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
         if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadArms().execute(school_id, staff_id, class_name);
+            lastThread = new loadArms().execute();
     }
 
     private void loadSubject() {
         progressBar3.setVisibility(View.VISIBLE);
         if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadSubject().execute(school_id, staff_id, class_name, arm);
+            lastThread = new loadSubject().execute();
+    }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            lastThread.execute();
+                            Tools.toast("Back Online! Resuming request....", View_Scores_menu.this, R.color.green_800);
+                        } else
+                            //load classes
+                            lastThread = new initialLoad().execute();
+
+
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), View_Scores_menu.this, R.color.red_500);
+                        lastThread.cancel(true);
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        w = 0;
+        unregisterReceiver(this.mReceiver);
+        super.onPause();
     }
 
     //loads arms
@@ -184,7 +230,8 @@ public class View_Scores_menu extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getrsarm");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
+            //school_id, staff_id, class_name
+            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
             return sentData.getStrData();
@@ -229,12 +276,18 @@ public class View_Scores_menu extends AppCompatActivity {
         }
     }
 
+    /* This collects the values of all the CA's and switch for different numbers of CA's
+     * Then in passes everything to the scores object
+     *
+     * */
+
     private class loadSubject extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getrssubject");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
+            //school_id, staff_id, class_name, arm
+            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name + "<>" + arm);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             return sentData.getStrData();
         }
@@ -285,7 +338,8 @@ public class View_Scores_menu extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getrsclass");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+//            school_id, staff_id
+            storageObj.setStrData(school_id + "<>" + staff_id);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             return sentData.getStrData();
         }
@@ -320,11 +374,6 @@ public class View_Scores_menu extends AppCompatActivity {
         }
     }
 
-    /* This collects the values of all the CA's and switch for different numbers of CA's
-     * Then in passes everything to the scores object
-     *
-     * */
-
     private class loadScores extends AsyncTask<String, Integer, String> {
         String text;
         String col0 = "", col1 = "", col2 = "", col3 = "", col4 = "", col5 = "", col6 = "", col7 = "", col8 = "", col9 = "";
@@ -333,7 +382,8 @@ public class View_Scores_menu extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
             storageObj.setOperation("getallstudentscore");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
+            //school_id, class_name, arm, subject
+            storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + subject);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
             return sentData.getStrData();
         }
@@ -586,49 +636,6 @@ public class View_Scores_menu extends AppCompatActivity {
 
         }
 
-    }
-
-    @Override
-    protected void onPause() {
-        w = 0;
-        unregisterReceiver(this.mReceiver);
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", View_Scores_menu.this, R.color.green_800);
-                        else
-                            //load classes
-                            new initialLoad().execute(school_id, staff_id);
-
-
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), View_Scores_menu.this, R.color.red_500);
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
     }
 
 }

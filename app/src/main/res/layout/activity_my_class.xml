@@ -31,10 +31,10 @@
             android:layout_alignParentTop="true"
             android:background="@color/teal_300"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/spacing_small"
             android:paddingLeft="@dimen/spacing_medium"
+            android:paddingTop="@dimen/spacing_medium"
             android:paddingRight="@dimen/spacing_medium"
-            android:paddingTop="@dimen/spacing_medium">
+            android:paddingBottom="@dimen/spacing_small">
 
             <RelativeLayout
                 android:layout_width="@dimen/spacing_xxlarge"
@@ -44,7 +44,7 @@
                     android:id="@+id/passport"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_account_circle"
+                    app:srcCompat="@drawable/ic_person"
                     tools:ignore="VectorDrawableCompat" />
             </RelativeLayout>
 
@@ -135,9 +135,9 @@
             android:id="@+id/bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:gravity="end"
             android:orientation="vertical">
 
@@ -173,10 +173,10 @@
                     android:id="@+id/fab_subject_teachers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_middle"
                     android:layout_marginLeft="@dimen/spacing_smlarge"
-                    android:layout_marginRight="@dimen/spacing_smlarge"
                     android:layout_marginTop="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_smlarge"
+                    android:layout_marginBottom="@dimen/spacing_middle"
                     android:clickable="true"
                     android:focusable="true"
                     android:onClick="subject_teachers"
@@ -224,10 +224,10 @@
                     android:id="@+id/fab_class_teachers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_middle"
                     android:layout_marginLeft="@dimen/spacing_smlarge"
-                    android:layout_marginRight="@dimen/spacing_smlarge"
                     android:layout_marginTop="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_smlarge"
+                    android:layout_marginBottom="@dimen/spacing_middle"
                     android:clickable="true"
                     android:focusable="true"
                     android:onClick="class_teachers"
@@ -247,10 +247,10 @@
                 android:id="@+id/see_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_middle"
                 android:layout_marginLeft="@dimen/spacing_smlarge"
-                android:layout_marginRight="@dimen/spacing_smlarge"
                 android:layout_marginTop="@dimen/spacing_middle"
+                android:layout_marginRight="@dimen/spacing_smlarge"
+                android:layout_marginBottom="@dimen/spacing_middle"
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="show_options"

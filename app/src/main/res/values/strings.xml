@@ -141,13 +141,13 @@
     <string name="logout">Logout</string>
     <string name="update">Update</string>
     <string name="alert">Alert</string>
-    <string name="demo_name">Ocholi Francis</string>
+    <string name="demo_name">My Name</string>
     <string name="get_started">Get Started</string>
     <string name="default_alarm_text">Set an alarm to remind some minutes before your child/children close for the day</string>
     <string name="enter_score">Enter score</string>
     <string name="register_score">Register Score</string>
     <string name="mark_all">MARK ALL</string>
-    <string name="no_internet_connection">Check your internet connection and try again</string>
+    <string name="no_internet_connection">No internet. Reconnecting....</string>
     <string name="pay_fees">Pay Fees</string>
     <string name="payment_status">Payment Status</string>
     <string name="verifying_school_id">Verifying School ID</string>
