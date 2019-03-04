@@ -41,7 +41,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class ChatActivity extends AppCompatActivity {
-    String school_id, staff_id, TAG = "mSkola", recipients = "", recipient_category = "";
+    String school_id, staff_id, TAG = "mSkola", recipients = "", recipient_category = "", message = "";
     private ChatView chatView;
     private ImageView dp;
     private TextView textbar;
@@ -49,6 +49,7 @@ public class ChatActivity extends AppCompatActivity {
     private boolean multi = false;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +80,18 @@ public class ChatActivity extends AppCompatActivity {
 
         if (!multi) {
             if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                new first_loading().execute(school_id, staff_id, recipients);
+                lastThread = new first_loading().execute();
             } else {
                 chatView.addMessage(new ChatMessage("Type your Broadcast message", System.currentTimeMillis(), ChatMessage.Type.RECEIVED, "<" + recipients + ">"));
             }
 
             chatView.setOnSentMessageListener(chatMessage ->
                     {
+                        message = chatMessage.getMessage();
                         if (multi)
-                            new sendBatchMessage().execute(school_id, chatMessage.getMessage(), recipients, staff_id, recipient_category);
+                            lastThread = new sendBatchMessage().execute();
                         else
-                            new sendSingleMessage().execute(school_id, chatMessage.getMessage(), recipients, staff_id);
+                            lastThread = new sendSingleMessage().execute();
                         return true;
                     }
             );
@@ -108,14 +110,63 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            try {
+//                                Tools.toast("Back Online!", MskolaLogin.this, R.color.green_900);
+                                lastThread.execute();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+//                        Tools.toast("Offline", ChatActivity.this, R.color.red_500);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
     //DONE
     private class first_loading extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getsinglemessage");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
-            return new serverProcess().requestProcess(storageObj).getStrData();
+            try {
+                storageFile storageObj = new storageFile();
+                storageObj.setOperation("getsinglemessage");
+                //school_id, staff_id, recipients
+                storageObj.setStrData(school_id + "<>" + staff_id + "<>" + recipients);
+                return new serverProcess().requestProcess(storageObj).getStrData();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
+            }
         }
 
         @Override
@@ -142,44 +193,31 @@ public class ChatActivity extends AppCompatActivity {
             }
             //finally
         }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            finish();
+        }
     }
 
     //DONE
     private class sendSingleMessage extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("sendmessage");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + "_");
-            return new serverProcess().requestProcess(storageObj).getStrData();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-
-            if (text.equals("success")) {
-                Tools.toast("Sent", ChatActivity.this, R.color.green_800);
-            } else {
-                Tools.toast("Could not send message", ChatActivity.this, R.color.red_800);
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("sendmessage");
+                    //school_id, chatMessage.getMessage(), recipients, staff_id
+                    storageObj.setStrData(school_id + "<>" + message + "<>" + recipients + "<>" + staff_id + "<>" + "_");
+                    return new serverProcess().requestProcess(storageObj).getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
             }
         }
-    }
-
-    //DONE
-    private class sendBatchMessage extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("sendmessage");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4]);
-            return new serverProcess().requestProcess(storageObj).getStrData();
-        }
 
         @Override
         protected void onPreExecute() {
@@ -189,7 +227,6 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-
             if (text.equals("success")) {
                 Tools.toast("Sent", ChatActivity.this, R.color.green_800);
             } else {
@@ -204,36 +241,43 @@ public class ChatActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), Chat_menu.class));
     }
 
+    //DONE
+    private class sendBatchMessage extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("sendmessage");
+                    //school_id, chatMessage.getMessage(), recipients, staff_id, recipient_category
+                    storageObj.setStrData(school_id + "<>" + message + "<>" + recipients + "<>" + staff_id + "<>" + recipient_category);
+                    return new serverProcess().requestProcess(storageObj).getStrData();
 
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", ChatActivity.this, R.color.green_800);
-                    }
+                } while (!isCancelled());
 
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast("Offline", ChatActivity.this, R.color.red_500);
-                    }
-                }).execute();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
             }
 
-        };
 
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+
+            if (text.equals("success")) {
+                Tools.toast("Sent", ChatActivity.this, R.color.green_800);
+            } else {
+                Tools.toast("Could not send message", ChatActivity.this, R.color.red_800);
+            }
+        }
     }
 
     @Override

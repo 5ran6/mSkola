@@ -62,6 +62,8 @@ public class Compile_Result_menu extends AppCompatActivity {
     private ViewGroup transitionsContainer;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
+
     private boolean compiling = false;
 
     @Override
@@ -131,11 +133,11 @@ public class Compile_Result_menu extends AppCompatActivity {
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() && !arm.isEmpty()) {
                 if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-                    new compileResult().execute(school_id, class_name, arm);
+                    lastThread = new compileResult().execute();
                 else
                     Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
             } else {
-                Tools.toast("Fill all necessary fields!", this, R.color.yellow_600);
+                Tools.toast("Fill all necessary fields!", this, R.color.yellow_900);
 
             }
         });
@@ -144,21 +146,69 @@ public class Compile_Result_menu extends AppCompatActivity {
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadArms().execute(school_id, staff_id, class_name);
+        //  if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        lastThread = new loadArms().execute();
     }
 
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Reconnecting...", Compile_Result_menu.this, R.color.green_800);
+                        else
+                            lastThread = new initialLoad().execute();
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        if (w > 1) {
+                            try {
+                                Tools.toast(getResources().getString(R.string.no_internet_connection), Compile_Result_menu.this, R.color.red_900);
+                                lastThread.cancel(true);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            Tools.toast(getResources().getString(R.string.no_internet_connection), Compile_Result_menu.this, R.color.red_900);
+                        }
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
 
     private class loadArms extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getpsarm");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getpsarm");
+                    ///school_id, staff_id, class_name
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            return sentData.getStrData();
-
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -183,6 +233,9 @@ public class Compile_Result_menu extends AppCompatActivity {
                 arm = select_arm.getSelectedItem().toString();
                 progressBar2.setVisibility(View.INVISIBLE);
                 counter = -1;
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Compile_Result_menu.this, R.color.red_900);
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -195,48 +248,6 @@ public class Compile_Result_menu extends AppCompatActivity {
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
 
-        }
-    }
-
-    private class compileResult extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("compileresult");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            compiling = true;
-            return sentData.getStrData();
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            TransitionManager.beginDelayedTransition(transitionsContainer);
-            progressBar.setVisibility(View.VISIBLE);
-            Tools.toast("Compiling......", Compile_Result_menu.this, R.color.green_600);
-            loadB.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-            progressBar.setVisibility(View.GONE);
-            compiling = false;
-            if (text.equals("success")) {
-                //    Toast.makeText(getBaseContext(), "", Toast.LENGTH_SHORT).show();
-                showCustomDialogSuccess("Results successfully compiled");
-            } else if (text.equals("not found")) {
-                showCustomDialogFailure("Dashboard not found in the selected class");
-            } else {
-                showCustomDialogFailure("An error occurred");
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
         }
     }
 
@@ -289,16 +300,79 @@ public class Compile_Result_menu extends AppCompatActivity {
         dialog.getWindow().setAttributes(lp);
     }
 
+    private class compileResult extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("compileresult");
+                    //school_id, class_name, arm
+                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    compiling = true;
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            TransitionManager.beginDelayedTransition(transitionsContainer);
+            progressBar.setVisibility(View.VISIBLE);
+            Tools.toast("Compiling......", Compile_Result_menu.this, R.color.green_600);
+            loadB.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            progressBar.setVisibility(View.GONE);
+            compiling = false;
+            if (text.equals("success")) {
+                //    Toast.makeText(getBaseContext(), "", Toast.LENGTH_SHORT).show();
+                showCustomDialogSuccess("Results successfully compiled");
+            } else if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Compile_Result_menu.this, R.color.red_900);
+            } else if (text.equals("not found")) {
+                showCustomDialogFailure("Dashboard not found in the selected class");
+            } else {
+                showCustomDialogFailure("An error occurred");
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+    }
+
     //loads Classes
     private class initialLoad extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getpsclass");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getpsclass");
+                    //school_id, staff_id
+                    storageObj.setStrData(school_id + "<>" + staff_id);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
         }
 
         @Override
@@ -309,7 +383,7 @@ public class Compile_Result_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
+            //  System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 text = text.split("##")[0];
@@ -328,45 +402,15 @@ public class Compile_Result_menu extends AppCompatActivity {
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Compile_Result_menu.this, R.color.red_900);
             } else {
-                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Compile_Result_menu.this, R.color.red_800, Toast.LENGTH_LONG);
-                load.setVisibility(View.INVISIBLE);
-
+                Tools.toast("Seems you are not a class teacher.", Compile_Result_menu.this, R.color.red_800, Toast.LENGTH_LONG);
+                load.setVisibility(View.GONE);
+                finish();
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Compile_Result_menu.this, R.color.green_800);
-                        else
-                            new initialLoad().execute(school_id, staff_id);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), Compile_Result_menu.this, R.color.red_500);
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
     }
 
     @Override

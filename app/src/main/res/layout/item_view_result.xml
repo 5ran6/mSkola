@@ -35,8 +35,8 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/spacing_large"
-            android:paddingTop="@dimen/spacing_large">
+            android:paddingTop="@dimen/spacing_large"
+            android:paddingBottom="@dimen/spacing_large">
 
             <View
                 android:layout_width="@dimen/spacing_large"
@@ -57,7 +57,7 @@
                         android:layout_height="@dimen/spacing_xxlarge"
                         android:contentDescription="@string/app_name"
                         android:src="@drawable/shape_circle"
-                        android:tint="@color/blue_grey_600" />
+                        android:tint="@color/blue_grey_200" />
 
 
                 </RelativeLayout>
@@ -120,7 +120,7 @@
                             android:singleLine="true"
                             android:text="JSS1A"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@color/grey_90"
+                            android:textColor="@color/grey_60"
                             android:textStyle="bold" />
 
                         <TextView
@@ -133,7 +133,7 @@
                             android:gravity="end"
                             android:text="2018-09-19"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@color/blue_300"
+                            android:textColor="@color/green_900"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -151,7 +151,7 @@
                             android:singleLine="true"
                             android:text="By: Lawrence Adu"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@color/grey_40" />
+                            android:textColor="@color/grey_90" />
 
                         <TextView
                             android:id="@+id/position"
@@ -163,7 +163,7 @@
                             android:singleLine="true"
                             android:text="View"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@color/green_700"
+                            android:textColor="@color/grey_700"
                             android:textStyle="italic" />
 
                     </LinearLayout>

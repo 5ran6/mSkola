@@ -15,11 +15,13 @@ package mountedwings.org.mskola_mgt.teacher;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -45,8 +47,10 @@ import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 import mountedwings.org.mskola_mgt.utils.ViewAnimation;
@@ -64,11 +68,14 @@ public class Assessment extends AppCompatActivity {
     private int current_step = 0;
     private View parent_view;
     private AppCompatEditText score;
-    private ViewGroup main;
-    private int last_index;
+    private int last_index, idx, idy;
     private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject;
     private BroadcastReceiver mReceiver;
-    private int w = 0, status = 1;
+    private int w = 0, status;
+    private AsyncTask lastThread;
+    private String i = "";
+    private boolean finished = false;
+    private boolean done = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +97,7 @@ public class Assessment extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
         // initToolbar(assessment.toUpperCase() + " for " + class_name + arm);
-        new first_loading().execute(school_id, class_name, arm, assessment, subject);
+        //     lastThread = new first_loading().execute();
     }
 
 
@@ -111,7 +118,7 @@ public class Assessment extends AppCompatActivity {
 
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        main = findViewById(R.id.main_content);
+        ViewGroup main = findViewById(R.id.main_content);
         main.addView(view, index);
         //add to the view list array
         view_list.add(view);
@@ -133,12 +140,18 @@ public class Assessment extends AppCompatActivity {
             return handled;
         });
 
-        score.setText(first_persons_score);
+        if (first_persons_score.equals("") || first_persons_score.isEmpty()) {
+            score.setHint(getResources().getString(R.string.enter_score));
+            score.setText(first_persons_score);
+        } else {
+            score.setText(first_persons_score);
+        }
+
         hideSoftKeyboard();
 
         mark_scores.setOnClickListener(v -> {
             //is Not a float
-            String i = "";
+            i = "";
             try {
 //                i = Float.valueOf(score.getText().toString());
                 i = score.getText().toString();
@@ -147,10 +160,10 @@ public class Assessment extends AppCompatActivity {
                 e.printStackTrace();
             } finally {
                 if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
-                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
+                    Tools.toast(score.getText() + " is an Invalid score", this, R.color.yellow_900);
                     return;
                 }
-                if (score.getText().toString().trim().equals("")) {
+                if (Objects.requireNonNull(score.getText()).toString().trim().equals("")) {
                     Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
@@ -158,15 +171,16 @@ public class Assessment extends AppCompatActivity {
 
             //send to server
             if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
+                idy = index;
+                new submitScore().execute();
                 collapseAndContinue(index);
             }
 
         });
 
         skip.setOnClickListener(v -> {
-
-            collapseAndContinue(index);
+            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+                collapseAndContinue(index);
             //don't record anything
 
         });
@@ -208,11 +222,11 @@ public class Assessment extends AppCompatActivity {
 //                i = Float.valueOf(score.getText().toString());
                 i = score.getText().toString();
             } catch (Exception e) {
-                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
+                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.red_900);
                 e.printStackTrace();
             } finally {
                 if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
-                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
+                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.red_900);
                     return;
                 }
 
@@ -225,7 +239,8 @@ public class Assessment extends AppCompatActivity {
             //      Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
             //send to server
             if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                new submitScore().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i));
+                idy = index;
+                new submitScore().execute();
                 collapseAndContinue(index);
             }
 
@@ -233,7 +248,7 @@ public class Assessment extends AppCompatActivity {
         });
         skip.setOnClickListener(v -> {
 
-            collapseAndContinue(index);
+            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) collapseAndContinue(index);
             //don't record anything
         });
     }
@@ -283,7 +298,6 @@ public class Assessment extends AppCompatActivity {
                     Snackbar.make(parent_view, "Title cannot empty", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-
 //                collapseAndContinue(4);
                 finish();
                 break;
@@ -299,8 +313,7 @@ public class Assessment extends AppCompatActivity {
         //TODO: just try and get the right ID for the index of the child view and you're good to go
         //  index = view_list.indexOf(view.getRootView().getId());
         //index = view.getId();
-//        Toast.makeText(getApplicationContext(), "Review from top", Toast.LENGTH_SHORT).show();
-        Tools.toast("Reviewing from top", this, R.color.yellow_900);
+        Tools.toast("Reviewing from top....", this, R.color.yellow_900, Toast.LENGTH_LONG);
 //        TODO: scroll to the top of activity
 
         if (success_step >= index && current_step != index) {
@@ -308,7 +321,6 @@ public class Assessment extends AppCompatActivity {
             collapseAll();
             ViewAnimation.expand(view_list.get(index).findViewById(R.id.lyt_title));
         }
-
     }
 
     //DONE
@@ -326,7 +338,8 @@ public class Assessment extends AppCompatActivity {
                 ViewAnimation.collapse(view_list.get(view_list.size() - 1).findViewById(R.id.lyt_title));
             } else {
                 if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                    new loading().execute(school_id, class_name, arm, assessment, subject, String.valueOf(index));
+                    idy = index;
+                    new loading().execute();
                     success_step = index > success_step ? index : success_step;
                     ViewAnimation.expand(view_list.get(index).findViewById(R.id.lyt_title));
                     View vv = view_list.get(index);
@@ -362,11 +375,7 @@ public class Assessment extends AppCompatActivity {
     private void setCheckedRecorded(int index) {
         RelativeLayout relative = step_view_list.get(index);
         relative.removeAllViews();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            relative.setBackground(getResources().getDrawable(R.drawable.shape_round_solid_green));
-        } else {
-            relative.setBackgroundDrawable(getResources().getDrawable(R.drawable.shape_round_solid_green));
-        }
+        relative.setBackground(getResources().getDrawable(R.drawable.shape_round_solid_green));
         ImageButton img = new ImageButton(this);
         img.setImageResource(R.drawable.ic_done);
         img.setBackgroundColor(Color.TRANSPARENT);
@@ -398,15 +407,82 @@ public class Assessment extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            try {
+                                Tools.toast("Back Online! Reconnecting...", Assessment.this, R.color.green_800);
+                                lastThread.execute();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        else //first time
+                        {
+                            if (!done)
+                                lastThread = new first_loading().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        if (w > 1) {
+                            try {
+                                Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment.this, R.color.red_900);
+                                lastThread.cancel(true);
+                                score.setHint("Network error....");
+                                score.setHintTextColor(getResources().getColor(R.color.red_300));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            Tools.toast("Network error", Assessment.this, R.color.red_900);
+                        }
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        //TODO: save instance state by saving the variable done and restoring it back when the activity is restored. Or save it to sharedPref
+    }
+
     private class loading extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getstudentscore");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4] + "<>" + regNumbs[Integer.valueOf(strings[5])]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getstudentscore");
+                    //school_id, class_name, arm, assessment, subject, String.valueOf(index)
+                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + assessment + "<>" + subject + "<>" + regNumbs[Integer.valueOf(String.valueOf(idy))]);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -418,14 +494,18 @@ public class Assessment extends AppCompatActivity {
         @Override
         protected void onPostExecute(String scores) {
             super.onPostExecute(scores);
-            Log.d(TAG, scores);
+//            Log.d(TAG, "Score = " + scores);
             //   Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
-            if (!scores.isEmpty()) {
+            if (!scores.isEmpty() || !scores.equalsIgnoreCase("")) {
                 score.setText("");
                 //has to be here
                 score.setText(scores);
+                if (scores.equalsIgnoreCase("network error")) {
+                    Tools.toast("Network error. Reconnecting...", Assessment.this, R.color.red_900);
+                }
             } else {
 //                Toast.makeText(getApplicationContext(), "Check your internet connection and try again", Toast.LENGTH_SHORT).show();
+                score.setHint(getResources().getString(R.string.enter_score));
             }
         }
     }
@@ -434,11 +514,20 @@ public class Assessment extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("savestudentscore");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4] + "<>" + regNumbs[Integer.valueOf(strings[5])] + "<>" + strings[6]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("savestudentscore");
+                    //school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i)
+                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + assessment + "<>" + subject + "<>" + regNumbs[Integer.valueOf(String.valueOf(idy))] + "<>" + String.valueOf(i));
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -454,6 +543,9 @@ public class Assessment extends AppCompatActivity {
             if (!scores.isEmpty()) {
                 score.setText("");
                 setCheckedRecorded(last_index);
+            }
+            if (scores.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Assessment.this, R.color.red_900);
             } else {
                 Tools.toast("Check your internet connection and try again", Assessment.this, R.color.red_800);
             }
@@ -464,55 +556,65 @@ public class Assessment extends AppCompatActivity {
     private class first_loading extends AsyncTask<String, Integer, Boolean> {
         @Override
         protected Boolean doInBackground(String... strings) {
-            Boolean success = false;
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrecordscoreinfo");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + strings[4]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            try {
+                do {
+                    boolean success = false;
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrecordscoreinfo");
+//            school_id, class_name, arm, assessment, subject
+                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + assessment + "<>" + subject);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            String text = sentData.getStrData();
-            Log.d(TAG, text);
+                    String text = sentData.getStrData();
+                    Log.d(TAG, text);
 
-            if (!text.equals("0") && !text.equals("")) {
+                    if (!text.equals("0") && !text.equals("")) {
 
-                try {
-                    first_persons_score = text.split("##")[1];
-                    //set text of EditText
+                        try {
+                            first_persons_score = text.split("##")[1];
+                            //set text of EditText
 
-                } catch (Exception ex) {
-                }
-                if (first_persons_score.equals("_")) {
-                    first_persons_score = "";
-                }
-                text = text.split("##")[0];
-                len = text.split("<>").length;
-                names = new String[len];
-                regNumbs = new String[len];
-                if (!text.isEmpty()) {
-                    int i = 0;
-                    do {
-                        //name
-                        names[i] = text.split("<>")[i].split(";")[1];
-                        //regNumber
-                        regNumbs[i] = text.split("<>")[i].split(";")[0];
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        if (first_persons_score.equals("_")) {
+                            first_persons_score = "";
+                        }
+                        text = text.split("##")[0];
+                        len = text.split("<>").length;
+                        names = new String[len];
+                        regNumbs = new String[len];
+                        if (!text.isEmpty()) {
+                            int i = 0;
+                            do {
+                                //name
+                                names[i] = text.split("<>")[i].split(";")[1];
+                                //regNumber
+                                regNumbs[i] = text.split("<>")[i].split(";")[0];
 
-                        Log.d(TAG, names[i]);
-                        Log.d(TAG, regNumbs[i]);
-                        i++;
-                    } while (i < text.split("<>").length);
-                    success = true;
-                } else {
-                    // display an error dialog and return to previous activity
-                    finish();
-                }
-            } else {
-                success = false;
+                                Log.d(TAG, names[i]);
+                                Log.d(TAG, regNumbs[i]);
+                                i++;
+                            } while (i < text.split("<>").length);
+                            success = true;
+                        } else {
+                            // display an error dialog and return to previous activity
+                            finish();
+                        }
+                    } else {
+                        success = false;
 
-                finish();
+                        finish();
 
+                    }
+                    finished = true;
+                    return success;
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
             }
 
-            return success;
         }
 
         @Override
@@ -525,55 +627,18 @@ public class Assessment extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
+                done = true;
                 loading.setVisibility(View.GONE);
                 for (int i = 0; i < len; i++)
                     initViews(i, names[i]);
             } else {
-                Tools.toast("No record found for selected class/subject", Assessment.this, R.color.yellow_900);
-                finish();
+                if (finished) {
+                    Tools.toast("No record found for this subject", Assessment.this, R.color.yellow_900);
+                    finish();
+                } else {
+                    Tools.toast("Network error. Reconnecting...", Assessment.this, R.color.yellow_900);
+                }
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-//        this.mReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                w++;
-//                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-//                    @Override
-//                    public void onConnectionSuccess() {
-//                        status = 1;
-//                        if (w > 1)
-//                            Tools.toast("Back Online! Try again", Assessment.this, R.color.green_800);
-//                        else
-//                            new first_loading().execute(school_id, class_name, arm, assessment, subject);
-//                    }
-//
-//                    @Override
-//                    public void onConnectionFail(String errorMsg) {
-//                        status = 0;
-//                        Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment.this, R.color.red_500);
-//                        finish();
-//                    }
-//                }).execute();
-//            }
-//
-//        };
-//
-//        registerReceiver(
-//                this.mReceiver,
-//                new IntentFilter(
-//                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
-    }
-
-
-    @Override
-    protected void onPause() {
-//        unregisterReceiver(this.mReceiver);
-//        w = 0;
-        super.onPause();
     }
 }

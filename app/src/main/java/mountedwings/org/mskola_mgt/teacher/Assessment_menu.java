@@ -66,12 +66,16 @@ public class Assessment_menu extends AppCompatActivity {
                     @Override
                     public void onConnectionSuccess() {
                         status = 1;
-                        if (w > 1) {
-                            lastThread.execute();
-                            Tools.toast("Back Online! Resuming request....", Assessment_menu.this, R.color.green_800);
-                        } else
-                            //load classes and assessments
-                            lastThread = new initialLoad().execute();
+                        try {
+                            if (w > 1) {
+                                lastThread.execute();
+                                Tools.toast("Back Online! Resuming request....", Assessment_menu.this, R.color.green_800);
+                            } else
+                                //load classes and assessments
+                                lastThread = new initialLoad().execute();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -79,7 +83,11 @@ public class Assessment_menu extends AppCompatActivity {
                         status = 0;
                         Log.d("mSkola", String.valueOf(status));
                         Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment_menu.this, R.color.red_600);
-                        lastThread.cancel(true);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }).execute();
             }
@@ -195,10 +203,10 @@ public class Assessment_menu extends AppCompatActivity {
                     intent1.putExtra("subject", subject);
                     startActivity(intent1);
                 } else {
-                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_900);
                 }
             } else {
-                Tools.toast("Fill all necessary fields", Assessment_menu.this, R.color.yellow_700);
+                Tools.toast("Fill all necessary fields", Assessment_menu.this, R.color.yellow_900);
             }
         });
 
@@ -221,13 +229,22 @@ public class Assessment_menu extends AppCompatActivity {
     private class loadArms extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrsarm");
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrsarm");
 //            school_id, staff_id, class_name
-            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            return sentData.getStrData();
+                    return sentData.getStrData();
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
 
         }
 
@@ -274,6 +291,9 @@ public class Assessment_menu extends AppCompatActivity {
                 progressBar4.setVisibility(View.INVISIBLE);
                 counter = -1;
 
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Assessment_menu.this, R.color.red_900);
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -292,12 +312,19 @@ public class Assessment_menu extends AppCompatActivity {
     private class loadSubject extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrssubject");
-            //school_id, staff_id, class_name, arm
-            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name + "<>" + arm);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrssubject");
+                    //school_id, staff_id, class_name, arm
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name + "<>" + arm);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -322,6 +349,9 @@ public class Assessment_menu extends AppCompatActivity {
                 subject = select_subject.getSelectedItem().toString();
                 progressBar3.setVisibility(View.INVISIBLE);
                 progressBar3.setVisibility(View.INVISIBLE);
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Assessment_menu.this, R.color.red_900);
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -344,11 +374,19 @@ public class Assessment_menu extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrsclass");
-            storageObj.setStrData(school_id + "<>" + staff_id);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrsclass");
+                    storageObj.setStrData(school_id + "<>" + staff_id);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
         }
 
         @Override
@@ -376,6 +414,9 @@ public class Assessment_menu extends AppCompatActivity {
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Assessment_menu.this, R.color.red_900);
             }
         }
     }

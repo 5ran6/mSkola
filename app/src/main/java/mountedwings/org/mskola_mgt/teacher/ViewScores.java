@@ -13,7 +13,6 @@
 
 package mountedwings.org.mskola_mgt.teacher;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -28,6 +27,12 @@ public class ViewScores extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(getApplicationContext(), View_Scores_menu.class));
+        finish();
+//        startActivity(new Intent(getApplicationContext(), View_Scores_menu.class));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

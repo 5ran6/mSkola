@@ -51,7 +51,6 @@ public class CheckNetworkConnection extends AsyncTask<Void, Void, Boolean> {
                 msg = "Context is null";
             onConnectionCallback.onConnectionFail(msg);
         }
-
     }
 
     public interface OnConnectionCallback {

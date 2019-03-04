@@ -147,7 +147,7 @@
     <string name="enter_score">Enter score</string>
     <string name="register_score">Register Score</string>
     <string name="mark_all">MARK ALL</string>
-    <string name="no_internet_connection">No internet. Reconnecting....</string>
+    <string name="no_internet_connection">No internet</string>
     <string name="pay_fees">Pay Fees</string>
     <string name="payment_status">Payment Status</string>
     <string name="verifying_school_id">Verifying School ID</string>
@@ -171,7 +171,7 @@
     <string name="old_password">OLD PASSWORD</string>
     <string name="enter_old_password">Enter old password</string>
     <string name="invite_a_friend">Check out mSkola, I use it to keep abreast with the academic
-    progress of my ward(s). Get it for free at mskola.com </string>
+    progress of my ward(s). Get it for free at mountedwings.org </string>
 
 
     <!-- for transitions-->

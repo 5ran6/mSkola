@@ -65,6 +65,7 @@ public class AttendanceActivity extends AppCompatActivity {
     private AttendanceAdapter adapter;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,29 +117,21 @@ public class AttendanceActivity extends AppCompatActivity {
         });
 
         fab_save.setOnClickListener(v -> {
-            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                new markAttendance().execute(school_id, class_name, arm, date);
-            } else {
-                Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-            }
+            //    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            lastThread = new markAttendance().execute(school_id, class_name, arm, date);
         });
 
 
         fab_add.setOnClickListener(v -> toggleFabMode(v));
 
         sav.setOnClickListener(v -> {
-            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                new markAttendance().execute(school_id, class_name, arm, date);
-            } else {
-                Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-            }
+            //   if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            lastThread = new markAttendance().execute(school_id, class_name, arm, date);
         });
         pub.setOnClickListener(v -> {
-            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                new publicHolidays().execute(school_id, class_name, arm, date);
-            } else {
-                Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-            }
+            // if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            lastThread = new publicHolidays().execute(school_id, class_name, arm, date);
+
         });
 
         all_morning.setOnClickListener(v -> {
@@ -187,19 +180,75 @@ public class AttendanceActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Reconnecting...", AttendanceActivity.this, R.color.green_800);
+                        else
+                            lastThread = new first_loading().execute();
+
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        if (w > 1) {
+                            try {
+                                Tools.toast(getResources().getString(R.string.no_internet_connection), AttendanceActivity.this, R.color.red_900);
+                                lastThread.cancel(true);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            Tools.toast(getResources().getString(R.string.no_internet_connection), AttendanceActivity.this, R.color.red_900);
+                        }
+
+                        //              finish();
+                    }
+                }).
+
+                        execute();
+            }
+
+        }
+
+        ;
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.
+
+                onResume();
+
+    }
 
     public class first_loading extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            //  Boolean success = false;
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("loadattendance");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("loadattendance");
+                    //school_id, class_name, arm, date
+                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + date);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
 
-            String text = sentData.getStrData();
-
-            return text;
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -256,6 +305,9 @@ public class AttendanceActivity extends AppCompatActivity {
                     Tools.toast("Oops! Something went wrong", AttendanceActivity.this, R.color.red_600);
                     finish();
                 }
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", AttendanceActivity.this, R.color.red_900);
             } else {
                 Tools.toast("No record found for selected class/arm", AttendanceActivity.this, R.color.yellow_600);
                 finish();
@@ -266,61 +318,71 @@ public class AttendanceActivity extends AppCompatActivity {
     private class markAttendance extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("takeattendance");
-            //to get the attendance values
-            StringBuilder allReg = new StringBuilder();
-            StringBuilder morning = new StringBuilder();
-            StringBuilder afternoon = new StringBuilder();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("takeattendance");
+                    //to get the attendance values
+                    StringBuilder allReg = new StringBuilder();
+                    StringBuilder morning = new StringBuilder();
+                    StringBuilder afternoon = new StringBuilder();
 
-            for (int i = 0; i < regNo.size(); i++) {
-                if (allReg.length() == 0) {
-                    allReg = new StringBuilder(regNo.get(i).toString());
-                } else {
-                    allReg.append(";").append(regNo.get(i).toString());
-                }
+                    for (int i = 0; i < regNo.size(); i++) {
+                        if (allReg.length() == 0) {
+                            allReg = new StringBuilder(regNo.get(i).toString());
+                        } else {
+                            allReg.append(";").append(regNo.get(i).toString());
+                        }
 
-                //morning
-                if (morning.length() == 0) {
-                    //get checkbox at position i
-                    //get the string at that index
-                    if (numbers.get(i).isSelected()) {
-                        morning = new StringBuilder("1");
-                    } else {
-                        morning = new StringBuilder("0");
-                    }
-                } else {
-                    if (numbers.get(i).isSelected()) {
-                        morning.append(";1");
-                    } else {
-                        morning.append(";0");
-                    }
-                }
+                        //morning
+                        if (morning.length() == 0) {
+                            //get checkbox at position i
+                            //get the string at that index
+                            if (numbers.get(i).isSelected()) {
+                                morning = new StringBuilder("1");
+                            } else {
+                                morning = new StringBuilder("0");
+                            }
+                        } else {
+                            if (numbers.get(i).isSelected()) {
+                                morning.append(";1");
+                            } else {
+                                morning.append(";0");
+                            }
+                        }
 //afternoon
-                if (afternoon.length() == 0) {
-                    if (numbers.get(i).isSelected1()) {
-                        afternoon = new StringBuilder("1");
-                    } else {
-                        afternoon = new StringBuilder("0");
-                    }
-                } else {
-                    if (numbers.get(i).isSelected1()) {
-                        afternoon.append(";1");
-                    } else {
-                        afternoon.append(";0");
-                    }
-                }
+                        if (afternoon.length() == 0) {
+                            if (numbers.get(i).isSelected1()) {
+                                afternoon = new StringBuilder("1");
+                            } else {
+                                afternoon = new StringBuilder("0");
+                            }
+                        } else {
+                            if (numbers.get(i).isSelected1()) {
+                                afternoon.append(";1");
+                            } else {
+                                afternoon.append(";0");
+                            }
+                        }
 
 
+                    }
+
+
+                    storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + allReg + "<>" + morning + "<>" + afternoon);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+
+                    String text = sentData.getStrData();
+
+                    return text;
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
             }
 
 
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + allReg + "<>" + morning + "<>" + afternoon);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-
-            String text = sentData.getStrData();
-
-            return text;
         }
 
         @Override
@@ -338,71 +400,16 @@ public class AttendanceActivity extends AppCompatActivity {
                 if (text.equals("success")) {
                     Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_800);
                     finish();
+                }
+
+                if (text.equalsIgnoreCase("network error")) {
+                    Tools.toast("Network error. Reconnecting...", AttendanceActivity.this, R.color.red_900);
                 } else {
                     Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
                 }
             } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        }
-    }
-
-    private class publicHolidays extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("takeattendance");
-            String allReg = "", morning = "", afternoon = "";
-            for (int i = 0; i < regNo.size(); i++) {
-                if (allReg.isEmpty()) {
-                    allReg = regNo.get(i).toString();
-                } else {
-                    allReg += ";" + regNo.get(i).toString();
-                }
-
-                if (morning.isEmpty()) {
-                    morning = "2";
-                } else {
-                    morning += ";2";
-                }
-
-                if (afternoon.isEmpty()) {
-                    afternoon = "2";
-                } else {
-                    afternoon += ";2";
-                }
-            }
-
-
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + allReg + "<>" + morning + "<>" + afternoon);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-
-            String text = sentData.getStrData();
-
-            return text;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-//            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-            try {
-                if (text.equals("success")) {
-//                    Toast.makeText(getApplicationContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
-                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_800);
-                    finish();
-                } else {
-                    Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
-                }
-            } catch (Exception ex) {
-
-            }
-
         }
     }
 
@@ -427,39 +434,77 @@ public class AttendanceActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", AttendanceActivity.this, R.color.green_800);
-                        else
-                            new first_loading().execute(school_id, class_name, arm, date);
+    private class publicHolidays extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("takeattendance");
+                    String allReg = "", morning = "", afternoon = "";
+                    for (int i = 0; i < regNo.size(); i++) {
+                        if (allReg.isEmpty()) {
+                            allReg = regNo.get(i).toString();
+                        } else {
+                            allReg += ";" + regNo.get(i).toString();
+                        }
 
+                        if (morning.isEmpty()) {
+                            morning = "2";
+                        } else {
+                            morning += ";2";
+                        }
+
+                        if (afternoon.isEmpty()) {
+                            afternoon = "2";
+                        } else {
+                            afternoon += ";2";
+                        }
                     }
 
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), AttendanceActivity.this, R.color.red_500);
-                        //              finish();
-                    }
-                }).execute();
+
+                    storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3] + "<>" + allReg + "<>" + morning + "<>" + afternoon);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+
+                    String text = sentData.getStrData();
+
+                    return text;
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
             }
 
-        };
 
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+//            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+            try {
+                if (text.equals("success")) {
+//                    Toast.makeText(getApplicationContext(), "Successfully marked", Toast.LENGTH_SHORT).show();
+                    Tools.toast("Successfully marked", AttendanceActivity.this, R.color.green_800);
+                    finish();
+                }
+                if (text.equalsIgnoreCase("network error")) {
+                    Tools.toast("Network error. Reconnecting...", AttendanceActivity.this, R.color.red_900);
+                } else {
+                    Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
     }
 
     @Override

@@ -91,7 +91,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:tint="@android:color/white"
-                app:backgroundTint="@color/colorPrimary"
+                app:backgroundTint="@color/colorAccent"
                 app:fabSize="normal"
                 app:rippleColor="@android:color/white"
                 app:srcCompat="@drawable/ic_close" />
@@ -101,6 +101,7 @@
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:visibility="visible" />
     </RelativeLayout>

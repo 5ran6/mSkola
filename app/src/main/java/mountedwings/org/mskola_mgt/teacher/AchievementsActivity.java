@@ -49,16 +49,14 @@ public class AchievementsActivity extends AppCompatActivity {
 
 
     private RecyclerView list;
-    private FloatingActionButton fab_done;
-    private TextView heading;
-    private ArrayList<byte[]> allPassport_aPerson = new ArrayList<>();
     private storageFile data = new storageFile();
     private ArrayList<String> achievements = new ArrayList<>();
     private ArrayList<String> title = new ArrayList<>();
     private BroadcastReceiver mReceiver;
     private int w = 0;
     private int status;
-
+    private AsyncTask lastThread;
+    private boolean done = false;
 
     ProgressBar loading;
     AchievementsAdapter adapter;
@@ -75,21 +73,21 @@ public class AchievementsActivity extends AppCompatActivity {
         //school_id from sharedPrefs
         school_id = mPrefs.getString("school_id", intent.getStringExtra("school_id"));
 
-        fab_done = findViewById(R.id.done);
-        heading = findViewById(R.id.achievements_heading);
+        FloatingActionButton fab_done = findViewById(R.id.done);
+        TextView heading = findViewById(R.id.achievements_heading);
         heading.setText("School Achievements");
 
         loading = findViewById(R.id.loading);
 
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setHasFixedSize(false);
+        list.setHasFixedSize(true);
 
         adapter = new AchievementsAdapter(numbers);
         list.setAdapter(adapter);
 
         //hide parentView
-        loading.setVisibility(View.VISIBLE);
+//        loading.setVisibility(View.VISIBLE);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> finish());
@@ -101,16 +99,81 @@ public class AchievementsActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    protected void onResume() {
+        SharedPreferences mPrefs = Objects.requireNonNull(getSharedPreferences(myPref, 0));
+        Intent intent = getIntent();
+        //school_id from sharedPrefs
+        school_id = mPrefs.getString("school_id", intent.getStringExtra("school_id"));
+
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            if (!done) {
+                                try {
+                                    Tools.toast("Back Online! Reconnecting...", AchievementsActivity.this, R.color.green_800);
+                                    lastThread = new first_loading().execute();
+                                    lastThread.execute();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        } else
+                            lastThread = new first_loading().execute();
+
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        if (w > 1) {
+                            try {
+                                Tools.toast(getResources().getString(R.string.no_internet_connection), AchievementsActivity.this, R.color.red_900);
+                                lastThread.cancel(true);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            Tools.toast(getResources().getString(R.string.no_internet_connection), AchievementsActivity.this, R.color.red_900);
+                        }
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
     //DONE
     private class first_loading extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            data = storageObj;
-            storageObj.setOperation("getpsstudentinfo");
-            storageObj.setStrData(strings[0]);
-            data = new serverProcess().requestProcess(storageObj);
-            return data.getStrData();
+            try {
+
+                do {
+                    storageFile storageObj = new storageFile();
+                    data = storageObj;
+                    storageObj.setOperation("getpsstudentinfo");
+                    //school_id
+                    storageObj.setStrData(school_id);
+                    data = new serverProcess().requestProcess(storageObj);
+                    return data.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -122,9 +185,10 @@ public class AchievementsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            if (!text.equals("0") && !text.equals("") && !text.equals("not found")) {
+            if (!text.equals("0") && !text.equals("") && !text.equals("not found") && !text.equalsIgnoreCase("network error")) {
+                done = true;
                 //       Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                allPassport_aPerson = data.getImageFiles();
+                ArrayList<byte[]> allPassport_aPerson = data.getImageFiles();
 
                 String rows[] = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
@@ -139,46 +203,22 @@ public class AchievementsActivity extends AppCompatActivity {
                 //show recyclerView with inflated views
                 adapter = new AchievementsAdapter(numbers);
                 list.setAdapter(adapter);
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                loading.setVisibility(View.GONE);
+                Tools.toast("Network error. Reconnecting...", AchievementsActivity.this, R.color.red_900);
             } else {
                 Tools.toast("No achievements found", AchievementsActivity.this, R.color.yellow_800);
                 finish();
             }
         }
-    }
 
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", AchievementsActivity.this, R.color.green_800);
-                        else
-                            new first_loading().execute(school_id);
-
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), AchievementsActivity.this, R.color.red_500);
-                        finish();
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            loading.setVisibility(View.GONE);
+            Tools.toast("Network error. Waiting for network", AchievementsActivity.this, R.color.red_900);
+        }
     }
 
     @Override

@@ -48,7 +48,12 @@ public class Settings extends AppCompatActivity {
 
         if (getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE).toString() != null) {
             SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
-            email.setText(mPrefs.getString("email_address", getIntent().getStringExtra("email_address")));
+            if (mPrefs.getString("email_address", getIntent().getStringExtra("email_address")).equalsIgnoreCase("admin")) {
+                email.setTextColor(getResources().getColor(R.color.green_700));
+                email.setText(mPrefs.getString("email_address", getIntent().getStringExtra("email_address")).toUpperCase());
+            } else {
+                email.setText(mPrefs.getString("email_address", getIntent().getStringExtra("email_address")));
+            }
 
             String raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
             try {

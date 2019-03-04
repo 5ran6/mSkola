@@ -60,9 +60,8 @@ public class Chat_menu extends AppCompatActivity {
     private View lyt_staff;
     private View lyt_parent;
     private View lyt_student;
-
+    private AsyncTask lastThread;
     private View back_drop;
-
     private ArrayList<NumberChatParentsList> parents_list = new ArrayList<>();
 
     private ProgressBar loading;
@@ -106,7 +105,7 @@ public class Chat_menu extends AppCompatActivity {
 
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setHasFixedSize(false);
+        list.setHasFixedSize(true);
 
         adapter = new ChatMenuAdapter(numbers);
         list.setAdapter(adapter);
@@ -175,65 +174,42 @@ public class Chat_menu extends AppCompatActivity {
         finish();
     }
 
-    //DONE
-    private class first_loading extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getmessages");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            sentData = new serverProcess().requestProcess(storageObj);
-            String text = sentData.getStrData();
-            return text;
-        }
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            try {
+                                Tools.toast("Back Online!", Chat_menu.this, R.color.green_800);
+                                lastThread.execute();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        } else
+                            lastThread = new first_loading().execute();
+                    }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            loading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-            if (!text.equals("not found") && !text.equals("0") && !text.isEmpty()) {
-
-                numbers.clear();
-                swipeProgress(false);
-
-                String rows[] = text.split("<>");
-                ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
-
-                for (int i = 0; i < rows.length; i++) {
-                    String row = rows[i];
-                    NumberChat number = new NumberChat();
-                    number.setRecipient(row.split("##")[0]);
-                    number.setmsg(row.split("##")[1]);
-                    number.setdate(row.split("##")[2]);
-                    number.setEmail(row.split("##")[3]);
-                    number.setImage(allPassport_aPerson.get(i));
-                    numbers.add(number);
-                }
-
-                //show recyclerView with inflated views
-                adapter = new ChatMenuAdapter(numbers);
-                list.setAdapter(adapter);
-                adapter.setOnItemClickListener((view, obj, position) -> {
-                    String recipient = numbers.get(position).getEmail();
-                    //       Toast.makeText(getBaseContext(), "Item " + recipient + " clicked", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), ChatActivity.class).putExtra("recipient", recipient));
-                    finish();
-                });
-            } else {
-                Tools.toast("No messages yet", Chat_menu.this, R.color.yellow_600);
-
-                finish();
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Chat_menu.this, R.color.red_500);
+                    }
+                }).execute();
             }
-            //finally
-            loading.setVisibility(View.GONE);
-            swipeProgress(false);
 
-        }
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
     }
 
 
@@ -333,38 +309,66 @@ public class Chat_menu extends AppCompatActivity {
         }
     }
 
+    //DONE
+    private class first_loading extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getmessages");
+            //school_id, staff_id
+            storageObj.setStrData(school_id + "<>" + staff_id);
+            sentData = new serverProcess().requestProcess(storageObj);
+            String text = sentData.getStrData();
+            return text;
+        }
 
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Chat_menu.this, R.color.green_800);
-                        else
-                            new first_loading().execute(school_id, staff_id);
-                    }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            loading.setVisibility(View.VISIBLE);
+        }
 
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), Chat_menu.this, R.color.red_500);
-                    }
-                }).execute();
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            if (!text.equals("not found") && !text.equals("0") && !text.isEmpty()) {
+
+                numbers.clear();
+                swipeProgress(false);
+
+                String rows[] = text.split("<>");
+                ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
+
+                for (int i = 0; i < rows.length; i++) {
+                    String row = rows[i];
+                    NumberChat number = new NumberChat();
+                    number.setRecipient(row.split("##")[0]);
+                    number.setmsg(row.split("##")[1]);
+                    number.setdate(row.split("##")[2]);
+                    number.setEmail(row.split("##")[3]);
+                    number.setImage(allPassport_aPerson.get(i));
+                    numbers.add(number);
+                }
+
+                //show recyclerView with inflated views
+                adapter = new ChatMenuAdapter(numbers);
+                list.setAdapter(adapter);
+                adapter.setOnItemClickListener((view, obj, position) -> {
+                    String recipient = numbers.get(position).getEmail();
+                    //       Toast.makeText(getBaseContext(), "Item " + recipient + " clicked", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class).putExtra("recipient", recipient));
+                    finish();
+                });
+            } else {
+                Tools.toast("No messages yet", Chat_menu.this, R.color.yellow_600);
+
+                finish();
             }
+            //finally
+            loading.setVisibility(View.GONE);
+            swipeProgress(false);
 
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
+        }
     }
 
     @Override

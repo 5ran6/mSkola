@@ -66,6 +66,6 @@ public class Assignment_history_detail extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        startActivity(new Intent(this, AssignmentHistoryActivity.class));
+        //  startActivity(new Intent(this, AssignmentHistoryActivity.class));
     }
 }

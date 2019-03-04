@@ -13,6 +13,7 @@
 
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -206,6 +207,7 @@ public class Chat_List_Teachers extends AppCompatActivity {
     }
 
 
+    @SuppressLint("RestrictedApi")
     private void enableActionMode(int position) {
         if (actionMode == null) {
             actionMode = startSupportActionMode(actionModeCallback);
@@ -262,6 +264,7 @@ public class Chat_List_Teachers extends AppCompatActivity {
             return false;
         }
 
+        @SuppressLint("RestrictedApi")
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mAdapter.clearSelections();

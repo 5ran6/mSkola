@@ -43,6 +43,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
+//TODO: solution to list automatically adding up after resuming the activity
 public class AssignmentHistoryActivity extends AppCompatActivity {
     ArrayList<NumberAssHist> numbers = new ArrayList<>();
 
@@ -75,7 +76,6 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
         heading = findViewById(R.id.assignment_history_title);
         heading.setText(R.string.given_ass);
         loading = findViewById(R.id.loading);
-        loading.setVisibility(View.VISIBLE);
 
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -85,13 +85,92 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
         list.setAdapter(adapter);
 
         //hide parentView
-        loading.setVisibility(View.VISIBLE);
 
 //        new first_loading().execute("cac180826043520", "admin");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
         fab_done.setOnClickListener(v -> finish());
+    }
 
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        //     finish();
+    }
 
+    public class loadIndividualAssignment extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getassdetails");
+            storageObj.setStrData(school_id + "<>" + strings[0]);
+
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+
+            return sentData.getStrData();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            try {
+                if (!text.isEmpty() && !text.equals("0")) {
+                    startActivity(new Intent(getApplicationContext(), Assignment_history_detail.class).putExtra("ass_details", text));
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", AssignmentHistoryActivity.this, R.color.green_800);
+                        else
+                            new first_loading().execute(school_id, staff_id);
+
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), AssignmentHistoryActivity.this, R.color.red_500);
+
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
     }
 
     public class first_loading extends AsyncTask<String, Integer, String> {
@@ -103,9 +182,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
             storageObj.setStrData(strings[0] + "<>" + strings[1]);
             storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            String text = sentData.getStrData();
-
-            return text;
+            return sentData.getStrData();
         }
 
         @Override
@@ -150,89 +227,6 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                 finish();
             }
         }
-    }
-
-    public class loadIndividualAssignment extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getassdetails");
-            storageObj.setStrData(school_id + "<>" + strings[0]);
-
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-
-            return sentData.getStrData();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-            try {
-                if (!text.isEmpty() && !text.equals("0")) {
-                    startActivity(new Intent(getApplicationContext(), Assignment_history_detail.class).putExtra("ass_details", text));
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
-
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", AssignmentHistoryActivity.this, R.color.green_800);
-                        else
-                            new first_loading().execute(school_id, staff_id);
-
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), AssignmentHistoryActivity.this, R.color.red_500);
-
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
-        super.onPause();
-        finish();
     }
 
 

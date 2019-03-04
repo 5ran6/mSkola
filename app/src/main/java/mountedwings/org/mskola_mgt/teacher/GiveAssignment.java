@@ -43,7 +43,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 public class GiveAssignment extends AppCompatActivity {
     private String school_id;
     private String class_name;
-    private String arm;
+    private String arm, questions, dueDate;
     private String subject;
     private String dueTime;
     private String staff_id;
@@ -53,6 +53,7 @@ public class GiveAssignment extends AppCompatActivity {
     private MaterialRippleLayout materialRippleLayout;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private boolean done = false;
 
     private void initComponents() {
         date = findViewById(R.id.date);
@@ -62,7 +63,6 @@ public class GiveAssignment extends AppCompatActivity {
         (findViewById(R.id.pick_date)).setOnClickListener(this::dialogDatePickerLight);
         (findViewById(R.id.pick_time)).setOnClickListener(bt -> dialogTimePickerDark());
     }
-
 
     private void dialogDatePickerLight(final View bt) {
         Calendar cur_calender = Calendar.getInstance();
@@ -127,9 +127,10 @@ public class GiveAssignment extends AppCompatActivity {
     public void upload(View view) {
         if (dateSelected && timeSelected) {
             if (!assignment.getText().toString().isEmpty()) {
-
-                String dueDate = date.getText().toString().trim();
-                String questions = assignment.getText().toString();
+                done = true;
+                //  String dueDate;
+                dueDate = date.getText().toString().trim();
+                questions = assignment.getText().toString();
                 //begin wait dialog
                 LinearLayout lyt_progress = findViewById(R.id.lyt_progress);
                 RelativeLayout parent_layout = findViewById(R.id.lyt_parent);
@@ -148,7 +149,6 @@ public class GiveAssignment extends AppCompatActivity {
                     new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
                 else
                     Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_500);
-
                 //        new uploadAssignment().execute("cac180826043520", questions, "English Language", "JSS1 A", dueDate, dueTime, "admin");
             } else {
                 Tools.toast("Assignment Field is empty", GiveAssignment.this, R.color.yellow_900);
@@ -215,8 +215,17 @@ public class GiveAssignment extends AppCompatActivity {
                     @Override
                     public void onConnectionSuccess() {
                         status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", GiveAssignment.this, R.color.green_800);
+                        if (w > 1) {
+                            if (done) {
+                                try {
+                                    Tools.toast("Back Online! Reconnecting...", GiveAssignment.this, R.color.green_800);
+                                    new uploadAssignment().execute(school_id, questions, subject, class_name + " " + arm, dueDate, dueTime, staff_id);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }
+
                     }
 
                     @Override

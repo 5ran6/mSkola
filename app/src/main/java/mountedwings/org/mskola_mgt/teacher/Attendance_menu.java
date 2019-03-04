@@ -53,6 +53,7 @@ public class Attendance_menu extends AppCompatActivity {
     private TextView load;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
 
     private void initComponent() {
         (findViewById(R.id.pick_date)).setOnClickListener(this::dialogDatePickerLight);
@@ -151,20 +152,69 @@ public class Attendance_menu extends AppCompatActivity {
     //finished
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadArms().execute(school_id, staff_id, class_name);
+        //    if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        lastThread = new loadArms().execute();
+    }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online! Try again", Attendance_menu.this, R.color.green_800);
+                        else //load classes and assessments
+                            lastThread = new loadClass().execute();
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        if (w > 1) {
+                            try {
+                                Tools.toast(getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_900);
+                                lastThread.cancel(true);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            Tools.toast(getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_900);
+                        }
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
     }
 
     private class loadArms extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getattendancearm");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getattendancearm");
+                    //school_id, staff_id, class_name
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
 
-            return sentData.getStrData();
-
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -179,9 +229,7 @@ public class Attendance_menu extends AppCompatActivity {
                 String[] dataRows = text.split(",");
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
-                for (int i = 1; i <= dataRows.length; i++) {
-                    data[i] = dataRows[(i - 1)];
-                }
+                System.arraycopy(dataRows, 0, data, 1, dataRows.length);
 
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -189,6 +237,9 @@ public class Attendance_menu extends AppCompatActivity {
                 arm = select_arm.getSelectedItem().toString();
                 progressBar2.setVisibility(View.INVISIBLE);
 
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Attendance_menu.this, R.color.red_900);
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -210,11 +261,21 @@ public class Attendance_menu extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getattendanceclass");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getattendanceclass");
+                    //school_id, staff_id
+                    storageObj.setStrData(school_id + "<>" + staff_id);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
+
         }
 
         @Override
@@ -241,44 +302,14 @@ public class Attendance_menu extends AppCompatActivity {
                 select_class.setAdapter(spinnerAdapter1);
                 class_name = select_class.getSelectedItem().toString();
                 progressBar1.setVisibility(View.INVISIBLE);
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", Attendance_menu.this, R.color.red_900);
             } else {
                 Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_800, Toast.LENGTH_LONG);
                 load.setVisibility(View.INVISIBLE);
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Attendance_menu.this, R.color.green_800);
-                        else //load classes and assessments
-                            new loadClass().execute(school_id, staff_id);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_500);
-                    }
-                }).execute();
-            }
-
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
     }
 
     @Override

@@ -441,11 +441,11 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     private void doRegister() {
+        toolbar.setVisibility(View.GONE);
+        parent_layout.setVisibility(View.GONE);
         final LinearLayout lyt_progress = findViewById(R.id.lyt_progress);
         lyt_progress.setVisibility(View.VISIBLE);
         lyt_progress.setAlpha(1.0f);
-        parent_layout.setVisibility(View.GONE);
-        toolbar.setVisibility(View.GONE);
         if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             bitmap = ((BitmapDrawable) passport.getDrawable()).getBitmap();
             lastThread = new register().execute();

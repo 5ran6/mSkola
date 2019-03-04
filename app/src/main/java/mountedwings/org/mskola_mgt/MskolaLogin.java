@@ -234,16 +234,15 @@ public class MskolaLogin extends AppCompatActivity {
     }
 
     private void doLogin() {
-        lyt_progress = findViewById(R.id.lyt_progress);
-        lyt_progress.setVisibility(View.VISIBLE);
-        lyt_progress.setAlpha(1.0f);
-        parent_layout.setVisibility(View.GONE);
-        hideSoftKeyboard();
-        if (EmailValidator.getInstance().isValid(emailE.getText().toString().trim()) && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        if ((EmailValidator.getInstance().isValid(emailE.getText().toString().trim()) || emailE.getText().toString().trim().equalsIgnoreCase("admin")) && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            lyt_progress = findViewById(R.id.lyt_progress);
+            lyt_progress.setVisibility(View.VISIBLE);
+            lyt_progress.setAlpha(1.0f);
+            parent_layout.setVisibility(View.GONE);
+            hideSoftKeyboard();
             lastThread = new login().execute();
-        else
+        } else
             Tools.toast("Input a valid email address", MskolaLogin.this, R.color.red_500);
-
     }
 
     @Override
@@ -258,16 +257,24 @@ public class MskolaLogin extends AppCompatActivity {
                     public void onConnectionSuccess() {
                         status = 1;
                         if (w > 1) {
-                            lastThread.execute();
-                            Tools.toast("Back Online! Resuming request...", MskolaLogin.this, R.color.green_800);
+                            try {
+                                Tools.toast("Back Online!", MskolaLogin.this, R.color.green_900);
+                                lastThread.execute();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
                     }
 
                     @Override
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_700);
-                        lastThread.cancel(true);
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_900);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }).execute();
             }
@@ -291,40 +298,51 @@ public class MskolaLogin extends AppCompatActivity {
     private class login extends AsyncTask<String, Integer, Boolean> {
         @Override
         protected Boolean doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("requestlogin");
-            // Log.d(TAG, school_id.toLowerCase() + " - " + emailAddress + " - " + password);
-            storageObj.setStrData(emailAddress + "," + password + "," + school_id.toLowerCase());
+            try {
+                do {
 
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("requestlogin");
+                    // Log.d(TAG, school_id.toLowerCase() + " - " + emailAddress + " - " + password);
+                    storageObj.setStrData(emailAddress + "," + password + "," + school_id.toLowerCase());
 
-            //received from server
-            text = sentData.getStrData();
-            boolean isSuccess;
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            Log.d(TAG, text);
-            if (text.contains("success")) {
-                isSuccess = true;
-                role = text.split("<>")[1];
-                //          Log.d(TAG, "registration successful");
-            } else if (text.contains("invalid")) {
-                isSuccess = false;
-                error_from_server = "Email and password mismatch. Try again";
-                //        Log.d(TAG, error_from_server);
-            } else if (text.contains("not found")) {
-                isSuccess = false;
-                error_from_server = "Looks like you don't have an mSkola account. Make sure you register before login";
-                //      Log.d(TAG, error_from_server);
-            } else if (text.contains("no access")) {
-                isSuccess = false;
-                error_from_server = "You do not have access to this school. Contact the schools' admin to verify your account";
-                //    Log.d(TAG, error_from_server);
-            } else {
-                isSuccess = false;
-                error_from_server = "An error occurred!";
-                //  Log.d(TAG, error_from_server);
+                    //received from server
+                    text = sentData.getStrData();
+                    boolean isSuccess;
+
+                    Log.d(TAG, text);
+                    if (text.contains("success")) {
+                        isSuccess = true;
+                        role = text.split("<>")[1];
+                        //          Log.d(TAG, "registration successful");
+                    } else if (text.contains("invalid")) {
+                        isSuccess = false;
+                        error_from_server = "Email and password mismatch. Try again";
+                        //        Log.d(TAG, error_from_server);
+                    } else if (text.contains("not found")) {
+                        isSuccess = false;
+                        error_from_server = "Looks like you don't have an mSkola account. Make sure you register before login";
+                        //      Log.d(TAG, error_from_server);
+                    } else if (text.contains("no access")) {
+                        isSuccess = false;
+                        error_from_server = "You do not have access to this school. Contact the schools' admin to verify your account";
+                        //    Log.d(TAG, error_from_server);
+                    } else {
+                        isSuccess = false;
+                        error_from_server = "An error occurred!";
+                        //  Log.d(TAG, error_from_server);
+                    }
+                    return isSuccess;
+
+                } while (!isCancelled());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            return isSuccess;
+            error_from_server = "Something went wrong. Try again";
+            return false;
         }
 
         @Override
@@ -336,9 +354,7 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(Boolean isSuccess) {
             super.onPostExecute(isSuccess);
             if (isSuccess) {
-
                 intent = new Intent(getApplicationContext(), Dashboard.class);
-
                 //sharedPref
                 editor = mPrefs.edit();
 //                editor.putBoolean("signed_in", true);
@@ -366,20 +382,26 @@ public class MskolaLogin extends AppCompatActivity {
     private class dashboardInfo extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            data = storageObj;
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    data = storageObj;
 
-            storageObj.setOperation("getinfoonlogin");
-            storageObj.setStrData(school_id + "<>" + emailAddress);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            data = sentData;
-            return sentData.getStrData();
+                    storageObj.setOperation("getinfoonlogin");
+                    storageObj.setStrData(school_id + "<>" + emailAddress);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    data = sentData;
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
+            }
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
@@ -391,7 +413,6 @@ public class MskolaLogin extends AppCompatActivity {
                 String name = rows[2];
 //              school = rows[2];
                 byte[] pass = data.getImageFiles().get(0);
-
 
                 //finally and intent
                 lyt_progress.setVisibility(View.GONE);
@@ -410,10 +431,15 @@ public class MskolaLogin extends AppCompatActivity {
                 startActivity(intent);
 
             } else {
+                finish();
                 Tools.toast("An error occurred", MskolaLogin.this, R.color.red_800);
             }
             finish();
         }
 
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
     }
 }

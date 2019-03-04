@@ -236,7 +236,6 @@ public class Login_SignUp extends AppCompatActivity {
             dialog.dismiss();
             finish();
         });
-
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }

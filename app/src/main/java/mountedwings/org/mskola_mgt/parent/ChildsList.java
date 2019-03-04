@@ -68,7 +68,6 @@ public class ChildsList extends AppCompatActivity {
         TextView heading = findViewById(R.id.heading);
         heading.setText(R.string.list_children);
 
-
         loading = findViewById(R.id.loading);
 
         list = findViewById(R.id.list);

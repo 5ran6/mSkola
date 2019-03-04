@@ -31,6 +31,7 @@ import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.adapter.MySubjectsAdapter;
@@ -66,7 +67,7 @@ public class MySubjects extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("List of your subjects");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("My Subjects");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Tools.setSystemBarColor(this, R.color.blue_400);
     }
@@ -126,12 +127,21 @@ public class MySubjects extends AppCompatActivity {
     private class getMySubjects extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getmysubjects");
-            //school_id, staff_id
-            storageObj.setStrData(school_id + "<>" + staff_id);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getmysubjects");
+                    //school_id, staff_id
+                    storageObj.setStrData(school_id + "<>" + staff_id);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
+
         }
 
         @Override
@@ -157,6 +167,9 @@ public class MySubjects extends AppCompatActivity {
                 MySubjectsAdapter mAdapter = new MySubjectsAdapter(MySubjects.this, numbers);
                 recyclerView.setAdapter(mAdapter);
 
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", MySubjects.this, R.color.red_900);
             } else {
                 Tools.toast("No subjects allocated to you.", MySubjects.this, R.color.red_500);
                 finish();

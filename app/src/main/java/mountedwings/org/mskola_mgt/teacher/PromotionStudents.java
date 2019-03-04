@@ -13,6 +13,7 @@
 
 package mountedwings.org.mskola_mgt.teacher;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -114,7 +115,7 @@ public class PromotionStudents extends AppCompatActivity {
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new LineItemDecoration(this, LinearLayout.VERTICAL));
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(true);
 
         //set data and list adapter
         mAdapter = new PromoteStudentsAdapter(this, numbers);
@@ -161,6 +162,7 @@ public class PromotionStudents extends AppCompatActivity {
 
     }
 
+    @SuppressLint("RestrictedApi")
     private void enableActionMode(int position) {
         if (actionMode == null) {
             actionMode = startSupportActionMode(actionModeCallback);
@@ -217,6 +219,7 @@ public class PromotionStudents extends AppCompatActivity {
             return false;
         }
 
+        @SuppressLint("RestrictedApi")
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mAdapter.clearSelections();

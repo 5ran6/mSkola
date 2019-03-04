@@ -14,7 +14,12 @@
 package mountedwings.org.mskola_mgt;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +36,7 @@ import android.widget.Toast;
 import java.util.Objects;
 
 import email.GMailSender;
+import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -41,6 +47,9 @@ public class DialogAddReview extends AppCompatActivity {
     private String response = "";
     private ProgressBar progressBar;
     private int color = R.color.blue_400;
+    private BroadcastReceiver mReceiver;
+    private int w = 0, status;
+    private AsyncTask lastThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,69 +93,118 @@ public class DialogAddReview extends AppCompatActivity {
                     rating = "From: " + email + "\n" + review + "\n" + rating_bar.getRating() + " star(s) rating";
                     //email to mountedwings customer care
                     try {
-                        new DialogAddReview.LongOperation().execute(rating, email);  //sends the email in background
+                        if (status == 1)
+                            lastThread = new DialogAddReview.LongOperation().execute();  //sends the email in background
+                        else
+                            Tools.toast("No internet connection", DialogAddReview.this, color);
+
                     } catch (Exception e) {
                         Log.e("mSkola", e.getMessage(), e);
                     }
-
                 }
             }
         });
-
         dialog.show();
         dialog.getWindow().setAttributes(lp);
+    }
+
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1) {
+                            try {
+                                // Tools.toast("Back Online!", DialogAddReview.this, R.color.green_800);
+                                lastThread.execute();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        if (w > 1) {
+                            try {
+                                //   Tools.toast(getResources().getString(R.string.no_internet_connection), DialogAddReview.this, R.color.red_900);
+                                lastThread.cancel(true);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }).execute();
+            }
+
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        //      finish();
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             try {
-
 //            GMailSender sender = new GMailSender("sender.sendermail.com", "senders password");
 //            sender.sendMail("subject",
 //                    "body",
 //                    "sender.sendermail.com",
 //                    "reciepients.recepientmail.com");
 //
-                GMailSender sender = new GMailSender("5raan6@gmail.com", "franship101");
-                sender.sendMail(" mSkola Customer Feedback",
-                        "\nReview: " + params[0] + "\n", params[1],
-                        "5raan6@gmail.com,mountedwingscsltd@gmail.com");
 
+
+                do {
+                    GMailSender sender = new GMailSender("5raan6@gmail.com", "franship101");
+                    sender.sendMail(" mSkola Customer Feedback",
+                            "\nReview " + rating + "\n", email,
+                            "5raan6@gmail.com,mountedwingscsltd@gmail.com");
+                    return "Email Sent";
+                } while (!isCancelled());
             } catch (Exception e) {
                 Log.e("error", e.getMessage(), e);
                 return "Email Not Sent";
             }
-            return "Email Sent";
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("LongOperation", result + "");
+            Log.d("mSkola", result + "");
             if (result.equalsIgnoreCase("Email Sent")) {
                 response = "Submitted. Thanks for your review.";
-                color = R.color.green_600;
+                color = R.color.green_800;
                 Tools.toast(response, DialogAddReview.this, color);
                 progressBar.setVisibility(View.GONE);
                 finish();
             } else {
                 response = "Something went wrong. Try again.";
-                color = R.color.red_600;
+                color = R.color.red_800;
                 progressBar.setVisibility(View.GONE);
             }
-
         }
 
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
-
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
         }
     }
-
 
 }

@@ -46,7 +46,6 @@ public class Assignment_menu extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), SchoolID_Login.class).putExtra("account_type", "Teacher"));
         }
         setContentView(R.layout.activity_assignment_menu);
-
     }
 
     public void giveAssignments(View view) {
@@ -56,6 +55,7 @@ public class Assignment_menu extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Invisible for now
     public void collateAssignments(View view) {
         intent = new Intent(getApplicationContext(), CollateAssignments.class);
         intent.putExtra("school_id", school_id);

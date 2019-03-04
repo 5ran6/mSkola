@@ -65,6 +65,7 @@ public class MskolaLogin extends AppCompatActivity {
     private LinearLayout lyt_progress;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
 
     private void submitForm() {
         if (!validateEmail()) {
@@ -187,82 +188,48 @@ public class MskolaLogin extends AppCompatActivity {
         }
     }
 
-    private class login extends AsyncTask<String, Integer, Boolean> {
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("requestlogin");
-            storageObj.setStrData(emailAddress + "," + password);
-            storageFile sentData = new serverProcessParents().requestProcess(storageObj);
-
-            //received from server
-            String text = sentData.getStrData();
-            boolean isSuccess;
-            if (text.contains("success")) {
-                isSuccess = true;
-                Log.d(TAG, "registration successful");
-            } else if (text.contains("invalid")) {
-                isSuccess = false;
-                error_from_server = "Email and password mismatch. Try again";
-                Log.d(TAG, error_from_server);
-            } else if (text.contains("not found")) {
-                isSuccess = false;
-                error_from_server = "Looks like you don't have an mSkola account. Make sure you register before login";
-                Log.d(TAG, error_from_server);
-            } else {
-                isSuccess = false;
-                error_from_server = "An error occurred!";
-                Log.d(TAG, error_from_server);
-            }
-            return isSuccess;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean isSuccess) {
-            super.onPostExecute(isSuccess);
-            if (isSuccess) {
-
-                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
-
-                //sharedPref
-                SharedPreferences.Editor editor = mPrefs.edit();
-                //      editor.putBoolean("signed_in", true);
-                editor.putString("account_type", role);
-                editor.putString("email_address", Objects.requireNonNull(emailE.getText()).toString());
-                editor.putBoolean("signed_in", singedIn);
-
-                editor.apply();
-
-                intent.putExtra("email_address", emailE.getText().toString());
-
-                startActivity(intent);
-                finish();
-            } else {
-                showCustomDialogFailure(error_from_server);
-                lyt_progress.setVisibility(View.GONE);
-                //clear sharedPref
-                clearSharedPreferences(MskolaLogin.this);
-            }
-        }
+    private void doLogin() {
+        //toolbar.setVisibility(View.GONE);
+        lastThread = new login().execute();
     }
 
     public static void clearSharedPreferences(Context ctx) {
         ctx.getSharedPreferences("mSkola", 0).edit().clear().apply();
     }
 
-    private void doLogin() {
-        lyt_progress = findViewById(R.id.lyt_progress);
-        lyt_progress.setVisibility(View.VISIBLE);
-        lyt_progress.setAlpha(1.0f);
-        parent_layout.setVisibility(View.GONE);
-        hideSoftKeyboard();
-        //toolbar.setVisibility(View.GONE);
-        new login().execute();
+    @Override
+    protected void onResume() {
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                w++;
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            Tools.toast("Back Online!", MskolaLogin.this, R.color.green_800);
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_700);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }).execute();
+            }
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
     }
 
 
@@ -308,34 +275,83 @@ public class MskolaLogin extends AppCompatActivity {
         findViewById(R.id.sig_in).setOnClickListener(view -> submitForm());
     }
 
-    @Override
-    protected void onResume() {
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                w++;
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", MskolaLogin.this, R.color.green_800);
-                    }
+    private class login extends AsyncTask<String, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... strings) {
 
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), MskolaLogin.this, R.color.red_700);
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("requestlogin");
+                    storageObj.setStrData(emailAddress + "," + password);
+                    storageFile sentData = new serverProcessParents().requestProcess(storageObj);
+
+                    //received from server
+                    String text = sentData.getStrData();
+                    boolean isSuccess;
+                    if (text.contains("success")) {
+                        isSuccess = true;
+                        Log.d(TAG, "registration successful");
+                    } else if (text.contains("invalid")) {
+                        isSuccess = false;
+                        error_from_server = "Email and password mismatch. Try again";
+                        Log.d(TAG, error_from_server);
+                    } else if (text.contains("not found")) {
+                        isSuccess = false;
+                        error_from_server = "Looks like you don't have an mSkola account. Make sure you register before login";
+                        Log.d(TAG, error_from_server);
+                    } else {
+                        isSuccess = false;
+                        error_from_server = "An error occurred!";
+                        Log.d(TAG, error_from_server);
                     }
-                }).execute();
+                    return isSuccess;
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                error_from_server = "Something went wrong. Try again";
+                return false;
             }
-        };
+        }
 
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            lyt_progress = findViewById(R.id.lyt_progress);
+            lyt_progress.setVisibility(View.VISIBLE);
+            lyt_progress.setAlpha(1.0f);
+            parent_layout.setVisibility(View.GONE);
+            hideSoftKeyboard();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isSuccess) {
+            super.onPostExecute(isSuccess);
+            if (isSuccess) {
+
+                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+
+                //sharedPref
+                SharedPreferences.Editor editor = mPrefs.edit();
+                //      editor.putBoolean("signed_in", true);
+                editor.putString("account_type", role);
+                editor.putString("email_address", Objects.requireNonNull(emailE.getText()).toString());
+                editor.putBoolean("signed_in", singedIn);
+
+                editor.apply();
+
+                intent.putExtra("email_address", emailE.getText().toString());
+
+                startActivity(intent);
+                finish();
+            } else {
+                showCustomDialogFailure(error_from_server);
+                lyt_progress.setVisibility(View.GONE);
+                //clear sharedPref
+                clearSharedPreferences(MskolaLogin.this);
+            }
+        }
     }
 
     @Override

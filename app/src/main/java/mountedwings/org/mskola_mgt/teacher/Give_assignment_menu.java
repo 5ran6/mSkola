@@ -37,7 +37,6 @@ import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
-import mountedwings.org.mskola_mgt.utils.NetworkUtil;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
@@ -49,6 +48,7 @@ public class Give_assignment_menu extends AppCompatActivity {
     private int counter = 0;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
+    private AsyncTask lastThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,18 +127,17 @@ public class Give_assignment_menu extends AppCompatActivity {
 
         load.setOnClickListener(v -> {
             if (!class_name.isEmpty() && !arm.isEmpty() && !subject.isEmpty()) {
-                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-
-                    Intent intent1 = new Intent(getBaseContext(), GiveAssignment.class);
-                    intent1.putExtra("school_id", school_id);
-                    intent1.putExtra("class_name", class_name);
-                    intent1.putExtra("arm", arm);
-                    intent1.putExtra("subject", subject);
-                    intent1.putExtra("email_address", staff_id);
-                    startActivity(intent1);
-                } else {
-                    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
-                }
+//                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                Intent intent1 = new Intent(getBaseContext(), GiveAssignment.class);
+                intent1.putExtra("school_id", school_id);
+                intent1.putExtra("class_name", class_name);
+                intent1.putExtra("arm", arm);
+                intent1.putExtra("subject", subject);
+                intent1.putExtra("email_address", staff_id);
+                startActivity(intent1);
+                //              } else {
+                //    Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
+                //            }
             } else {
                 Tools.toast("Fill all necessary fields", Give_assignment_menu.this);
 
@@ -149,27 +148,78 @@ public class Give_assignment_menu extends AppCompatActivity {
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadArms().execute(school_id, staff_id, class_name);
+        //  if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        lastThread = new loadArms().execute();
     }
 
     private void loadSubject() {
         progressBar3.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            new loadSubject().execute(school_id, staff_id, class_name, arm);
+//        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        lastThread = new loadSubject().execute();
     }
 
+    @Override
+    protected void onResume() {
+        w++;
+        this.mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        status = 1;
+                        if (w > 1)
+                            try {
+                                Tools.toast("Back Online! Reconnecting...", Give_assignment_menu.this, R.color.green_900);
+                                lastThread.execute();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        else
+                            //load classes and assessments
+                            lastThread = new initialLoad().execute();
+                    }
+
+                    @Override
+                    public void onConnectionFail(String errorMsg) {
+                        status = 0;
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), Give_assignment_menu.this, R.color.red_900);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }).execute();
+            }
+        };
+
+        registerReceiver(
+                this.mReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
+        super.onResume();
+    }
 
     private class loadArms extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrsarm");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrsarm");
+                    //school_id, staff_id, class_name
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
 
+                    return sentData.getStrData();
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
+            }
         }
 
         @Override
@@ -214,11 +264,21 @@ public class Give_assignment_menu extends AppCompatActivity {
     private class loadSubject extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrssubject");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrssubject");
+                    //school_id, staff_id, class_name, arm
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name + "<>" + arm);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+
+                } while (!isCancelled());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
+            }
         }
 
         @Override
@@ -265,11 +325,20 @@ public class Give_assignment_menu extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrsclass");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrsclass");
+                    //school_id, staff_id
+                    storageObj.setStrData(school_id + "<>" + staff_id);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
+            }
         }
 
         @Override
@@ -306,39 +375,6 @@ public class Give_assignment_menu extends AppCompatActivity {
                 progressBar1.setVisibility(View.INVISIBLE);
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        w++;
-        this.mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
-                    @Override
-                    public void onConnectionSuccess() {
-                        status = 1;
-                        if (w > 1)
-                            Tools.toast("Back Online! Try again", Give_assignment_menu.this, R.color.green_800);
-                        else
-                            //load classes and assessments
-                            new initialLoad().execute(school_id, staff_id);
-                    }
-
-                    @Override
-                    public void onConnectionFail(String errorMsg) {
-                        status = 0;
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), Give_assignment_menu.this, R.color.red_500);
-                    }
-                }).execute();
-            }
-        };
-
-        registerReceiver(
-                this.mReceiver,
-                new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION));
-        super.onResume();
     }
 
     @Override

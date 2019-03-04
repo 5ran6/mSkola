@@ -15,11 +15,11 @@ package mountedwings.org.mskola_mgt.adapter;
 
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class AssHistAdapter extends RecyclerView.Adapter<AssHistAdapter.ViewHold
         private TextView subject;
         private TextView classArm;
         private TextView staff_id;
-        private CardView cardView;
+        private LinearLayout cardView;
 
         private ViewHolder(View v) {
             super(v);
@@ -90,7 +90,7 @@ public class AssHistAdapter extends RecyclerView.Adapter<AssHistAdapter.ViewHold
             subject = v.findViewById(R.id.subject);
             classArm = v.findViewById(R.id.current_class);
             staff_id = v.findViewById(R.id.teacher_name);
-            cardView = v.findViewById(R.id.parent_layout);
+            cardView = v.findViewById(R.id.lyt_parent);
         }
 
         private void bindData(NumberAssHist number) {

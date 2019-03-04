@@ -62,8 +62,8 @@ public class SchoolID_Login extends AppCompatActivity {
 
     private Spinner recentIds;
     private BroadcastReceiver mReceiver;
-    private int w = 0, status;
     private Button cont;
+    private int w = 0, status;
     private AsyncTask lastThread;
 
     @Override
@@ -152,7 +152,7 @@ public class SchoolID_Login extends AppCompatActivity {
 
     private void verifyID() {
         //check if the field is empty first
-        if (!Objects.requireNonNull(school_id.getText()).toString().isEmpty() && status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+        if (!Objects.requireNonNull(school_id.getText()).toString().isEmpty()) {
             //validate from server
             checking.setVisibility(View.VISIBLE);
             //animate textView
@@ -169,7 +169,7 @@ public class SchoolID_Login extends AppCompatActivity {
             lastThread = new verifySchoolID().execute();
 
         } else {
-            Tools.toast("Fill in School ID", SchoolID_Login.this, R.color.md_yellow_900);
+            Tools.toast("Fill in a 'School ID'", SchoolID_Login.this, R.color.md_yellow_900);
         }
     }
 
@@ -207,8 +207,8 @@ public class SchoolID_Login extends AppCompatActivity {
                         status = 1;
                         if (w > 1) {
                             try {
+                                Tools.toast("Back Online!", SchoolID_Login.this, R.color.green_800);
                                 lastThread.execute();
-                                Tools.toast("Back Online! Resuming request....", SchoolID_Login.this, R.color.green_800);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -220,8 +220,8 @@ public class SchoolID_Login extends AppCompatActivity {
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
                         if (w > 1) {
-                            Tools.toast(getResources().getString(R.string.no_internet_connection), SchoolID_Login.this, R.color.red_700);
                             try {
+                                Tools.toast(getResources().getString(R.string.no_internet_connection), SchoolID_Login.this, R.color.red_700);
                                 lastThread.cancel(true);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -252,12 +252,21 @@ public class SchoolID_Login extends AppCompatActivity {
     public class verifySchoolID extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            //  Boolean success = false;
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("verifyid");
-            storageObj.setStrData(schoolID);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+
+            try {
+                do {
+                    //  Boolean success = false;
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("verifyid");
+                    storageObj.setStrData(schoolID);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "";
+            }
+
         }
 
         @Override
@@ -277,7 +286,6 @@ public class SchoolID_Login extends AppCompatActivity {
                     verifying.setVisibility(View.INVISIBLE);
                 }
             });
-
             switch (text) {
                 case "found":
                     //save school_id to sharedPrefs

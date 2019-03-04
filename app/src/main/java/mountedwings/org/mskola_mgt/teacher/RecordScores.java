@@ -88,7 +88,7 @@ public class RecordScores extends AppCompatActivity {
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new LineItemDecoration(this, LinearLayout.VERTICAL));
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(true);
         progressBar = findViewById(R.id.loading);
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);

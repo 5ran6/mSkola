@@ -111,7 +111,7 @@ public class Psychomotor extends AppCompatActivity {
         recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.addItemDecoration(new LineItemDecoration(getApplicationContext(), LinearLayout.VERTICAL));
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(true);
     }
 
     //DONE

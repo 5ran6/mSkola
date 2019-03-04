@@ -18,6 +18,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,6 +55,8 @@ public class StudentInformation extends AppCompatActivity {
         setContentView(R.layout.activity_students_information);
 
         list = findViewById(R.id.list);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.setHasFixedSize(true);
         school_id = getIntent().getStringExtra("school_id");
         student_full_name = getIntent().getStringExtra("student_name");
         reg_no = getIntent().getStringExtra("reg_no");

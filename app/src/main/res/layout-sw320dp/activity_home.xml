@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".43"
+                    android:layout_weight=".37"
                     android:fontFamily="@font/rocket_rinder"
                     android:gravity="end"
                     android:text="m-Skola"
@@ -56,7 +56,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".6"
+                    android:layout_weight=".7"
                     android:gravity="start"
                     android:padding="@dimen/spacing_small"
                     android:text="1.0"
@@ -70,8 +70,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/select_your_account_type"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+                android:textStyle="bold|italic" />
 
         </LinearLayout>
 
@@ -86,7 +86,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="80sp"
+            android:layout_height="100sp"
             android:layout_marginLeft="@dimen/spacing_middle"
             android:layout_marginRight="@dimen/spacing_middle"
             android:clickable="true"
@@ -125,7 +125,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="@string/teacher"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/light_blue_400"
                         android:textStyle="bold" />
 
@@ -142,7 +142,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="80sp"
+            android:layout_height="100sp"
             android:layout_marginLeft="@dimen/spacing_middle"
             android:layout_marginRight="@dimen/spacing_middle"
             android:clickable="true"
@@ -181,7 +181,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="@string/parent"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/light_blue_400"
                         android:textStyle="bold" />
 
@@ -198,7 +198,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="80sp"
+            android:layout_height="100sp"
             android:layout_marginLeft="@dimen/spacing_middle"
             android:layout_marginRight="@dimen/spacing_middle"
             android:clickable="true"
@@ -237,7 +237,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="@string/student"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/light_blue_400"
                         android:textStyle="bold" />
 

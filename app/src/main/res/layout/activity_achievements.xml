@@ -79,15 +79,16 @@
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:gravity="end|right"
             android:orientation="vertical">
 
@@ -95,10 +96,10 @@
                 android:id="@+id/done"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_middle"
                 android:layout_marginLeft="@dimen/spacing_smlarge"
-                android:layout_marginRight="@dimen/spacing_smlarge"
                 android:layout_marginTop="@dimen/spacing_middle"
+                android:layout_marginRight="@dimen/spacing_smlarge"
+                android:layout_marginBottom="@dimen/spacing_middle"
                 android:clickable="true"
                 android:focusable="true"
                 android:tint="@android:color/white"

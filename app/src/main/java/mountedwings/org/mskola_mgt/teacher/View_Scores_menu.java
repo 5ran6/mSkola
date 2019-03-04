@@ -22,7 +22,6 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -69,6 +68,7 @@ public class View_Scores_menu extends AppCompatActivity {
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
     private AsyncTask lastThread;
+    private TextView load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class View_Scores_menu extends AppCompatActivity {
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
 
-        TextView load = findViewById(R.id.load);
+        load = findViewById(R.id.load);
         select_arm = findViewById(R.id.select_arm);
         select_class = findViewById(R.id.select_class);
         select_subject = findViewById(R.id.subject);
@@ -169,13 +169,13 @@ public class View_Scores_menu extends AppCompatActivity {
 
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        //   if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
             lastThread = new loadArms().execute();
     }
 
     private void loadSubject() {
         progressBar3.setVisibility(View.VISIBLE);
-        if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+        // if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
             lastThread = new loadSubject().execute();
     }
 
@@ -195,15 +195,17 @@ public class View_Scores_menu extends AppCompatActivity {
                         } else
                             //load classes
                             lastThread = new initialLoad().execute();
-
-
                     }
 
                     @Override
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
                         Tools.toast(getResources().getString(R.string.no_internet_connection), View_Scores_menu.this, R.color.red_500);
-                        lastThread.cancel(true);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }).execute();
             }
@@ -228,14 +230,21 @@ public class View_Scores_menu extends AppCompatActivity {
     private class loadArms extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrsarm");
-            //school_id, staff_id, class_name
-            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrsarm");
+                    //school_id, staff_id, class_name
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
 
-            return sentData.getStrData();
+                    return sentData.getStrData();
 
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -261,6 +270,9 @@ public class View_Scores_menu extends AppCompatActivity {
                 progressBar2.setVisibility(View.INVISIBLE);
                 counter = -1;
 
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", View_Scores_menu.this, R.color.red_900);
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -284,12 +296,22 @@ public class View_Scores_menu extends AppCompatActivity {
     private class loadSubject extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrssubject");
-            //school_id, staff_id, class_name, arm
-            storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name + "<>" + arm);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+            try {
+                do {
+
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrssubject");
+                    //school_id, staff_id, class_name, arm
+                    storageObj.setStrData(school_id + "<>" + staff_id + "<>" + class_name + "<>" + arm);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
+
         }
 
         @Override
@@ -314,6 +336,9 @@ public class View_Scores_menu extends AppCompatActivity {
                 subject = select_subject.getSelectedItem().toString();
                 progressBar3.setVisibility(View.INVISIBLE);
                 progressBar3.setVisibility(View.INVISIBLE);
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", View_Scores_menu.this, R.color.red_900);
             } else {
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -336,12 +361,20 @@ public class View_Scores_menu extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getrsclass");
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getrsclass");
 //            school_id, staff_id
-            storageObj.setStrData(school_id + "<>" + staff_id);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+                    storageObj.setStrData(school_id + "<>" + staff_id);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
+
         }
 
         @Override
@@ -352,7 +385,7 @@ public class View_Scores_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            System.out.println(text);
+            //  System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String dataRows[] = text.split("<>");
@@ -371,6 +404,10 @@ public class View_Scores_menu extends AppCompatActivity {
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
             }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", View_Scores_menu.this, R.color.red_900);
+            }
+
         }
     }
 
@@ -380,12 +417,21 @@ public class View_Scores_menu extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getallstudentscore");
-            //school_id, class_name, arm, subject
-            storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + subject);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
+
+            try {
+                do {
+                    storageFile storageObj = new storageFile();
+                    storageObj.setOperation("getallstudentscore");
+                    //school_id, class_name, arm, subject
+                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + subject);
+                    storageFile sentData = new serverProcess().requestProcess(storageObj);
+                    return sentData.getStrData();
+
+                } while (!isCancelled());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return "network error";
+            }
         }
 
         @Override
@@ -393,13 +439,14 @@ public class View_Scores_menu extends AppCompatActivity {
             super.onPreExecute();
             progressBar = findViewById(R.id.progress);
             progressBar.setVisibility(View.VISIBLE);
+            load.setEnabled(false);
         }
 
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             progressBar.setVisibility(View.GONE);
-            Log.d("mSkola", text);
+            // Log.d("mSkola", text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 scores.setNoCas(Integer.parseInt(text.split("##")[1]) + 2); // + 2 for EXAM and TOTAL
@@ -410,71 +457,71 @@ public class View_Scores_menu extends AppCompatActivity {
                 float total = 0;
                 String exams = "";
 
-                for (int i = 0; i < rows.length; i++) {
-                    exams = rows[i].split(";")[0];
+                for (String row : rows) {
+                    exams = row.split(";")[0];
                     total = 0;
 
                     for (int j = 0; j < no_cas; j++) {
                         switch (j) {
                             case 0:
-                                col0 = rows[i].split(";")[1];
-                                if (!rows[i].split(";")[1].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[1]);
+                                col0 = row.split(";")[1];
+                                if (!row.split(";")[1].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[1]);
                                 }
 
                                 break;
                             case 1:
-                                col1 = rows[i].split(";")[2];
-                                if (!rows[i].split(";")[2].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[2]);
+                                col1 = row.split(";")[2];
+                                if (!row.split(";")[2].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[2]);
                                 }
                                 break;
                             case 2:
-                                col2 = rows[i].split(";")[3];
-                                if (!rows[i].split(";")[3].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[3]);
+                                col2 = row.split(";")[3];
+                                if (!row.split(";")[3].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[3]);
                                 }
                                 break;
                             case 3:
-                                col3 = rows[i].split(";")[4];
-                                if (!rows[i].split(";")[4].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[4]);
+                                col3 = row.split(";")[4];
+                                if (!row.split(";")[4].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[4]);
                                 }
                                 break;
                             case 4:
-                                col4 = rows[i].split(";")[5];
-                                if (!rows[i].split(";")[5].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[5]);
+                                col4 = row.split(";")[5];
+                                if (!row.split(";")[5].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[5]);
                                 }
                                 break;
                             case 5:
-                                col5 = rows[i].split(";")[6];
-                                if (!rows[i].split(";")[6].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[6]);
+                                col5 = row.split(";")[6];
+                                if (!row.split(";")[6].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[6]);
                                 }
                                 break;
                             case 6:
-                                col6 = rows[i].split(";")[7];
-                                if (!rows[i].split(";")[7].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[7]);
+                                col6 = row.split(";")[7];
+                                if (!row.split(";")[7].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[7]);
                                 }
                                 break;
                             case 7:
-                                col7 = rows[i].split(";")[8];
-                                if (!rows[i].split(";")[8].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[8]);
+                                col7 = row.split(";")[8];
+                                if (!row.split(";")[8].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[8]);
                                 }
                                 break;
                             case 8:
-                                col8 = rows[i].split(";")[9];
-                                if (!rows[i].split(";")[9].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[9]);
+                                col8 = row.split(";")[9];
+                                if (!row.split(";")[9].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[9]);
                                 }
                                 break;
                             case 9:
-                                col9 = rows[i].split(";")[10];
-                                if (!rows[i].split(";")[10].equals("_")) {
-                                    total += Float.parseFloat(rows[i].split(";")[10]);
+                                col9 = row.split(";")[10];
+                                if (!row.split(";")[10].equals("_")) {
+                                    total += Float.parseFloat(row.split(";")[10]);
                                 }
                                 break;
                         }
@@ -485,7 +532,7 @@ public class View_Scores_menu extends AppCompatActivity {
                         total += Float.parseFloat(exams);
                     }
 
-                    String nameVar = rows[i].split(";")[(rows[i].split(";").length - 2)];
+                    String nameVar = row.split(";")[(row.split(";").length - 2)];
                     NAMES.add(nameVar);
                     //       NAMES.add(rows[i].split(";")[(rows[i].split(";").length - 1)]);
 
@@ -629,8 +676,12 @@ public class View_Scores_menu extends AppCompatActivity {
                 scores.setNoStudents(NAMES.size());
                 startActivity(new Intent(getApplicationContext(), ViewScores.class));
                 finish();
+            }
+            if (text.equalsIgnoreCase("network error")) {
+                Tools.toast("Network error. Reconnecting...", View_Scores_menu.this, R.color.red_900);
             } else {
                 Tools.toast("No scores yet for selected class", View_Scores_menu.this);
+                load.setEnabled(true);
             }
 
 
