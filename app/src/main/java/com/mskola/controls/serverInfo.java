@@ -14,13 +14,7 @@
 package com.mskola.controls;
 
 public class serverInfo {
-    // public String ip = "169.254.167.77";
-    //  private String ip = "192.168.201.2";
     private String ip = "157.245.136.223";
-    //  private String ip = "191.168.10.226";
-    //   private String ip = "mountedwings.org";
-    //public String ip = "169.254.167.77";
-    //   public String ip = "10.1.1.7";
     private String port = "9098";
 
     //online port
