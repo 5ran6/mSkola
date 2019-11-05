@@ -28,12 +28,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
@@ -170,13 +170,13 @@ public class View_Scores_menu extends AppCompatActivity {
     private void loadArm() {
         progressBar2.setVisibility(View.VISIBLE);
         //   if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            lastThread = new loadArms().execute();
+        lastThread = new loadArms().execute();
     }
 
     private void loadSubject() {
         progressBar3.setVisibility(View.VISIBLE);
         // if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-            lastThread = new loadSubject().execute();
+        lastThread = new loadSubject().execute();
     }
 
     @Override
@@ -273,11 +273,6 @@ public class View_Scores_menu extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", View_Scores_menu.this, R.color.red_900);
-            } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_arm.setAdapter(spinnerAdapter1);
-                progressBar2.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -339,13 +334,6 @@ public class View_Scores_menu extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", View_Scores_menu.this, R.color.red_900);
-            } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_subject.setAdapter(spinnerAdapter1);
-
-                progressBar3.setVisibility(View.INVISIBLE);
-
             }
         }
 
@@ -388,7 +376,7 @@ public class View_Scores_menu extends AppCompatActivity {
             //  System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String dataRows[] = text.split("<>");
+                String[] dataRows = text.split("<>");
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
                 for (int i = 1; i <= dataRows.length; i++) {
@@ -446,7 +434,8 @@ public class View_Scores_menu extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             progressBar.setVisibility(View.GONE);
-            // Log.d("mSkola", text);
+            //   Toast.makeText(View_Scores_menu.this, text, Toast.LENGTH_SHORT).show();
+
 
             if (!text.equals("0") && !text.isEmpty()) {
                 scores.setNoCas(Integer.parseInt(text.split("##")[1]) + 2); // + 2 for EXAM and TOTAL
@@ -674,14 +663,14 @@ public class View_Scores_menu extends AppCompatActivity {
                 scores.setHEADERS(HEADERS);
                 scores.setNAMES(NAMES);
                 scores.setNoStudents(NAMES.size());
-                startActivity(new Intent(getApplicationContext(), ViewScores.class));
                 finish();
+                startActivity(new Intent(getApplicationContext(), ViewScores.class));
+            } else {
+                Toast.makeText(View_Scores_menu.this, "No scores found", Toast.LENGTH_SHORT).show();
+                load.setEnabled(true);
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", View_Scores_menu.this, R.color.red_900);
-            } else {
-                Tools.toast("No scores yet for selected class", View_Scores_menu.this);
-                load.setEnabled(true);
             }
 
 

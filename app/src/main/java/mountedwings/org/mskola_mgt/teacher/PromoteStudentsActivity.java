@@ -48,7 +48,7 @@ import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class PromoteStudentsActivity extends AppCompatActivity {
     private String regNos;
-    private String classes[];
+    private String[] classes;
     private String session, class_name;
     private String arm;
 
@@ -65,7 +65,9 @@ public class PromoteStudentsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promote_students_final_menu);
+
         Intent intent = getIntent();
+
         regNos = intent.getStringExtra("reg_nos");
 
         SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
@@ -163,6 +165,7 @@ public class PromoteStudentsActivity extends AppCompatActivity {
         });
     }
 
+
     private void loadSessionList() {
         progressBar3.setVisibility(View.VISIBLE);
         if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
@@ -244,7 +247,7 @@ public class PromoteStudentsActivity extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
-                String dataRows[] = text.split("<>")[0].split(";");
+                String[] dataRows = text.split("<>")[0].split(";");
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
                 for (int i = 1; i <= dataRows.length; i++) {
@@ -380,7 +383,7 @@ public class PromoteStudentsActivity extends AppCompatActivity {
 
             if (!text.equals("0") && !text.isEmpty()) {
                 text = text.split("##")[0];
-                String dataRows[] = text.split("<>");
+                String[] dataRows = text.split("<>");
 
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";

@@ -14,15 +14,21 @@
 package com.mskola.controls;
 
 public class serverInfoParents {
-    //  private String ip = "192.168.43.233";
-    //  private String ip = "192.168.43.233";
+    //    private String ip = "192.168.43.233";
+    private String ip = "157.245.136.223";
+    //   public String ip = "169.254.167.77";
+
     //private String ip = "192.168.43.75";
-    private String ip = "mountedwings.org";
+
+    //private String ip = "mountedwings.org";
     //  private String ip = "192.168.137.1";
     //  private String ip = "191.168.8.108";
-    //   public String ip = "169.254.167.77"
+//       public String ip = "169.254.174.122";
     //   public String ip = "10.1.1.7";
-    private String port = "9097";
+    private String port = "9090";
+
+    //online port
+    //   private String port = "9097";
 
     public String getIp() {
         return ip;

@@ -28,14 +28,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
@@ -240,12 +238,13 @@ public class Attendance_menu extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", Attendance_menu.this, R.color.red_900);
-            } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_arm.setAdapter(spinnerAdapter1);
-                progressBar2.setVisibility(View.INVISIBLE);
             }
+            //            else {
+//                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+//                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                select_arm.setAdapter(spinnerAdapter1);
+//                progressBar2.setVisibility(View.INVISIBLE);
+//            }
         }
 
         @Override
@@ -288,7 +287,7 @@ public class Attendance_menu extends AppCompatActivity {
             super.onPostExecute(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String rows[] = text.split(";");
+                String[] rows = text.split(";");
 
                 String[] data = new String[(rows.length + 1)];
                 data[0] = "";
@@ -302,13 +301,16 @@ public class Attendance_menu extends AppCompatActivity {
                 select_class.setAdapter(spinnerAdapter1);
                 class_name = select_class.getSelectedItem().toString();
                 progressBar1.setVisibility(View.INVISIBLE);
+                progressBar2.setVisibility(View.INVISIBLE);
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", Attendance_menu.this, R.color.red_900);
-            } else {
-                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_800, Toast.LENGTH_LONG);
-                load.setVisibility(View.INVISIBLE);
             }
+
+//            if (not class teacher){
+//                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_800, Toast.LENGTH_LONG);
+//                load.setVisibility(View.INVISIBLE);
+//            }
         }
     }
 

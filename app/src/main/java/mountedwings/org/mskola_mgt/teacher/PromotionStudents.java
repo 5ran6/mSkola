@@ -81,7 +81,7 @@ public class PromotionStudents extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Select students to promote");
+        getSupportActionBar().setTitle("Select student(s) to promote");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Tools.setSystemBarColor(this, R.color.blue_400);
     }
@@ -183,50 +183,13 @@ public class PromotionStudents extends AppCompatActivity {
         }
     }
 
-    private class ActionModeCallback implements ActionMode.Callback {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_grey_700);
-            mode.getMenuInflater().inflate(R.menu.menu_selecet_all, menu);
-            return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.homeAsUp) {
+            finish();
         }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int id = item.getItemId();
-
-            //            if (id == R.id.action_delete) {
-//                deleteInboxes();
-//                mode.finish();
-//                return true;
-//            }
-//
-            if (id == R.id.select_all) {
-                if (selected) {
-                    selectAll();
-                    selected = !selected;
-                } else {
-                    actionMode.finish();
-                    selected = !selected;
-                }
-                return true;
-            }
-            return false;
-        }
-
-        @SuppressLint("RestrictedApi")
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mAdapter.clearSelections();
-            actionMode = null;
-            fab_done.setVisibility(View.INVISIBLE);
-            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_400);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     //  '
@@ -277,4 +240,44 @@ public class PromotionStudents extends AppCompatActivity {
         super.onResume();
     }
 
+    private class ActionModeCallback implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_grey_700);
+            mode.getMenuInflater().inflate(R.menu.menu_selecet_all, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int id = item.getItemId();
+
+
+            if (id == R.id.select_all) {
+                if (selected) {
+                    selectAll();
+                    selected = !selected;
+                } else {
+                    actionMode.finish();
+                    selected = !selected;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        @SuppressLint("RestrictedApi")
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mAdapter.clearSelections();
+            actionMode = null;
+            fab_done.setVisibility(View.INVISIBLE);
+            Tools.setSystemBarColor(PromotionStudents.this, R.color.blue_400);
+        }
+    }
 }

@@ -213,6 +213,14 @@ public class Chat_menu extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        finish();
+    }
+
     //DONE
     private class getParents extends AsyncTask<String, Integer, String> {
         @Override
@@ -238,7 +246,7 @@ public class Chat_menu extends AppCompatActivity {
             super.onPostExecute(text);
             category = "parent";
             if (!text.equals("0") && !text.isEmpty()) {
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
 
                 for (int i = 0; i < rows.length; i++) {
@@ -261,7 +269,6 @@ public class Chat_menu extends AppCompatActivity {
         }
     }
 
-
     private class getStudents extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... strings) {
@@ -283,7 +290,7 @@ public class Chat_menu extends AppCompatActivity {
             super.onPostExecute(text);
             category = "student";
             if (!text.equals("0") && !text.isEmpty()) {
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
 
                 for (int i = 0; i < rows.length; i++) {
@@ -336,7 +343,7 @@ public class Chat_menu extends AppCompatActivity {
                 numbers.clear();
                 swipeProgress(false);
 
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
 
                 for (int i = 0; i < rows.length; i++) {
@@ -369,13 +376,6 @@ public class Chat_menu extends AppCompatActivity {
             swipeProgress(false);
 
         }
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
-        super.onPause();
     }
 
 

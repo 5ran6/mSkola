@@ -270,51 +270,12 @@ public class ViewResult_menu extends AppCompatActivity {
         }
     }
 
-    //loads Classes
-    private class initialLoad extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            storageFile storageObj = new storageFile();
-            storageObj.setOperation("getpsclass");
-            storageObj.setStrData(strings[0] + "<>" + strings[1]);
-            storageFile sentData = new serverProcess().requestProcess(storageObj);
-            return sentData.getStrData();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String text) {
-            super.onPostExecute(text);
-            System.out.println(text);
-
-            if (!text.equals("0") && !text.isEmpty()) {
-                String dataRows[] = text.split("<>");
-
-                String[] data = new String[(dataRows.length + 1)];
-                data[0] = "";
-                for (int i = 1; i <= dataRows.length; i++) {
-                    data[i] = dataRows[(i - 1)];
-                }
-
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_class.setAdapter(spinnerAdapter1);
-                class_name = select_class.getSelectedItem().toString();
-
-                progressBar1.setVisibility(View.INVISIBLE);
-                counter = -1;
-            } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_class.setAdapter(spinnerAdapter1);
-                progressBar1.setVisibility(View.INVISIBLE);
-            }
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        finish();
     }
 
     @Override
@@ -350,11 +311,51 @@ public class ViewResult_menu extends AppCompatActivity {
         super.onResume();
     }
 
-    @Override
-    protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
-        super.onPause();
+    //loads Classes
+    private class initialLoad extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            storageFile storageObj = new storageFile();
+            storageObj.setOperation("getpsclass");
+            storageObj.setStrData(strings[0] + "<>" + strings[1]);
+            storageFile sentData = new serverProcess().requestProcess(storageObj);
+            return sentData.getStrData();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String text) {
+            super.onPostExecute(text);
+            System.out.println(text);
+
+            if (!text.equals("0") && !text.isEmpty()) {
+                String[] dataRows = text.split("<>");
+
+                String[] data = new String[(dataRows.length + 1)];
+                data[0] = "";
+                for (int i = 1; i <= dataRows.length; i++) {
+                    data[i] = dataRows[(i - 1)];
+                }
+
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
+                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                select_class.setAdapter(spinnerAdapter1);
+                class_name = select_class.getSelectedItem().toString();
+
+                progressBar1.setVisibility(View.INVISIBLE);
+                counter = -1;
+            } else {
+                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
+                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                select_class.setAdapter(spinnerAdapter1);
+                progressBar1.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
 }

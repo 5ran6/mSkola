@@ -39,8 +39,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
-import java.util.Collections;
-
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.SchoolID_Login;
 import mountedwings.org.mskola_mgt.utils.CheckNetworkConnection;
@@ -98,6 +96,7 @@ public class Compile_Result_menu extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (select_class.getSelectedItemPosition() >= 0) {
                     class_name = select_class.getSelectedItem().toString();
+                    //Toast.makeText(Compile_Result_menu.this, class_name, Toast.LENGTH_SHORT).show();;
                     counter++;
                     //run new thread
                     if (counter >= 1)
@@ -145,6 +144,7 @@ public class Compile_Result_menu extends AppCompatActivity {
 
 
     private void loadArm() {
+        Toast.makeText(this, "Loading arms", Toast.LENGTH_SHORT);
         progressBar2.setVisibility(View.VISIBLE);
         //  if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
         lastThread = new loadArms().execute();
@@ -219,6 +219,8 @@ public class Compile_Result_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            System.out.println(text);
+
             if (!text.equals("0") && !text.isEmpty()) {
                 String[] dataRows = text.split(",");
                 String[] data = new String[(dataRows.length + 1)];
@@ -236,11 +238,6 @@ public class Compile_Result_menu extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", Compile_Result_menu.this, R.color.red_900);
-            } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_arm.setAdapter(spinnerAdapter1);
-                progressBar2.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -383,11 +380,11 @@ public class Compile_Result_menu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            //  System.out.println(text);
+            System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
                 text = text.split("##")[0];
-                String dataRows[] = text.split("<>");
+                String[] dataRows = text.split("<>");
 
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
@@ -402,9 +399,6 @@ public class Compile_Result_menu extends AppCompatActivity {
 
                 progressBar1.setVisibility(View.INVISIBLE);
                 counter = -1;
-            }
-            if (text.equalsIgnoreCase("network error")) {
-                Tools.toast("Network error. Reconnecting...", Compile_Result_menu.this, R.color.red_900);
             } else {
                 Tools.toast("Seems you are not a class teacher.", Compile_Result_menu.this, R.color.red_800, Toast.LENGTH_LONG);
                 load.setVisibility(View.GONE);

@@ -116,8 +116,11 @@ public class SchoolID_Login extends AppCompatActivity {
             boolean handled = false;
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideSoftKeyboard();
-                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
+                if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+                    Tools.toast("Verifying School ID", SchoolID_Login.this);
                     verifyID();
+
+                }
                 handled = true;
             }
             return handled;
@@ -190,8 +193,13 @@ public class SchoolID_Login extends AppCompatActivity {
 
         dialog.findViewById(R.id.bt_close).setOnClickListener(v -> dialog.dismiss());
 
-        dialog.show();
-        dialog.getWindow().setAttributes(lp);
+        try {
+            dialog.show();
+            dialog.getWindow().setAttributes(lp);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -200,14 +208,14 @@ public class SchoolID_Login extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 w++;
-                Log.d("mSkola", "W = " + String.valueOf(w));
+                Log.d("mSkola", "W = " + w);
                 new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
                         status = 1;
                         if (w > 1) {
                             try {
-                                Tools.toast("Back Online!", SchoolID_Login.this, R.color.green_800);
+                                //       Tools.toast("Back Online!", SchoolID_Login.this, R.color.green_800);
                                 lastThread.execute();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -244,7 +252,7 @@ public class SchoolID_Login extends AppCompatActivity {
     protected void onPause() {
         unregisterReceiver(this.mReceiver);
         w = 0;
-        Log.d("mSkola", "W = " + String.valueOf(w));
+        Log.d("mSkola", "W = " + w);
         super.onPause();
         finish();
     }

@@ -277,7 +277,7 @@ public class AttendanceActivity extends AppCompatActivity {
                 }
 
                 //worked. Split into reg and names
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 if (rows.length > 0) {
                     for (int i = 0; i < rows.length; i++) {
                         regNo.add(rows[i].split(";")[0]);
@@ -308,10 +308,8 @@ public class AttendanceActivity extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", AttendanceActivity.this, R.color.red_900);
-            } else {
-                Tools.toast("No record found for selected class/arm", AttendanceActivity.this, R.color.yellow_600);
-                finish();
             }
+
         }
     }
 
@@ -404,8 +402,6 @@ public class AttendanceActivity extends AppCompatActivity {
 
                 if (text.equalsIgnoreCase("network error")) {
                     Tools.toast("Network error. Reconnecting...", AttendanceActivity.this, R.color.red_900);
-                } else {
-                    Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -497,8 +493,6 @@ public class AttendanceActivity extends AppCompatActivity {
                 }
                 if (text.equalsIgnoreCase("network error")) {
                     Tools.toast("Network error. Reconnecting...", AttendanceActivity.this, R.color.red_900);
-                } else {
-                    Tools.toast("An error occurred. Check your connection and try again", AttendanceActivity.this, R.color.red_600);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

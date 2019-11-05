@@ -346,8 +346,9 @@ public class MskolaLogin extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-//        unregisterReceiver(this.mReceiver);
-//        w = 0;
+        unregisterReceiver(this.mReceiver);
+        w = 0;
         super.onPause();
+        finish();
     }
 }

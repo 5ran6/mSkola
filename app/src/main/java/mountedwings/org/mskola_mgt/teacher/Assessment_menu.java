@@ -34,7 +34,6 @@ import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 import mountedwings.org.mskola_mgt.R;
@@ -274,7 +273,7 @@ public class Assessment_menu extends AppCompatActivity {
                 ca.add("");
 
                 for (int i = 1; i <= no_cas; i++) {
-                    ca.add(i, "CA" + String.valueOf(i));
+                    ca.add(i, "CA" + i);
                 }
 
                 ca.add("Exams");
@@ -294,11 +293,6 @@ public class Assessment_menu extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", Assessment_menu.this, R.color.red_900);
-            } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_arm.setAdapter(spinnerAdapter1);
-                progressBar2.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -352,13 +346,6 @@ public class Assessment_menu extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", Assessment_menu.this, R.color.red_900);
-            } else {
-                ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Collections.emptyList());
-                spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_subject.setAdapter(spinnerAdapter1);
-
-                progressBar3.setVisibility(View.INVISIBLE);
-
             }
         }
 
@@ -399,7 +386,7 @@ public class Assessment_menu extends AppCompatActivity {
             super.onPostExecute(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String dataRows[] = text.split("<>");
+                String[] dataRows = text.split("<>");
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
                 for (int i = 1; i <= dataRows.length; i++) {

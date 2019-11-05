@@ -27,9 +27,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Test"
+            android:name=".Splash"
             android:screenOrientation="portrait">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -127,7 +128,7 @@
         <activity
             android:name=".ChangePassword"
             android:screenOrientation="portrait" />
-        <activity android:name=".Splash" />
+        <activity android:name=".Test" />
         <activity android:name=".parent.MskolaLogin" />
         <activity android:name=".parent.ChildsList" />
         <activity android:name=".parent.SingleChild_menu" />

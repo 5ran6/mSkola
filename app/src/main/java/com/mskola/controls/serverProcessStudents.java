@@ -42,7 +42,6 @@ public class serverProcessStudents {
 
             try {
                 sentData = (storageFile) (ois.readObject());
-
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }

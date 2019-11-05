@@ -275,6 +275,14 @@ public class MskolaLogin extends AppCompatActivity {
         findViewById(R.id.sig_in).setOnClickListener(view -> submitForm());
     }
 
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        finish();
+    }
+
     private class login extends AsyncTask<String, Integer, Boolean> {
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -288,6 +296,8 @@ public class MskolaLogin extends AppCompatActivity {
 
                     //received from server
                     String text = sentData.getStrData();
+                    Log.d("mSkola", text);
+
                     boolean isSuccess;
                     if (text.contains("success")) {
                         isSuccess = true;
@@ -306,7 +316,6 @@ public class MskolaLogin extends AppCompatActivity {
                         Log.d(TAG, error_from_server);
                     }
                     return isSuccess;
-
                 } while (!isCancelled());
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -352,12 +361,5 @@ public class MskolaLogin extends AppCompatActivity {
                 clearSharedPreferences(MskolaLogin.this);
             }
         }
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
-        super.onPause();
     }
 }

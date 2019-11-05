@@ -24,6 +24,7 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
@@ -69,6 +70,7 @@ public class Assessment extends AppCompatActivity {
     private View parent_view;
     private AppCompatEditText score;
     private int last_index, idx, idy;
+    private NestedScrollView nestedScrollView;
     private String TAG = "mSkola", first_persons_score = "", school_id, class_name, arm, assessment, subject;
     private BroadcastReceiver mReceiver;
     private int w = 0, status;
@@ -84,7 +86,7 @@ public class Assessment extends AppCompatActivity {
         parent_view = findViewById(android.R.id.content);
         TextView heading = findViewById(R.id.text);
         Intent intent = getIntent();
-
+        nestedScrollView = findViewById(R.id.nested_scroll_view);
         school_id = intent.getStringExtra("school_id");
         class_name = intent.getStringExtra("class_name");
         assessment = intent.getStringExtra("assessment");
@@ -315,11 +317,17 @@ public class Assessment extends AppCompatActivity {
         //index = view.getId();
         Tools.toast("Reviewing from top....", this, R.color.yellow_900, Toast.LENGTH_LONG);
 //        TODO: scroll to the top of activity
+        nestedScrollView.fullScroll(View.FOCUS_UP);
+        nestedScrollView.smoothScrollTo(0, 0);
+
 
         if (success_step >= index && current_step != index) {
             current_step = index;
             collapseAll();
             ViewAnimation.expand(view_list.get(index).findViewById(R.id.lyt_title));
+            EditText tv = view_list.get(index).findViewById(R.id.et_title);
+            tv.setText(first_persons_score);
+
         }
     }
 
@@ -519,7 +527,7 @@ public class Assessment extends AppCompatActivity {
                     storageFile storageObj = new storageFile();
                     storageObj.setOperation("savestudentscore");
                     //school_id, class_name, arm, assessment, subject, String.valueOf(index), String.valueOf(i)
-                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + assessment + "<>" + subject + "<>" + regNumbs[Integer.valueOf(String.valueOf(idy))] + "<>" + String.valueOf(i));
+                    storageObj.setStrData(school_id + "<>" + class_name + "<>" + arm + "<>" + assessment + "<>" + subject + "<>" + regNumbs[Integer.valueOf(String.valueOf(idy))] + "<>" + i);
                     storageFile sentData = new serverProcess().requestProcess(storageObj);
                     return sentData.getStrData();
 
@@ -546,8 +554,6 @@ public class Assessment extends AppCompatActivity {
             }
             if (scores.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", Assessment.this, R.color.red_900);
-            } else {
-                Tools.toast("Check your internet connection and try again", Assessment.this, R.color.red_800);
             }
         }
     }

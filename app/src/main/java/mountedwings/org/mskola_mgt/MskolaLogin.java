@@ -251,7 +251,7 @@ public class MskolaLogin extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 w++;
-                Log.d("mSkola", "W = " + String.valueOf(w));
+                Log.d("mSkola", "W = " + w);
                 new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
@@ -291,7 +291,7 @@ public class MskolaLogin extends AppCompatActivity {
     protected void onPause() {
         unregisterReceiver(this.mReceiver);
         w = 0;
-        Log.d("mSkola", "W = " + String.valueOf(w));
+        Log.d("mSkola", "W = " + w);
         super.onPause();
     }
 
@@ -408,12 +408,16 @@ public class MskolaLogin extends AppCompatActivity {
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (!text.equals("0") && !text.equals("")) {
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 String school = rows[0];
                 String name = rows[2];
 //              school = rows[2];
-                byte[] pass = data.getImageFiles().get(0);
-
+                byte[] pass = {};
+                try {
+                    data.getImageFiles().get(0);
+                } catch (Exception p) {
+                    p.printStackTrace();
+                }
                 //finally and intent
                 lyt_progress.setVisibility(View.GONE);
 

@@ -99,7 +99,7 @@ public class ChildsList extends AppCompatActivity {
             storageObj.setOperation("getchildren");
             storageObj.setStrData(strings[0]);
             data = new serverProcessParents().requestProcess(storageObj);
-
+            //  Log.d("mSkola", data.getStrData());
             return data.getStrData();
         }
 
@@ -112,9 +112,11 @@ public class ChildsList extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
+            //  Log.d("mSkola", text);
+
             if (!text.equals("0") && !text.equals("") && !text.isEmpty()) {
                 allPassport_aPerson = data.getImageFiles();
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
 
                     NumberChildrenList numberChildrenList = new NumberChildrenList();
@@ -138,7 +140,7 @@ public class ChildsList extends AppCompatActivity {
                 adapter.setOnItemClickListener((view, obj, position) -> {
                     adapter.getItemId(position);
                     //sends the students' regNo and name(for menu header)
-                    Tools.toast(email + " reg no = " + obj.getRegNo() + " " + obj.getSchoolId(), ChildsList.this);
+                    //    Tools.toast(email + " reg no = " + obj.getRegNo() + " " + obj.getSchoolId(), ChildsList.this);
                     startActivity(new Intent(getApplicationContext(), SingleChild_menu.class).putExtra("student_reg_no", obj.getRegNo()).putExtra("student_name", obj.getName()).putExtra("class_name", obj.getClass_name() + " " + obj.getArm()).putExtra("school_id", obj.getSchoolId()).putExtra("email_address", email));
                     finish();
                 });
@@ -193,7 +195,5 @@ public class ChildsList extends AppCompatActivity {
 //        w = 0;
         super.onPause();
     }
-
-
 }
 
