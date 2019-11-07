@@ -31,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.mskola.controls.serverProcessParents;
@@ -58,6 +59,7 @@ public class Assessment_menu extends AppCompatActivity {
     private int w = 0;
     private int status = 1;
     private MaterialRippleLayout loading;
+    private AsyncTask lastThread;
 
     @Override
     protected void onResume() {
@@ -70,12 +72,17 @@ public class Assessment_menu extends AppCompatActivity {
                 new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
-//                        status = 1;
-//                        if (w > 1)
-//                            Tools.toast("Back Online! Try again", Assessment_menu.this, R.color.green_800);
-//                        else
-                        //                    //load classes and assessments
-                        //                     new initialLoad().execute(school_id);
+                        status = 1;
+                        try {
+                            if (w > 1) {
+                                lastThread.execute();
+                                Tools.toast("Back Online! Resuming request....", Assessment_menu.this, R.color.green_800);
+                            } else
+                                //load classes and assessments
+                                lastThread = new initialLoad().execute(school_id);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -83,6 +90,11 @@ public class Assessment_menu extends AppCompatActivity {
                         status = 0;
                         Log.d("mSkola", String.valueOf(status));
                         Tools.toast(getResources().getString(R.string.no_internet_connection), Assessment_menu.this, R.color.red_600);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }).execute();
             }
@@ -105,9 +117,10 @@ public class Assessment_menu extends AppCompatActivity {
 
         //school_id/staff id from sharedPrefs
         parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
-        //school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
-        school_id = getIntent().getStringExtra("school_id");
-        student_reg_no = getIntent().getStringExtra("student_reg_no");
+        school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        student_reg_no = mPrefs.getString("student_reg_no", getIntent().getStringExtra("student_reg_no"));
+        //school_id = getIntent().getStringExtra("school_id");
+        // student_reg_no = getIntent().getStringExtra("student_reg_no");
 
 
         TextView load = findViewById(R.id.load);
@@ -194,7 +207,10 @@ public class Assessment_menu extends AppCompatActivity {
     private void loadSubject() {
         progressBar3.setVisibility(View.VISIBLE);
         //     if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED)
-        new loadSubject().execute(school_id, session, term, student_reg_no);
+//        lastThread = new loadSubject().execute(school_id, session, term, student_reg_no);
+        //String[]
+        Toast.makeText(this, school_id + " " + session + " " + term + " " + student_reg_no, Toast.LENGTH_LONG).show();
+        lastThread = new loadSubject().execute(school_id, session, term, student_reg_no);
     }
 
     private class loadAssessment extends AsyncTask<String, Integer, String> {
@@ -295,6 +311,14 @@ public class Assessment_menu extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        finish();
+    }
+
     //loads sessions
     private class initialLoad extends AsyncTask<String, Integer, String> {
 
@@ -318,7 +342,7 @@ public class Assessment_menu extends AppCompatActivity {
             System.out.println(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String dataRows[] = text.split("<>");
+                String[] dataRows = text.split("<>");
                 String[] data = new String[(dataRows.length + 1)];
                 String[] data1 = {"", "First", "Second", "Third"};
                 data[0] = "";
@@ -348,14 +372,6 @@ public class Assessment_menu extends AppCompatActivity {
 
             }
         }
-    }
-
-    @Override
-    protected void onPause() {
-        finish();
-//        unregisterReceiver(this.mReceiver);
-//        w = 0;
-        super.onPause();
     }
 
 

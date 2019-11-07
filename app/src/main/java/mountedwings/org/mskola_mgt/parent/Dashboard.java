@@ -23,6 +23,7 @@ import mountedwings.org.mskola_mgt.Chat;
 import mountedwings.org.mskola_mgt.ChatActivity;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.Settings;
+import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -55,4 +56,21 @@ public class Dashboard extends AppCompatActivity {
     public void information(View view) {
         startActivity(new Intent(getApplicationContext(), SchoolInformation_menu.class));
     }
+
+    private long exitTime = 0;
+
+    @Override
+    public void onBackPressed() {
+        doExitApp();
+    }
+
+    public void doExitApp() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Tools.toast("Press again to exit app", Dashboard.this);
+            exitTime = System.currentTimeMillis();
+        } else {
+            finishAffinity();
+        }
+    }
+
 }

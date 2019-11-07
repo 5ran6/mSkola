@@ -129,7 +129,7 @@ public class ResultActivity extends AppCompatActivity {
             //  Log.d(TAG, "Loaded round 1: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String school_info[] = text.split("<>");
+                String[] school_info = text.split("<>");
                 String raw_info, raw_next_term;
                 try {
                     raw_info = school_info[0];
@@ -212,7 +212,7 @@ public class ResultActivity extends AppCompatActivity {
             // Log.d(TAG, "Loaded round 2: " + text);
 
             if (!text.equals("0") && !text.isEmpty() && !text.equals("0")) {
-                String data[] = text.split("##");
+                String[] data = text.split("##");
 
                 String raw_data1, raw_data2, raw_data3;
                 raw_data1 = data[0];
@@ -290,7 +290,7 @@ public class ResultActivity extends AppCompatActivity {
             Log.d(TAG, "Loaded round 3: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String data[] = text.split("##");
+                String[] data = text.split("##");
                 try {
                     String raw_scores = data[0], raw_others = data[1], raw_psychomotor = data[2];
                     int no_scores = raw_scores.split("<>").length;
@@ -348,7 +348,7 @@ public class ResultActivity extends AppCompatActivity {
             Log.d(TAG, "Loaded round 4: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String data[] = text.split("<>");
+                String[] data = text.split("<>");
 
                 String raw_grades = data[0];
                 String raw_upper_values = data[1];
@@ -403,13 +403,13 @@ public class ResultActivity extends AppCompatActivity {
             //  Log.d(TAG, "Loaded round 5: " + text);
 
             if (!text.equals("0") && !text.isEmpty() && !text.trim().equals("not compiled")) {
-                String data[] = text.split("<>");
+                String[] data = text.split("<>");
 
                 String raw_subjects = data[0], raw_short_codes = data[1];
                 String no_cas = data[2];
                 result.setNoCas(Integer.valueOf(no_cas) + 6); // for exam, total, average....grade
                 int no_subjects = raw_subjects.split(";").length;
-                Log.i(TAG, "no subjects = " + String.valueOf(no_subjects));
+                Log.i(TAG, "no subjects = " + no_subjects);
 
 
                 for (int i = 0; i < no_subjects; i++) {
@@ -852,7 +852,7 @@ public class ResultActivity extends AppCompatActivity {
             Log.d(TAG, "Loaded round 6: " + text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String data[] = text.split(";");
+                String[] data = text.split(";");
 
                 ResultFooter resultFooter = new ResultFooter();
                 resultFooter.setTotal(data[0]);
@@ -879,7 +879,12 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             //inflate everything in UI, then unveil
-            result_layout.addView(new TableMainLayout(getApplicationContext()));
+            try {
+                result_layout.addView(new TableMainLayout(getApplicationContext()));
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
             //TODO: unveil gradually from top to bottom. How about that?
             loading.setVisibility(View.GONE);

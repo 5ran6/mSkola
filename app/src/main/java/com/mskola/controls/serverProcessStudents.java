@@ -28,7 +28,7 @@ public class serverProcessStudents {
             int port;
             String host;
 
-            serverInfoParents serverInfo = new serverInfoParents();
+            serverInfoStudents serverInfo = new serverInfoStudents();
             host = serverInfo.getIp();
             port = Integer.parseInt(serverInfo.getPort());
 

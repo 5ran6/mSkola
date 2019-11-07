@@ -356,6 +356,14 @@ public class Assessment_menu extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        finish();
+    }
+
     //loads Classes
     private class initialLoad extends AsyncTask<String, Integer, String> {
 
@@ -389,9 +397,7 @@ public class Assessment_menu extends AppCompatActivity {
                 String[] dataRows = text.split("<>");
                 String[] data = new String[(dataRows.length + 1)];
                 data[0] = "";
-                for (int i = 1; i <= dataRows.length; i++) {
-                    data[i] = dataRows[(i - 1)];
-                }
+                System.arraycopy(dataRows, 0, data, 1, dataRows.length);
 
                 ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, data);
                 spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -406,14 +412,6 @@ public class Assessment_menu extends AppCompatActivity {
                 Tools.toast("Network error. Reconnecting...", Assessment_menu.this, R.color.red_900);
             }
         }
-    }
-
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
-        super.onPause();
     }
 
 

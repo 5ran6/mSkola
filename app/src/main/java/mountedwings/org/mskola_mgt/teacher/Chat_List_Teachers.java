@@ -164,7 +164,7 @@ public class Chat_List_Teachers extends AppCompatActivity {
             super.onPostExecute(text);
             category = "staff";
             if (!text.equals("0") && !text.isEmpty()) {
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 ArrayList<byte[]> allPassport_aPerson = sentData.getImageFiles();
 
                 for (int i = 0; i < rows.length; i++) {

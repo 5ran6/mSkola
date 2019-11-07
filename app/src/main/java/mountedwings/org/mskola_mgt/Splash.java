@@ -25,6 +25,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import mountedwings.org.mskola_mgt.teacher.Dashboard;
 
@@ -34,6 +35,7 @@ public class Splash extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private static final int PREFRENCE_MODE_PRIVATE = 0;
     private Boolean singedIn;
+    private String who;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class Splash extends AppCompatActivity {
         if (getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE).toString() != null) {
             SharedPreferences mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
             singedIn = mPrefs.getBoolean("signed_in", false);
+            who = mPrefs.getString("who", "");
         }
         ImageView img = findViewById(R.id.img);
         final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
@@ -65,11 +68,29 @@ public class Splash extends AppCompatActivity {
         Handler handler1 = new Handler();
         handler1.postDelayed(() -> {
             // intent
+
+            //   Toast.makeText(this, String.valueOf(singedIn), Toast.LENGTH_SHORT).show();
             if (singedIn) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                //     Toast.makeText(Splash.this, "Reached    1 " + who, Toast.LENGTH_LONG).show();
+
+                if (who.equalsIgnoreCase("parent")) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.parent.Dashboard.class));
+                } else if (who.equalsIgnoreCase("teacher")) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                } else if (who.equalsIgnoreCase("student")) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), mountedwings.org.mskola_mgt.student.Dashboard.class));
+
+                } else {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), Home.class));
+
+                }
             } else {
                 //initial Launch
+                Toast.makeText(Splash.this, "Reached    wrong", Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(new Intent(getApplicationContext(), Home.class));
             }

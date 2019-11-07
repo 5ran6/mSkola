@@ -363,6 +363,7 @@ public class MskolaLogin extends AppCompatActivity {
                 editor.putString("email_address", Objects.requireNonNull(emailE.getText()).toString());
                 editor.putString("role", role.toLowerCase());
                 editor.putBoolean("signed_in", singedIn);
+                editor.putString("who", "teacher");
                 editor.apply();
 
                 intent.putExtra("email_address", emailE.getText().toString());
@@ -414,7 +415,7 @@ public class MskolaLogin extends AppCompatActivity {
 //              school = rows[2];
                 byte[] pass = {};
                 try {
-                    data.getImageFiles().get(0);
+                    pass = data.getImageFiles().get(0);
                 } catch (Exception p) {
                     p.printStackTrace();
                 }

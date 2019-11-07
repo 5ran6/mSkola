@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.mskola.controls.serverProcess;
@@ -98,19 +99,28 @@ public class MySubjects extends AppCompatActivity {
                     @Override
                     public void onConnectionSuccess() {
                         status = 1;
-                        if (w > 1) {
-                            lastThread.execute();
-                            Tools.toast("Back Online! Resuming request....", MySubjects.this, R.color.green_800);
-                        } else
-                            lastThread = new getMySubjects().execute();
+                        try {
+                            if (w > 1) {
+                                lastThread.execute();
+                                Tools.toast("Back Online! Resuming request....", MySubjects.this, R.color.green_800);
+                            } else
+                                lastThread = new getMySubjects().execute();
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void onConnectionFail(String errorMsg) {
                         status = 0;
-                        lastThread.cancel(true);
-                        Tools.toast(getResources().getString(R.string.no_internet_connection), MySubjects.this, R.color.red_500);
-                        finish();
+                        Log.d("mSkola", String.valueOf(status));
+                        Tools.toast(getResources().getString(R.string.no_internet_connection), MySubjects.this, R.color.red_600);
+                        try {
+                            lastThread.cancel(true);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }).execute();
             }
@@ -122,6 +132,14 @@ public class MySubjects extends AppCompatActivity {
                 new IntentFilter(
                         ConnectivityManager.CONNECTIVITY_ACTION));
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(this.mReceiver);
+        w = 0;
+        super.onPause();
+        finish();
     }
 
     private class getMySubjects extends AsyncTask<String, Integer, String> {
@@ -154,7 +172,7 @@ public class MySubjects extends AppCompatActivity {
             super.onPostExecute(text);
 
             if (!text.equals("0") && !text.isEmpty()) {
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
 
                 for (String row : rows) {
                     NumberMySubjects number = new NumberMySubjects();
@@ -169,10 +187,7 @@ public class MySubjects extends AppCompatActivity {
 
             }
             if (text.equalsIgnoreCase("network error")) {
-                Tools.toast("Network error. Reconnecting...", MySubjects.this, R.color.red_900);
-            } else {
-                Tools.toast("No subjects allocated to you.", MySubjects.this, R.color.red_500);
-                finish();
+                Tools.toast("Network error", MySubjects.this, R.color.red_900);
             }
         }
 
@@ -181,14 +196,6 @@ public class MySubjects extends AppCompatActivity {
             super.onProgressUpdate(values);
 
         }
-    }
-
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(this.mReceiver);
-        w = 0;
-        super.onPause();
     }
 
 

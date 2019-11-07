@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+//PARENT
 package mountedwings.org.mskola_mgt.parent;
 
 import android.app.Dialog;
@@ -347,7 +347,7 @@ public class MskolaLogin extends AppCompatActivity {
                 editor.putString("account_type", role);
                 editor.putString("email_address", Objects.requireNonNull(emailE.getText()).toString());
                 editor.putBoolean("signed_in", singedIn);
-
+                editor.putString("who", "parent");
                 editor.apply();
 
                 intent.putExtra("email_address", emailE.getText().toString());

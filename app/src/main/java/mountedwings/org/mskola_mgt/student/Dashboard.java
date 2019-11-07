@@ -35,6 +35,7 @@ import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.Settings;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
+import static mountedwings.org.mskola_mgt.SettingFlat.PREFRENCE_MODE_PRIVATE;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 
@@ -50,6 +51,8 @@ public class Dashboard extends AppCompatActivity {
     private String class_name;
     private String school = "";
     private String name = "";
+    private SharedPreferences mPrefs;
+    private SharedPreferences.Editor editor;
     //private byte[] pass = new byte[1000];
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
@@ -69,6 +72,12 @@ public class Dashboard extends AppCompatActivity {
 
             name = mPrefs.getString("student_name", getIntent().getStringExtra("student_name"));
             student_reg_no = mPrefs.getString("student_reg_no", getIntent().getStringExtra("reg_no"));
+
+            mPrefs = getSharedPreferences(myPref, PREFRENCE_MODE_PRIVATE);
+            editor = mPrefs.edit();
+            editor.putString("student_reg_no", student_reg_no);
+            editor.apply();
+
             school = mPrefs.getString("school", getIntent().getStringExtra("school"));
 
             String raw_pass = mPrefs.getString("pass", Arrays.toString(getIntent().getByteArrayExtra("pass")));
@@ -107,7 +116,14 @@ public class Dashboard extends AppCompatActivity {
         TextView school_name = findViewById(R.id.tv_school_name);
         parent_view = findViewById(R.id.parent_layout);
         student_name.setText(name);
-        school_name.setText(school.toUpperCase());
+        try {
+            school_name.setText(school.toUpperCase());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("School wasn't selected previously. Login again!");
+            finish();
+            startActivity(new Intent(this, Home.class));
+        }
 
         CardView assessment = findViewById(R.id.assessment);
         assessment.setOnClickListener(v -> {
@@ -203,4 +219,6 @@ public class Dashboard extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), Home.class));
 
     }
+
+
 }

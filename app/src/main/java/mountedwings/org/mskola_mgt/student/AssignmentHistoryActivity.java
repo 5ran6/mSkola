@@ -25,6 +25,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcessParents;
 import com.mskola.files.storageFile;
@@ -107,7 +108,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
             if (!text.isEmpty() && !text.equals("0")) {
                 loading.setVisibility(View.GONE);
                 //worked. Split into reg and names
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 for (String row : rows) {
                     NumberStudentsAssignment numberStudentsAssignment = new NumberStudentsAssignment();
                     numberStudentsAssignment.setAssignment_date(row.split(";")[0]);
@@ -131,7 +132,7 @@ public class AssignmentHistoryActivity extends AppCompatActivity {
                 });
 
             } else {
-                Tools.toast("You haven't given an assignment!", AssignmentHistoryActivity.this);
+                Tools.toast("You haven't been given an assignment!", AssignmentHistoryActivity.this, R.color.primary_light, Toast.LENGTH_LONG);
                 finish();
             }
         }

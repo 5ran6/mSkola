@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -44,7 +45,7 @@ import mountedwings.org.mskola_mgt.utils.Tools;
 import static mountedwings.org.mskola_mgt.SettingFlat.myPref;
 
 public class Attendance_menu extends AppCompatActivity {
-    private String school_id = "", staff_id = "", class_name = "", arm = "";
+    private String school_id = "", role = "", staff_id = "", class_name = "", arm = "";
     private Spinner select_class, select_arm;
     private ProgressBar progressBar1, progressBar2;
     private TextView date;
@@ -88,6 +89,8 @@ public class Attendance_menu extends AppCompatActivity {
 
         staff_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
+        role = mPrefs.getString("role", getIntent().getStringExtra("role"));
+
 
         //   Toast.makeText(this, staff_id, Toast.LENGTH_SHORT).show();
         initComponent();
@@ -307,10 +310,11 @@ public class Attendance_menu extends AppCompatActivity {
                 Tools.toast("Network error. Reconnecting...", Attendance_menu.this, R.color.red_900);
             }
 
-//            if (not class teacher){
-//                Tools.toast("Either you're not a CLASS TEACHER or you have to " + getResources().getString(R.string.no_internet_connection), Attendance_menu.this, R.color.red_800, Toast.LENGTH_LONG);
-//                load.setVisibility(View.INVISIBLE);
-//            }
+            if (!role.equalsIgnoreCase("admin") || !role.equalsIgnoreCase("ct") || !role.equalsIgnoreCase("superadmin")) {
+                Tools.toast("Sorry, you're not a CLASS TEACHER", Attendance_menu.this, R.color.red_800, Toast.LENGTH_LONG);
+                load.setVisibility(View.INVISIBLE);
+                finish();
+            }
         }
     }
 

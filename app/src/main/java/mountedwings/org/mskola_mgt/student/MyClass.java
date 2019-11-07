@@ -70,7 +70,7 @@ public class MyClass extends AppCompatActivity {
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
             reg_no = mPrefs.getString("student_reg_no", getIntent().getStringExtra("reg_no"));
         } else {
-            Tools.toast("Previous Login invalidated. Login again!", this, R.color.red_600);
+            Tools.toast("Previous Login invalidated. Login again!", this, R.color.teal_300);
 
             //clear mPrefs
             clearSharedPreferences(this);
@@ -103,7 +103,7 @@ public class MyClass extends AppCompatActivity {
         lyt_save = findViewById(R.id.lyt_class_teachers);
         ViewAnimation.initShowOut(lyt_hols);
         ViewAnimation.initShowOut(lyt_save);
-
+        Tools.setSystemBarColor(MyClass.this, R.color.teal_300);
         disappear();
         new initialLoad().execute(school_id, reg_no);
     }
@@ -181,12 +181,12 @@ public class MyClass extends AppCompatActivity {
 
             //TODO: come and check which is term and for others
             if (!text.equals("0") && !text.isEmpty()) {
-                String rows[] = text.split("##");
+                String[] rows = text.split("##");
                 String student_name = rows[2].split("<>")[2] + " " + rows[2].split("<>")[3];
                 name.setText(student_name);
 
                 //data1
-                String data1[] = rows[0].split("<>");
+                String[] data1 = rows[0].split("<>");
                 class_session.setText(String.format("%s\t %s", data1[0], data1[1]));
                 String current_term = data1[2];
                 term.setText(String.format("%s TERM", current_term.toUpperCase()));
@@ -196,7 +196,7 @@ public class MyClass extends AppCompatActivity {
                 passport.setImageBitmap(bitmap);
 
                 //data3
-                String data3[] = rows[2].split("<>");
+                String[] data3 = rows[2].split("<>");
 //                others.setText(String.format("REG NO: %s %s", data3[1].toUpperCase(), data3[5].toUpperCase()));
                 others.setText(String.format("REG NO: %s", data3[1].toUpperCase()));
 
@@ -234,7 +234,7 @@ public class MyClass extends AppCompatActivity {
             super.onPostExecute(text);
             Log.i("mSkola", "Class mates info " + text);
             if (!text.equals("0") && !text.isEmpty()) {
-                String rows[] = text.split("<>");
+                String[] rows = text.split("<>");
                 try {
                     for (int i = 0; i < rows.length; i++) {
                         NumberClassMates numberClassMates = new NumberClassMates();

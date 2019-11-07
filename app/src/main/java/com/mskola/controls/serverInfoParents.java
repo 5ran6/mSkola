@@ -16,7 +16,7 @@ package com.mskola.controls;
 public class serverInfoParents {
     private String ip = "157.245.136.223";
 
-    private String port = "9090";
+    private String port = "9097";
 
     //online port
     //   private String port = "9097";

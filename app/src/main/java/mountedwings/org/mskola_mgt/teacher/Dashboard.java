@@ -26,6 +26,7 @@ import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -46,7 +47,7 @@ public class Dashboard extends AppCompatActivity {
     private String school_id;
     private String email;
     private String school = "";
-    private String name;
+    private String name, who;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
 
     @Override
@@ -58,6 +59,9 @@ public class Dashboard extends AppCompatActivity {
             SharedPreferences mPrefs = getSharedPreferences(myPref, PREFERENCE_MODE_PRIVATE);
             email = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
             role = mPrefs.getString("role", getIntent().getStringExtra("role"));
+
+            //  Tools.toast(role, Dashboard.this, R.color.red_600);
+
             school_id = mPrefs.getString("school_id", getIntent().getStringExtra("school_id"));
 
             name = mPrefs.getString("name", getIntent().getStringExtra("name"));
@@ -112,11 +116,15 @@ public class Dashboard extends AppCompatActivity {
 
         CardView attendance = findViewById(R.id.attendance);
         attendance.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), Attendance_menu.class);
-            intent.putExtra("school_id", school_id);
-            intent.putExtra("role", role);
-            intent.putExtra("email_address", email);
-            startActivity(intent);
+            if (role.equalsIgnoreCase("admin") || role.equalsIgnoreCase("ct") || role.equalsIgnoreCase("superadmin")) {
+                Intent intent = new Intent(getApplicationContext(), Attendance_menu.class);
+                intent.putExtra("school_id", school_id);
+                intent.putExtra("role", role);
+                intent.putExtra("email_address", email);
+                startActivity(intent);
+            } else
+                Tools.toast("Sorry, you're not a CLASS TEACHER", Dashboard.this, R.color.red_800, Toast.LENGTH_LONG);
+
         });
 
         CardView assignment = findViewById(R.id.assignment);
@@ -126,6 +134,8 @@ public class Dashboard extends AppCompatActivity {
             intent.putExtra("role", role);
             intent.putExtra("email_address", email);
             startActivity(intent);
+
+
         });
 
         CardView result = findViewById(R.id.result);
