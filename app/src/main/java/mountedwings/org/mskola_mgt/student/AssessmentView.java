@@ -51,14 +51,12 @@ public class AssessmentView extends AppCompatActivity {
 
 
         text = getIntent().getStringExtra("text");
-        Log.i(TAG, text);
+        Log.i(TAG, text + "    ---total text");
         session = getIntent().getStringExtra("session");
         term = getIntent().getStringExtra("term");
         subject = getIntent().getStringExtra("subject");
-        class_name = getIntent().getStringExtra("class_name");
         //heading
         subject_name.setText(subject.toUpperCase());
-        class_term.setText(String.format("%s - %s Term", class_name, term));
         current_session.setText(session);
 
 
@@ -78,7 +76,10 @@ public class AssessmentView extends AppCompatActivity {
     private void substring(String string) {
         //text = Exams;CA1;C2;CA3........;STUDENT NAME##NO OF CAs
         String[] noCas = string.split("##");
-        Log.i(TAG, "No CAS: " + noCas[1].trim());
+        class_name = noCas[2].replace("<>", " ");
+        // Toast.makeText(this, class_name, Toast.LENGTH_SHORT).show();
+
+        Log.i(TAG, "No CAS: " + noCas[1].trim() + " class_name: " + class_name);
 
         switch (noCas[1].trim()) {
             case "1":
@@ -174,6 +175,7 @@ public class AssessmentView extends AppCompatActivity {
 
         //student's name
         name.setText(scores[cas.size()].toUpperCase().split("##")[0]);
+        class_term.setText(String.format("%s - %s Term", class_name, term));
 
 
         for (int i = 0; i < cas.size(); i++) {

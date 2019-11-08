@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,6 +74,7 @@ public class ChildsList extends AppCompatActivity {
         list = findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(true);
+//        new first_loading().execute("aduaondohemba@gmail.com");
         new first_loading().execute(email);
 
 //        adapter = new ChildrenListAdapter(numbers);
@@ -118,17 +120,22 @@ public class ChildsList extends AppCompatActivity {
                 allPassport_aPerson = data.getImageFiles();
                 String[] rows = text.split("<>");
                 for (int i = 0; i < rows.length; i++) {
+                    try {
+                        NumberChildrenList numberChildrenList = new NumberChildrenList();
+                        numberChildrenList.setRegNo(rows[i].split(";")[0]);
+                        numberChildrenList.setName(rows[i].split(";")[1]);
+                        numberChildrenList.setSchoolId(rows[i].split(";")[2]);
+                        numberChildrenList.setSchoolName(rows[i].split(";")[3]);
+                        numberChildrenList.setClass_name(rows[i].split(";")[4]);
+                        numberChildrenList.setArm(rows[i].split(";")[5]);
 
-                    NumberChildrenList numberChildrenList = new NumberChildrenList();
-                    numberChildrenList.setRegNo(rows[i].split(";")[0]);
-                    numberChildrenList.setName(rows[i].split(";")[1]);
-                    numberChildrenList.setSchoolId(rows[i].split(";")[2]);
-                    numberChildrenList.setSchoolName(rows[i].split(";")[3]);
-                    numberChildrenList.setClass_name(rows[i].split(";")[4]);
-                    numberChildrenList.setArm(rows[i].split(";")[5]);
+                        numberChildrenList.setImage(allPassport_aPerson.get(i));
+                        numbers.add(numberChildrenList);
 
-                    numberChildrenList.setImage(allPassport_aPerson.get(i));
-                    numbers.add(numberChildrenList);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        Log.i("mSkola", "Some students may not have been promoted");
+                    }
                     loading.setVisibility(View.GONE);
                 }
                 //setRecyclerView

@@ -25,7 +25,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import mountedwings.org.mskola_mgt.teacher.Dashboard;
 
@@ -90,7 +89,7 @@ public class Splash extends AppCompatActivity {
                 }
             } else {
                 //initial Launch
-                Toast.makeText(Splash.this, "Reached    wrong", Toast.LENGTH_LONG).show();
+                //     Toast.makeText(Splash.this, "Reached    wrong", Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(new Intent(getApplicationContext(), Home.class));
             }
