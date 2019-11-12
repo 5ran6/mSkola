@@ -453,9 +453,16 @@ public class View_Scores_menu extends AppCompatActivity {
                     for (int j = 0; j < no_cas; j++) {
                         switch (j) {
                             case 0:
-                                col0 = row.split(";")[1];
-                                if (!row.split(";")[1].equals("_")) {
-                                    total += Float.parseFloat(row.split(";")[1]);
+                                Toast.makeText(View_Scores_menu.this, "No scores found", Toast.LENGTH_SHORT).show();
+                                load.setEnabled(true);
+                                try {
+                                    col0 = row.split(";")[1];
+                                    if (!row.split(";")[1].equals("_")) {
+                                        total += Float.parseFloat(row.split(";")[1]);
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
 
                                 break;

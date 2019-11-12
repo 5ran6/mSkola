@@ -19,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import mountedwings.org.mskola_mgt.Chat;
 import mountedwings.org.mskola_mgt.ChatActivity;
 import mountedwings.org.mskola_mgt.R;
 import mountedwings.org.mskola_mgt.Settings;
@@ -50,7 +49,9 @@ public class Dashboard extends AppCompatActivity {
     }
 
     public void fees(View view) {
-        startActivity(new Intent(getApplicationContext(), Chat.class));
+        Toast.makeText(getApplicationContext(), "Under Development!", Toast.LENGTH_SHORT).show();
+
+//        startActivity(new Intent(getApplicationContext(), Chat.class));
     }
 
     public void information(View view) {
