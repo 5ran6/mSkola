@@ -27,6 +27,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -93,7 +95,6 @@ public class Assessment extends AppCompatActivity {
         arm = intent.getStringExtra("arm");
         subject = intent.getStringExtra("subject");
 
-
         heading.setText(new StringBuilder().append(assessment.toUpperCase()).append(" for ").append(class_name).append(arm).toString());
 
         loading = findViewById(R.id.loading);
@@ -151,12 +152,13 @@ public class Assessment extends AppCompatActivity {
 
         hideSoftKeyboard();
 
-        mark_scores.setOnClickListener(v -> {
+        mark_scores.setOnClickListener(v -> { //1
             //is Not a float
             i = "";
             try {
 //                i = Float.valueOf(score.getText().toString());
-                i = score.getText().toString();
+                i = Objects.requireNonNull(score.getText()).toString();
+                //     Toast.makeText(this, i, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
                 e.printStackTrace();
@@ -200,7 +202,7 @@ public class Assessment extends AppCompatActivity {
 
     private void subsequentView(int index, View vv) {
         // button init
-        Button mark_scores = vv.findViewById(R.id.bt_continue_title);
+        // Button mark_scores = vv.findViewById(R.id.bt_continue_title);
         Button skip = vv.findViewById(R.id.bt_skip);
 
         score = vv.findViewById(R.id.et_title);
@@ -216,38 +218,38 @@ public class Assessment extends AppCompatActivity {
         score.setText("");
 
         hideSoftKeyboard();
-
-        mark_scores.setOnClickListener(v -> {
-//is Not a float
-            String i = "";
-            try {
-//                i = Float.valueOf(score.getText().toString());
-                i = score.getText().toString();
-            } catch (Exception e) {
-                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.red_900);
-                e.printStackTrace();
-            } finally {
-                if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
-                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.red_900);
-                    return;
-                }
-
-                if (score.getText().toString().trim().equals("")) {
-                    Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-            //      Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
-            //send to server
-            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                idy = index;
-                new submitScore().execute();
-                collapseAndContinue(index);
-            }
-
-
-        });
+//
+//        mark_scores.setOnClickListener(v -> { //2
+////is Not a float
+//            String i = "";
+//            try {
+////                i = Float.valueOf(score.getText().toString());
+//                i = score.getText().toString();
+//            } catch (Exception e) {
+//                Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.red_900);
+//                e.printStackTrace();
+//            } finally {
+//                if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
+//                    Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.red_900);
+//                    return;
+//                }
+//
+//                if (score.getText().toString().trim().equals("")) {
+//                    Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
+//                    return;
+//                }
+//            }
+//
+//            //      Toast.makeText(getApplicationContext(), "Valid " + score.getText().toString(), Toast.LENGTH_SHORT).show();
+//            //send to server
+//            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+//                idy = index;
+//                new submitScore().execute();
+//                collapseAndContinue(index);
+//            }
+//
+//
+//        });
         skip.setOnClickListener(v -> {
 
             if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) collapseAndContinue(index);
@@ -318,7 +320,7 @@ public class Assessment extends AppCompatActivity {
         Tools.toast("Reviewing from top....", this, R.color.yellow_900, Toast.LENGTH_LONG);
 //        TODO: scroll to the top of activity
         nestedScrollView.fullScroll(View.FOCUS_UP);
-        nestedScrollView.smoothScrollTo(0, 0);
+        nestedScrollView.smoothScrollTo(0, -10);
 
 
         if (success_step >= index && current_step != index) {
@@ -359,6 +361,27 @@ public class Assessment extends AppCompatActivity {
             ViewAnimation.collapse(view_list.get(view_list.size() - 1).findViewById(R.id.lyt_title));
             hideSoftKeyboard();
         }
+
+        score.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0)
+                    score.setHint(" ");
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+            }
+        });
+
     }
 
     //DONE
@@ -509,6 +532,7 @@ public class Assessment extends AppCompatActivity {
                 //has to be here
                 score.setText(scores);
                 if (scores.equalsIgnoreCase("network error")) {
+                    score.setHint(" ");
                     Tools.toast("Network error. Reconnecting...", Assessment.this, R.color.red_900);
                 }
             } else {
@@ -547,7 +571,7 @@ public class Assessment extends AppCompatActivity {
         protected void onPostExecute(String scores) {
             super.onPostExecute(scores);
             Log.d(TAG, scores);
-            //   Toast.makeText(getApplicationContext(), scores, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), i, Toast.LENGTH_SHORT).show();
             if (!scores.isEmpty()) {
                 score.setText("");
                 setCheckedRecorded(last_index);

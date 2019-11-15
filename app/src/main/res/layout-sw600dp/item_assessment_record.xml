@@ -82,7 +82,7 @@
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_score"
+                android:hint="Wait! Score is Loading...."
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:maxLength="5"

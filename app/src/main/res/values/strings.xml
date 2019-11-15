@@ -144,7 +144,7 @@
     <string name="demo_name">My Name</string>
     <string name="get_started">Get Started</string>
     <string name="default_alarm_text">Set an alarm to remind some minutes before your child/children close for the day</string>
-    <string name="enter_score">Enter score</string>
+    <string name="enter_score">Enter a score</string>
     <string name="register_score">Register Score</string>
     <string name="mark_all">MARK ALL</string>
     <string name="no_internet_connection">Check internet connection</string>

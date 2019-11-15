@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Copyright 2019 Mountedwings Cybersystems LTD. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_img"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/parent_layout"
+        android:layout_width="330dp"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_large">
+
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logo"
+            android:tint="@color/colorPrimary" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="Welcome to mSkola"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorPrimaryLight"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="Login to continue"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/blue_grey_300" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_mlarge" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email_address"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+            android:textColor="@color/blue_grey_800" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/grey_40">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/emailE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:theme="@style/EditText.Blue" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+            android:textColor="@color/blue_grey_800" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/grey_40">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/pass1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:theme="@style/EditText.Blue" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <RelativeLayout
+            android:id="@+id/change"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/change_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:onClick="change"
+                android:text="@string/change_password"
+                android:textColor="@color/grey_600"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
+                android:onClick="forgot"
+                android:text="@string/forgot_password"
+                android:textColor="@color/red_500"
+                android:textStyle="italic" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/keep_signed_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginTop="@dimen/spacing_middle"
+            android:layout_marginRight="-4dp"
+            android:text="Keep me Signed in"
+            android:textColor="@color/blue_600"
+            android:textStyle="bold"
+            android:theme="@style/Checkbox.Blue" />
+
+        <Button
+            android:id="@+id/sig_in"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginRight="-4dp"
+            android:background="@drawable/btn_rounded_blue_300"
+            android:text="L O G I N"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyt_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/spacing_medium"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <mountedwings.org.mskola_mgt.widget.ViewLoadingDotsBounce
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:background="@color/pink_400" />
+    </LinearLayout>
+
+</RelativeLayout>
