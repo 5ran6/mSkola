@@ -163,12 +163,18 @@ public class Assessment extends AppCompatActivity {
                 Tools.toast(score.getText().toString() + " is an Invalid score", this, R.color.yellow_900);
                 e.printStackTrace();
             } finally {
-                if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
-                    Tools.toast(score.getText() + " is an Invalid score", this, R.color.yellow_900);
-                    return;
-                }
-                if (Objects.requireNonNull(score.getText()).toString().trim().equals("")) {
-                    Snackbar.make(parent_view, "Score cannot be empty", Snackbar.LENGTH_SHORT).show();
+                try {
+                    if (Float.valueOf(i) > 100.00 || Float.valueOf(i) < 0) {
+                        Tools.toast(score.getText() + " is an Invalid score", this, R.color.yellow_900);
+                        return;
+                    }
+                    if (Objects.requireNonNull(score.getText()).toString().trim().equals("") || Objects.requireNonNull(score.getText()).toString().trim().isEmpty() || i.isEmpty()) {
+                        Snackbar.make(parent_view, "Score cannot be empty. You may want to click Skip instead", Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                } catch (Exception e) {
+                    // Snackbar.make(parent_view, "Score cannot be empty. You may want to click Skip instead.", Snackbar.LENGTH_LONG).show();
+                    e.printStackTrace();
                     return;
                 }
             }
@@ -176,6 +182,9 @@ public class Assessment extends AppCompatActivity {
             //send to server
             if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 idy = index;
+//                if(index == 0)
+                //                  first_persons_score = i;
+
                 new submitScore().execute();
                 collapseAndContinue(index);
             }
@@ -319,16 +328,19 @@ public class Assessment extends AppCompatActivity {
         //index = view.getId();
         Tools.toast("Reviewing from top....", this, R.color.yellow_900, Toast.LENGTH_LONG);
 //        TODO: scroll to the top of activity
-        nestedScrollView.fullScroll(View.FOCUS_UP);
-        nestedScrollView.smoothScrollTo(0, -10);
 
+        // i = first_persons_score;
 
         if (success_step >= index && current_step != index) {
             current_step = index;
             collapseAll();
             ViewAnimation.expand(view_list.get(index).findViewById(R.id.lyt_title));
-            EditText tv = view_list.get(index).findViewById(R.id.et_title);
-            tv.setText(first_persons_score);
+            nestedScrollView.fullScroll(View.FOCUS_UP);
+            nestedScrollView.smoothScrollTo(-100, -100);
+            EditText et = view_list.get(index).findViewById(R.id.et_title);
+            et.setText(first_persons_score);
+            i = et.getText().toString();
+//            Tools.toast("Reached here", this, R.color.yellow_900, Toast.LENGTH_LONG);
 
         }
     }
@@ -363,7 +375,6 @@ public class Assessment extends AppCompatActivity {
         }
 
         score.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0)
@@ -381,7 +392,6 @@ public class Assessment extends AppCompatActivity {
                                       int before, int count) {
             }
         });
-
     }
 
     //DONE

@@ -28,7 +28,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mskola.controls.serverProcess;
 import com.mskola.files.storageFile;
@@ -453,7 +452,7 @@ public class View_Scores_menu extends AppCompatActivity {
                     for (int j = 0; j < no_cas; j++) {
                         switch (j) {
                             case 0:
-                                Toast.makeText(View_Scores_menu.this, "No scores found", Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(View_Scores_menu.this, "No scores found", Toast.LENGTH_SHORT).show();
                                 load.setEnabled(true);
                                 try {
                                     col0 = row.split(";")[1];
@@ -673,7 +672,7 @@ public class View_Scores_menu extends AppCompatActivity {
                 finish();
                 startActivity(new Intent(getApplicationContext(), ViewScores.class));
             } else {
-                Toast.makeText(View_Scores_menu.this, "No scores found", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(View_Scores_menu.this, "No scores found", Toast.LENGTH_SHORT).show();
                 load.setEnabled(true);
             }
             if (text.equalsIgnoreCase("network error")) {

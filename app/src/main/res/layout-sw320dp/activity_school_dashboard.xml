@@ -185,8 +185,6 @@
             </LinearLayout>
 
             <include layout="@layout/academics_items" />
-
-
         </LinearLayout>
 
     </ScrollView>
