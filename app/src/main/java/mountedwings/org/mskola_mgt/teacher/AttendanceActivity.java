@@ -308,6 +308,7 @@ public class AttendanceActivity extends AppCompatActivity {
             }
             if (text.equalsIgnoreCase("network error")) {
                 Tools.toast("Network error. Reconnecting...", AttendanceActivity.this, R.color.red_900);
+                new first_loading().execute();
             }
 
         }

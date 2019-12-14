@@ -316,7 +316,7 @@ public class MskolaLogin extends AppCompatActivity {
                     if (text.contains("success")) {
                         isSuccess = true;
                         role = text.split("<>")[1];
-                        //          Log.d(TAG, "registration successful");
+                        Log.d(TAG, "role = " + role);
                     } else if (text.contains("invalid")) {
                         isSuccess = false;
                         error_from_server = "Email and password mismatch. Try again";

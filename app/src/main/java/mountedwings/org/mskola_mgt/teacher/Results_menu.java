@@ -37,7 +37,7 @@ public class Results_menu extends AppCompatActivity {
         Intent intent = getIntent();
         school_id = intent.getStringExtra("school_id");
         staff_id = intent.getStringExtra("email_address");
-        if (role.equalsIgnoreCase("admin"))
+        if (role.equalsIgnoreCase("admin") || role.equalsIgnoreCase("CM"))
             setContentView(R.layout.activity_result_menu);
         else
             setContentView(R.layout.activity_result_menu_not_admin);
@@ -72,5 +72,12 @@ public class Results_menu extends AppCompatActivity {
         intent.putExtra("email_address", staff_id);
         startActivity(intent);
 
+    }
+
+    public void resultComments(View view) {
+        intent = new Intent(getBaseContext(), Print_Academic_Result_menu.class);
+        intent.putExtra("school_id", school_id);
+        intent.putExtra("email_address", staff_id);
+        startActivity(intent);
     }
 }

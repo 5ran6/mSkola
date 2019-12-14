@@ -81,8 +81,8 @@ public class Sign_Up extends AppCompatActivity {
     Boolean network, newPassport = false;
     private static final int PICK_IMAGE_ID_CAMERA = 334; // the number doesn't matter
 
-    private TextInputLayout firstName, lastName, phone, email, town, password1, password2;
     private Spinner country;
+    private TextInputLayout firstName, lastName, phone, email, town, password1, password2;
     private AppCompatEditText fName, lName, phoneE, emailE, townE, pass1, pass2;
     private ImageView passport;
     private boolean isFilled = false;
@@ -538,7 +538,7 @@ public class Sign_Up extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0) {
@@ -597,7 +597,6 @@ public class Sign_Up extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-
         }
     }
 

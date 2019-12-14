@@ -18,7 +18,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import mountedwings.org.mskola_mgt.parent.FAQ;
+import mountedwings.org.mskola_mgt.teacher.PrintResultActivity;
 import mountedwings.org.mskola_mgt.utils.Tools;
 
 public class Test extends AppCompatActivity {
@@ -29,10 +29,10 @@ public class Test extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         Tools.setSystemBarTransparent(this);
 
-        startActivity(new Intent(this, Home.class));
+        //  startActivity(new Intent(this, Home.class));
     }
 
     public void testing(View view) {
-        startActivity(new Intent(this, FAQ.class));
+        startActivity(new Intent(this, PrintResultActivity.class));
     }
 }
