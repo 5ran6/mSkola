@@ -95,6 +95,8 @@ public class ResultActivity extends AppCompatActivity {
 
     private ArrayList<String> HEADERS = new ArrayList<>();
     private ProgressBar loading;
+private    String class_arm ="";
+    private String class_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +225,8 @@ public class ResultActivity extends AppCompatActivity {
                 String[] data2 = raw_data2.split("<>");
                 String[] data3 = raw_data3.split("<>");
 
-                String class_arm = data1[0].toUpperCase();
+
+                class_arm = data1[0].toUpperCase();
                 session = data1[1];
                 term = data1[2];
 
@@ -400,7 +403,7 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            //  Log.d(TAG, "Loaded round 5: " + text);
+              Log.d(TAG, "Loaded round 5: " + text);
 
             if (!text.equals("0") && !text.isEmpty() && !text.trim().equals("not compiled")) {
                 String data[] = text.split("<>");
@@ -822,7 +825,18 @@ public class ResultActivity extends AppCompatActivity {
             }
 
             //run next thread
-            new getstudentresult().execute(school_id, student_reg_no, session, term);
+//            new getstudentresult().execute(school_id, student_reg_no, session, term);
+
+//            sPosition if senior, no,then junior yes
+            Log.d("mSKola", school_id+ " "+ student_reg_no+ " "+ "class"+ " "+ "yes"+ " "+ session+ " "+ term + " "+"class name: "+class_name + " arm:"+ class_arm.split(" ")[1]);
+
+            if (class_name.substring(0,1).equalsIgnoreCase("J"))
+                new getstudentresult().execute(school_id, student_reg_no,  "class", "yes", session, term, class_name, class_arm.split(" ")[1]);
+            else
+                new getstudentresult().execute(school_id, student_reg_no,  "class", "no", session, term, class_name, class_arm.split(" ")[1]);
+
+
+
         }
     }
 
@@ -833,11 +847,11 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             storageFile storageObj = new storageFile();
-            storageObj.setOperation("getstudentresult");
-            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]);
+            storageObj.setOperation("getstudentprintresult");
+            storageObj.setStrData(strings[0] + "<>" + strings[1] + "<>" + strings[2] + "<>" + strings[3]+ "<>" + strings[4]+ "<>" + strings[5]+ "<>" + strings[6]+ "<>" + strings[7]);
             storageFile sentData = new serverProcessParents().requestProcess(storageObj);
 
-
+            Log.d(TAG, "response round 6: " + sentData.getStrData());
             return sentData.getStrData();
         }
 
@@ -853,6 +867,7 @@ public class ResultActivity extends AppCompatActivity {
 
             if (!text.equals("0") && !text.isEmpty()) {
                 String data[] = text.split(";");
+                Log.d("mSkola", "Round 6 text: " + data.toString());
 
                 ResultFooter resultFooter = new ResultFooter();
                 resultFooter.setTotal(data[0]);
@@ -899,7 +914,10 @@ public class ResultActivity extends AppCompatActivity {
         student_reg_no = getIntent().getStringExtra("student_reg_no");
         term = getIntent().getStringExtra("term");
         session = getIntent().getStringExtra("session");
-        school_logo = findViewById(R.id.logo);
+        class_name = getIntent().getStringExtra("class_name");
+        class_name = class_name.split(" ")[0];
+
+                school_logo = findViewById(R.id.logo);
         result_summary_tv = findViewById(R.id.result_summary);
         keys_tv = findViewById(R.id.keys);
         pschomotor_tv = findViewById(R.id.psychomotor_title);

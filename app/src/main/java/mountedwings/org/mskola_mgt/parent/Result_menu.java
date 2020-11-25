@@ -100,6 +100,7 @@ public class Result_menu extends AppCompatActivity {
         String parent_id = mPrefs.getString("email_address", getIntent().getStringExtra("email_address"));
         school_id = getIntent().getStringExtra("school_id");
         student_reg_no = getIntent().getStringExtra("student_reg_no");
+        class_name = getIntent().getStringExtra("class_name");
         new initialLoad().execute(school_id, parent_id);
 
         TextView load = findViewById(R.id.load);
@@ -152,7 +153,7 @@ public class Result_menu extends AppCompatActivity {
                 // if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 //    new loadAssessment().execute(school_id, session, term, subject, student_reg_no);
                 Tools.toast(student_reg_no, this);
-                startActivity(new Intent(this, ResultActivity.class).putExtra("term", term).putExtra("session", session).putExtra("student_reg_no", student_reg_no).putExtra("school_id", school_id));
+                startActivity(new Intent(this, ResultActivity.class).putExtra("term", term).putExtra("session", session).putExtra("student_reg_no", student_reg_no).putExtra("school_id", school_id).putExtra("class_name", class_name));
                 // } else {
                 Tools.toast(getResources().getString(R.string.no_internet_connection), this, R.color.red_700);
                 //}
